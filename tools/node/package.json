@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/JustAGhosT/autopr-engine#readme",
   "devDependencies": {
-    "markdownlint-cli2": "^0.18.1"
+    "markdownlint-cli2": "^0.20.0"
   }
 }
