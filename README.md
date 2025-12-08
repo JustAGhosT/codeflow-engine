@@ -109,9 +109,11 @@ The extension communicates with CodeFlow Engine via:
 
 ## Related Repositories
 
-- [`codeflow-engine`](../codeflow-engine) - Core engine (communicates via API)
-- [`codeflow-desktop`](../codeflow-desktop) - Desktop application
-- [`codeflow-infrastructure`](../codeflow-infrastructure) - Production infrastructure
+- [`codeflow-engine`](https://github.com/JustAGhosT/codeflow-engine) - Core engine (communicates via API)
+- [`codeflow-desktop`](https://github.com/JustAGhosT/codeflow-desktop) - Desktop application
+- [`codeflow-infrastructure`](https://github.com/JustAGhosT/codeflow-infrastructure) - Production infrastructure
+- [`codeflow-azure-setup`](https://github.com/JustAGhosT/codeflow-azure-setup) - Azure bootstrap scripts
+- [`codeflow-website`](https://github.com/JustAGhosT/codeflow-website) - Marketing website
 
 ## License
 
