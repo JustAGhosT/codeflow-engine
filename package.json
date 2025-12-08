@@ -6,7 +6,7 @@
   "publisher": "autopr",
   "repository": {
     "type": "git",
-    "url": "https://github.com/autopr/autopr-engine.git"
+    "url": "https://github.com/JustAGhosT/codeflow-vscode-extension.git"
   },
   "license": "MIT",
   "engines": {
