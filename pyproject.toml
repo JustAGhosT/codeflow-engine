@@ -2,6 +2,76 @@
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
+[project]
+name = "codeflow-engine"
+version = "1.0.1"
+description = "AI-Powered GitHub PR Automation and Issue Management"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "MIT"}
+authors = [
+    {name = "VeritasVault Team", email = "dev@veritasvault.net"}
+]
+maintainers = [
+    {name = "VeritasVault Team", email = "dev@veritasvault.net"}
+]
+keywords = [
+    "github", "pull-request", "automation", "ai", "code-review",
+    "ci-cd", "workflow", "integration", "slack", "linear", "autogen",
+    "llm", "openai", "anthropic", "issue-management", "quality-gates",
+    "platform-detection", "multi-agent"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
+dynamic = ["dependencies"]
+
+[project.urls]
+Homepage = "https://github.com/JustAGhosT/codeflow-engine"
+Documentation = "https://codeflow-engine.readthedocs.io"
+Repository = "https://github.com/JustAGhosT/codeflow-engine"
+"Bug Tracker" = "https://github.com/JustAGhosT/codeflow-engine/issues"
+Changelog = "https://github.com/JustAGhosT/codeflow-engine/blob/main/CHANGELOG.md"
+Discussions = "https://github.com/JustAGhosT/codeflow-engine/discussions"
+
+[project.scripts]
+autopr = "codeflow_engine.cli.main:main"
+autopr-server = "codeflow_engine.server:main"
+autopr-worker = "codeflow_engine.worker:main"
+autopr-migration = "codeflow_engine.migration:main"
+
+[project.entry-points."autopr.actions"]
+platform_detector = "codeflow_engine.actions.platform_detector:PlatformDetector"
+pr_review_analyzer = "codeflow_engine.actions.pr_review_analyzer:PRReviewAnalyzer"
+issue_creator = "codeflow_engine.actions.issue_creator:IssueCreator"
+ai_comment_analyzer = "codeflow_engine.actions.ai_comment_analyzer:AICommentAnalyzer"
+quality_gates = "codeflow_engine.actions.quality_gates:QualityGates"
+autogen_multi_agent = "codeflow_engine.actions.autogen_multi_agent:AutoGenMultiAgent"
+
+[project.entry-points."autopr.integrations"]
+github = "codeflow_engine.integrations.github:GitHubIntegration"
+linear = "codeflow_engine.integrations.linear:LinearIntegration"
+slack = "codeflow_engine.integrations.slack:SlackIntegration"
+axolo = "codeflow_engine.integrations.axolo:AxoloIntegration"
+
+[project.entry-points."autopr.llm_providers"]
+openai = "codeflow_engine.ai.providers.openai:OpenAIProvider"
+anthropic = "codeflow_engine.ai.providers.anthropic:AnthropicProvider"
+mistral = "codeflow_engine.ai.providers.mistral:MistralProvider"
+groq = "codeflow_engine.ai.providers.groq:GroqProvider"
+
 [tool.poetry]
 name = "codeflow-engine"
 version = "1.0.1"
@@ -17,21 +87,6 @@ keywords = [
     "ci-cd", "workflow", "integration", "slack", "linear", "autogen",
     "llm", "openai", "anthropic", "issue-management", "quality-gates",
     "platform-detection", "multi-agent"
-]
-
-classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Intended Audience :: Developers",
-    "Intended Audience :: Information Technology",
-    "Intended Audience :: System Administrators",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.13",
-    "Operating System :: OS Independent",
-    "Topic :: Software Development",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: Software Development :: Quality Assurance",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence"
 ]
 
 [tool.poetry.dependencies]
@@ -63,20 +118,23 @@ psycopg2-binary = "^2.9.11"
 flask-socketio = "^5.5.1"
 alembic = "^1.17.2"
 
+# Deprecated: Use [project.urls] instead (kept for backward compatibility)
 [tool.poetry.urls]
-Homepage = "https://github.com/veritasvault/codeflow-engine"
+Homepage = "https://github.com/JustAGhosT/codeflow-engine"
 Documentation = "https://codeflow-engine.readthedocs.io"
-Repository = "https://github.com/veritasvault/codeflow-engine"
-"Bug Tracker" = "https://github.com/veritasvault/codeflow-engine/issues"
-Changelog = "https://github.com/veritasvault/codeflow-engine/blob/main/CHANGELOG.md"
-Discussions = "https://github.com/veritasvault/codeflow-engine/discussions"
+Repository = "https://github.com/JustAGhosT/codeflow-engine"
+"Bug Tracker" = "https://github.com/JustAGhosT/codeflow-engine/issues"
+Changelog = "https://github.com/JustAGhosT/codeflow-engine/blob/main/CHANGELOG.md"
+Discussions = "https://github.com/JustAGhosT/codeflow-engine/discussions"
 
+# Deprecated: Use [project.scripts] instead (kept for backward compatibility)
 [tool.poetry.scripts]
-autopr = "codeflow_engine.cli:main"
+autopr = "codeflow_engine.cli.main:main"
 autopr-server = "codeflow_engine.server:main"
 autopr-worker = "codeflow_engine.worker:main"
 autopr-migration = "codeflow_engine.migration:main"
 
+# Deprecated: Use [project.entry-points] instead (kept for backward compatibility)
 [tool.poetry.plugins."autopr.actions"]
 "platform_detector" = "codeflow_engine.actions.platform_detector:PlatformDetector"
 "pr_review_analyzer" = "codeflow_engine.actions.pr_review_analyzer:PRReviewAnalyzer"
