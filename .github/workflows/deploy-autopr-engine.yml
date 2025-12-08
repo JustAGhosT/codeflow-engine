@@ -1,0 +1,291 @@
+name: Build and Deploy CodeFlow Engine
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'autopr/**'
+      - 'docker/**'
+      - 'pyproject.toml'
+      - 'poetry.lock'
+      - '.github/workflows/deploy-autopr-engine.yml'
+      - '.github/app-manifest.yml'
+  pull_request:
+    paths:
+      - 'autopr/**'
+      - 'docker/**'
+      - 'pyproject.toml'
+      - 'poetry.lock'
+      - '.github/workflows/deploy-autopr-engine.yml'
+      - '.github/app-manifest.yml'
+      - '.autopr.yml'
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # PR validation - build and validate only, no push/deploy
+  validate_pr:
+    name: Validate Build (PR)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate app-manifest.yml
+        run: |
+          echo "Validating GitHub App manifest..."
+          python3 -c "import yaml; yaml.safe_load(open('.github/app-manifest.yml'))"
+          echo "✅ app-manifest.yml is valid YAML"
+
+      - name: Validate .autopr.yml config
+        run: |
+          if [ -f ".autopr.yml" ]; then
+            echo "Validating .autopr.yml..."
+            python3 -c "import yaml; yaml.safe_load(open('.autopr.yml'))"
+            echo "✅ .autopr.yml is valid YAML"
+          else
+            echo "⚠️ .autopr.yml not found (optional)"
+          fi
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image (no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          push: false
+          tags: codeflow-engine:pr-${{ github.event.pull_request.number }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            RUN_TESTS=false
+
+      - name: Validate build
+        run: echo "✅ Docker image built successfully for PR validation"
+
+  build-and-push:
+    name: Build and Push Container Image
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            RUN_TESTS=false
+
+  deploy-infrastructure:
+    name: Deploy Azure Infrastructure
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: (github.ref == 'refs/heads/main' && github.event_name == 'push') || github.event_name == 'workflow_dispatch'
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Check if resources exist and get/generate passwords
+        id: passwords
+        run: |
+          RESOURCE_GROUP="prod-rg-san-autopr"
+          CONTAINER_APP="prod-autopr-san-app"
+
+          # Check if container app exists
+          if az containerapp show -n $CONTAINER_APP -g $RESOURCE_GROUP &>/dev/null; then
+            echo "Container app exists, checking for existing secrets..."
+
+            # For existing deployments, use secrets from GitHub (must be set manually)
+            # This prevents password regeneration that would break existing DB connections
+            if [ -n "${{ secrets.AUTOPR_POSTGRES_LOGIN }}" ]; then
+              echo "Using postgres login from secrets"
+              echo "postgres_login=${{ secrets.AUTOPR_POSTGRES_LOGIN }}" >> $GITHUB_OUTPUT
+            else
+              echo "::warning::AUTOPR_POSTGRES_LOGIN secret not set. Using default 'autopr'."
+              echo "postgres_login=autopr" >> $GITHUB_OUTPUT
+            fi
+
+            if [ -n "${{ secrets.AUTOPR_POSTGRES_PASSWORD }}" ]; then
+              echo "Using existing postgres password from secrets"
+              echo "postgres_password=${{ secrets.AUTOPR_POSTGRES_PASSWORD }}" >> $GITHUB_OUTPUT
+            else
+              echo "::warning::AUTOPR_POSTGRES_PASSWORD secret not set. Using generated password (may break existing DB)."
+              echo "postgres_password=$(openssl rand -base64 32)" >> $GITHUB_OUTPUT
+            fi
+
+            if [ -n "${{ secrets.AUTOPR_REDIS_PASSWORD }}" ]; then
+              echo "Using existing redis password from secrets"
+              echo "redis_password=${{ secrets.AUTOPR_REDIS_PASSWORD }}" >> $GITHUB_OUTPUT
+            else
+              # Redis password can be retrieved from Azure
+              REDIS_KEY=$(az redis list-keys -n prod-autopr-san-redis -g $RESOURCE_GROUP --query primaryKey -o tsv 2>/dev/null || echo "")
+              if [ -n "$REDIS_KEY" ]; then
+                echo "Retrieved redis password from Azure"
+                echo "redis_password=$REDIS_KEY" >> $GITHUB_OUTPUT
+              else
+                echo "::warning::Could not retrieve Redis password. Using generated password."
+                echo "redis_password=$(openssl rand -base64 32)" >> $GITHUB_OUTPUT
+              fi
+            fi
+          else
+            echo "First deployment, generating new credentials..."
+            if [ -n "${{ secrets.AUTOPR_POSTGRES_LOGIN }}" ]; then
+              echo "Using postgres login from secrets"
+              echo "postgres_login=${{ secrets.AUTOPR_POSTGRES_LOGIN }}" >> $GITHUB_OUTPUT
+            else
+              echo "postgres_login=autopr" >> $GITHUB_OUTPUT
+            fi
+            POSTGRES_PWD=$(openssl rand -base64 32)
+            REDIS_PWD=$(openssl rand -base64 32)
+            echo "postgres_password=$POSTGRES_PWD" >> $GITHUB_OUTPUT
+            echo "redis_password=$REDIS_PWD" >> $GITHUB_OUTPUT
+            echo "::notice::Save these credentials to GitHub secrets for future deployments: AUTOPR_POSTGRES_LOGIN, AUTOPR_POSTGRES_PASSWORD, AUTOPR_REDIS_PASSWORD"
+          fi
+
+      - name: Cleanup duplicate managed certificates
+        run: |
+          RESOURCE_GROUP="prod-rg-san-autopr"
+          ENV_NAME="prod-autopr-san-env"
+          CUSTOM_DOMAIN="app.autopr.io"
+          
+          echo "🔍 Checking for existing managed certificates for domain: $CUSTOM_DOMAIN"
+          
+          # Check if environment exists
+          if az containerapp env show -n $ENV_NAME -g $RESOURCE_GROUP &>/dev/null; then
+            echo "Environment exists, checking for duplicate certificates..."
+            
+            # List all managed certificates and find duplicates for our domain
+            CERTS=$(az containerapp env certificate list \
+              --name $ENV_NAME \
+              --resource-group $RESOURCE_GROUP \
+              --output json 2>/dev/null || echo "[]")
+            
+            # Check if any certificates match our domain
+            DUPLICATE_CERTS=$(echo "$CERTS" | jq -r --arg domain "$CUSTOM_DOMAIN" \
+              '.[] | select(.properties.subjectName == $domain and .type == "Microsoft.App/managedEnvironments/managedCertificates") | .name')
+            
+            if [ -n "$DUPLICATE_CERTS" ]; then
+              echo "⚠️ Found duplicate managed certificate(s) for domain $CUSTOM_DOMAIN:"
+              echo "$DUPLICATE_CERTS"
+              echo ""
+              echo "🗑️ Removing duplicate certificates to prevent deployment conflicts..."
+              
+              while IFS= read -r cert_name; do
+                if [ -n "$cert_name" ]; then
+                  echo "Deleting certificate: $cert_name"
+                  az containerapp env certificate delete \
+                    --name $ENV_NAME \
+                    --resource-group $RESOURCE_GROUP \
+                    --certificate "$cert_name" \
+                    --yes || echo "⚠️ Failed to delete certificate $cert_name (may not exist or be in use)"
+                fi
+              done <<< "$DUPLICATE_CERTS"
+              
+              echo "✅ Cleanup completed"
+            else
+              echo "✅ No duplicate certificates found for $CUSTOM_DOMAIN"
+            fi
+          else
+            echo "ℹ️ Environment does not exist yet, skipping certificate cleanup"
+          fi
+          echo ""
+
+      - name: Deploy Bicep Template
+        run: |
+          echo "ℹ️ Note: SSL certificates are automatically managed by Azure. No certificate upload needed!"
+          echo "📖 See infrastructure/bicep/FAQ.md for certificate details"
+          echo ""
+          az deployment group create \
+            --name codeflow-engine \
+            --resource-group prod-rg-san-autopr \
+            --template-file infrastructure/bicep/codeflow-engine.bicep \
+            --parameters \
+              environment=prod \
+              regionAbbr=san \
+              location=eastus2 \
+              customDomain=app.autopr.io \
+              containerImage=ghcr.io/justaghost/codeflow-engine:latest \
+              postgresLogin="${{ steps.passwords.outputs.postgres_login }}" \
+              postgresPassword="${{ steps.passwords.outputs.postgres_password }}" \
+              redisPassword="${{ steps.passwords.outputs.redis_password }}"
+
+      - name: Get deployment outputs
+        id: outputs
+        run: |
+          OUTPUTS=$(az deployment group show \
+            --resource-group prod-rg-san-autopr \
+            --name codeflow-engine \
+            --query properties.outputs \
+            --output json)
+          
+          echo "container_app_url=$(echo $OUTPUTS | jq -r '.containerAppUrl.value')" >> $GITHUB_OUTPUT
+          echo "custom_domain=$(echo $OUTPUTS | jq -r '.customDomain.value')" >> $GITHUB_OUTPUT
+          echo "postgres_fqdn=$(echo $OUTPUTS | jq -r '.postgresFqdn.value')" >> $GITHUB_OUTPUT
+          echo "redis_host=$(echo $OUTPUTS | jq -r '.redisHostName.value')" >> $GITHUB_OUTPUT
+
+      - name: Display deployment info
+        run: |
+          echo "✅ Deployment successful!"
+          echo "Container App URL: ${{ steps.outputs.outputs.container_app_url }}"
+          echo "Custom Domain: ${{ steps.outputs.outputs.custom_domain }}"
+          echo "PostgreSQL FQDN: ${{ steps.outputs.outputs.postgres_fqdn }}"
+          echo "Redis Host: ${{ steps.outputs.outputs.redis_host }}"
+          echo ""
+          echo "🔒 SSL Certificate: Automatically managed by Azure (no action needed)"
+          echo ""
+          echo "⚠️ Next steps:"
+          echo "1. Add DNS CNAME record: ${{ steps.outputs.outputs.custom_domain }} -> Container App FQDN"
+          echo "2. Wait for DNS propagation (typically 15-30 minutes)"
+          echo "3. Azure will automatically provision and bind the SSL certificate (5-15 minutes)"
+          echo ""
+          echo "📖 For troubleshooting, see: infrastructure/bicep/FAQ.md"
+
