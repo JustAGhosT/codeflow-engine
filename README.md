@@ -59,7 +59,7 @@ docker run -d \
 
 ```bash
 # Clone repository
-git clone https://github.com/your-org/codeflow-engine.git
+git clone https://github.com/JustAGhosT/codeflow-engine.git
 cd codeflow-engine
 
 # Create virtual environment
@@ -114,8 +114,9 @@ MIT - See [LICENSE](LICENSE) for details.
 
 ## Related Repositories
 
-- [`codeflow-infrastructure`](../codeflow-infrastructure) - Production infrastructure as code
-- [`codeflow-desktop`](../codeflow-desktop) - Desktop application
-- [`codeflow-vscode-extension`](../codeflow-vscode-extension) - VS Code extension
-- [`codeflow-azure-setup`](../codeflow-azure-setup) - Azure bootstrap scripts
+- [`codeflow-infrastructure`](https://github.com/JustAGhosT/codeflow-infrastructure) - Production infrastructure as code
+- [`codeflow-desktop`](https://github.com/JustAGhosT/codeflow-desktop) - Desktop application
+- [`codeflow-vscode-extension`](https://github.com/JustAGhosT/codeflow-vscode-extension) - VS Code extension
+- [`codeflow-azure-setup`](https://github.com/JustAGhosT/codeflow-azure-setup) - Azure bootstrap scripts
+- [`codeflow-website`](https://github.com/JustAGhosT/codeflow-website) - Marketing website
 
