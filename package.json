@@ -1,9 +1,9 @@
 {
-  "name": "autopr",
-  "displayName": "AutoPR",
+  "name": "codeflow-vscode-extension",
+  "displayName": "CodeFlow",
   "description": "AI-Powered Code Quality and Automation for VS Code",
   "version": "1.0.10",
-  "publisher": "autopr",
+  "publisher": "codeflow",
   "repository": {
     "type": "git",
     "url": "https://github.com/JustAGhosT/codeflow-vscode-extension.git"
@@ -30,163 +30,163 @@
     "commands": [
       {
         "command": "autopr.qualityCheck",
-        "title": "AutoPR: Run Quality Check",
-        "category": "AutoPR"
+        "title": "CodeFlow: Run Quality Check",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.qualityCheckFile",
-        "title": "AutoPR: Check Current File",
-        "category": "AutoPR"
+        "title": "CodeFlow: Check Current File",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.qualityCheckWorkspace",
-        "title": "AutoPR: Check Workspace",
-        "category": "AutoPR"
+        "title": "CodeFlow: Check Workspace",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.fileSplit",
-        "title": "AutoPR: Split Large File",
-        "category": "AutoPR"
+        "title": "CodeFlow: Split Large File",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.autoFix",
-        "title": "AutoPR: Auto-Fix Issues",
-        "category": "AutoPR"
+        "title": "CodeFlow: Auto-Fix Issues",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.showDashboard",
-        "title": "AutoPR: Show Dashboard",
-        "category": "AutoPR"
+        "title": "CodeFlow: Show Dashboard",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.configure",
-        "title": "AutoPR: Configure",
-        "category": "AutoPR"
+        "title": "CodeFlow: Configure",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.setVolume",
-        "title": "AutoPR: Set Volume Level",
-        "category": "AutoPR"
+        "title": "CodeFlow: Set Volume Level",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.toggleTool",
-        "title": "AutoPR: Toggle Tool",
-        "category": "AutoPR"
+        "title": "CodeFlow: Toggle Tool",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.performanceCheck",
-        "title": "AutoPR: Performance Analysis",
-        "category": "AutoPR"
+        "title": "CodeFlow: Performance Analysis",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.dependencyScan",
-        "title": "AutoPR: Dependency Scan",
-        "category": "AutoPR"
+        "title": "CodeFlow: Dependency Scan",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.securityScan",
-        "title": "AutoPR: Security Scan",
-        "category": "AutoPR"
+        "title": "CodeFlow: Security Scan",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.complexityAnalysis",
-        "title": "AutoPR: Complexity Analysis",
-        "category": "AutoPR"
+        "title": "CodeFlow: Complexity Analysis",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.documentationCheck",
-        "title": "AutoPR: Documentation Check",
-        "category": "AutoPR"
+        "title": "CodeFlow: Documentation Check",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.learningMemory",
-        "title": "AutoPR: Learning Memory",
-        "category": "AutoPR"
+        "title": "CodeFlow: Learning Memory",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.clearCache",
-        "title": "AutoPR: Clear Cache",
-        "category": "AutoPR"
+        "title": "CodeFlow: Clear Cache",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.exportResults",
-        "title": "AutoPR: Export Results",
-        "category": "AutoPR"
+        "title": "CodeFlow: Export Results",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.importConfig",
-        "title": "AutoPR: Import Configuration",
-        "category": "AutoPR"
+        "title": "CodeFlow: Import Configuration",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.refreshIssues",
-        "title": "AutoPR: Refresh Issues",
-        "category": "AutoPR"
+        "title": "CodeFlow: Refresh Issues",
+        "category": "CodeFlow"
       },
       {
         "command": "autopr.refreshMetrics",
-        "title": "AutoPR: Refresh Metrics",
-        "category": "AutoPR"
+        "title": "CodeFlow: Refresh Metrics",
+        "category": "CodeFlow"
       },
              {
          "command": "autopr.refreshHistory",
-         "title": "AutoPR: Refresh History",
-         "category": "AutoPR"
+         "title": "CodeFlow: Refresh History",
+         "category": "CodeFlow"
        },
        {
          "command": "autopr.showVersion",
-         "title": "AutoPR: Show Version",
-         "category": "AutoPR"
+         "title": "CodeFlow: Show Version",
+         "category": "CodeFlow"
        },
        {
          "command": "autopr.refreshAll",
-         "title": "AutoPR: Refresh All Views",
-         "category": "AutoPR"
+         "title": "CodeFlow: Refresh All Views",
+         "category": "CodeFlow"
        },
        {
          "command": "autopr.showViews",
-         "title": "AutoPR: Show Views",
-         "category": "AutoPR"
+         "title": "CodeFlow: Show Views",
+         "category": "CodeFlow"
        },
        {
          "command": "autopr.quickFix",
-         "title": "AutoPR: Quick Fix",
-         "category": "AutoPR"
+         "title": "CodeFlow: Quick Fix",
+         "category": "CodeFlow"
        },
        {
          "command": "autopr.analyzeWorkspace",
-         "title": "AutoPR: Analyze Workspace",
-         "category": "AutoPR"
+         "title": "CodeFlow: Analyze Workspace",
+         "category": "CodeFlow"
        },
        {
          "command": "autopr.generateReport",
-         "title": "AutoPR: Generate Report",
-         "category": "AutoPR"
+         "title": "CodeFlow: Generate Report",
+         "category": "CodeFlow"
        },
        {
          "command": "autopr.toggleAutoMode",
-         "title": "AutoPR: Toggle Auto Mode",
-         "category": "AutoPR"
+         "title": "CodeFlow: Toggle Auto Mode",
+         "category": "CodeFlow"
        },
        {
          "command": "autopr.showSettings",
-         "title": "AutoPR: Settings",
-         "category": "AutoPR"
+         "title": "CodeFlow: Settings",
+         "category": "CodeFlow"
        },
                {
           "command": "autopr.showHelp",
-          "title": "AutoPR: Help",
-          "category": "AutoPR"
+          "title": "CodeFlow: Help",
+          "category": "CodeFlow"
         },
         {
           "command": "autopr.checkCompatibility",
-          "title": "AutoPR: Check Compatibility",
-          "category": "AutoPR"
+          "title": "CodeFlow: Check Compatibility",
+          "category": "CodeFlow"
         },
         {
           "command": "autopr.showLogs",
-          "title": "AutoPR: Show Logs",
-          "category": "AutoPR"
+          "title": "CodeFlow: Show Logs",
+          "category": "CodeFlow"
         }
     ],
     "menus": {
@@ -345,25 +345,25 @@
        "statusBar": [
          {
            "command": "autopr.quickFix",
-           "text": "$(lightbulb) AutoPR",
-           "tooltip": "AutoPR: Quick Fix",
+          "text": "$(lightbulb) CodeFlow",
+          "tooltip": "CodeFlow: Quick Fix",
            "alignment": "left"
          },
          {
            "command": "autopr.showViews",
-           "text": "$(graph) Metrics",
-           "tooltip": "AutoPR: Show Metrics",
+          "text": "$(graph) Metrics",
+          "tooltip": "CodeFlow: Show Metrics",
            "alignment": "right"
          }
        ]
      },
     "configuration": {
-      "title": "AutoPR",
+      "title": "CodeFlow",
       "properties": {
         "autopr.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "Enable AutoPR extension"
+          "description": "Enable CodeFlow extension"
         },
         "autopr.qualityMode": {
           "type": "string",
@@ -558,7 +558,7 @@
       "activitybar": [
         {
           "id": "autopr",
-          "title": "AutoPR",
+          "title": "CodeFlow",
           "icon": "resources/autopr-icon.svg"
         }
       ]
