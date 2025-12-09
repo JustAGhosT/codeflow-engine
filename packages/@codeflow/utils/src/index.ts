@@ -3,5 +3,7 @@
  */
 
 export * from "./validation";
-export * from "./formatting";
+export * from "./formatting/date";
+export * from "./formatting/number";
+export * from "./formatting/string";
 
