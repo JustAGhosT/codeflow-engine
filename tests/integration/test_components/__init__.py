@@ -1,0 +1,2 @@
+"""Component integration tests."""
+
