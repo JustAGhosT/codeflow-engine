@@ -33,6 +33,7 @@ The CodeFlow Orchestration repository serves as the central hub for:
 - [Shared Libraries Plan](./docs/SHARED_LIBRARIES_PLAN.md) - Wave 4: Shared libraries strategy
 - [Optimization Plan](./docs/OPTIMIZATION_PLAN.md) - Wave 4: Performance and cost optimization
 - [Package Publishing Guide](./docs/PACKAGE_PUBLISHING_GUIDE.md) - Publishing shared utility packages
+- [Deployment Automation](./docs/DEPLOYMENT_AUTOMATION.md) - Enhanced deployment with rollback and health checks
 
 ### Scripts
 
