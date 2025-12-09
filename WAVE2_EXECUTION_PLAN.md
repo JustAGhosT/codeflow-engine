@@ -372,33 +372,47 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
 
 #### 6.3 End-to-End Testing
 
+##### E2E Testing Framework
+
+- [x] **Create E2E testing guide** - E2E_TESTING.md
+  - [x] E2E test structure and organization
+  - [x] Workflow E2E test examples
+  - [x] Deployment validation examples
+  - [x] Smoke test examples
+  - [x] Best practices and CI/CD integration
+
+- [x] **Create E2E test infrastructure**
+  - [x] E2E test fixtures - tests/e2e/conftest.py
+  - [x] Test directory structure - test_smoke/, test_workflows/, etc.
+  - [x] Initial smoke tests - test_critical_paths.py
+
 ##### Create E2E Test Suite
 
 - [ ] **Deployment validation tests**
 
-  - [ ] Azure deployment
-  - [ ] Kubernetes deployment
-  - [ ] Docker deployment
-  - [ ] Health checks
+  - [ ] Azure deployment - Framework ready
+  - [ ] Kubernetes deployment - Framework ready
+  - [ ] Docker deployment - Framework ready
+  - [x] Health checks - Smoke tests include this
 
-- [ ] **Smoke tests**
+- [x] **Smoke tests**
 
-  - [ ] Basic functionality
-  - [ ] Critical paths
-  - [ ] Error scenarios
-  - [ ] Performance baseline
+  - [x] Basic functionality - test_critical_paths.py
+  - [x] Critical paths - test_critical_paths.py
+  - [ ] Error scenarios - TODO
+  - [ ] Performance baseline - TODO
 
 - [ ] **Regression tests**
 
-  - [ ] Known issues
-  - [ ] Previous bugs
-  - [ ] Breaking changes
+  - [ ] Known issues - Framework ready
+  - [ ] Previous bugs - Framework ready
+  - [ ] Breaking changes - Framework ready
 
 - [ ] **User workflow tests**
-  - [ ] PR creation workflow
-  - [ ] Issue creation workflow
-  - [ ] Comment handling workflow
-  - [ ] Integration workflows
+  - [ ] PR creation workflow - Framework ready
+  - [ ] Issue creation workflow - Framework ready
+  - [ ] Comment handling workflow - Framework ready
+  - [ ] Integration workflows - Framework ready
 
 #### 6.4 Quality Gates
 
