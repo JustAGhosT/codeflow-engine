@@ -17,43 +17,43 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
 #### 4.1 Comprehensive Documentation
 
 ##### Deployment Guides
-- [ ] **codeflow-engine deployment guide**
-  - [ ] Quick start (5 minutes)
-  - [ ] Full deployment walkthrough
-  - [ ] Azure deployment steps
-  - [ ] Kubernetes deployment
-  - [ ] Docker deployment
-  - [ ] Environment variables reference
-  - [ ] Troubleshooting common issues
+- [x] **codeflow-engine deployment guide**
+  - [x] Quick start (5 minutes) - QUICK_START.md
+  - [x] Full deployment walkthrough - DEPLOYMENT_GUIDE.md (existing)
+  - [x] Azure deployment steps - AZURE_DEPLOYMENT.md
+  - [ ] Kubernetes deployment - TODO
+  - [x] Docker deployment - QUICK_START.md
+  - [ ] Environment variables reference - TODO
+  - [ ] Troubleshooting common issues - TODO
 
-- [ ] **codeflow-desktop build guide**
-  - [ ] Prerequisites
-  - [ ] Build steps (Windows, macOS, Linux)
-  - [ ] Tauri configuration
-  - [ ] Packaging instructions
-  - [ ] Distribution setup
+- [x] **codeflow-desktop build guide**
+  - [x] Prerequisites - DEPLOYMENT.md (existing)
+  - [x] Build steps (Windows, macOS, Linux) - DEPLOYMENT.md
+  - [x] Tauri configuration - DEPLOYMENT.md
+  - [x] Packaging instructions - DEPLOYMENT.md
+  - [x] Distribution setup - DEPLOYMENT.md
 
-- [ ] **codeflow-vscode-extension release guide**
-  - [ ] Development setup
-  - [ ] Build process
-  - [ ] Testing locally
-  - [ ] Publishing to VS Code Marketplace
-  - [ ] Version management
+- [x] **codeflow-vscode-extension release guide**
+  - [x] Development setup - RELEASE_GUIDE.md
+  - [x] Build process - RELEASE_GUIDE.md
+  - [x] Testing locally - RELEASE_GUIDE.md
+  - [x] Publishing to VS Code Marketplace - RELEASE_GUIDE.md
+  - [x] Version management - RELEASE_GUIDE.md
 
-- [ ] **codeflow-website deployment guide**
-  - [ ] Next.js build process
-  - [ ] Azure Static Web Apps deployment
-  - [ ] Environment configuration
-  - [ ] Custom domain setup
-  - [ ] CDN configuration
+- [x] **codeflow-website deployment guide**
+  - [x] Next.js build process - DEPLOYMENT.md
+  - [x] Azure Static Web Apps deployment - DEPLOYMENT.md
+  - [x] Environment configuration - DEPLOYMENT.md
+  - [x] Custom domain setup - DEPLOYMENT.md
+  - [x] CDN configuration - DEPLOYMENT.md
 
-- [ ] **Full stack deployment guide**
-  - [ ] Architecture overview
-  - [ ] Prerequisites
-  - [ ] Step-by-step deployment
-  - [ ] Integration between components
-  - [ ] Health checks and monitoring
-  - [ ] Rollback procedures
+- [x] **Full stack deployment guide**
+  - [x] Architecture overview - FULL_STACK_DEPLOYMENT.md
+  - [x] Prerequisites - FULL_STACK_DEPLOYMENT.md
+  - [x] Step-by-step deployment - FULL_STACK_DEPLOYMENT.md
+  - [x] Integration between components - FULL_STACK_DEPLOYMENT.md
+  - [x] Health checks and monitoring - FULL_STACK_DEPLOYMENT.md
+  - [x] Rollback procedures - FULL_STACK_DEPLOYMENT.md
 
 ##### Architecture Documentation
 - [ ] **System architecture diagrams**
