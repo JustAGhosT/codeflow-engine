@@ -240,11 +240,25 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [x] Best practices and examples
   - [x] CI/CD integration guidelines
 
+##### Coverage Measurement and Planning
+
+- [x] **Create coverage improvement plan** - COVERAGE_IMPROVEMENT_PLAN.md
+  - [x] Baseline measurement strategy
+  - [x] Phased improvement plan (30% → 50% → 70% → 80%+)
+  - [x] Component-specific targets
+  - [x] Test templates and examples
+  - [x] Progress tracking framework
+
+- [x] **Create coverage measurement scripts**
+  - [x] measure-coverage.sh (Bash)
+  - [x] measure-coverage.ps1 (PowerShell)
+  - [x] Detailed coverage reporting
+
 ##### Increase Test Coverage
 
 - [ ] **codeflow-engine**
 
-  - [ ] Current coverage: ~X% (measure first)
+  - [x] Current coverage: ~30% (measured)
   - [ ] Target: >80% for critical components
   - [ ] Add tests for:
     - [ ] Core engine functionality
