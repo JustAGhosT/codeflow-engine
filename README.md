@@ -22,7 +22,8 @@ The CodeFlow Orchestration repository serves as the central hub for:
 - [Migration Overview](./MIGRATION.md) - Complete migration status and progress (72% complete)
 - [Migration Analysis](./MIGRATION_ANALYSIS.md) - Comprehensive analysis, mistakes, and improvements
 - [Migration Phases](./MIGRATION_PHASES.md) - Detailed phase descriptions and goals
-- [Wave 4 Execution Plan](./WAVE4_EXECUTION_PLAN.md) - Optimization & Enhancement (planned)
+- [Wave 4 Execution Plan](./WAVE4_EXECUTION_PLAN.md) - Optimization & Enhancement (in progress)
+- [Documentation Index](./docs/README.md) - Central index for all documentation
 
 ### Key Documentation
 
