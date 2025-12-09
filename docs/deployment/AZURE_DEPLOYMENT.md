@@ -15,7 +15,7 @@ This guide covers deploying CodeFlow Engine to Azure using Azure Container Apps,
 
 ## Architecture
 
-```
+``` text
 ┌─────────────────┐
 │  Azure Container│
 │      Apps       │  ← CodeFlow Engine
@@ -301,24 +301,28 @@ az containerapp logs show \
 
 ### Container Won't Start
 
-1. Check logs:
+1 Check logs:
+
 ```bash
 az containerapp logs show --name codeflow-engine --resource-group codeflow-rg
 ```
 
-2. Verify environment variables:
+2 Verify environment variables
+
 ```bash
 az containerapp show --name codeflow-engine --resource-group codeflow-rg --query properties.template.containers[0].env
 ```
 
-3. Check database connectivity:
+3 Check database connectivity
+
 ```bash
 az postgres flexible-server show --name codeflow-postgres --resource-group codeflow-rg
 ```
 
 ### Database Connection Issues
 
-1. Verify firewall rules allow Container Apps:
+1 Verify firewall rules allow Container Apps:
+
 ```bash
 az postgres flexible-server firewall-rule create \
   --server-name codeflow-postgres \
@@ -328,8 +332,8 @@ az postgres flexible-server firewall-rule create \
   --end-ip-address 0.0.0.0
 ```
 
-2. Check connection string format
-3. Verify credentials in Key Vault
+2 Check connection string format
+3 Verify credentials in Key Vault
 
 ### High Costs
 
@@ -373,4 +377,3 @@ az containerapp revision activate \
 - [Azure Container Apps Documentation](https://docs.microsoft.com/azure/container-apps/)
 - [Bicep Documentation](https://docs.microsoft.com/azure/azure-resource-manager/bicep/)
 - [Full Deployment Guide](./DEPLOYMENT_GUIDE.md)
-

@@ -54,6 +54,7 @@ docker-compose up -d
 ```
 
 This will start:
+
 - CodeFlow Engine (port 8000)
 - PostgreSQL database (port 5432)
 - Redis cache (port 6379)
@@ -67,6 +68,7 @@ curl http://localhost:8000/health
 ```
 
 You should see:
+
 ```json
 {
   "status": "healthy",
@@ -79,7 +81,8 @@ You should see:
 ### Step 5: Access the Dashboard
 
 Open your browser to:
-```
+
+``` text
 http://localhost:8000/dashboard
 ```
 
@@ -104,7 +107,7 @@ If port 8000 is already in use, change it in `docker-compose.yml`:
 services:
   codeflow-engine:
     ports:
-      - "8001:8000"  # Change 8001 to any available port
+      - "8001:8000" # Change 8001 to any available port
 ```
 
 ### Database Connection Error
@@ -130,6 +133,7 @@ docker-compose logs codeflow-engine
 ```
 
 Common issues:
+
 - Missing environment variables
 - Database not ready (wait 30 seconds)
 - Invalid GitHub token
@@ -158,4 +162,3 @@ docker-compose down -v
 - Deploy to production
 
 See the [full documentation](../README.md) for more details.
-

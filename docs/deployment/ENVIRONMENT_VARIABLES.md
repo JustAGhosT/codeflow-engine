@@ -6,13 +6,13 @@ Complete reference for all environment variables used by CodeFlow Engine.
 
 ## Quick Reference
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `DATABASE_URL` | Yes* | - | PostgreSQL connection string |
-| `REDIS_URL` | No | `redis://localhost:6379/0` | Redis connection string |
-| `GITHUB_TOKEN` | Yes* | - | GitHub Personal Access Token |
-| `CODEFLOW_ENV` | No | `development` | Environment (development/staging/production) |
-| `CODEFLOW_LOG_LEVEL` | No | `INFO` | Logging level (DEBUG/INFO/WARNING/ERROR) |
+| Variable             | Required | Default                    | Description                                  |
+| -------------------- | -------- | -------------------------- | -------------------------------------------- |
+| `DATABASE_URL`       | Yes\*    | -                          | PostgreSQL connection string                 |
+| `REDIS_URL`          | No       | `redis://localhost:6379/0` | Redis connection string                      |
+| `GITHUB_TOKEN`       | Yes\*    | -                          | GitHub Personal Access Token                 |
+| `CODEFLOW_ENV`       | No       | `development`              | Environment (development/staging/production) |
+| `CODEFLOW_LOG_LEVEL` | No       | `INFO`                     | Logging level (DEBUG/INFO/WARNING/ERROR)     |
 
 \* Required for production deployments
 
@@ -85,7 +85,8 @@ CODEFLOW_PORT=8080
 PostgreSQL database connection string.
 
 **Format:**
-```
+
+```text
 postgresql://[user[:password]@][host][:port][/database][?param1=value1&...]
 ```
 
@@ -103,6 +104,7 @@ DATABASE_URL=postgresql://user:pass@host:5432/db?pool_size=10&max_overflow=20
 ```
 
 **Connection Pool Options:**
+
 - `pool_size`: Number of connections in pool (default: 10)
 - `max_overflow`: Maximum overflow connections (default: 20)
 - `pool_timeout`: Timeout for getting connection (default: 30)
@@ -121,7 +123,8 @@ DATABASE_URL=postgresql://user:pass@host:5432/db?pool_size=10&max_overflow=20
 Redis cache connection string.
 
 **Format:**
-```
+
+``` text
 redis://[password@]host[:port][/database][?param1=value1&...]
 rediss://[password@]host[:port][/database][?param1=value1&...]  # SSL
 ```
@@ -143,6 +146,7 @@ REDIS_URL=redis://localhost:6379/1
 ```
 
 **Alternative Variables:**
+
 - `REDIS_HOST`: Redis host (default: `localhost`)
 - `REDIS_PORT`: Redis port (default: `6379`)
 - `REDIS_DB`: Database number (default: `0`)
@@ -162,6 +166,7 @@ REDIS_URL=redis://localhost:6379/1
 GitHub Personal Access Token for API authentication.
 
 **Token Format:**
+
 - Classic: `ghp_...`
 - Fine-grained: `github_pat_...`
 
@@ -300,8 +305,11 @@ ANTHROPIC_DEFAULT_MODEL=claude-3-opus-20240229
 ### Other LLM Providers
 
 #### `MISTRAL_API_KEY`
+
 #### `GROQ_API_KEY`
+
 #### `PERPLEXITY_API_KEY`
+
 #### `TOGETHER_API_KEY`
 
 Similar structure to OpenAI/Anthropic.
@@ -698,6 +706,6 @@ All environment variables are validated on startup. Invalid values will cause th
 ## Support
 
 For issues or questions:
+
 - GitHub Issues: [codeflow-engine/issues](https://github.com/JustAGhosT/codeflow-engine/issues)
 - Documentation: [README.md](../../README.md)
-

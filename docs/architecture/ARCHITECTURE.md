@@ -32,7 +32,7 @@ CodeFlow Engine is an AI-powered automation platform that analyzes GitHub pull r
 
 ## High-Level Architecture
 
-``` text
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │                        External Systems                          │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐     │
@@ -73,7 +73,7 @@ CodeFlow Engine is an AI-powered automation platform that analyzes GitHub pull r
 
 ### CodeFlow Engine Internal Structure
 
-``` text
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    FastAPI Application                       │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
@@ -153,7 +153,7 @@ Actions are modular, reusable components:
 
 ### GitHub Webhook Flow
 
-``` text
+```text
 GitHub
   │
   │ Webhook Event (PR opened, comment, etc.)
@@ -183,7 +183,7 @@ Integrations (Slack, Linear, etc.)
 
 ### PR Processing Flow
 
-``` text
+```text
 1. PR Opened/Updated
    │
    ▼
@@ -216,7 +216,7 @@ Integrations (Slack, Linear, etc.)
 
 ### Issue Creation Flow
 
-``` text
+```text
 Quality Analysis
   │
   │ Issues Found
@@ -246,7 +246,7 @@ Notifications
 
 ### Production Deployment (Azure)
 
-``` text
+```text
 ┌─────────────────────────────────────────────────────────┐
 │                    Azure Cloud                           │
 │                                                          │
@@ -277,7 +277,7 @@ Notifications
 
 ### Local Development
 
-``` text
+```text
 Developer Machine
   │
   ├─► VS Code Extension
@@ -342,7 +342,7 @@ Developer Machine
 
 ### Extension ↔ Engine Communication
 
-``` text
+```text
 VS Code Extension
   │
   │ HTTP/WebSocket
@@ -363,7 +363,7 @@ Extension UI Updates
 
 ### Desktop ↔ Engine Communication
 
-``` text
+```text
 Desktop App (Tauri)
   │
   │ HTTP API
@@ -380,7 +380,7 @@ Results Displayed in Desktop UI
 
 ### Website Integration
 
-``` text
+```text
 Website (Next.js)
   │
   │ API Calls (Server-side)
@@ -409,7 +409,7 @@ Content Rendered in Website
 
 ### Relationships
 
-```
+```text
 Workflow ──┬──> WorkflowExecution
            │
            └──> Action
@@ -504,6 +504,6 @@ QualityCheck ──> Metrics
 ## Support
 
 For questions or clarifications:
+
 - GitHub Issues: [codeflow-engine/issues](https://github.com/JustAGhosT/codeflow-engine/issues)
 - Documentation: [README.md](../../README.md)
-
