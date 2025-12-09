@@ -1,4 +1,4 @@
-# 14. Caching Strategy
+﻿# 14. Caching Strategy
 
 ## Status
 
@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-AutoPR needs to optimize performance and reduce redundant operations by implementing an effective
+CodeFlow needs to optimize performance and reduce redundant operations by implementing an effective
 caching strategy. The system requires caching for:
 
 - LLM API responses

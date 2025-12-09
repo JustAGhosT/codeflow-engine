@@ -1,11 +1,11 @@
-# AutoPR Engine Repository Migration Guide
+﻿# CODEFLOW Engine Repository Migration Guide
 
 This guide documents the major repository reorganization completed in Phase 5 of the repository
 structure cleanup.
 
 ## Overview
 
-The AutoPR Engine repository has undergone a comprehensive reorganization to improve
+The CODEFLOW Engine repository has undergone a comprehensive reorganization to improve
 maintainability, discoverability, and developer experience. This migration guide helps developers
 understand the changes and update their workflows accordingly.
 
@@ -17,33 +17,33 @@ understand the changes and update their workflows accordingly.
 
 ```
 docs/
-├── PLAN.md
-├── ARCHITECTURE.md
-├── AI_BOTS_ECOSYSTEM_ANALYSIS.md
-├── ENTERPRISE_MODERNIZATION_PLAN.md
-└── scattered documentation files
+â”œâ”€â”€ PLAN.md
+â”œâ”€â”€ ARCHITECTURE.md
+â”œâ”€â”€ AI_BOTS_ECOSYSTEM_ANALYSIS.md
+â”œâ”€â”€ ENTERPRISE_MODERNIZATION_PLAN.md
+â””â”€â”€ scattered documentation files
 ```
 
 **After:**
 
 ```
 docs/
-├── architecture/
-│   ├── README.md
-│   ├── ARCHITECTURE_LEGACY.md
-│   └── AUTOPR_ENHANCED_SYSTEM.md
-├── plans/
-│   ├── REPOSITORY_STRUCTURE_PLAN.md
-│   ├── ENTERPRISE_MODERNIZATION_PLAN.md
-│   ├── PLAN_LEGACY.md
-│   └── other plan files
-├── analysis/
-│   ├── AI_BOTS_ECOSYSTEM_ANALYSIS.md
-│   └── ecosystem analysis files
-├── development/
-│   ├── ONBOARDING_STRATEGY.md
-│   └── development guides
-└── README.md (main documentation index)
+â”œâ”€â”€ architecture/
+â”‚   â”œâ”€â”€ README.md
+â”‚   â”œâ”€â”€ ARCHITECTURE_LEGACY.md
+â”‚   â””â”€â”€ CODEFLOW_ENHANCED_SYSTEM.md
+â”œâ”€â”€ plans/
+â”‚   â”œâ”€â”€ REPOSITORY_STRUCTURE_PLAN.md
+â”‚   â”œâ”€â”€ ENTERPRISE_MODERNIZATION_PLAN.md
+â”‚   â”œâ”€â”€ PLAN_LEGACY.md
+â”‚   â””â”€â”€ other plan files
+â”œâ”€â”€ analysis/
+â”‚   â”œâ”€â”€ AI_BOTS_ECOSYSTEM_ANALYSIS.md
+â”‚   â””â”€â”€ ecosystem analysis files
+â”œâ”€â”€ development/
+â”‚   â”œâ”€â”€ ONBOARDING_STRATEGY.md
+â”‚   â””â”€â”€ development guides
+â””â”€â”€ README.md (main documentation index)
 ```
 
 ### 2. Configuration Consolidation
@@ -52,20 +52,20 @@ docs/
 
 ```
 configs/
-├── .flake8.test
-├── workflows/phase2-rapid-prototyping.yaml (duplicate)
-└── scattered configuration files
+â”œâ”€â”€ .flake8.test
+â”œâ”€â”€ workflows/phase2-rapid-prototyping.yaml (duplicate)
+â””â”€â”€ scattered configuration files
 ```
 
 **After:**
 
 ```
 configs/
-├── .flake8 (renamed from .flake8.test)
-├── workflows/phase2_rapid_prototyping.yaml (removed duplicate)
-├── config.yaml (validated)
-├── mypy.ini (validated)
-└── organized configuration structure
+â”œâ”€â”€ .flake8 (renamed from .flake8.test)
+â”œâ”€â”€ workflows/phase2_rapid_prototyping.yaml (removed duplicate)
+â”œâ”€â”€ config.yaml (validated)
+â”œâ”€â”€ mypy.ini (validated)
+â””â”€â”€ organized configuration structure
 ```
 
 ### 3. Template Reorganization
@@ -74,25 +74,25 @@ configs/
 
 ```
 templates/
-├── ONBOARDING_STRATEGY.md (should be in docs)
-├── NO_CODE_PLATFORM_PLAN.md (should be in docs)
-├── py.typed (should be in autopr)
-└── scattered template files
+â”œâ”€â”€ ONBOARDING_STRATEGY.md (should be in docs)
+â”œâ”€â”€ NO_CODE_PLATFORM_PLAN.md (should be in docs)
+â”œâ”€â”€ py.typed (should be in CODEFLOW)
+â””â”€â”€ scattered template files
 ```
 
 **After:**
 
 ```
 templates/
-├── platforms/ (40+ platform templates)
-├── discovery/ (code analysis templates)
-├── deployment/ (deployment templates)
-├── security/ (security templates)
-├── monitoring/ (monitoring templates)
-├── testing/ (testing templates)
-├── documentation/ (documentation templates)
-├── integrations/ (integration templates)
-└── organized template structure
+â”œâ”€â”€ platforms/ (40+ platform templates)
+â”œâ”€â”€ discovery/ (code analysis templates)
+â”œâ”€â”€ deployment/ (deployment templates)
+â”œâ”€â”€ security/ (security templates)
+â”œâ”€â”€ monitoring/ (monitoring templates)
+â”œâ”€â”€ testing/ (testing templates)
+â”œâ”€â”€ documentation/ (documentation templates)
+â”œâ”€â”€ integrations/ (integration templates)
+â””â”€â”€ organized template structure
 ```
 
 ### 4. Build System Cleanup
@@ -100,21 +100,21 @@ templates/
 **Before:**
 
 ```
-├── pyproject.toml
-├── requirements.txt (redundant)
-├── requirements-dev.txt (redundant)
-├── .coverage.Home.30960.XkmJtlRx (scattered)
-├── coverage.xml (scattered)
-└── build-artifacts/ (unorganized)
+â”œâ”€â”€ pyproject.toml
+â”œâ”€â”€ requirements.txt (redundant)
+â”œâ”€â”€ requirements-dev.txt (redundant)
+â”œâ”€â”€ .coverage.Home.30960.XkmJtlRx (scattered)
+â”œâ”€â”€ coverage.xml (scattered)
+â””â”€â”€ build-artifacts/ (unorganized)
 ```
 
 **After:**
 
 ```
-├── pyproject.toml (single source of truth)
-├── build-artifacts/ (organized)
-├── .gitignore (updated for better artifact management)
-└── consolidated build system
+â”œâ”€â”€ pyproject.toml (single source of truth)
+â”œâ”€â”€ build-artifacts/ (organized)
+â”œâ”€â”€ .gitignore (updated for better artifact management)
+â””â”€â”€ consolidated build system
 ```
 
 ## Import Path Updates

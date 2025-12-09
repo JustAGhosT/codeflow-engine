@@ -1,5 +1,5 @@
-"""
-AutoPR Template System
+﻿"""
+CodeFlow Template System
 
 This module provides a flexible template system with support for multiple template providers.
 The default provider uses Jinja2 for template rendering, with optional integration
@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 DEFAULT_TEMPLATE_DIRS = [
     Path(__file__).parent / "templates",
     Path.cwd() / "templates",
-    Path.home() / ".autopr" / "templates",
+    Path.home() / ".codeflow" / "templates",
 ]
 
 

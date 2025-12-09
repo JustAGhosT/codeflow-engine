@@ -1,5 +1,5 @@
-"""
-Data models for the AutoPR Agent Framework.
+﻿"""
+Data models for the CodeFlow Agent Framework.
 
 This module defines the Pydantic models used for type-safe data exchange between agents.
 """

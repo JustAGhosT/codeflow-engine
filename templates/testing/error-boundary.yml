@@ -1,9 +1,9 @@
-name: "React Error Boundary Component Template"
+﻿name: "React Error Boundary Component Template"
 category: "testing"
 description:
   "Production-ready React Error Boundary component with error logging and user-friendly fallback UI"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["testing", "react", "error_boundary", "error_handling", "production"]
 
 template_info:
@@ -276,7 +276,7 @@ template: |
               <div style={{
                 fontSize: '48px',
                 marginBottom: '16px'
-              }}>⚠️</div>
+              }}>âš ï¸</div>
               <h1 style={{
                 fontSize: '24px',
                 fontWeight: '600',

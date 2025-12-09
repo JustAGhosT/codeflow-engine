@@ -1,12 +1,12 @@
-# Custom Domain Implementation for app.autopr.io
+﻿# Custom Domain Implementation for app.codeflow.io
 
 ## Problem Statement
 
-The domain for app.autopr.io was not linked in the infrastructure configuration. While the Static Web App for autopr.io had custom domain configuration, the Container App for app.autopr.io was missing this configuration, requiring manual setup through the Azure Portal after each deployment.
+The domain for app.codeflow.io was not linked in the infrastructure configuration. While the Static Web App for codeflow.io had custom domain configuration, the Container App for app.codeflow.io was missing this configuration, requiring manual setup through the Azure Portal after each deployment.
 
 ## Solution
 
-Added custom domain configuration directly to the Azure Container App Bicep template, mirroring the approach already implemented for the Static Web App (autopr.io).
+Added custom domain configuration directly to the Azure Container App Bicep template, mirroring the approach already implemented for the Static Web App (codeflow.io).
 
 ## Changes Made
 
@@ -15,7 +15,7 @@ Added custom domain configuration directly to the Azure Container App Bicep temp
 **Added custom domain parameter:**
 ```bicep
 @description('Custom domain name for the container app')
-param customDomain string = 'app.autopr.io'
+param customDomain string = 'app.codeflow.io'
 ```
 
 **Added custom domain configuration to Container App ingress:**
@@ -41,11 +41,11 @@ output customDomain string = customDomain
 
 ### 2. Parameter Files (`infrastructure/bicep/codeflow-engine-parameters.json`)
 
-Added customDomain parameter with value "app.autopr.io".
+Added customDomain parameter with value "app.codeflow.io".
 
 ### 3. Deployment Scripts (`infrastructure/bicep/deploy-codeflow-engine.sh`)
 
-- Added CUSTOM_DOMAIN parameter (default: "app.autopr.io")
+- Added CUSTOM_DOMAIN parameter (default: "app.codeflow.io")
 - Included customDomain in deployment command
 - Added DNS setup instructions to the output
 
@@ -59,12 +59,12 @@ Added customDomain parameter with value "app.autopr.io".
 
 **Updated `docs/ARCHITECTURE_AND_DEPLOYMENT.md`:**
 
-- Expanded Custom Domain Issue section to include both autopr.io and app.autopr.io
+- Expanded Custom Domain Issue section to include both codeflow.io and app.codeflow.io
 - Added comprehensive DNS configuration section with examples
 - Added specific instructions for obtaining FQDNs from deployment outputs
 - Documented SSL certificate auto-management
 
-**Updated `infrastructure/bicep/README-AUTOPR-ENGINE.md`:**
+**Updated `infrastructure/bicep/README-codeflow-ENGINE.md`:**
 
 - Added customDomain to required parameters section
 - Updated Next Steps with detailed DNS configuration instructions
@@ -73,7 +73,7 @@ Added customDomain parameter with value "app.autopr.io".
 ## How It Works
 
 1. **Deployment**: When the Bicep template is deployed, it creates the Container App with custom domain configuration
-2. **DNS Configuration**: Administrator adds a CNAME record pointing app.autopr.io to the Container App FQDN
+2. **DNS Configuration**: Administrator adds a CNAME record pointing app.codeflow.io to the Container App FQDN
 3. **Validation**: Azure validates domain ownership via the CNAME record
 4. **Certificate Provisioning**: Azure automatically provisions an SSL certificate for the custom domain
 5. **Auto-Renewal**: Azure manages certificate renewal before expiration
@@ -82,7 +82,7 @@ Added customDomain parameter with value "app.autopr.io".
 
 1. **No Manual Intervention**: Custom domain persists across all deployments
 2. **Automatic SSL Management**: Azure handles certificate provisioning and renewal
-3. **Consistency**: Same approach used for both autopr.io and app.autopr.io
+3. **Consistency**: Same approach used for both codeflow.io and app.codeflow.io
 4. **Infrastructure as Code**: Domain configuration is version-controlled and repeatable
 5. **Reduced Deployment Time**: Eliminates manual post-deployment steps
 
@@ -100,12 +100,12 @@ TTL: 3600
 Get the Container App FQDN from deployment outputs:
 ```bash
 az deployment group show \
-  --resource-group prod-rg-san-autopr \
+  --resource-group prod-rg-san-codeflow \
   --name codeflow-engine \
   --query properties.outputs.containerAppUrl.value
 ```
 
-Example: `app.autopr.io` → `prod-autopr-san-app.eastus2.azurecontainerapps.io`
+Example: `app.codeflow.io` â†’ `prod-codeflow-san-app.eastus2.azurecontainerapps.io`
 
 ## Verification
 
@@ -113,13 +113,13 @@ After DNS propagation (typically 15-30 minutes), verify:
 
 ```bash
 # Check custom domain
-curl -I https://app.autopr.io/
+curl -I https://app.codeflow.io/
 
 # Check health endpoint
-curl https://app.autopr.io/health
+curl https://app.codeflow.io/health
 
 # Check API endpoint
-curl https://app.autopr.io/api
+curl https://app.codeflow.io/api
 ```
 
 All should return successful responses over HTTPS with a valid SSL certificate.
@@ -133,10 +133,10 @@ All should return successful responses over HTTPS with a valid SSL certificate.
 
 ## Testing
 
-- ✅ Bicep template validated with `az bicep build`
-- ✅ Code review completed (0 critical issues)
-- ✅ CodeQL security scan passed (0 alerts)
-- ✅ Changes follow infrastructure as code best practices
+- âœ… Bicep template validated with `az bicep build`
+- âœ… Code review completed (0 critical issues)
+- âœ… CodeQL security scan passed (0 alerts)
+- âœ… Changes follow infrastructure as code best practices
 
 ## Related Files
 

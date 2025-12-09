@@ -1,5 +1,5 @@
-"""
-AutoPR Action: Handle PR Comments
+﻿"""
+CodeFlow Action: Handle PR Comments
 Processes PR comments, attempts to fix issues, and creates GitHub issues for complex problems.
 """
 
@@ -36,7 +36,7 @@ def handle_pr_comment(inputs: HandlePRCommentInputs) -> HandlePRCommentOutputs:
     Processes PR comments and attempts to fix issues or create GitHub issues.
 
     Workflow:
-    1. React to comment with 👀 to indicate pickup
+    1. React to comment with ðŸ‘€ to indicate pickup
     2. Analyze comment for actionable feedback
     3. Attempt simple fixes (typos, formatting, etc.)
     4. For complex issues, create GitHub issue
@@ -65,7 +65,7 @@ def handle_pr_comment(inputs: HandlePRCommentInputs) -> HandlePRCommentOutputs:
     # For complex issues, create GitHub issue
     if is_complex_issue(comment):
         issue_number = create_github_issue(inputs)
-        # React with 📝 to indicate issue created
+        # React with ðŸ“ to indicate issue created
         react_to_comment(inputs.repo_owner, inputs.repo_name, inputs.comment_id, "memo")
 
         return HandlePRCommentOutputs(
@@ -205,7 +205,7 @@ def create_github_issue(inputs: HandlePRCommentInputs) -> int:
 - File: {inputs.file_path or "N/A"}
 - Line: {inputs.line_number or "N/A"}
 
-**Generated automatically by AutoPR**
+**Generated automatically by CodeFlow**
 """
 
     # Create issue using GitHub CLI
@@ -220,7 +220,7 @@ def create_github_issue(inputs: HandlePRCommentInputs) -> int:
         "--repo",
         f"{inputs.repo_owner}/{inputs.repo_name}",
         "--label",
-        "autopr-generated,from-pr-comment",
+        "codeflow-generated,from-pr-comment",
     ]
 
     result = subprocess.run(cmd, check=False, capture_output=True, text=True)

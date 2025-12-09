@@ -1,5 +1,5 @@
 """
-AutoPR Configuration Module
+CodeFlow Configuration Module
 
 Centralized configuration management system with:
 - Environment-specific configurations
@@ -19,7 +19,7 @@ import yaml
 
 # Import new centralized configuration system
 from codeflow_engine.config.settings import (
-    AutoPRSettings,
+    CodeFlowSettings,
     Environment,
     LLMProvider,
     get_settings,
@@ -34,9 +34,9 @@ from codeflow_engine.config.validation import (
 
 
 @dataclass
-class AutoPRConfig:
+class CodeFlowConfig:
     """
-    Main configuration class for AutoPR Engine.
+    Main configuration class for CodeFlow Engine.
 
     Handles loading configuration from environment variables,
     YAML files, and provides sensible defaults.
@@ -115,12 +115,12 @@ class AutoPRConfig:
         if config_path is None:
             # Look for config file in common locations
             possible_paths = [
-                "autopr.yaml",
-                "autopr.yml",
-                ".autopr.yaml",
-                ".autopr.yml",
-                pathlib.Path("~/.autopr.yaml").expanduser(),
-                pathlib.Path("~/.autopr.yml").expanduser(),
+                "codeflow.yaml",
+                "codeflow.yml",
+                ".codeflow.yaml",
+                ".codeflow.yml",
+                pathlib.Path("~/.codeflow.yaml").expanduser(),
+                pathlib.Path("~/.codeflow.yml").expanduser(),
             ]
 
             for path in possible_paths:
@@ -176,7 +176,7 @@ class AutoPRConfig:
         return any([self.openai_api_key, self.anthropic_api_key])
 
     @classmethod
-    def from_file(cls, config_path: str) -> "AutoPRConfig":
+    def from_file(cls, config_path: str) -> "CodeFlowConfig":
         """
         Create configuration instance from file.
 
@@ -184,7 +184,7 @@ class AutoPRConfig:
             config_path: Path to configuration file
 
         Returns:
-            AutoPRConfig instance
+            CodeFlowConfig instance
         """
         config = cls()
         config._load_from_file(config_path)
@@ -192,12 +192,12 @@ class AutoPRConfig:
 
 
 # Backward compatibility wrapper
-def get_config() -> AutoPRConfig:
+def get_config() -> CodeFlowConfig:
     """
     Get legacy configuration (deprecated).
 
     Returns:
-        AutoPRConfig instance for backward compatibility
+        CodeFlowConfig instance for backward compatibility
 
     Deprecated:
         Use get_settings() instead for the new configuration system
@@ -207,15 +207,15 @@ def get_config() -> AutoPRConfig:
         DeprecationWarning,
         stacklevel=2,
     )
-    return AutoPRConfig()
+    return CodeFlowConfig()
 
 
 # New centralized configuration exports
 __all__ = [
     # Legacy configuration (deprecated)
-    "AutoPRConfig",
+    "CodeFlowConfig",
     # New centralized configuration system
-    "AutoPRSettings",
+    "CodeFlowSettings",
     "Environment",
     "LLMProvider",
     "check_environment_variables",

@@ -1,8 +1,8 @@
-"""
-AutoPR Action: Configurable LLM Provider
+﻿"""
+CodeFlow Action: Configurable LLM Provider
 Unified interface for multiple LLM providers (OpenAI, Anthropic, Mistral, Groq, Perplexity, etc.)
 
-This file has been refactored into a modular structure under autopr.actions.llm.
+This file has been refactored into a modular structure under codeflow.actions.llm.
 This module maintains backward compatibility by re-exporting the modular components.
 """
 

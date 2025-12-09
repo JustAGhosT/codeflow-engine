@@ -1,4 +1,4 @@
-# 6. Plugin System Design
+﻿# 6. Plugin System Design
 
 ## Status
 
@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-AutoPR requires a flexible plugin system to:
+CodeFlow requires a flexible plugin system to:
 
 - Support third-party extensions
 - Enable modular feature development
@@ -58,8 +58,8 @@ We will implement a plugin system with the following architecture:
    - Entry points via `pyproject.toml`:
 
    ```toml
-   [tool.poetry.plugins."autopr.plugins"]
-   "github" = "autopr_github.plugin:GithubPlugin"
+   [tool.poetry.plugins."codeflow.plugins"]
+   "github" = "codeflow_github.plugin:GithubPlugin"
    ```
 
    - Dynamic loading from specified directories

@@ -1,6 +1,6 @@
-# GitHub App Code Adaptation Guide
+﻿# GitHub App Code Adaptation Guide
 
-## ⚠️ Important Note
+## âš ï¸ Important Note
 
 The GitHub App code was migrated from a **Next.js/TypeScript** project (`twinesandstraps`) to `codeflow-engine`, which is a **Python/FastAPI** project. The code needs to be adapted.
 
@@ -18,11 +18,11 @@ The following files were copied but are in **Next.js format**:
 
 ### Option 1: Convert to FastAPI (Recommended)
 
-Convert the Next.js routes to FastAPI endpoints in `autopr/`:
+Convert the Next.js routes to FastAPI endpoints in `codeflow/`:
 
 **Structure:**
 ```
-autopr/
+codeflow/
   integrations/
     github_app/
       __init__.py
@@ -40,11 +40,11 @@ octokit = "^2.0.0"  # Python GitHub SDK
 pynacl = "^1.5.0"   # For libsodium encryption
 ```
 
-### Option 2: Use autopr-desktop (React/TypeScript)
+### Option 2: Use codeflow-desktop (React/TypeScript)
 
-The `autopr-desktop` folder is a React/TypeScript project. You could:
-1. Move the GitHub App code to `autopr-desktop/src/`
-2. Set up Next.js in autopr-desktop
+The `codeflow-desktop` folder is a React/TypeScript project. You could:
+1. Move the GitHub App code to `codeflow-desktop/src/`
+2. Set up Next.js in codeflow-desktop
 3. Deploy as a separate service
 
 ### Option 3: Standalone Next.js Service
@@ -58,8 +58,8 @@ Create a separate Next.js microservice for the GitHub App:
 
 Since codeflow-engine already has:
 - FastAPI/Flask infrastructure (dashboard/server.py)
-- GitHub client (`autopr/clients/github_client.py`)
-- Integration system (`autopr/integrations/`)
+- GitHub client (`codeflow/clients/github_client.py`)
+- Integration system (`codeflow/integrations/`)
 
 **Best approach:** Convert to FastAPI and integrate with existing infrastructure.
 
@@ -67,12 +67,12 @@ Since codeflow-engine already has:
 
 1. **Review the copied files** to understand the functionality
 2. **Convert TypeScript to Python**:
-   - `route.ts` → FastAPI route handlers
-   - `github-secrets.ts` → Python encryption using `pynacl`
-   - `page.tsx` → HTML template or API response
+   - `route.ts` â†’ FastAPI route handlers
+   - `github-secrets.ts` â†’ Python encryption using `pynacl`
+   - `page.tsx` â†’ HTML template or API response
 3. **Integrate with existing codeflow-engine**:
-   - Use `autopr/clients/github_client.py` if possible
-   - Add to `autopr/integrations/` registry
+   - Use `codeflow/clients/github_client.py` if possible
+   - Add to `codeflow/integrations/` registry
 4. **Update dependencies** in `pyproject.toml`
 5. **Test the endpoints**
 

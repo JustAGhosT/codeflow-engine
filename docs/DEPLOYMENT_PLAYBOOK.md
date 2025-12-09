@@ -1,5 +1,5 @@
-# Deployment Playbook
-## AutoPR Engine - Production Deployment Guide
+﻿# Deployment Playbook
+## CodeFlow Engine - Production Deployment Guide
 
 **Version:** 1.0.0  
 **Last Updated:** 2025-11-22  
@@ -68,7 +68,7 @@ PORT=8000
 DASHBOARD_PORT=8080
 
 # Database (PostgreSQL)
-DATABASE_URL=postgresql://user:password@localhost:5432/autopr_prod
+DATABASE_URL=postgresql://user:password@localhost:5432/codeflow_prod
 DB_POOL_SIZE=20
 DB_MAX_OVERFLOW=40
 DB_POOL_TIMEOUT=30
@@ -96,8 +96,8 @@ LINEAR_API_KEY=lin_api_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 # Security
 SECRET_KEY=generate-a-secure-random-key-here
 JWT_SECRET=generate-another-secure-random-key
-ALLOWED_HOSTS=autopr.example.com,api.autopr.example.com
-CORS_ORIGINS=https://autopr.example.com
+ALLOWED_HOSTS=codeflow.example.com,api.codeflow.example.com
+CORS_ORIGINS=https://codeflow.example.com
 
 # Performance
 WORKER_PROCESSES=4
@@ -138,16 +138,16 @@ sudo apt-get install -y \
     supervisor
 
 # Python virtual environment
-python3.12 -m venv /opt/autopr/venv
-source /opt/autopr/venv/bin/activate
+python3.12 -m venv /opt/CodeFlow/venv
+source /opt/CodeFlow/venv/bin/activate
 
 # Python dependencies
 pip install --upgrade pip setuptools wheel
 pip install -r requirements.txt --no-cache-dir
 
 # Verify installation
-python -m autopr.version
-python -m autopr.health_check
+python -m codeflow.version
+python -m codeflow.health_check
 ```
 
 ---
@@ -161,12 +161,12 @@ python -m autopr.health_check
 psql -h localhost -U postgres
 
 # Create database and user
-CREATE DATABASE autopr_prod;
-CREATE USER autopr_user WITH ENCRYPTED PASSWORD 'secure_password';
-GRANT ALL PRIVILEGES ON DATABASE autopr_prod TO autopr_user;
+CREATE DATABASE codeflow_prod;
+CREATE USER codeflow_user WITH ENCRYPTED PASSWORD 'secure_password';
+GRANT ALL PRIVILEGES ON DATABASE codeflow_prod TO codeflow_user;
 
 # Enable required extensions
-\c autopr_prod
+\c codeflow_prod
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pg_trgm";  -- For text search
 CREATE EXTENSION IF NOT EXISTS "btree_gin"; -- For index optimization
@@ -176,7 +176,7 @@ CREATE EXTENSION IF NOT EXISTS "btree_gin"; -- For index optimization
 
 ```bash
 # Export connection string
-export DATABASE_URL=postgresql://autopr_user:secure_password@localhost:5432/autopr_prod
+export DATABASE_URL=postgresql://codeflow_user:secure_password@localhost:5432/codeflow_prod
 
 # Run migrations
 alembic upgrade head
@@ -218,7 +218,7 @@ psql $DATABASE_URL -c "ANALYZE;"
 
 ```bash
 # Clone repository (or pull latest)
-cd /opt/autopr
+cd /opt/CodeFlow
 git clone https://github.com/your-org/codeflow-engine.git .
 # OR
 git pull origin main
@@ -234,7 +234,7 @@ git verify-tag v1.0.1
 
 ```bash
 # Activate virtual environment
-source /opt/autopr/venv/bin/activate
+source /opt/CodeFlow/venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
@@ -243,7 +243,7 @@ pip install -r requirements.txt
 pytest tests/ -v --tb=short
 
 # Build frontend (if applicable)
-cd autopr-desktop
+cd codeflow-desktop
 npm install
 npm run build
 cd ..
@@ -253,12 +253,12 @@ cd ..
 
 ```bash
 # Copy configuration files
-cp .env.production /opt/autopr/.env
-cp config/production.yaml /opt/autopr/config/config.yaml
+cp .env.production /opt/CodeFlow/.env
+cp config/production.yaml /opt/CodeFlow/config/config.yaml
 
 # Set proper permissions
-chmod 600 /opt/autopr/.env
-chmod 644 /opt/autopr/config/config.yaml
+chmod 600 /opt/CodeFlow/.env
+chmod 644 /opt/CodeFlow/config/config.yaml
 
 # Verify configuration
 python -c "from codeflow_engine.config import load_config; print(load_config())"
@@ -270,31 +270,31 @@ python -c "from codeflow_engine.config import load_config; print(load_config())"
 
 ### 1. Systemd Service (Main API)
 
-Create `/etc/systemd/system/autopr-api.service`:
+Create `/etc/systemd/system/codeflow-api.service`:
 
 ```ini
 [Unit]
-Description=AutoPR Engine API
+Description=CodeFlow Engine API
 After=network.target postgresql.service redis.service
 Wants=postgresql.service redis.service
 
 [Service]
 Type=notify
-User=autopr
-Group=autopr
-WorkingDirectory=/opt/autopr
-Environment="PATH=/opt/autopr/venv/bin"
-EnvironmentFile=/opt/autopr/.env
+User=CodeFlow
+Group=CodeFlow
+WorkingDirectory=/opt/CodeFlow
+Environment="PATH=/opt/CodeFlow/venv/bin"
+EnvironmentFile=/opt/CodeFlow/.env
 
-ExecStart=/opt/autopr/venv/bin/gunicorn \
+ExecStart=/opt/CodeFlow/venv/bin/gunicorn \
     --bind 0.0.0.0:8000 \
     --workers 4 \
     --worker-class uvicorn.workers.UvicornWorker \
     --timeout 300 \
-    --access-logfile /var/log/autopr/access.log \
-    --error-logfile /var/log/autopr/error.log \
+    --access-logfile /var/log/CodeFlow/access.log \
+    --error-logfile /var/log/CodeFlow/error.log \
     --log-level info \
-    autopr.main:app
+    codeflow.main:app
 
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID
@@ -309,7 +309,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
-ReadWritePaths=/var/log/autopr /opt/autopr/data
+ReadWritePaths=/var/log/CodeFlow /opt/CodeFlow/data
 
 [Install]
 WantedBy=multi-user.target
@@ -317,23 +317,23 @@ WantedBy=multi-user.target
 
 ### 2. Systemd Service (Dashboard)
 
-Create `/etc/systemd/system/autopr-dashboard.service`:
+Create `/etc/systemd/system/codeflow-dashboard.service`:
 
 ```ini
 [Unit]
-Description=AutoPR Engine Dashboard
-After=network.target autopr-api.service
-Wants=autopr-api.service
+Description=CodeFlow Engine Dashboard
+After=network.target codeflow-api.service
+Wants=codeflow-api.service
 
 [Service]
 Type=simple
-User=autopr
-Group=autopr
-WorkingDirectory=/opt/autopr
-Environment="PATH=/opt/autopr/venv/bin"
-EnvironmentFile=/opt/autopr/.env
+User=CodeFlow
+Group=CodeFlow
+WorkingDirectory=/opt/CodeFlow
+Environment="PATH=/opt/CodeFlow/venv/bin"
+EnvironmentFile=/opt/CodeFlow/.env
 
-ExecStart=/opt/autopr/venv/bin/python -m autopr.dashboard.server
+ExecStart=/opt/CodeFlow/venv/bin/python -m codeflow.dashboard.server
 
 Restart=always
 RestartSec=10
@@ -345,7 +345,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
-ReadWritePaths=/var/log/autopr /opt/autopr/data
+ReadWritePaths=/var/log/CodeFlow /opt/CodeFlow/data
 
 [Install]
 WantedBy=multi-user.target
@@ -353,15 +353,15 @@ WantedBy=multi-user.target
 
 ### 3. Nginx Configuration
 
-Create `/etc/nginx/sites-available/autopr`:
+Create `/etc/nginx/sites-available/CodeFlow`:
 
 ```nginx
-upstream autopr_api {
+upstream codeflow_api {
     server 127.0.0.1:8000 max_fails=3 fail_timeout=30s;
     keepalive 32;
 }
 
-upstream autopr_dashboard {
+upstream codeflow_dashboard {
     server 127.0.0.1:8080 max_fails=3 fail_timeout=30s;
     keepalive 32;
 }
@@ -369,18 +369,18 @@ upstream autopr_dashboard {
 # Redirect HTTP to HTTPS
 server {
     listen 80;
-    server_name autopr.example.com;
+    server_name codeflow.example.com;
     return 301 https://$server_name$request_uri;
 }
 
 # Main HTTPS server
 server {
     listen 443 ssl http2;
-    server_name autopr.example.com;
+    server_name codeflow.example.com;
 
     # SSL Configuration
-    ssl_certificate /etc/letsencrypt/live/autopr.example.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/autopr.example.com/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/codeflow.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/codeflow.example.com/privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256';
     ssl_prefer_server_ciphers on;
@@ -394,7 +394,7 @@ server {
 
     # API Endpoints
     location /api/ {
-        proxy_pass http://autopr_api;
+        proxy_pass http://codeflow_api;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -412,7 +412,7 @@ server {
 
     # Dashboard
     location / {
-        proxy_pass http://autopr_dashboard;
+        proxy_pass http://codeflow_dashboard;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -422,7 +422,7 @@ server {
 
     # WebSocket support
     location /ws {
-        proxy_pass http://autopr_dashboard;
+        proxy_pass http://codeflow_dashboard;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
@@ -432,14 +432,14 @@ server {
 
     # Static files (if any)
     location /static/ {
-        alias /opt/autopr/static/;
+        alias /opt/CodeFlow/static/;
         expires 1y;
         add_header Cache-Control "public, immutable";
     }
 
     # Health check endpoint (bypass auth)
     location /health {
-        proxy_pass http://autopr_api/api/health;
+        proxy_pass http://codeflow_api/api/health;
         access_log off;
     }
 }
@@ -449,23 +449,23 @@ server {
 
 ```bash
 # Enable services
-sudo systemctl enable autopr-api.service
-sudo systemctl enable autopr-dashboard.service
+sudo systemctl enable codeflow-api.service
+sudo systemctl enable codeflow-dashboard.service
 sudo systemctl enable nginx
 
 # Start services
-sudo systemctl start autopr-api.service
-sudo systemctl start autopr-dashboard.service
+sudo systemctl start codeflow-api.service
+sudo systemctl start codeflow-dashboard.service
 sudo systemctl restart nginx
 
 # Check service status
-sudo systemctl status autopr-api.service
-sudo systemctl status autopr-dashboard.service
+sudo systemctl status codeflow-api.service
+sudo systemctl status codeflow-dashboard.service
 sudo systemctl status nginx
 
 # View logs
-sudo journalctl -u autopr-api.service -f
-sudo journalctl -u autopr-dashboard.service -f
+sudo journalctl -u codeflow-api.service -f
+sudo journalctl -u codeflow-dashboard.service -f
 ```
 
 ---
@@ -492,11 +492,11 @@ redis-cli -h localhost ping || echo "Redis connection failed"
 
 ```bash
 # Run integration tests against deployed environment
-export AUTOPR_API_URL=https://autopr.example.com
+export codeflow_API_URL=https://codeflow.example.com
 pytest tests/integration/ -v --tb=short
 
 # Test workflow creation
-curl -X POST https://autopr.example.com/api/workflows/ \
+curl -X POST https://codeflow.example.com/api/workflows/ \
     -H "Authorization: Bearer $GITHUB_TOKEN" \
     -H "Content-Type: application/json" \
     -d '{
@@ -510,10 +510,10 @@ curl -X POST https://autopr.example.com/api/workflows/ \
 
 ```bash
 # Check response times
-time curl -s https://autopr.example.com/api/health > /dev/null
+time curl -s https://codeflow.example.com/api/health > /dev/null
 
 # Load test (using Apache Bench)
-ab -n 1000 -c 10 https://autopr.example.com/api/health
+ab -n 1000 -c 10 https://codeflow.example.com/api/health
 
 # Check database connection pool
 psql $DATABASE_URL -c "
@@ -522,7 +522,7 @@ SELECT
     max_conn - count(*) as available_connections
 FROM pg_stat_activity, 
     (SELECT setting::int as max_conn FROM pg_settings WHERE name = 'max_connections') s
-WHERE datname = 'autopr_prod';
+WHERE datname = 'codeflow_prod';
 "
 ```
 
@@ -530,16 +530,16 @@ WHERE datname = 'autopr_prod';
 
 ```bash
 # Check SSL certificate
-openssl s_client -connect autopr.example.com:443 -servername autopr.example.com < /dev/null
+openssl s_client -connect codeflow.example.com:443 -servername codeflow.example.com < /dev/null
 
 # Verify HTTPS redirect
-curl -I http://autopr.example.com | grep "301\|302"
+curl -I http://codeflow.example.com | grep "301\|302"
 
 # Check security headers
-curl -I https://autopr.example.com | grep -E "X-Frame-Options|X-Content-Type-Options|Strict-Transport-Security"
+curl -I https://codeflow.example.com | grep -E "X-Frame-Options|X-Content-Type-Options|Strict-Transport-Security"
 
 # Verify file permissions
-ls -la /opt/autopr/.env | grep "600"
+ls -la /opt/CodeFlow/.env | grep "600"
 ```
 
 ---
@@ -552,25 +552,25 @@ If critical issues are detected post-deployment:
 
 ```bash
 # 1. Stop services immediately
-sudo systemctl stop autopr-api.service
-sudo systemctl stop autopr-dashboard.service
+sudo systemctl stop codeflow-api.service
+sudo systemctl stop codeflow-dashboard.service
 
 # 2. Restore previous code version
-cd /opt/autopr
+cd /opt/CodeFlow
 git checkout tags/v1.0.0  # Previous stable version
 
 # 3. Restore database (if needed)
 # WARNING: This will lose data since backup!
-psql -h localhost -U postgres -c "DROP DATABASE autopr_prod;"
-psql -h localhost -U postgres -c "CREATE DATABASE autopr_prod;"
-pg_restore -d autopr_prod /backups/autopr_prod_pre_deployment.dump
+psql -h localhost -U postgres -c "DROP DATABASE codeflow_prod;"
+psql -h localhost -U postgres -c "CREATE DATABASE codeflow_prod;"
+pg_restore -d codeflow_prod /backups/codeflow_prod_pre_deployment.dump
 
 # 4. Restart services
-sudo systemctl start autopr-api.service
-sudo systemctl start autopr-dashboard.service
+sudo systemctl start codeflow-api.service
+sudo systemctl start codeflow-dashboard.service
 
 # 5. Verify rollback
-curl -f https://autopr.example.com/api/health
+curl -f https://codeflow.example.com/api/health
 ```
 
 ### Gradual Rollback (Blue-Green)
@@ -609,19 +609,19 @@ curl http://localhost:9090/metrics
 
 ```bash
 # Create a test workflow
-WORKFLOW_ID=$(curl -X POST https://autopr.example.com/api/workflows/ \
+WORKFLOW_ID=$(curl -X POST https://codeflow.example.com/api/workflows/ \
     -H "Authorization: Bearer $GITHUB_TOKEN" \
     -H "Content-Type: application/json" \
     -d '{"name":"smoke-test","trigger":"manual"}' | jq -r '.workflow_id')
 
 # Execute workflow
-curl -X POST https://autopr.example.com/api/workflows/$WORKFLOW_ID/execute \
+curl -X POST https://codeflow.example.com/api/workflows/$WORKFLOW_ID/execute \
     -H "Authorization: Bearer $GITHUB_TOKEN" \
     -H "Content-Type: application/json" \
     -d '{"context":{"test":true}}'
 
 # Verify execution
-curl https://autopr.example.com/api/workflows/$WORKFLOW_ID \
+curl https://codeflow.example.com/api/workflows/$WORKFLOW_ID \
     -H "Authorization: Bearer $GITHUB_TOKEN"
 ```
 
@@ -635,11 +635,11 @@ curl https://autopr.example.com/api/workflows/$WORKFLOW_ID \
 ### 4. Stakeholder Communication
 
 ```
-Subject: AutoPR Engine Deployment - v1.0.1 Complete
+Subject: CodeFlow Engine Deployment - v1.0.1 Complete
 
 Team,
 
-The deployment of AutoPR Engine v1.0.1 to production has been completed successfully.
+The deployment of CodeFlow Engine v1.0.1 to production has been completed successfully.
 
 Deployment Details:
 - Version: v1.0.1
@@ -654,9 +654,9 @@ Key Changes:
 - Exception sanitization
 
 Monitoring:
-- Dashboard: https://autopr.example.com
-- Metrics: https://metrics.autopr.example.com
-- Logs: https://logs.autopr.example.com
+- Dashboard: https://codeflow.example.com
+- Metrics: https://metrics.codeflow.example.com
+- Logs: https://logs.codeflow.example.com
 
 Please report any issues to the on-call team.
 
@@ -675,7 +675,7 @@ Configure Prometheus scraping:
 ```yaml
 # prometheus.yml
 scrape_configs:
-  - job_name: 'autopr-api'
+  - job_name: 'codeflow-api'
     static_configs:
       - targets: ['localhost:9090']
     metrics_path: '/metrics'
@@ -686,7 +686,7 @@ scrape_configs:
 
 Configure uptime monitoring (e.g., UptimeRobot, Pingdom):
 
-- **Endpoint:** https://autopr.example.com/api/health
+- **Endpoint:** https://codeflow.example.com/api/health
 - **Interval:** 1 minute
 - **Timeout:** 10 seconds
 - **Alert:** Email/SMS on failure
@@ -697,7 +697,7 @@ Configure log shipping to centralized logging:
 
 ```bash
 # rsyslog or filebeat configuration
-# Ship logs from /var/log/autopr/* to ELK/Splunk/DataDog
+# Ship logs from /var/log/CodeFlow/* to ELK/Splunk/DataDog
 ```
 
 ### 4. Alert Configuration
@@ -718,7 +718,7 @@ Set up alerts for:
 **Database Backups:**
 ```bash
 # Daily full backup
-0 2 * * * pg_dump -Fc autopr_prod > /backups/autopr_prod_$(date +\%Y\%m\%d).dump
+0 2 * * * pg_dump -Fc codeflow_prod > /backups/codeflow_prod_$(date +\%Y\%m\%d).dump
 
 # Hourly incremental backup (using WAL archiving)
 # Configure in postgresql.conf:
@@ -729,7 +729,7 @@ Set up alerts for:
 **Application Backups:**
 ```bash
 # Backup configuration and data
-0 3 * * * tar -czf /backups/autopr_app_$(date +\%Y\%m\%d).tar.gz /opt/autopr/.env /opt/autopr/data
+0 3 * * * tar -czf /backups/codeflow_app_$(date +\%Y\%m\%d).tar.gz /opt/CodeFlow/.env /opt/CodeFlow/data
 ```
 
 ### 2. Recovery Procedures
@@ -737,7 +737,7 @@ Set up alerts for:
 **Database Recovery:**
 ```bash
 # Full restore from backup
-pg_restore -d autopr_prod /backups/autopr_prod_20251122.dump
+pg_restore -d codeflow_prod /backups/codeflow_prod_20251122.dump
 
 # Point-in-time recovery (if WAL archiving enabled)
 # 1. Restore base backup
@@ -749,11 +749,11 @@ pg_restore -d autopr_prod /backups/autopr_prod_20251122.dump
 **Application Recovery:**
 ```bash
 # Restore application files
-tar -xzf /backups/autopr_app_20251122.tar.gz -C /opt/autopr
+tar -xzf /backups/codeflow_app_20251122.tar.gz -C /opt/CodeFlow
 
 # Restart services
-sudo systemctl restart autopr-api.service
-sudo systemctl restart autopr-dashboard.service
+sudo systemctl restart codeflow-api.service
+sudo systemctl restart codeflow-dashboard.service
 ```
 
 ### 3. Backup Testing
@@ -774,13 +774,13 @@ Schedule monthly backup restoration tests:
 **1. Service Won't Start**
 ```bash
 # Check service logs
-sudo journalctl -u autopr-api.service -n 50
+sudo journalctl -u codeflow-api.service -n 50
 
 # Check file permissions
-ls -la /opt/autopr/.env
+ls -la /opt/CodeFlow/.env
 
 # Verify dependencies
-source /opt/autopr/venv/bin/activate
+source /opt/CodeFlow/venv/bin/activate
 pip check
 ```
 
@@ -799,10 +799,10 @@ alembic stamp head
 **3. High Memory Usage**
 ```bash
 # Check process memory
-ps aux | grep autopr | awk '{print $6}' | awk '{sum+=$1} END {print sum/1024 " MB"}'
+ps aux | grep CodeFlow | awk '{print $6}' | awk '{sum+=$1} END {print sum/1024 " MB"}'
 
 # Restart services
-sudo systemctl restart autopr-api.service
+sudo systemctl restart codeflow-api.service
 
 # Adjust worker count in systemd service file
 ```
@@ -810,14 +810,14 @@ sudo systemctl restart autopr-api.service
 **4. Connection Pool Exhausted**
 ```bash
 # Check active connections
-psql $DATABASE_URL -c "SELECT count(*) FROM pg_stat_activity WHERE datname = 'autopr_prod';"
+psql $DATABASE_URL -c "SELECT count(*) FROM pg_stat_activity WHERE datname = 'codeflow_prod';"
 
 # Increase pool size in .env
 DB_POOL_SIZE=30
 DB_MAX_OVERFLOW=60
 
 # Restart service
-sudo systemctl restart autopr-api.service
+sudo systemctl restart codeflow-api.service
 ```
 
 ---

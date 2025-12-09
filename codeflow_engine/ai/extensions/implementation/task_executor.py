@@ -1,4 +1,4 @@
-"""
+﻿"""
 Task Executor Module
 
 Handles task execution, monitoring, and state management for implementation roadmap.
@@ -215,7 +215,7 @@ class TaskExecutor:
     async def _setup_sentry_monitoring(self) -> dict[str, Any]:
         """Set up Sentry monitoring."""
         config_content = '''"""
-Sentry Configuration for AutoPR Engine
+Sentry Configuration for CodeFlow Engine
 """
 
 import sentry_sdk

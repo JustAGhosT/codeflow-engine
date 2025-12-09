@@ -1,4 +1,4 @@
-# 20. Package Naming Convention: codeflow_engine
+﻿# 20. Package Naming Convention: codeflow_engine
 
 ## Status
 
@@ -10,7 +10,7 @@ Accepted
 
 ## Context
 
-The project was initially named "autopr" with the Python package "autopr". As the project evolved into a more comprehensive automation platform, a rename was needed to better reflect its scope and avoid namespace conflicts with other automation tools.
+The project was initially named "CodeFlow" with the Python package "CodeFlow". As the project evolved into a more comprehensive automation platform, a rename was needed to better reflect its scope and avoid namespace conflicts with other automation tools.
 
 The package needed to:
 - Reflect the broader scope beyond just pull requests
@@ -20,27 +20,27 @@ The package needed to:
 
 ## Decision
 
-Rename the Python package from `autopr` to `codeflow_engine` while maintaining user-facing names for backward compatibility.
+Rename the Python package from `CodeFlow` to `codeflow_engine` while maintaining user-facing names for backward compatibility.
 
 ### Package Structure
 
 - **Python Package**: `codeflow_engine` (snake_case for Python convention)
 - **PyPI Distribution**: `codeflow-engine` (kebab-case for package managers)
-- **CLI Tools**: `autopr`, `autopr-server`, `autopr-worker`, `autopr-migration` (maintained for backward compatibility)
-- **Configuration Files**: `autopr.yaml`, `autopr.yml` (maintained for backward compatibility)
-- **Plugin Namespaces**: `autopr.actions`, `autopr.integrations`, `autopr.llm_providers` (maintained for backward compatibility)
+- **CLI Tools**: `CodeFlow`, `codeflow-server`, `codeflow-worker`, `codeflow-migration` (maintained for backward compatibility)
+- **Configuration Files**: `codeflow.yaml`, `codeflow.yml` (maintained for backward compatibility)
+- **Plugin Namespaces**: `codeflow.actions`, `codeflow.integrations`, `codeflow.llm_providers` (maintained for backward compatibility)
 
 ### Import Changes
 
 ```python
 # Before
-from autopr.engine import AutoPREngine
-from autopr.config import AutoPRConfig
-from autopr.actions.platform_detector import PlatformDetector
+from codeflow.engine import CodeFlowEngine
+from codeflow.config import CodeFlowConfig
+from codeflow.actions.platform_detector import PlatformDetector
 
 # After
-from codeflow_engine.engine import AutoPREngine
-from codeflow_engine.config import AutoPRConfig
+from codeflow_engine.engine import CodeFlowEngine
+from codeflow_engine.config import CodeFlowConfig
 from codeflow_engine.actions.platform_detector import PlatformDetector
 ```
 
@@ -56,9 +56,9 @@ from codeflow_engine.actions.platform_detector import PlatformDetector
 
 ### Backward Compatibility Strategy
 
-1. **User-Facing Names**: CLI commands remain `autopr` for existing scripts and workflows
-2. **Configuration Files**: Still look for `autopr.yaml` to avoid breaking user configs
-3. **Plugin System**: Plugin namespaces use `autopr.*` for community plugin compatibility
+1. **User-Facing Names**: CLI commands remain `CodeFlow` for existing scripts and workflows
+2. **Configuration Files**: Still look for `codeflow.yaml` to avoid breaking user configs
+3. **Plugin System**: Plugin namespaces use `codeflow.*` for community plugin compatibility
 4. **Documentation**: Clear migration guide for any custom code
 5. **Gradual Transition**: Phased approach allows users to migrate at their own pace
 
@@ -66,7 +66,7 @@ from codeflow_engine.actions.platform_detector import PlatformDetector
 
 ### Updated Files
 
-1. **Package Directory**: `autopr/` → `codeflow_engine/`
+1. **Package Directory**: `CodeFlow/` â†’ `codeflow_engine/`
 2. **pyproject.toml**: Updated package declaration, coverage paths, isort config
 3. **setup.py**: Updated entry points and package references
 4. **All Python Files**: Updated 697+ import statements
@@ -75,20 +75,20 @@ from codeflow_engine.actions.platform_detector import PlatformDetector
 
 ### Plugin System Compatibility
 
-The plugin system maintains backward compatibility by keeping the `autopr.*` namespace:
+The plugin system maintains backward compatibility by keeping the `codeflow.*` namespace:
 
 ```python
-[tool.poetry.plugins."autopr.actions"]
+[tool.poetry.plugins."codeflow.actions"]
 "platform_detector" = "codeflow_engine.actions.platform_detector:PlatformDetector"
 
-[tool.poetry.plugins."autopr.integrations"]
+[tool.poetry.plugins."codeflow.integrations"]
 "github" = "codeflow_engine.integrations.github:GitHubIntegration"
 
-[tool.poetry.plugins."autopr.llm_providers"]
+[tool.poetry.plugins."codeflow.llm_providers"]
 "openai" = "codeflow_engine.ai.providers.openai:OpenAIProvider"
 ```
 
-This allows third-party plugins to continue using the familiar `autopr.*` namespace while the core package uses `codeflow_engine`.
+This allows third-party plugins to continue using the familiar `codeflow.*` namespace while the core package uses `codeflow_engine`.
 
 ## Consequences
 
@@ -110,7 +110,7 @@ This allows third-party plugins to continue using the familiar `autopr.*` namesp
 ### Neutral
 
 - **Community Plugins**: Plugin developers need to understand namespace mapping
-- **Import Length**: `codeflow_engine` is longer than `autopr` (14 vs 6 characters)
+- **Import Length**: `codeflow_engine` is longer than `CodeFlow` (14 vs 6 characters)
 
 ## Migration Guide
 
@@ -118,9 +118,9 @@ This allows third-party plugins to continue using the familiar `autopr.*` namesp
 
 No changes needed! CLI commands remain the same:
 ```bash
-autopr --help
-autopr-server start
-autopr-worker run
+CodeFlow --help
+codeflow-server start
+codeflow-worker run
 ```
 
 ### For Developers (Using as Library)
@@ -129,17 +129,17 @@ Update imports in your code:
 
 ```python
 # Old imports
-from autopr.engine import AutoPREngine
-from autopr.config import AutoPRConfig
+from codeflow.engine import CodeFlowEngine
+from codeflow.config import CodeFlowConfig
 
 # New imports
-from codeflow_engine.engine import AutoPREngine
-from codeflow_engine.config import AutoPRConfig
+from codeflow_engine.engine import CodeFlowEngine
+from codeflow_engine.config import CodeFlowConfig
 ```
 
 Use find-replace in your codebase:
 ```bash
-find . -name "*.py" -exec sed -i 's/from autopr\./from codeflow_engine./g' {} \;
+find . -name "*.py" -exec sed -i 's/from CodeFlow\./from codeflow_engine./g' {} \;
 ```
 
 ### For Plugin Authors
@@ -151,7 +151,7 @@ Package imports use the new name, but plugin namespaces remain:
 from codeflow_engine.actions.base import Action
 
 # But your plugin.yaml still uses old namespace
-[tool.poetry.plugins."autopr.actions"]
+[tool.poetry.plugins."codeflow.actions"]
 "my_custom_action" = "my_package.actions:MyAction"
 ```
 
@@ -160,7 +160,7 @@ from codeflow_engine.actions.base import Action
 - **2025-12-08**: Package rename completed
 - **2025-12-08**: Documentation updated
 - **2025-12-08**: All tests passing with new imports
-- **Q1 2026**: Deprecation notices for any remaining `autopr` references
+- **Q1 2026**: Deprecation notices for any remaining `CodeFlow` references
 - **Q2 2026**: Full transition to `codeflow_engine` branding
 
 ## Related Decisions

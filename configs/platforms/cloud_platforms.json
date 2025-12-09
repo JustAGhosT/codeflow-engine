@@ -1,4 +1,4 @@
-{
+﻿{
   "version": "1.0.0",
   "description": "Configuration for cloud hosting platforms. Individual platform configurations are stored in the cloud/ subdirectory.",
   "platforms": [
@@ -84,7 +84,7 @@
       "folder_patterns": 0.1
     },
     "categories": ["cloud_hosting"],
-    "last_updated_by": "AutoPR Engine",
+    "last_updated_by": "CodeFlow Engine",
     "schema_version": "1.1.0"
   }
 }

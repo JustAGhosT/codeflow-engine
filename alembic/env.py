@@ -1,4 +1,4 @@
-import os
+﻿import os
 import sys
 from logging.config import fileConfig
 
@@ -66,8 +66,8 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    # If AUTOPR_OFFLINE_MIGRATION is set, use offline mode even in online context
-    if os.getenv("AUTOPR_OFFLINE_MIGRATION"):
+    # If CODEFLOW_OFFLINE_MIGRATION is set, use offline mode even in online context
+    if os.getenv("CODEFLOW_OFFLINE_MIGRATION"):
         run_migrations_offline()
         return
     

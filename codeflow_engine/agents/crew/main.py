@@ -1,4 +1,4 @@
-"""
+﻿"""
 Crew Main Module
 
 Main module for crew-based agent collaboration.
@@ -48,8 +48,8 @@ def get_llm_provider_manager() -> LLMProviderManager | None:
         return None
 
 
-class AutoPRCrew:
-    """Main crew orchestration for AutoPR operations."""
+class CodeFlowCrew:
+    """Main crew orchestration for CodeFlow operations."""
 
     def __init__(
         self,

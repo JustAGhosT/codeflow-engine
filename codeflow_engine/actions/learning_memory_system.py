@@ -1,5 +1,5 @@
-"""
-AutoPR Action: Learning & Memory System
+﻿"""
+CodeFlow Action: Learning & Memory System
 Tracks patterns, user preferences, and project context to improve decision-making over time.
 """
 
@@ -32,7 +32,7 @@ class MemoryOutputs(BaseModel):
 
 class LearningMemorySystem:
     def __init__(self, db_path: str | None = None) -> None:
-        self.db_path: str = db_path or "autopr_memory.db"
+        self.db_path: str = db_path or "codeflow_memory.db"
         self.init_database()
 
     def init_database(self) -> None:

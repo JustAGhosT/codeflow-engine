@@ -1,16 +1,16 @@
-# AutoPR Package Architecture
+﻿# CodeFlow Package Architecture
 
 ## Overview
 
-AutoPR is built as a modular system with a clear separation of concerns across multiple packages,
+CodeFlow is built as a modular system with a clear separation of concerns across multiple packages,
 supporting both .NET and Python runtimes. This document outlines the package structure,
 responsibilities, and relationships between different components.
 
 ## Core Packages (NuGet/.NET)
 
-### AutoPR.Core
+### codeflow.Core
 
-**NuGet**: `AutoPR.Core`**Purpose**: Core interfaces, models, and shared utilities used throughout
+**NuGet**: `codeflow.Core`**Purpose**: Core interfaces, models, and shared utilities used throughout
 the platform.
 
 **Key Components**:
@@ -21,9 +21,9 @@ the platform.
 - Base exception types
 - Configuration models
 
-### AutoPR.Plugins
+### codeflow.Plugins
 
-**NuGet**: `AutoPR.Plugins`**Purpose**: Base interfaces and utilities for developing AutoPR plugins.
+**NuGet**: `codeflow.Plugins`**Purpose**: Base interfaces and utilities for developing CodeFlow plugins.
 
 **Key Components**:
 
@@ -33,9 +33,9 @@ the platform.
 - Base classes for common plugin types
 - Plugin metadata attributes
 
-### AutoPR.Extensions
+### codeflow.Extensions
 
-**NuGet**: `AutoPR.Extensions`**Purpose**: Common extensions and utilities used across the platform.
+**NuGet**: `codeflow.Extensions`**Purpose**: Common extensions and utilities used across the platform.
 
 **Key Components**:
 
@@ -47,9 +47,9 @@ the platform.
 
 ## Language-Specific Runtimes
 
-### AutoPR.Python
+### codeflow.Python
 
-**NuGet**: `AutoPR.Python`**Purpose**: Python runtime integration for AutoPR.
+**NuGet**: `codeflow.Python`**Purpose**: Python runtime integration for codeflow.
 
 **Features**:
 
@@ -62,9 +62,9 @@ the platform.
 - Asynchronous task execution
 - GIL-aware thread pooling
 
-### AutoPR.Node
+### codeflow.Node
 
-**NuGet**: `AutoPR.Node`**Purpose**: Node.js runtime integration for AutoPR.
+**NuGet**: `codeflow.Node`**Purpose**: Node.js runtime integration for codeflow.
 
 **Features**:
 
@@ -76,10 +76,10 @@ the platform.
 
 ## Client Libraries
 
-### @autopr/client (npm)
+### @CodeFlow/client (npm)
 
-**Package**: `@autopr/client`**Language**: TypeScript/JavaScript**Purpose**: Official
-TypeScript/JavaScript client for interacting with AutoPR services.
+**Package**: `@CodeFlow/client`**Language**: TypeScript/JavaScript**Purpose**: Official
+TypeScript/JavaScript client for interacting with CodeFlow services.
 
 **Features**:
 
@@ -89,9 +89,9 @@ TypeScript/JavaScript client for interacting with AutoPR services.
 - Authentication helpers
 - WebSocket support for real-time updates
 
-### AutoPR.Client (NuGet)
+### codeflow.Client (NuGet)
 
-**NuGet**: `AutoPR.Client`**Language**: C#**Purpose**: Official .NET client for AutoPR services.
+**NuGet**: `codeflow.Client`**Language**: C#**Purpose**: Official .NET client for CodeFlow services.
 
 **Features**:
 
@@ -114,12 +114,12 @@ TypeScript/JavaScript client for interacting with AutoPR services.
 
 ```text
 myplugin/
-├── src/
-│   ├── index.ts          # Plugin entry point
-│   ├── config.schema.ts  # Configuration schema
-│   └── ...               # Plugin implementation
-├── package.json          # Plugin metadata and dependencies
-└── README.md             # Documentation
+â”œâ”€â”€ src/
+â”‚   â”œâ”€â”€ index.ts          # Plugin entry point
+â”‚   â”œâ”€â”€ config.schema.ts  # Configuration schema
+â”‚   â””â”€â”€ ...               # Plugin implementation
+â”œâ”€â”€ package.json          # Plugin metadata and dependencies
+â””â”€â”€ README.md             # Documentation
 ```
 
 ### Development Guidelines
@@ -133,10 +133,10 @@ myplugin/
 
 ## Plugin Packages
 
-### @autopr/plugin-github
+### @CodeFlow/plugin-github
 
-**Package**: `@autopr/plugin-github`**Type**: Integration Plugin**Purpose**: GitHub integration for
-AutoPR.
+**Package**: `@CodeFlow/plugin-github`**Type**: Integration Plugin**Purpose**: GitHub integration for
+codeflow.
 
 **Features**:
 
@@ -148,10 +148,10 @@ AutoPR.
 - GitHub Apps support
 - Fine-grained permissions
 
-### @autopr/plugin-azure
+### @CodeFlow/plugin-azure
 
-**Package**: `@autopr/plugin-azure`**Type**: Integration Plugin**Purpose**: Azure DevOps integration
-for AutoPR.
+**Package**: `@CodeFlow/plugin-azure`**Type**: Integration Plugin**Purpose**: Azure DevOps integration
+for codeflow.
 
 **Features**:
 
@@ -162,10 +162,10 @@ for AutoPR.
 - Azure DevOps REST API client
 - Service principal authentication
 
-### @autopr/plugin-gitlab
+### @CodeFlow/plugin-gitlab
 
-**Package**: `@autopr/plugin-gitlab`**Type**: Integration Plugin**Purpose**: GitLab integration for
-AutoPR.
+**Package**: `@CodeFlow/plugin-gitlab`**Type**: Integration Plugin**Purpose**: GitLab integration for
+codeflow.
 
 **Features**:
 
@@ -176,10 +176,10 @@ AutoPR.
 - GitLab API client with pagination
 - Group and subgroup support
 
-### @autopr/plugin-autoweave
+### @CodeFlow/plugin-autoweave
 
-**Package**: `@autopr/plugin-autoweave`**Type**: Integration Plugin**Purpose**: AutoWeave
-integration for AutoPR.
+**Package**: `@CodeFlow/plugin-autoweave`**Type**: Integration Plugin**Purpose**: AutoWeave
+integration for codeflow.
 
 **Features**:
 
@@ -279,22 +279,22 @@ templates.
 ```mermaid
 graph TD
     %% Core Packages
-    A[AutoPR.Core] --> B[AutoPR.Plugins]
-    A --> C[AutoPR.Extensions]
+    A[codeflow.Core] --> B[codeflow.Plugins]
+    A --> C[codeflow.Extensions]
 
     %% Language Runtimes
-    B --> D[AutoPR.Python]
-    B --> E[AutoPR.Node]
+    B --> D[codeflow.Python]
+    B --> E[codeflow.Node]
 
     %% Client Libraries
-    A --> F[@autopr/client]
-    A --> G[AutoPR.Client]
+    A --> F[@CodeFlow/client]
+    A --> G[codeflow.Client]
 
     %% Plugin Packages
-    B --> H[@autopr/plugin-github]
-    B --> I[@autopr/plugin-azure]
-    B --> J[@autopr/plugin-gitlab]
-    B --> K[@autopr/plugin-autoweave]
+    B --> H[@CodeFlow/plugin-github]
+    B --> I[@CodeFlow/plugin-azure]
+    B --> J[@CodeFlow/plugin-gitlab]
+    B --> K[@CodeFlow/plugin-autoweave]
 
     %% Template System
     A --> L[@autoweave/template-engine]
@@ -307,10 +307,10 @@ graph TD
     N --> Q[@autoweave/templates-ai]
 
     %% Python Services
-    D --> R[autopr-python]
-    R --> S[autopr.ai]
-    R --> T[autopr.templates]
-    R --> U[autopr.analysis]
+    D --> R[codeflow-python]
+    R --> S[codeflow.ai]
+    R --> T[codeflow.templates]
+    R --> U[codeflow.analysis]
 
     %% Styling
     classDef core fill:#f9f,stroke:#333

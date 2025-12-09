@@ -1,5 +1,5 @@
-# Master Product Requirements Document (PRD)
-## AutoPR Engine
+﻿# Master Product Requirements Document (PRD)
+## CodeFlow Engine
 
 **Document Version:** 1.0  
 **Date:** 2025-11-22  
@@ -11,7 +11,7 @@
 
 ## Executive Summary
 
-**Product Name:** AutoPR Engine  
+**Product Name:** CodeFlow Engine  
 **Product Vision:** Transform GitHub pull request workflows through intelligent AI-powered automation, making code review faster, more consistent, and higher quality for development teams worldwide.
 
 **Target Market:** 
@@ -449,30 +449,30 @@ Manual code reviews are time-consuming, inconsistent, and error-prone. Developme
 ### System Components
 
 ```
-┌─────────────────────────────────────────┐
-│         GitHub Webhook                   │
-└─────────────┬───────────────────────────┘
-              │
-              ▼
-┌─────────────────────────────────────────┐
-│      AutoPR API Gateway (FastAPI)        │
-│  Auth, Rate Limiting, Routing            │
-└─────────┬───────────────────────────────┘
-          │
-    ┌─────┼─────┬─────────┐
-    │     │     │         │
-    ▼     ▼     ▼         ▼
-┌────┐ ┌────┐ ┌────┐  ┌────┐
-│Work│ │Integ│ │Anal│  │AI  │
-│flow│ │Hub │ │ytics│  │Eng │
-└──┬─┘ └──┬─┘ └──┬─┘  └──┬─┘
-   │      │      │       │
-   └──────┴──────┴───────┘
-              │
-              ▼
-┌─────────────────────────────────────────┐
-│   Data Layer (PostgreSQL + Redis)       │
-└─────────────────────────────────────────┘
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚         GitHub Webhook                   â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+              â”‚
+              â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚      CodeFlow API Gateway (FastAPI)        â”‚
+â”‚  Auth, Rate Limiting, Routing            â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+          â”‚
+    â”Œâ”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+    â”‚     â”‚     â”‚         â”‚
+    â–¼     â–¼     â–¼         â–¼
+â”Œâ”€â”€â”€â”€â” â”Œâ”€â”€â”€â”€â” â”Œâ”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”
+â”‚Workâ”‚ â”‚Integâ”‚ â”‚Analâ”‚  â”‚AI  â”‚
+â”‚flowâ”‚ â”‚Hub â”‚ â”‚yticsâ”‚  â”‚Eng â”‚
+â””â”€â”€â”¬â”€â”˜ â””â”€â”€â”¬â”€â”˜ â””â”€â”€â”¬â”€â”˜  â””â”€â”€â”¬â”€â”˜
+   â”‚      â”‚      â”‚       â”‚
+   â””â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”˜
+              â”‚
+              â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚   Data Layer (PostgreSQL + Redis)       â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ### Technology Stack
@@ -534,20 +534,20 @@ Manual code reviews are time-consuming, inconsistent, and error-prone. Developme
 ## Release Plan
 
 ### Current State (v1.0.1)
-- Core workflow engine ✅
-- Multi-agent AI review ✅
-- GitHub integration ✅
-- Slack/Linear integration ✅
-- Basic analytics ✅
-- Volume-aware workflows ✅
+- Core workflow engine âœ…
+- Multi-agent AI review âœ…
+- GitHub integration âœ…
+- Slack/Linear integration âœ…
+- Basic analytics âœ…
+- Volume-aware workflows âœ…
 
 ### Phase 1 (Current - Weeks 1-4)
 **Focus:** Critical fixes and foundation
-- Master PRD (this document) ✅
-- Security audit ✅
-- Logging consolidation ✅
-- DB optimization (already done) ✅
-- Database indexes (already done) ✅
+- Master PRD (this document) âœ…
+- Security audit âœ…
+- Logging consolidation âœ…
+- DB optimization (already done) âœ…
+- Database indexes (already done) âœ…
 
 ### Phase 2 (Weeks 5-8)
 **Focus:** Performance and testing

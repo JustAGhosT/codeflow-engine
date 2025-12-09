@@ -1,5 +1,5 @@
-"""
-AutoPR Action: Platform Detector
+﻿"""
+CodeFlow Action: Platform Detector
 Detects which rapid prototyping platform was used and routes accordingly
 """
 
@@ -553,7 +553,7 @@ class PlatformDetector:
         return base_config
 
     def _get_recommended_workflow(self, platform: str, confidence: float) -> str:
-        """Get recommended AutoPR workflow for the platform"""
+        """Get recommended CodeFlow workflow for the platform"""
 
         if confidence < 0.5:
             return "phase2_generic_enhancement"
@@ -708,9 +708,9 @@ class PlatformDetector:
         return "unknown"
 
 
-# Entry point for AutoPR
+# Entry point for CodeFlow
 def run(inputs_dict: dict) -> dict:
-    """AutoPR entry point"""
+    """CodeFlow entry point"""
     inputs = PlatformDetectorInputs(**inputs_dict)
     detector = PlatformDetector()
     outputs = detector.detect_platform(inputs)

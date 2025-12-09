@@ -1,5 +1,5 @@
-"""
-Enhanced Configuration Management for AutoPR Engine
+﻿"""
+Enhanced Configuration Management for CodeFlow Engine
 
 This module provides a comprehensive configuration system with:
 - Environment-specific configurations
@@ -306,9 +306,9 @@ class AILintingConfig(BaseModel):
     enable_orchestration: bool = Field(default=False)
 
 
-class AutoPRSettings(BaseSettings):
+class CodeFlowSettings(BaseSettings):
     """
-    Main settings class for AutoPR Engine.
+    Main settings class for CodeFlow Engine.
 
     This class combines all configuration sections and provides
     environment-specific loading, validation, and management.
@@ -377,12 +377,12 @@ class AutoPRSettings(BaseSettings):
             List of Path objects to check for configuration files
         """
         return [
-            Path.cwd() / "autopr.yaml",
-            Path.cwd() / "autopr.yml",
-            Path.cwd() / ".autopr.yaml",
-            Path.cwd() / ".autopr.yml",
-            Path.home() / ".autopr.yaml",
-            Path.home() / ".autopr.yml",
+            Path.cwd() / "codeflow.yaml",
+            Path.cwd() / "codeflow.yml",
+            Path.cwd() / ".codeflow.yaml",
+            Path.cwd() / ".codeflow.yml",
+            Path.home() / ".codeflow.yaml",
+            Path.home() / ".codeflow.yml",
         ]
 
     def _load_yaml_config(self, config_path: Path) -> dict[str, Any] | None:
@@ -538,7 +538,7 @@ class AutoPRSettings(BaseSettings):
         self._load_custom_config()
 
     @classmethod
-    def from_file(cls, config_path: str | Path) -> "AutoPRSettings":
+    def from_file(cls, config_path: str | Path) -> "CodeFlowSettings":
         """
         Create settings instance from configuration file.
 
@@ -546,7 +546,7 @@ class AutoPRSettings(BaseSettings):
             config_path: Path to configuration file
 
         Returns:
-            AutoPRSettings instance
+            CodeFlowSettings instance
         """
         config_path = Path(config_path)
         if not config_path.exists():
@@ -566,40 +566,40 @@ class AutoPRSettings(BaseSettings):
 
 
 # Global settings instance
-_settings: AutoPRSettings | None = None
+_settings: CodeFlowSettings | None = None
 
 
-def get_settings() -> AutoPRSettings:
+def get_settings() -> CodeFlowSettings:
     """
     Get the global settings instance.
 
     Returns:
-        AutoPRSettings instance
+        CodeFlowSettings instance
     """
     global _settings
     if _settings is None:
-        _settings = AutoPRSettings()
+        _settings = CodeFlowSettings()
     return _settings
 
 
-def reload_settings() -> AutoPRSettings:
+def reload_settings() -> CodeFlowSettings:
     """
     Reload the global settings instance.
 
     Returns:
-        Reloaded AutoPRSettings instance
+        Reloaded CodeFlowSettings instance
     """
     global _settings
     _settings = None
     return get_settings()
 
 
-def set_settings(settings: AutoPRSettings) -> None:
+def set_settings(settings: CodeFlowSettings) -> None:
     """
     Set the global settings instance.
 
     Args:
-        settings: AutoPRSettings instance to set as global
+        settings: CodeFlowSettings instance to set as global
     """
     global _settings
     _settings = settings

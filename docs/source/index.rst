@@ -1,7 +1,7 @@
-AutoPR Engine Documentation
+﻿CodeFlow Engine Documentation
 ==========================
 
-Welcome to the AutoPR Engine documentation. AutoPR is a multi-faceted automated code review and quality management system that implements AI-powered code analysis, automated fixes, and quality assurance workflows.
+Welcome to the CodeFlow Engine documentation. CodeFlow is a multi-faceted automated code review and quality management system that implements AI-powered code analysis, automated fixes, and quality assurance workflows.
 
 .. toctree::
    :maxdepth: 2
@@ -12,7 +12,7 @@ Welcome to the AutoPR Engine documentation. AutoPR is a multi-faceted automated 
 Overview
 --------
 
-AutoPR Engine provides:
+CodeFlow Engine provides:
 
 * **AI-Powered Code Analysis**: Intelligent code review and analysis using multiple AI providers
 * **Quality Assurance Pipeline**: Comprehensive quality checks with multiple modes (Fast, Comprehensive, AI-Enhanced, Smart)
@@ -24,11 +24,11 @@ AutoPR Engine provides:
 Quick Start
 -----------
 
-To get started with AutoPR Engine:
+To get started with CodeFlow Engine:
 
-1. Install the package: ``pip install autopr-engine``
+1. Install the package: ``pip install codeflow-engine``
 2. Configure your API keys for AI providers
-3. Run quality analysis: ``autopr quality --mode fast``
+3. Run quality analysis: ``CodeFlow quality --mode fast``
 4. Review and apply suggested fixes
 
 For detailed installation and configuration instructions, see the :doc:`getting-started` guide.

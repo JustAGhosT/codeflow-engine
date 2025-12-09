@@ -1,4 +1,4 @@
-"""Main Axolo integration client."""
+﻿"""Main Axolo integration client."""
 
 from datetime import datetime
 import logging
@@ -19,13 +19,13 @@ logger = logging.getLogger(__name__)
 
 class AxoloIntegration:
     """
-    Primary communication integration using Axolo for GitHub ↔ Slack
+    Primary communication integration using Axolo for GitHub â†” Slack
 
     Features:
     - Ephemeral PR channels (1 PR = 1 Channel)
     - Bi-directional GitHub/Slack sync
     - AI tool integration and mentions
-    - Custom AutoPR commands
+    - Custom CodeFlow commands
     - Smart reminder system
     """
 
@@ -135,13 +135,13 @@ class AxoloIntegration:
                 "end_of_day_summary": os.getenv("AXOLO_EOD_SUMMARY", "17:00"),
             },
             ai_tool_mentions={
-                "autopr": os.getenv("AUTOPR_MENTION", "@autopr"),
+                "CodeFlow": os.getenv("codeflow_MENTION", "@CodeFlow"),
                 "copilot": os.getenv("COPILOT_MENTION", "@github-copilot"),
             },
             custom_commands={
-                "analyze": "/autopr-analyze",
-                "status": "/autopr-status",
-                "assign": "/autopr-assign-ai",
+                "analyze": "/codeflow-analyze",
+                "status": "/codeflow-status",
+                "assign": "/codeflow-assign-ai",
             },
         )
 
@@ -176,10 +176,10 @@ class AxoloIntegration:
 
         return channel
 
-    async def post_autopr_analysis(
+    async def post_codeflow_analysis(
         self, channel: AxoloPRChannel, analysis_result: dict[str, Any]
     ) -> None:
-        """Post AutoPR analysis results to Axolo channel"""
+        """Post CodeFlow analysis results to Axolo channel"""
 
         if not self.messaging:
             logger.error("Messaging not initialized")
@@ -196,7 +196,7 @@ class AxoloIntegration:
                     "type": "header",
                     "text": {
                         "type": "plain_text",
-                        "text": "🤖 AutoPR Analysis Complete",
+                        "text": "ðŸ¤– CodeFlow Analysis Complete",
                     },
                 },
                 {
@@ -265,7 +265,7 @@ class AxoloIntegration:
                     "type": "header",
                     "text": {
                         "type": "plain_text",
-                        "text": "🔗 Linear Issues Created",
+                        "text": "ðŸ”— Linear Issues Created",
                     },
                 },
             ],
@@ -277,7 +277,7 @@ class AxoloIntegration:
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"• *{issue.get('title', 'Untitled')}*\n{issue.get('url', 'No URL')}",
+                    "text": f"â€¢ *{issue.get('title', 'Untitled')}*\n{issue.get('url', 'No URL')}",
                 },
             }
             message["blocks"].append(issue_block)
@@ -308,7 +308,7 @@ class AxoloIntegration:
                     "type": "header",
                     "text": {
                         "type": "plain_text",
-                        "text": "🤖 AI Tools Assigned",
+                        "text": "ðŸ¤– AI Tools Assigned",
                     },
                 },
             ],
@@ -320,7 +320,7 @@ class AxoloIntegration:
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"• *{assignment.get('tool', 'Unknown')}*: {assignment.get('task', 'No task specified')}",
+                    "text": f"â€¢ *{assignment.get('tool', 'Unknown')}*: {assignment.get('task', 'No task specified')}",
                 },
             }
             message["blocks"].append(assignment_block)
@@ -333,17 +333,17 @@ class AxoloIntegration:
 
     # Command handlers (delegate to command_handler)
     async def handle_analyze_command(self, command_data: dict[str, Any]) -> None:
-        """Handle /autopr-analyze command"""
+        """Handle /codeflow-analyze command"""
         if self.command_handler:
             await self.command_handler.handle_analyze_command(command_data)
 
     async def handle_status_command(self, command_data: dict[str, Any]) -> None:
-        """Handle /autopr-status command"""
+        """Handle /codeflow-status command"""
         if self.command_handler:
             await self.command_handler.handle_status_command(command_data)
 
     async def handle_assign_ai_command(self, command_data: dict[str, Any]) -> None:
-        """Handle /autopr-assign-ai command"""
+        """Handle /codeflow-assign-ai command"""
         if self.command_handler:
             await self.command_handler.handle_assign_ai_command(command_data)
 

@@ -1,5 +1,5 @@
-"""
-ActionInputs base class for AutoPR.
+﻿"""
+ActionInputs base class for CodeFlow.
 """
 
 from dataclasses import dataclass

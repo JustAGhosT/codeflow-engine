@@ -1,4 +1,4 @@
-import unittest
+﻿import unittest
 from dataclasses import dataclass
 from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock, patch
@@ -158,7 +158,7 @@ class TestPlatformAnalysisAgent(unittest.TestCase):
         """Test getting platform info for an unknown platform value."""
         # Ensure the manager returns None for unknown platforms
         with patch(
-            "autopr.agents.platform_analysis_agent.PlatformConfigManager"
+            "codeflow.agents.platform_analysis_agent.PlatformConfigManager"
         ) as MockMgr:
             instance = MockMgr.return_value
             instance.get_platform.return_value = None

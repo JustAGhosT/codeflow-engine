@@ -1,4 +1,4 @@
-name: "PR Comment Handler"
+﻿name: "PR Comment Handler"
 description:
   "Automatically processes PR comments, attempts fixes, and creates issues for complex feedback"
 
@@ -38,7 +38,7 @@ steps:
     action: "git_commit_and_push"
     inputs:
       branch_name: "{{ steps.extract_comment_info.outputs.branch_name }}"
-      commit_message: "🤖 AutoPR: {{ steps.handle_comment.outputs.response_message }}"
+      commit_message: "ðŸ¤– CodeFlow: {{ steps.handle_comment.outputs.response_message }}"
     when: "{{ steps.handle_comment.outputs.fix_applied == true }}"
 
   - name: "post_response"
@@ -46,16 +46,16 @@ steps:
     inputs:
       pr_number: "{{ steps.extract_comment_info.outputs.pr_number }}"
       comment_body: |
-        🤖 **AutoPR Response:**
+        ðŸ¤– **CodeFlow Response:**
 
         {{ steps.handle_comment.outputs.response_message }}
 
         {% if steps.handle_comment.outputs.issue_created %}
-        📝 Created issue #{{ steps.handle_comment.outputs.issue_number }} to track this feedback.
+        ðŸ“ Created issue #{{ steps.handle_comment.outputs.issue_number }} to track this feedback.
         {% endif %}
 
         {% if steps.handle_comment.outputs.fix_applied %}
-        ✅ Fix has been applied and committed to this PR.
+        âœ… Fix has been applied and committed to this PR.
         {% endif %}
     when: "{{ steps.handle_comment.outputs.action_taken != 'acknowledged' }}"
 

@@ -1,4 +1,4 @@
-# Windows Development Setup for AutoPR Engine
+﻿# Windows Development Setup for CodeFlow Engine
 
 This document provides Windows-specific development setup instructions and workarounds for common
 issues.
@@ -102,7 +102,7 @@ chore: update dependencies
 Run tests before pushing:
 
 ```cmd
-python -m pytest -v --cov=autopr --cov-report=term-missing
+python -m pytest -v --cov=CodeFlow --cov-report=term-missing
 ```
 
 ## IDE Configuration
@@ -129,7 +129,7 @@ Add these settings to your VS Code workspace (`.vscode/settings.json`):
 
 ### PyCharm
 
-1. Go to File → Settings → Tools → External Tools
+1. Go to File â†’ Settings â†’ Tools â†’ External Tools
 2. Add tools for Black, isort, flake8, and mypy
 3. Configure keyboard shortcuts for quick access
 4. Enable "Reformat code" and "Optimize imports" on commit

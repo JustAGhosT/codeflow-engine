@@ -1,4 +1,4 @@
-# 18. AutoPR SaaS Offering Consideration
+﻿# 18. CodeFlow SaaS Offering Consideration
 
 ## Status
 
@@ -6,14 +6,14 @@ Proposed
 
 ## Context
 
-AutoPR Engine is currently available as an open-source project that users can self-host. There is
-an existing deployed instance at `app.autopr.io` that provides a managed experience. We need to
-decide whether to formally offer AutoPR as a Software-as-a-Service (SaaS) product.
+CodeFlow Engine is currently available as an open-source project that users can self-host. There is
+an existing deployed instance at `app.codeflow.io` that provides a managed experience. We need to
+decide whether to formally offer CodeFlow as a Software-as-a-Service (SaaS) product.
 
 Key considerations include:
 
 - Growing demand for managed solutions to reduce operational overhead
-- Current `app.autopr.io` deployment serves as a limited-time trial instance
+- Current `app.codeflow.io` deployment serves as a limited-time trial instance
 - Competitive landscape includes other AI code review tools with SaaS offerings
 - Revenue generation potential for sustainability of the project
 - Security and compliance requirements for enterprise customers
@@ -23,7 +23,7 @@ Key considerations include:
 
 We will adopt a **hybrid model** that supports both self-hosted and SaaS deployments:
 
-### 1. SaaS Offering (AutoPR Cloud)
+### 1. SaaS Offering (CodeFlow Cloud)
 
 #### 1.1 Tier Structure
 
@@ -41,7 +41,7 @@ We will adopt a **hybrid model** that supports both self-hosted and SaaS deploym
 - **Global CDN**: Low-latency access from anywhere
 - **99.9% SLA**: For Pro and Enterprise tiers
 
-### 2. Self-Hosted Option (AutoPR Engine)
+### 2. Self-Hosted Option (CodeFlow Engine)
 
 Maintain the open-source self-hosted option for users who:
 
@@ -54,16 +54,16 @@ Maintain the open-source self-hosted option for users who:
 
 | Feature | Self-Hosted | SaaS Free | SaaS Pro | SaaS Enterprise |
 |---------|-------------|-----------|----------|-----------------|
-| Basic AI Analysis | ✅ | ✅ | ✅ | ✅ |
-| GitHub Integration | ✅ | ✅ | ✅ | ✅ |
-| Multi-agent Collaboration | ✅ | ❌ | ✅ | ✅ |
-| Custom Workflows | ✅ | Limited | ✅ | ✅ |
-| Linear/Jira Integration | ✅ | ❌ | ✅ | ✅ |
-| Slack/Teams Integration | ✅ | ❌ | ✅ | ✅ |
-| SSO/SAML | ✅ | ❌ | ❌ | ✅ |
-| Audit Logs | ✅ | ❌ | ❌ | ✅ |
-| Custom AI Models | ✅ | ❌ | ❌ | ✅ |
-| Dedicated Support | ❌ | ❌ | Email | 24/7 + Slack |
+| Basic AI Analysis | âœ… | âœ… | âœ… | âœ… |
+| GitHub Integration | âœ… | âœ… | âœ… | âœ… |
+| Multi-agent Collaboration | âœ… | âŒ | âœ… | âœ… |
+| Custom Workflows | âœ… | Limited | âœ… | âœ… |
+| Linear/Jira Integration | âœ… | âŒ | âœ… | âœ… |
+| Slack/Teams Integration | âœ… | âŒ | âœ… | âœ… |
+| SSO/SAML | âœ… | âŒ | âŒ | âœ… |
+| Audit Logs | âœ… | âŒ | âŒ | âœ… |
+| Custom AI Models | âœ… | âŒ | âŒ | âœ… |
+| Dedicated Support | âŒ | âŒ | Email | 24/7 + Slack |
 | SLA | N/A | N/A | 99.5% | 99.9% |
 
 ### 4. Technical Architecture for SaaS
@@ -97,7 +97,7 @@ Maintain the open-source self-hosted option for users who:
 
 ### 6. Go-to-Market Strategy
 
-1. **Phase 1 (Months 1-3)**: Limited beta with current `app.autopr.io` users
+1. **Phase 1 (Months 1-3)**: Limited beta with current `app.codeflow.io` users
 2. **Phase 2 (Months 4-6)**: Public launch of Free and Pro tiers
 3. **Phase 3 (Months 7-12)**: Enterprise tier with dedicated sales
 
@@ -143,7 +143,7 @@ Maintain the open-source self-hosted option for users who:
 
 ### Phase 3: Beta Launch (Weeks 9-12)
 
-- [ ] Invite beta testers from `app.autopr.io`
+- [ ] Invite beta testers from `app.codeflow.io`
 - [ ] Gather feedback and iterate
 - [ ] Finalize pricing model
 - [ ] Prepare marketing materials

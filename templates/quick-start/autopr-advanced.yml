@@ -1,9 +1,9 @@
-# AutoPR Engine - Advanced Setup
+﻿# CodeFlow Engine - Advanced Setup
 # ================================
-# Full-featured AutoPR workflow with all integrations
-# Copy to: .github/workflows/autopr.yml
+# Full-featured CodeFlow workflow with all integrations
+# Copy to: .github/workflows/codeflow.yml
 
-name: AutoPR Analysis (Advanced)
+name: CodeFlow Analysis (Advanced)
 
 on:
   pull_request:
@@ -48,7 +48,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip'
 
-      - name: Install AutoPR Engine
+      - name: Install CodeFlow Engine
         run: pip install "codeflow-engine[full]"
 
       - name: Determine PR number
@@ -67,7 +67,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          autopr analyze \
+          CodeFlow analyze \
             --repo "${{ github.repository }}" \
             --pr "${{ steps.pr.outputs.number }}" \
             --detailed \
@@ -84,11 +84,11 @@ jobs:
             const fs = require('fs');
             const analysis = JSON.parse(fs.readFileSync('analysis.json', 'utf8'));
 
-            let body = `## AutoPR Analysis Report\n\n`;
+            let body = `## CodeFlow Analysis Report\n\n`;
 
             // Risk Assessment
             const riskLevel = analysis.risk_level || 'low';
-            const riskEmoji = { low: '🟢', medium: '🟡', high: '🔴' }[riskLevel] || '⚪';
+            const riskEmoji = { low: 'ðŸŸ¢', medium: 'ðŸŸ¡', high: 'ðŸ”´' }[riskLevel] || 'âšª';
             body += `### Risk Level: ${riskEmoji} ${riskLevel.toUpperCase()}\n\n`;
 
             // Summary
@@ -104,7 +104,7 @@ jobs:
 
             // Security Issues
             if (analysis.security_issues && analysis.security_issues.length > 0) {
-              body += `### 🔒 Security Issues\n\n`;
+              body += `### ðŸ”’ Security Issues\n\n`;
               for (const issue of analysis.security_issues) {
                 body += `- **${issue.severity}**: ${issue.message}\n`;
                 if (issue.file) body += `  - File: \`${issue.file}\`\n`;
@@ -114,7 +114,7 @@ jobs:
 
             // Code Quality Issues
             if (analysis.issues && analysis.issues.length > 0) {
-              body += `### 📋 Code Quality Issues\n\n`;
+              body += `### ðŸ“‹ Code Quality Issues\n\n`;
               for (const issue of analysis.issues.slice(0, 10)) {
                 body += `- ${issue.message}\n`;
               }
@@ -126,7 +126,7 @@ jobs:
 
             // Suggestions
             if (analysis.suggestions && analysis.suggestions.length > 0) {
-              body += `### 💡 Suggestions\n\n`;
+              body += `### ðŸ’¡ Suggestions\n\n`;
               for (const suggestion of analysis.suggestions.slice(0, 5)) {
                 body += `- ${suggestion}\n`;
               }
@@ -134,7 +134,7 @@ jobs:
             }
 
             body += `---\n`;
-            body += `*Powered by [AutoPR Engine](https://github.com/JustAGhosT/codeflow-engine) | `;
+            body += `*Powered by [CodeFlow Engine](https://github.com/JustAGhosT/codeflow-engine) | `;
             body += `[View Full Report](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID})*`;
 
             await github.rest.issues.createComment({
@@ -147,7 +147,7 @@ jobs:
       - name: Upload Analysis Report
         uses: actions/upload-artifact@v4
         with:
-          name: autopr-analysis-${{ steps.pr.outputs.number }}
+          name: codeflow-analysis-${{ steps.pr.outputs.number }}
           path: analysis.json
           retention-days: 90
 
@@ -164,7 +164,7 @@ jobs:
     if: |
       github.event_name == 'issue_comment' &&
       github.event.issue.pull_request &&
-      contains(github.event.comment.body, '/autopr')
+      contains(github.event.comment.body, '/CodeFlow')
 
     steps:
       - name: Checkout repository
@@ -175,7 +175,7 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Install AutoPR Engine
+      - name: Install CodeFlow Engine
         run: pip install codeflow-engine
 
       - name: Parse Command
@@ -184,11 +184,11 @@ jobs:
           COMMENT_BODY: ${{ github.event.comment.body }}
         run: |
           # Use environment variable to prevent command injection
-          if echo "$COMMENT_BODY" | grep -q "/autopr analyze"; then
+          if echo "$COMMENT_BODY" | grep -q "/CodeFlow analyze"; then
             echo "action=analyze" >> $GITHUB_OUTPUT
-          elif echo "$COMMENT_BODY" | grep -q "/autopr suggest"; then
+          elif echo "$COMMENT_BODY" | grep -q "/CodeFlow suggest"; then
             echo "action=suggest" >> $GITHUB_OUTPUT
-          elif echo "$COMMENT_BODY" | grep -q "/autopr help"; then
+          elif echo "$COMMENT_BODY" | grep -q "/CodeFlow help"; then
             echo "action=help" >> $GITHUB_OUTPUT
           fi
 
@@ -199,7 +199,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           PR_NUMBER=$(echo "${{ github.event.issue.pull_request.url }}" | grep -oE '[0-9]+$')
-          autopr ${{ steps.command.outputs.action }} \
+          CodeFlow ${{ steps.command.outputs.action }} \
             --repo "${{ github.repository }}" \
             --pr "$PR_NUMBER"
 
@@ -226,7 +226,7 @@ jobs:
                   repo: context.repo.repo,
                   title: issue.title,
                   body: issue.body,
-                  labels: issue.labels || ['autopr', 'automated']
+                  labels: issue.labels || ['CodeFlow', 'automated']
                 });
               }
             }

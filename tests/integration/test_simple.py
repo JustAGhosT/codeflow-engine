@@ -1,4 +1,4 @@
-"""Simple test file to diagnose import issues."""
+﻿"""Simple test file to diagnose import issues."""
 
 from pathlib import Path
 import sys
@@ -14,9 +14,9 @@ if project_root not in sys.path:
 def test_imports():
     """Test that we can import the required modules."""
     with patch("codeflow_engine.agents.crew.get_llm_provider_manager"):
-        from codeflow_engine.agents.crew import AutoPRCrew
+        from codeflow_engine.agents.crew import CodeFlowCrew
 
-        assert AutoPRCrew is not None
+        assert CodeFlowCrew is not None
 
 
 def test_volume_imports():

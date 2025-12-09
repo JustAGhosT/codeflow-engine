@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "amazon_codewhisperer",
   "name": "Amazon CodeWhisperer",
   "description": "AI coding companion by Amazon Web Services that provides real-time code suggestions and security scanning",
@@ -12,7 +12,7 @@
   "type": "ai",
   "source": "official",
   "priority": 50,
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "vendor": "Amazon Web Services",
   "website": "https://aws.amazon.com/codewhisperer",
   "pricing_model": "freemium",

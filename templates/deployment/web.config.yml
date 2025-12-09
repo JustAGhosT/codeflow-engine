@@ -1,10 +1,10 @@
-name: "Azure App Service Web.config"
+﻿name: "Azure App Service Web.config"
 category: "deployment"
 description:
   "Azure App Service web.config for React SPA and Node.js applications with URL rewriting and
   security headers"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["azure", "app-service", "web.config", "deployment", "security", "spa"]
 
 template_info:

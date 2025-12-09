@@ -1,8 +1,8 @@
-# Python 3.13.5 Upgrade Guide
+﻿# Python 3.13.5 Upgrade Guide
 
 ## Overview
 
-This document outlines the upgrade of the AutoPR Engine project from Python 3.8+ to Python 3.13.5,
+This document outlines the upgrade of the CodeFlow Engine project from Python 3.8+ to Python 3.13.5,
 including all necessary configuration changes, dependency updates, and compatibility considerations.
 
 ## What Changed
@@ -188,7 +188,7 @@ pre-commit run --all-files
 
 ```cmd
 # Run full test suite
-pytest --cov=autopr --cov-report=html
+pytest --cov=CodeFlow --cov-report=html
 
 # Run specific test categories
 pytest -m "not slow"  # Skip slow tests
@@ -313,7 +313,7 @@ pre-commit install
 ## Conclusion
 
 The upgrade to Python 3.13.5 provides significant performance improvements, enhanced developer
-experience, and future-proofing for the AutoPR Engine project. All dependencies have been updated to
+experience, and future-proofing for the CodeFlow Engine project. All dependencies have been updated to
 compatible versions, and the migration process is straightforward.
 
 The project now benefits from the latest Python features while maintaining backward compatibility

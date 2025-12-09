@@ -1,5 +1,5 @@
-"""
-Tests for the AutoPR Agent Framework.
+﻿"""
+Tests for the CodeFlow Agent Framework.
 """
 
 from pathlib import Path
@@ -7,12 +7,12 @@ import tempfile
 import unittest
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from codeflow_engine.agents.crew.main import AutoPRCrew
+from codeflow_engine.agents.crew.main import CodeFlowCrew
 from codeflow_engine.agents.models import CodeIssue, PlatformAnalysis, PlatformComponent
 
 
-class TestAutoPRCrew(unittest.IsolatedAsyncioTestCase):
-    """Test cases for the AutoPRCrew class."""
+class TestCodeFlowCrew(unittest.IsolatedAsyncioTestCase):
+    """Test cases for the CodeFlowCrew class."""
 
     # Test data constants
     CODE_QUALITY_METRICS = {
@@ -91,9 +91,9 @@ class TestAutoPRCrew(unittest.IsolatedAsyncioTestCase):
         mock_agent.fix_code_issues = AsyncMock(return_value=self.LINT_ISSUES)
         return mock_agent
 
-    def _create_crew_instance(self) -> AutoPRCrew:
-        """Create a test instance of AutoPRCrew with injected dependencies."""
-        return AutoPRCrew(
+    def _create_crew_instance(self) -> CodeFlowCrew:
+        """Create a test instance of CodeFlowCrew with injected dependencies."""
+        return CodeFlowCrew(
             llm_model="gpt-4",
             code_quality_agent=self.mock_code_quality_agent,
             platform_agent=self.mock_platform_agent,
@@ -115,16 +115,16 @@ class TestAutoPRCrew(unittest.IsolatedAsyncioTestCase):
             def mock_analyze(self, repo_path=None, volume=None, **kwargs):
                 return {
                     "code_quality": {
-                        "metrics": TestAutoPRCrew.CODE_QUALITY_METRICS,
-                        "issues": TestAutoPRCrew.CODE_QUALITY_ISSUES,
+                        "metrics": TestCodeFlowCrew.CODE_QUALITY_METRICS,
+                        "issues": TestCodeFlowCrew.CODE_QUALITY_ISSUES,
                     },
                     "platform_analysis": {
                         "platform": "Python",
                         "confidence": 0.95,
-                        "components": TestAutoPRCrew.PLATFORM_COMPONENTS,
+                        "components": TestCodeFlowCrew.PLATFORM_COMPONENTS,
                         "recommendations": ["Consider adding type hints"],
                     },
-                    "linting_issues": TestAutoPRCrew.LINT_ISSUES,
+                    "linting_issues": TestCodeFlowCrew.LINT_ISSUES,
                     "current_volume": volume or self.volume,
                     "quality_inputs": {"mode": "smart"},
                 }

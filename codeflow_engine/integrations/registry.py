@@ -1,5 +1,5 @@
-"""
-AutoPR Integration Registry
+﻿"""
+CodeFlow Integration Registry
 
 Registry for managing and discovering integrations.
 """
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class IntegrationRegistry:
     """
-    Registry for managing AutoPR integrations.
+    Registry for managing CodeFlow integrations.
 
     Provides registration, discovery, and management of integrations.
     """

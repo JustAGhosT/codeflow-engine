@@ -1,7 +1,7 @@
-"""
-AutoPR Engine - Core Engine Implementation
+﻿"""
+CodeFlow Engine - Core Engine Implementation
 
-Main engine class that orchestrates AutoPR operations.
+Main engine class that orchestrates CodeFlow operations.
 """
 
 import asyncio
@@ -12,8 +12,8 @@ from typing import Any, Dict, List, Optional
 from codeflow_engine.actions.registry import ActionRegistry
 # from codeflow_engine.agents.agents import AgentManager  # Not implemented yet
 from codeflow_engine.ai.core.providers.manager import LLMProviderManager
-from codeflow_engine.config import AutoPRConfig
-from codeflow_engine.exceptions import AutoPRException, ConfigurationError
+from codeflow_engine.config import CodeFlowConfig
+from codeflow_engine.exceptions import CodeFlowException, ConfigurationError
 from codeflow_engine.health import HealthChecker
 from codeflow_engine.integrations.registry import IntegrationRegistry
 from codeflow_engine.quality.metrics_collector import MetricsCollector
@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 def handle_operation_error(
     operation_name: str,
     exception: Exception,
-    error_class: type[AutoPRException] = AutoPRException,
+    error_class: type[CodeFlowException] = CodeFlowException,
     *,
     reraise: bool = True,
 ) -> None:
@@ -37,7 +37,7 @@ def handle_operation_error(
     Args:
         operation_name: Name of the operation that failed
         exception: The exception that was raised
-        error_class: Exception class to raise (default: AutoPRException)
+        error_class: Exception class to raise (default: CodeFlowException)
         log_level: Logging level to use ('exception', 'error', 'warning')
         reraise: Whether to reraise the exception after logging
         
@@ -51,9 +51,9 @@ def handle_operation_error(
         raise error_class(error_msg) from exception
 
 
-class AutoPREngine:
+class CodeFlowEngine:
     """
-    Main AutoPR Engine class that coordinates all automation activities.
+    Main CodeFlow Engine class that coordinates all automation activities.
 
     This class serves as the central orchestrator for:
     - Workflow execution
@@ -62,15 +62,15 @@ class AutoPREngine:
     - AI/LLM provider coordination
     """
 
-    def __init__(self, config: AutoPRConfig | None = None, log_handler: logging.Handler | None = None):
+    def __init__(self, config: CodeFlowConfig | None = None, log_handler: logging.Handler | None = None):
         """
-        Initialize the AutoPR Engine.
+        Initialize the CodeFlow Engine.
 
         Args:
             config: Configuration object. If None, loads default config.
             log_handler: Optional logging handler to add to the root logger.
         """
-        self.config = config or AutoPRConfig()
+        self.config = config or CodeFlowConfig()
         self.workflow_engine = WorkflowEngine(self.config)
         self.action_registry: ActionRegistry = ActionRegistry()
         self.integration_registry = IntegrationRegistry()
@@ -80,9 +80,9 @@ class AutoPREngine:
         if log_handler:
             logging.getLogger().addHandler(log_handler)
 
-        logger.info("AutoPR Engine initialized successfully")
+        logger.info("CodeFlow Engine initialized successfully")
 
-    async def __aenter__(self) -> "AutoPREngine":
+    async def __aenter__(self) -> "CodeFlowEngine":
         """Async context manager entry."""
         await self.start()
         return self
@@ -92,7 +92,7 @@ class AutoPREngine:
         await self.stop()
 
     async def start(self) -> None:
-        """Start the AutoPR Engine and initialize all components."""
+        """Start the CodeFlow Engine and initialize all components."""
         try:
             # Validate configuration before starting
             if not self.config.validate():
@@ -103,21 +103,21 @@ class AutoPREngine:
             await self.workflow_engine.start()
             await self.integration_registry.initialize()
             await self.llm_manager.initialize()
-            logger.info("AutoPR Engine started successfully")
+            logger.info("CodeFlow Engine started successfully")
         except ConfigurationError:
             raise
         except Exception as e:
-            handle_operation_error("Engine startup", e, AutoPRException)
+            handle_operation_error("Engine startup", e, CodeFlowException)
 
     async def stop(self) -> None:
-        """Stop the AutoPR Engine and cleanup resources."""
+        """Stop the CodeFlow Engine and cleanup resources."""
         try:
             await self.workflow_engine.stop()
             await self.integration_registry.cleanup()
             await self.llm_manager.cleanup()
-            logger.info("AutoPR Engine stopped successfully")
+            logger.info("CodeFlow Engine stopped successfully")
         except Exception as e:
-            handle_operation_error("Engine shutdown", e, AutoPRException)
+            handle_operation_error("Engine shutdown", e, CodeFlowException)
 
     async def process_event(
         self, event_type: str, event_data: dict[str, Any]
@@ -137,11 +137,11 @@ class AutoPREngine:
             logger.info(f"Successfully processed {event_type} event")
             return result
         except Exception as e:
-            handle_operation_error("Event processing", e, AutoPRException)
+            handle_operation_error("Event processing", e, CodeFlowException)
 
     def get_status(self) -> dict[str, Any]:
         """
-        Get the current status of the AutoPR Engine.
+        Get the current status of the CodeFlow Engine.
 
         Returns:
             Status dictionary with component information
@@ -156,7 +156,7 @@ class AutoPREngine:
         }
 
     def get_version(self) -> str:
-        """Get the AutoPR Engine version."""
+        """Get the CodeFlow Engine version."""
         from codeflow_engine import __version__
 
         return __version__
@@ -171,4 +171,4 @@ class AutoPREngine:
         try:
             return await self.health_checker.check_all()
         except Exception as e:
-            handle_operation_error("Health check", e, AutoPRException)
+            handle_operation_error("Health check", e, CodeFlowException)

@@ -1,4 +1,4 @@
-# AutoPR Engine - Installation Guide
+﻿# CodeFlow Engine - Installation Guide
 
 Choose the installation method that works best for you.
 
@@ -123,10 +123,10 @@ docker-compose ps         # Check status
 
 ### Minimal Setup (5 lines)
 
-Create `.github/workflows/autopr.yml`:
+Create `.github/workflows/codeflow.yml`:
 
 ```yaml
-name: AutoPR
+name: CodeFlow
 on:
   pull_request:
     types: [opened, synchronize]
@@ -139,7 +139,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install codeflow-engine
-      - run: autopr analyze --repo ${{ github.repository }} --pr ${{ github.event.pull_request.number }}
+      - run: CodeFlow analyze --repo ${{ github.repository }} --pr ${{ github.event.pull_request.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -149,8 +149,8 @@ jobs:
 
 ```bash
 # From your repository root:
-curl -sSL https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/templates/quick-start/autopr-minimal.yml \
-  -o .github/workflows/autopr.yml --create-dirs
+curl -sSL https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/templates/quick-start/codeflow-minimal.yml \
+  -o .github/workflows/codeflow.yml --create-dirs
 
 # Or use make (if codeflow-engine is cloned):
 make setup-action
@@ -160,9 +160,9 @@ make setup-action
 
 | Template | Description | Download |
 |----------|-------------|----------|
-| **Minimal** | Simplest setup, basic analysis | [autopr-minimal.yml](templates/quick-start/autopr-minimal.yml) |
-| **Standard** | Recommended setup with comments | [autopr-workflow.yml](templates/quick-start/autopr-workflow.yml) |
-| **Advanced** | Full features, multi-job | [autopr-advanced.yml](templates/quick-start/autopr-advanced.yml) |
+| **Minimal** | Simplest setup, basic analysis | [codeflow-minimal.yml](templates/quick-start/codeflow-minimal.yml) |
+| **Standard** | Recommended setup with comments | [codeflow-workflow.yml](templates/quick-start/codeflow-workflow.yml) |
+| **Advanced** | Full features, multi-job | [codeflow-advanced.yml](templates/quick-start/codeflow-advanced.yml) |
 
 ---
 
@@ -203,13 +203,13 @@ export GROQ_API_KEY=gsk_your_key
 
 ```bash
 # Check CLI is installed
-autopr --version
+CodeFlow --version
 
 # Run help
-autopr --help
+CodeFlow --help
 
 # Test connection
-autopr status
+CodeFlow status
 ```
 
 ---
@@ -254,7 +254,7 @@ export OPENAI_API_KEY=sk-your_key_here
 
 ## Next Steps
 
-1. **Local Development:** Run `autopr --help` to see available commands
+1. **Local Development:** Run `CodeFlow --help` to see available commands
 2. **GitHub Integration:** Add the workflow file and set secrets
 3. **Full Documentation:** See [README.md](README.md)
 4. **Configuration Options:** See [.env.example](.env.example)
@@ -271,5 +271,5 @@ pip uninstall codeflow-engine
 docker-compose down -v
 
 # Remove workflow
-rm .github/workflows/autopr.yml
+rm .github/workflows/codeflow.yml
 ```

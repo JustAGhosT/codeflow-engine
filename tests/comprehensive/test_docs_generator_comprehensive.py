@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 Comprehensive tests for docs generator module.
 """
@@ -388,10 +388,10 @@ class TestDocRenderer:
             variables=["name", "project"]
         )
         
-        data = {"name": "John", "project": "AutoPR"}
+        data = {"name": "John", "project": "CodeFlow"}
         result = doc_renderer.render_template(template, data)
         
-        assert result == "Hello John, welcome to AutoPR"
+        assert result == "Hello John, welcome to CodeFlow"
 
     def test_render_with_default_renderer(self, doc_renderer):
         """Test rendering with default renderer."""
@@ -608,14 +608,14 @@ class TestDocsGenerator:
         
         data = {
             "title": "API Documentation",
-            "description": "This is the API documentation for AutoPR."
+            "description": "This is the API documentation for CodeFlow."
         }
         
         result = docs_generator.generate_documentation(template, data)
         
         assert result is not None
         assert "API Documentation" in result
-        assert "AutoPR" in result
+        assert "CodeFlow" in result
 
     def test_generate_from_template_file(self, docs_generator):
         """Test generating documentation from template file."""
@@ -656,7 +656,7 @@ class TestDocsGenerator:
         )
         
         data = {
-            "project_name": "AutoPR Engine",
+            "project_name": "CodeFlow Engine",
             "description": "Automated PR generation engine."
         }
         
@@ -671,7 +671,7 @@ class TestDocsGenerator:
             
             with open(output_file, 'r') as f:
                 content = f.read()
-            assert "AutoPR Engine" in content
+            assert "CodeFlow Engine" in content
             assert "Automated PR generation engine" in content
             
         finally:

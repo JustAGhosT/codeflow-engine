@@ -1,4 +1,4 @@
-"""Linear API client implementation."""
+﻿"""Linear API client implementation."""
 
 import logging
 import os
@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class LinearClient:
-    """Simple Linear API client for AutoPR."""
+    """Simple Linear API client for CodeFlow."""
 
     def __init__(self, api_key: str | None = None):
         """Initialize the Linear client.

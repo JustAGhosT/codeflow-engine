@@ -1,19 +1,19 @@
-"""Platform detector core implementation.
+﻿"""Platform detector core implementation.
 
-This module provides the main platform detection logic used by AutoPR.
+This module provides the main platform detection logic used by codeflow.
 
 It combines:
 
-- platform configuration data (:mod:`autopr.actions.platform_detection.config`)
-- filesystem analysis (:mod:`autopr.actions.platform_detection.file_analyzer`)
-- scoring and ranking (:mod:`autopr.actions.platform_detection.scoring`)
+- platform configuration data (:mod:`codeflow.actions.platform_detection.config`)
+- filesystem analysis (:mod:`codeflow.actions.platform_detection.file_analyzer`)
+- scoring and ranking (:mod:`codeflow.actions.platform_detection.scoring`)
 
 and exposes:
 
 - a synchronous :meth:`PlatformDetector.detect_platform` API that works with
   :class:`PlatformDetectorInputs`
 - an asynchronous :meth:`PlatformDetector.analyze` API used by
-  :class:`autopr.agents.platform_analysis_agent.PlatformAnalysisAgent`.
+  :class:`codeflow.agents.platform_analysis_agent.PlatformAnalysisAgent`.
 """
 
 from __future__ import annotations
@@ -39,7 +39,7 @@ class PlatformDetectorOutputs(BaseModel):
 
     This is the analysis-level result used by higher-level components such as
     :class:`PlatformAnalysisAgent`. It intentionally differs from the simpler
-    models in :mod:`autopr.actions.platform_detection.models`.
+    models in :mod:`codeflow.actions.platform_detection.models`.
     """
 
     primary_platform: str
@@ -76,7 +76,7 @@ class PlatformDetector:
             workspace_path = inputs.workspace_path or "."
             workspace = Path(workspace_path)
 
-            # Defensive guard – if the workspace does not exist, return unknown
+            # Defensive guard â€“ if the workspace does not exist, return unknown
             if not workspace.exists():
                 return PlatformDetectorOutputs(
                     primary_platform="unknown",
@@ -121,7 +121,7 @@ class PlatformDetector:
                 if folders:
                     found_folders[platform] = folders
 
-            # Content matches (counts) – convert to repeated markers
+            # Content matches (counts) â€“ convert to repeated markers
             content_match_counts = analyzer.scan_content_for_patterns(platform_configs)
             content_matches: dict[str, list[str]] = {}
             for platform, count in content_match_counts.items():
@@ -311,7 +311,7 @@ class PlatformDetector:
                         f"Reason: {reclassification_reasons[0]}"
                     )
 
-            # 5) Platform-specific configs – for now we expose raw detection rules
+            # 5) Platform-specific configs â€“ for now we expose raw detection rules
             platform_specific_configs: dict[str, dict[str, Any]] = {}
             for platform_id, cfg in platform_configs.items():
                 detection_cfg = cfg.get("detection", {}) or {}
@@ -369,7 +369,7 @@ class PlatformDetector:
                 ``repository_url`` and ``commit_messages``.
         """
 
-        _ = file_paths  # Currently unused – reserved for future refinement
+        _ = file_paths  # Currently unused â€“ reserved for future refinement
         ctx = context or {}
 
         repository_url = ctx.get("repository_url", "")

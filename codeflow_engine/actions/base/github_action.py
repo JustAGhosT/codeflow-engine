@@ -1,5 +1,5 @@
-"""
-GitHub-specific action class for AutoPR.
+﻿"""
+GitHub-specific action class for CodeFlow.
 """
 
 from typing import Any

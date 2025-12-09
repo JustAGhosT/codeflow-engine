@@ -1,4 +1,4 @@
-# Configuration file for the Sphinx documentation builder.
+﻿# Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
 # list see the documentation:
@@ -18,9 +18,9 @@ sys.path.insert(0, os.path.abspath("../.."))
 
 # -- Project information -----------------------------------------------------
 
-project = "AutoPR Engine"
-copyright = "2024, AutoPR Team"
-author = "AutoPR Team"
+project = "CodeFlow Engine"
+copyright = "2024, CodeFlow Team"
+author = "CodeFlow Team"
 release = "1.0.0"
 
 # -- General configuration ---------------------------------------------------
@@ -149,7 +149,7 @@ myst_enable_extensions = [
 
 # -- Project-specific settings -----------------------------------------------
 
-# AutoPR specific settings
+# CodeFlow specific settings
 html_theme_options = {
     "navigation_depth": 4,
     "collapse_navigation": False,

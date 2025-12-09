@@ -1,4 +1,4 @@
-# Remaining Code Review Fixes
+﻿# Remaining Code Review Fixes
 
 This document provides detailed instructions for the remaining code review issues that need to be addressed.
 
@@ -9,11 +9,11 @@ This document provides detailed instructions for the remaining code review issue
 
 ## Priority 1: Critical Runtime Issues
 
-### 1. Add Engine None Guards in database/config.py ⚠️
+### 1. Add Engine None Guards in database/config.py âš ï¸
 
 **Issue**: `engine` can be None but functions assume it's valid, causing obscure AttributeErrors.
 
-**Files**: `autopr/database/config.py` lines 107-113, 147-215
+**Files**: `CODEFLOW/database/config.py` lines 107-113, 147-215
 
 **Fix**: Add guard checks at start of functions:
 
@@ -23,7 +23,7 @@ def get_db() -> Generator:
     if engine is None:
         raise RuntimeError(
             "Database engine is not initialized. "
-            "Ensure DATABASE_URL is set and AUTOPR_SKIP_DB_INIT is not set when running DB operations. "
+            "Ensure DATABASE_URL is set and CODEFLOW_SKIP_DB_INIT is not set when running DB operations. "
             "Check that psycopg2-binary is installed: poetry add psycopg2-binary"
         )
     db = SessionLocal()
@@ -55,7 +55,7 @@ def get_connection_info() -> dict[str, Any]:
     if engine is None:
         return {
             "status": "unavailable",
-            "error": "Database engine not initialized (AUTOPR_SKIP_DB_INIT may be set)"
+            "error": "Database engine not initialized (CODEFLOW_SKIP_DB_INIT may be set)"
         }
     # ... rest of function
 ```
@@ -64,7 +64,7 @@ def get_connection_info() -> dict[str, Any]:
 
 **Issue**: Only one symbol set to None in except blocks, leaving others undefined.
 
-**Files**: `autopr/features/__init__.py` lines 15-70
+**Files**: `CODEFLOW/features/__init__.py` lines 15-70
 
 **Fix**:
 
@@ -130,7 +130,7 @@ __all__ = [
 
 **Issue**: Using `dataclasses.field` instead of `pydantic.Field`.
 
-**Files**: `autopr/features/workflow_builder.py` line 26, 70-109
+**Files**: `CODEFLOW/features/workflow_builder.py` line 26, 70-109
 
 **Fix**:
 
@@ -172,7 +172,7 @@ class Workflow(BaseModel):
 
 **Issue**: Hard-coded 2-item list ignores limit parameter.
 
-**Files**: `autopr/features/ai_learning_system.py` lines 366-379
+**Files**: `CODEFLOW/features/ai_learning_system.py` lines 366-379
 
 **Fix**:
 
@@ -225,7 +225,7 @@ def recommend_reviewers(self, code_changes: str, limit: int = 5) -> list[dict]:
 
 **Issue**: Using deprecated `.dict()` method.
 
-**Files**: `autopr/features/ai_learning_system.py` lines 447-468
+**Files**: `CODEFLOW/features/ai_learning_system.py` lines 447-468
 
 **Fix**:
 
@@ -260,7 +260,7 @@ def export_training_data(self) -> dict:
 
 **Issue**: `np.mean()` returns `numpy.float64` which fails JSON serialization.
 
-**Files**: `autopr/features/ai_learning_system.py` lines 385-422
+**Files**: `CODEFLOW/features/ai_learning_system.py` lines 385-422
 
 **Fix**:
 
@@ -334,7 +334,7 @@ def test_weak_signals_returns_unknown():
 
 **Issue**: Overcomplicated focus restoration that doesn't work reliably.
 
-**Files**: `autopr/dashboard/templates/index.html` lines 609-631
+**Files**: `CODEFLOW/dashboard/templates/index.html` lines 609-631
 
 **Fix**:
 
@@ -386,8 +386,8 @@ function closeModal(modalId) {
     "filesystem": {
       "command": "node",
       "args": [
-        "${AUTOPR_ROOT_PATH}\\node_modules\\@modelcontextprotocol\\server-filesystem\\dist\\index.js",
-        "${AUTOPR_ROOT_PATH}"
+        "${CODEFLOW_ROOT_PATH}\\node_modules\\@modelcontextprotocol\\server-filesystem\\dist\\index.js",
+        "${CODEFLOW_ROOT_PATH}"
       ]
     }
   }
@@ -397,7 +397,7 @@ function closeModal(modalId) {
 Add to `.env.example`:
 ```bash
 # MCP Server Root Path (for mcp-servers.json)
-AUTOPR_ROOT_PATH=.
+CODEFLOW_ROOT_PATH=.
 ```
 
 ### 10. Remove Hardcoded Credentials from mcp-servers.json
@@ -466,7 +466,7 @@ Or update RLS policy example to use existing column.
 ```markdown
 #### Path Validation Implementation
 
-The `autopr/dashboard/server.py` module implements path validation using Python's Path library:
+The `CODEFLOW/dashboard/server.py` module implements path validation using Python's Path library:
 
 - **Canonicalization**: Uses `Path.expanduser().resolve(strict=False)` to normalize paths
   - Handles null bytes, path separators, and leading dots automatically
@@ -511,7 +511,7 @@ This approach is more robust than regex as it handles OS-specific path formats a
 
 **Issue**: client_id never stored, disconnect cleanup fails, sender not excluded from broadcasts.
 
-**Files**: `autopr/features/realtime_dashboard.py` lines 66-269
+**Files**: `CODEFLOW/features/realtime_dashboard.py` lines 66-269
 
 **Complex fix - see separate implementation guide in this file below.**
 
@@ -609,9 +609,9 @@ After applying fixes:
 
 ```bash
 # Test imports
-poetry run python -c "from codeflow_engine.dashboard.router import DashboardState; print('✅ Dashboard imports')"
-poetry run python -c "from codeflow_engine.database.config import get_db; print('✅ Database config imports')"
-poetry run python -c "from codeflow_engine.features import *; print('✅ Features import')"
+poetry run python -c "from codeflow_engine.dashboard.router import DashboardState; print('âœ… Dashboard imports')"
+poetry run python -c "from codeflow_engine.database.config import get_db; print('âœ… Database config imports')"
+poetry run python -c "from codeflow_engine.features import *; print('âœ… Features import')"
 
 # Run tests
 poetry run pytest tests/test_platform_detector_improvements.py -v
@@ -630,6 +630,6 @@ python -c "import json; json.load(open('mcp-servers.json'))"
 - **Completed**: 3 critical fixes (P0 docstring, P1 quality mode, DATABASE_URL)
 - **Remaining**: 18 fixes documented above
 - **Estimated Time**: 2-3 hours for all remaining fixes
-- **Priority Order**: Database guards → Feature imports → Pydantic fixes → Tests → Documentation
+- **Priority Order**: Database guards â†’ Feature imports â†’ Pydantic fixes â†’ Tests â†’ Documentation
 
 Apply fixes in batches, test after each batch, and commit incrementally.

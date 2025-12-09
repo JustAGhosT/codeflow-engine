@@ -1,9 +1,9 @@
-name: "Test Setup Configuration Template"
+﻿name: "Test Setup Configuration Template"
 category: "testing"
 description:
   "Comprehensive test setup for React applications with Jest, Vitest, and Testing Library"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["testing", "jest", "vitest", "react", "testing_library"]
 
 template_info:

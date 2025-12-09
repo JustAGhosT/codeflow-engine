@@ -1,9 +1,9 @@
-name: "Platform Guide HTML Template"
+﻿name: "Platform Guide HTML Template"
 category: "html_template"
 description:
   "HTML template for platform-specific development guides with hero sections and structured content"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["html", "platform", "guide", "documentation", "responsive"]
 
 template_info:

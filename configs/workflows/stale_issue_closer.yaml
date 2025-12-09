@@ -1,4 +1,4 @@
-# autopr/workflows/stale_issue_closer.yaml
+﻿# codeflow/workflows/stale_issue_closer.yaml
 stale_issue_closer:
   main: stale_issue_closer
   steps:
@@ -14,4 +14,4 @@ stale_issue_closer:
       inputs:
         pull_request_number: "{{ stale_issues[0].number }}" # For demo, just the first
         comment: |
-          ⚠️ This issue has been marked as stale due to inactivity. Please update or comment to keep it open.
+          âš ï¸ This issue has been marked as stale due to inactivity. Please update or comment to keep it open.

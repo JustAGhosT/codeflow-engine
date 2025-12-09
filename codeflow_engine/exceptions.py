@@ -1,7 +1,7 @@
-"""
-AutoPR Engine Exceptions
+﻿"""
+CodeFlow Engine Exceptions
 
-Custom exception classes for the AutoPR Engine with secure error handling
+Custom exception classes for the CodeFlow Engine with secure error handling
 and information leakage prevention.
 
 Security: All exceptions include sanitization methods to prevent exposing
@@ -15,9 +15,9 @@ from typing import Optional, Any
 logger = logging.getLogger(__name__)
 
 
-class AutoPRException(Exception):
+class CodeFlowException(Exception):
     """
-    Base exception class for all AutoPR Engine errors.
+    Base exception class for all CodeFlow Engine errors.
     
     Includes automatic sanitization to prevent information leakage.
     """
@@ -131,7 +131,7 @@ def sanitize_error_message(message: str) -> str:
     return sanitized
 
 
-class ConfigurationError(AutoPRException):
+class ConfigurationError(CodeFlowException):
     """Raised when there's an issue with configuration."""
 
     def __init__(self, message: str, config_key: str | None = None):
@@ -144,7 +144,7 @@ class ConfigurationError(AutoPRException):
         self.config_key = config_key
 
 
-class IntegrationError(AutoPRException):
+class IntegrationError(CodeFlowException):
     """Raised when there's an issue with external integrations."""
 
     def __init__(self, message: str, integration_name: str | None = None):
@@ -156,7 +156,7 @@ class IntegrationError(AutoPRException):
         self.integration_name = integration_name
 
 
-class WorkflowError(AutoPRException):
+class WorkflowError(CodeFlowException):
     """Raised when there's an issue with workflow execution."""
 
     def __init__(self, message: str, workflow_name: str | None = None):
@@ -168,7 +168,7 @@ class WorkflowError(AutoPRException):
         self.workflow_name = workflow_name
 
 
-class ActionError(AutoPRException):
+class ActionError(CodeFlowException):
     """Raised when there's an issue with action execution."""
 
     def __init__(self, message: str, action_name: str | None = None):
@@ -180,7 +180,7 @@ class ActionError(AutoPRException):
         self.action_name = action_name
 
 
-class LLMProviderError(AutoPRException):
+class LLMProviderError(CodeFlowException):
     """Raised when there's an issue with LLM providers."""
 
     def __init__(self, message: str, provider_name: str | None = None):
@@ -192,7 +192,7 @@ class LLMProviderError(AutoPRException):
         self.provider_name = provider_name
 
 
-class ValidationError(AutoPRException):
+class ValidationError(CodeFlowException):
     """Raised when data validation fails."""
 
     def __init__(self, message: str, field_name: str | None = None):
@@ -204,7 +204,7 @@ class ValidationError(AutoPRException):
         self.field_name = field_name
 
 
-class RateLimitError(AutoPRException):
+class RateLimitError(CodeFlowException):
     """Raised when rate limits are exceeded."""
 
     def __init__(self, message: str, retry_after: int | None = None):
@@ -215,7 +215,7 @@ class RateLimitError(AutoPRException):
         self.retry_after = retry_after
 
 
-class AuthenticationError(AutoPRException):
+class AuthenticationError(CodeFlowException):
     """Raised when authentication fails."""
 
     def __init__(self, message: str):
@@ -223,7 +223,7 @@ class AuthenticationError(AutoPRException):
         super().__init__(message, "AUTH_ERROR", user_msg)
 
 
-class AutoPRPermissionError(AutoPRException):
+class CodeFlowPermissionError(CodeFlowException):
     """Raised when permission is denied."""
 
     def __init__(self, message: str, resource: str | None = None):
@@ -310,7 +310,7 @@ def handle_exception_safely(
     log_exception_securely(error, context=context, level='error')
     
     # Return sanitized response (safe for end users)
-    if isinstance(error, AutoPRException):
+    if isinstance(error, CodeFlowException):
         response = {
             'success': False,
             'error': error.get_user_message(),
@@ -330,7 +330,7 @@ def handle_exception_safely(
         if safe_context:
             response['context'] = safe_context
     else:
-        # Generic error for non-AutoPR exceptions
+        # Generic error for non-CodeFlow exceptions
         response = {
             'success': False,
             'error': sanitize_error_message(str(error)),

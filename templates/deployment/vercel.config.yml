@@ -1,10 +1,10 @@
-name: "Vercel Deployment Configuration"
+﻿name: "Vercel Deployment Configuration"
 category: "deployment"
 description:
   "Vercel deployment configuration for React SPAs, Node.js APIs, and static sites with routing and
   build optimization"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["vercel", "deployment", "spa", "serverless", "routing", "build"]
 
 template_info:

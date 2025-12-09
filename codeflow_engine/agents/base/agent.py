@@ -1,8 +1,8 @@
-"""
-Base agent class for AutoPR agents.
+﻿"""
+Base agent class for CodeFlow agents.
 
 This module provides the BaseAgent class which serves as the foundation for all
-AutoPR agents. It handles common functionality like initialization, logging, and
+CodeFlow agents. It handles common functionality like initialization, logging, and
 volume-based configuration.
 """
 
@@ -38,7 +38,7 @@ OutputT = TypeVar("OutputT")
 
 
 class BaseAgent[InputT, OutputT]:
-    """Base class for all AutoPR agents.
+    """Base class for all CodeFlow agents.
 
     This class provides common functionality for all agents, including:
     - Initialization with LLM provider and volume configuration

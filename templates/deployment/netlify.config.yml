@@ -1,10 +1,10 @@
-name: "Netlify Deployment Configuration"
+﻿name: "Netlify Deployment Configuration"
 category: "deployment"
 description:
   "Netlify deployment configuration with build settings, redirects, headers, and environment
   variables for SPAs and static sites"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["netlify", "deployment", "spa", "static-site", "redirects", "headers"]
 
 template_info:

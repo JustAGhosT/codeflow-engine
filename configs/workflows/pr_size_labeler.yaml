@@ -1,4 +1,4 @@
-# autopr/workflows/pr_size_labeler.yaml
+﻿# codeflow/workflows/pr_size_labeler.yaml
 pr_size_labeler:
   main: pr_size_labeler
   inputs:

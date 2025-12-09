@@ -1,5 +1,5 @@
-"""
-AutoPR Quality package.
+﻿"""
+CodeFlow Quality package.
 
 Provides base classes, metrics collection, and template quality analysis tools.
 """

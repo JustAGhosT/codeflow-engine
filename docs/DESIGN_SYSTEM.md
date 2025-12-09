@@ -1,10 +1,10 @@
-# AutoPR Engine Design System
+﻿# CodeFlow Engine Design System
 
 > **Version:** 1.0.0
 > **Last Updated:** December 6, 2025
 > **Status:** Alpha Preview
 
-This document defines the comprehensive design system for AutoPR Engine, establishing visual consistency, accessibility standards, and component guidelines across all applications.
+This document defines the comprehensive design system for CodeFlow Engine, establishing visual consistency, accessibility standards, and component guidelines across all applications.
 
 ---
 
@@ -29,7 +29,7 @@ This document defines the comprehensive design system for AutoPR Engine, establi
 
 ### 1.1 Design Principles
 
-The AutoPR Engine design system is built on the following core principles:
+The CodeFlow Engine design system is built on the following core principles:
 
 | Principle | Description |
 |-----------|-------------|
@@ -50,18 +50,18 @@ The AutoPR Engine design system is built on the following core principles:
 
 ```
 codeflow-engine/
-├── design-system/
-│   ├── tokens.css          # Centralized design tokens
-│   └── README.md           # Quick reference guide
-├── DESIGN_SYSTEM.md        # This comprehensive documentation
-├── website/
-│   └── app/
-│       ├── globals.css     # Website-specific styles
-│       └── components/     # Website React components
-└── autopr-desktop/
-    └── src/
-        ├── App.css         # Desktop app styles
-        └── components/ui/  # shadcn/ui components
+â”œâ”€â”€ design-system/
+â”‚   â”œâ”€â”€ tokens.css          # Centralized design tokens
+â”‚   â””â”€â”€ README.md           # Quick reference guide
+â”œâ”€â”€ DESIGN_SYSTEM.md        # This comprehensive documentation
+â”œâ”€â”€ website/
+â”‚   â””â”€â”€ app/
+â”‚       â”œâ”€â”€ globals.css     # Website-specific styles
+â”‚       â””â”€â”€ components/     # Website React components
+â””â”€â”€ codeflow-desktop/
+    â””â”€â”€ src/
+        â”œâ”€â”€ App.css         # Desktop app styles
+        â””â”€â”€ components/ui/  # shadcn/ui components
 ```
 
 ---
@@ -91,7 +91,7 @@ Design tokens are imported into both applications:
 @import "../../design-system/tokens.css";
 ```
 
-**Desktop App (`autopr-desktop/src/App.css`):**
+**Desktop App (`codeflow-desktop/src/App.css`):**
 ```css
 @tailwind base;
 @tailwind components;
@@ -347,7 +347,7 @@ const geistMono = localFont({
 
 ### 6.1 Unified Component Approach
 
-AutoPR Engine uses a hybrid component approach:
+CodeFlow Engine uses a hybrid component approach:
 
 | Application | Component Source | Styling Approach |
 |-------------|-----------------|------------------|
@@ -672,9 +672,9 @@ The alpha preview status is communicated through consistent visual elements:
 <div className="bg-gradient-to-r from-amber-500 to-orange-500 py-3 text-center text-sm text-white">
   <p>
     <span role="img" aria-label="construction">
-      🚧
+      ðŸš§
     </span>{" "}
-    <span className="font-semibold">Alpha Preview:</span> AutoPR Engine is
+    <span className="font-semibold">Alpha Preview:</span> CodeFlow Engine is
     currently in alpha...
   </p>
 </div>
@@ -720,11 +720,11 @@ Approved emojis for alpha/preview messaging:
 
 | Emoji | Name | Usage |
 |-------|------|-------|
-| 🚧 | Construction | Alpha status indicator |
-| 🚀 | Rocket | Launch/getting started |
-| 🤖 | Robot | AI/automation features |
-| 🔄 | Cycle | Sync/update features |
-| ⚡ | Lightning | Speed/performance |
+| ðŸš§ | Construction | Alpha status indicator |
+| ðŸš€ | Rocket | Launch/getting started |
+| ðŸ¤– | Robot | AI/automation features |
+| ðŸ”„ | Cycle | Sync/update features |
+| âš¡ | Lightning | Speed/performance |
 
 ---
 
@@ -885,7 +885,7 @@ Never rely on color alone to convey information:
 
 ### 11.1 Strategy
 
-AutoPR Engine uses **class-based dark mode** with the following features:
+CodeFlow Engine uses **class-based dark mode** with the following features:
 
 - System preference detection (`prefers-color-scheme`)
 - Manual toggle (light/dark/system)

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Report Generator Module
 
 Generates comprehensive reports and analytics for implementation roadmap execution.
@@ -430,7 +430,7 @@ class ReportGenerator:
         """
 
         return build_basic_page(
-            header=PageHeader(title="AutoPR Implementation Report"),
+            header=PageHeader(title="CodeFlow Implementation Report"),
             generated_at=report.get("report_metadata", {}).get("generated_at", ""),
             content_html=content_html,
             extra_css=extra_css,

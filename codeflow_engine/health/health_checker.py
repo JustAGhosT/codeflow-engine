@@ -1,7 +1,7 @@
-"""
+﻿"""
 Health Checker
 
-Comprehensive health checking system for AutoPR components.
+Comprehensive health checking system for CodeFlow components.
 """
 
 import asyncio
@@ -35,7 +35,7 @@ class ComponentHealth:
 
 class HealthChecker:
     """
-    Comprehensive health checker for AutoPR components.
+    Comprehensive health checker for CodeFlow components.
 
     Checks health of:
     - Database connectivity
@@ -53,7 +53,7 @@ class HealthChecker:
         Initialize health checker.
 
         Args:
-            engine: AutoPREngine instance (optional)
+            engine: CodeFlowEngine instance (optional)
         """
         self.engine = engine
         self.last_check_time: float | None = None

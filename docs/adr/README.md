@@ -1,4 +1,4 @@
-# Architecture Decision Records (ADRs)
+﻿# Architecture Decision Records (ADRs)
 
 This directory contains Architecture Decision Records (ADRs) for the codeflow-engine project.
 
@@ -28,7 +28,7 @@ Each ADR follows this structure:
 - [ADR-0001: Hybrid C#/Python Architecture](0001-hybrid-csharp-python-architecture.md) - **Status: Superseded by ADR-0019**
   - Originally proposed hybrid architecture (not implemented)
   
-- [ADR-0019: Python-Only Architecture](0019-python-only-architecture.md) - **Status: Accepted** ⭐
+- [ADR-0019: Python-Only Architecture](0019-python-only-architecture.md) - **Status: Accepted** â­
   - **Supersedes ADR-0001**: Documents the actual Python-only implementation
   - Includes migration summary explaining why hybrid approach wasn't implemented
   
@@ -101,11 +101,11 @@ Each ADR follows this structure:
 
 ### Business & Product
 
-- [ADR-0018: AutoPR SaaS Consideration](0018-autopr-saas-consideration.md) - **Status: Accepted**
+- [ADR-0018: CodeFlow SaaS Consideration](0018-codeflow-saas-consideration.md) - **Status: Accepted**
   - SaaS offering analysis and decision
   
-- [ADR-0020: Package Naming Convention](0020-package-naming.md) - **Status: Accepted** ⭐
-  - Documents the autopr → codeflow_engine rename
+- [ADR-0020: Package Naming Convention](0020-package-naming.md) - **Status: Accepted** â­
+  - Documents the CodeFlow â†’ codeflow_engine rename
   - Includes migration guide and backward compatibility strategy
 
 ## Creating a New ADR
@@ -140,8 +140,8 @@ The project uses a **Python-only architecture** (ADR-0019):
 
 - **Package Name**: `codeflow_engine` (Python package)
 - **PyPI Distribution**: `codeflow-engine`
-- **CLI Tools**: `autopr`, `autopr-server`, `autopr-worker` (backward compatible)
-- **Config Files**: `autopr.yaml`, `autopr.yml` (backward compatible)
+- **CLI Tools**: `CodeFlow`, `codeflow-server`, `codeflow-worker` (backward compatible)
+- **Config Files**: `codeflow.yaml`, `codeflow.yml` (backward compatible)
 
 ### Future Considerations
 

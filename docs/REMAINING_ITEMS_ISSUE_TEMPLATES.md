@@ -1,4 +1,4 @@
-# Remaining Items - GitHub Issue Templates
+﻿# Remaining Items - GitHub Issue Templates
 
 This document contains templates for creating GitHub issues for the remaining medium-priority and unaddressed items identified during the comprehensive project analysis.
 
@@ -63,7 +63,7 @@ Current token validation may not comprehensively check token format, scopes, and
 - [ ] Documentation in TROUBLESHOOTING.md
 
 **Related Files:**
-- Look for authentication/token handling in `autopr/` directory
+- Look for authentication/token handling in `codeflow/` directory
 
 ---
 
@@ -167,7 +167,7 @@ Blocking I/O operations (file system, database, external HTTP requests) may caus
 **Performance Target:** 30-50% improvement in concurrent request handling
 
 **Related Files:**
-- `autopr/workflows/engine.py` (partially done)
+- `codeflow/workflows/engine.py` (partially done)
 - File I/O operations throughout codebase
 - HTTP client calls
 
@@ -238,7 +238,7 @@ Current color palette may not meet WCAG 2.1 Level AA contrast requirements (4.5:
 - [ ] Updated color palette meeting WCAG 2.1 AA
 - [ ] Tailwind config updated
 - [ ] All text/background combinations pass contrast checks
-- [ ] Lighthouse accessibility score ≥90
+- [ ] Lighthouse accessibility score â‰¥90
 - [ ] Documentation in docs/design/README.md
 
 **Tools:**
@@ -372,12 +372,12 @@ No documentation of architectural decisions, making it difficult for new contrib
 **Directory Structure:**
 ```
 docs/architecture/
-├── README.md (index of ADRs)
-├── template.md
-└── decisions/
-    ├── 0001-use-fastapi.md
-    ├── 0002-use-tauri.md
-    └── ...
+â”œâ”€â”€ README.md (index of ADRs)
+â”œâ”€â”€ template.md
+â””â”€â”€ decisions/
+    â”œâ”€â”€ 0001-use-fastapi.md
+    â”œâ”€â”€ 0002-use-tauri.md
+    â””â”€â”€ ...
 ```
 
 ---

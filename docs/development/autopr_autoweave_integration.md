@@ -1,15 +1,15 @@
-# AutoPR and AutoWeave Integration Guide
+﻿# CODEFLOW and AutoWeave Integration Guide
 
 ## Overview
 
 This document outlines the integration patterns, technical architecture, and best practices for
-combining AutoPR's automated pull request capabilities with AutoWeave's template-based project
+combining CODEFLOW's automated pull request capabilities with AutoWeave's template-based project
 generation system. The integration is designed for enterprise-scale operations with high
 performance, security, and reliability requirements.
 
 ## Executive Summary
 
-The AutoPR and AutoWeave integration provides a seamless workflow for template-based project
+The CODEFLOW and AutoWeave integration provides a seamless workflow for template-based project
 generation with automated pull request capabilities. The architecture is built on a modular
 microservices approach, delivering optimal performance for each domain while maintaining
 enterprise-grade security and scalability.
@@ -35,7 +35,7 @@ workflow orchestration
 
 ```mermaid
 graph TD
-    subgraph AutoPR Engine
+    subgraph CODEFLOW Engine
         A[Workflow Engine] -->|Orchestrates| B[Action Registry]
         B --> C[Template Processing]
         B --> D[AI/ML Services]
@@ -125,11 +125,11 @@ graph TD
 
 ### 1. Template Generation Workflow
 
-#### AutoPR → AutoWeave (Template Generation)
+#### CODEFLOW â†’ AutoWeave (Template Generation)
 
 ```mermaid
 sequenceDiagram
-    participant AP as AutoPR Workflow
+    participant AP as CODEFLOW Workflow
     participant AE as Action Executor
     participant TP as Template Processor
     participant TR as Template Registry
@@ -182,7 +182,7 @@ X-Correlation-ID: corr_9876543210
 
 ### 2. Template Discovery
 
-#### AutoPR → AutoWeave (Template Discovery)
+#### CODEFLOW â†’ AutoWeave (Template Discovery)
 
 ```http
 GET /api/v1/templates?category=containers&platform=dotnet&version=7.0
@@ -312,7 +312,7 @@ redirect_uri=https://your-app.com/callback
 #### 2. Service Account Authentication
 
 ```yaml
-# config/autopr.yaml
+# config/codeflow.yaml
 auth:
   serviceAccount:
     enabled: true
@@ -340,12 +340,12 @@ auth:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: autopr-worker
+  name: codeflow-worker
 spec:
   template:
     spec:
       containers:
-        - name: autopr
+        - name: CODEFLOW
           volumeMounts:
             - name: tls-certs
               mountPath: /etc/tls
@@ -362,7 +362,7 @@ spec:
       volumes:
         - name: tls-certs
           secret:
-            secretName: autopr-tls
+            secretName: codeflow-tls
 ```
 
 **Features**:
@@ -693,7 +693,7 @@ class AutoWeaveClient:
         return response.json()
 ```
 
-### C# Client for AutoPR
+### C# Client for CODEFLOW
 
 ```csharp
 using System.Net.Http;
@@ -701,12 +701,12 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-public class AutoPrClient
+public class CODEFLOWClient
 {
     private readonly HttpClient _httpClient;
     private readonly string _apiKey;
 
-    public AutoPrClient(string baseUrl, string apiKey)
+    public CODEFLOWClient(string baseUrl, string apiKey)
     {
         _httpClient = new HttpClient { BaseAddress = new Uri(baseUrl) };
         _apiKey = apiKey;
@@ -986,7 +986,7 @@ cache_config = {
 ### Prerequisites
 
 - .NET 6.0+ for AutoWeave
-- Python 3.9+ for AutoPR
+- Python 3.9+ for CODEFLOW
 - Redis for caching
 - PostgreSQL for template storage
 
@@ -998,9 +998,9 @@ AUTOWEAVE_API_KEY=your-api-key
 AUTOWEAVE_DATABASE_URL=postgresql://user:pass@localhost/autoweave
 AUTOWEAVE_CACHE_REDIS=localhost:6379
 
-# AutoPR
-AUTOPR_API_KEY=your-api-key
-AUTOPR_AUTH_TOKEN=your-github-token
+# CODEFLOW
+CODEFLOW_API_KEY=your-api-key
+CODEFLOW_AUTH_TOKEN=your-github-token
 AUTOWEAVE_API_URL=https://autoweave.example.com/api
 ```
 

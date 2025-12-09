@@ -1,4 +1,4 @@
-from datetime import datetime
+﻿from datetime import datetime
 import logging
 import re
 from typing import TYPE_CHECKING, Any
@@ -21,7 +21,7 @@ class AxoloCommandHandler:
         self.active_channels = active_channels
 
     async def handle_analyze_command(self, command_data: dict[str, Any]) -> None:
-        """Handle /autopr-analyze command"""
+        """Handle /codeflow-analyze command"""
 
         channel_id = command_data["channel_id"]
         command_data["user_id"]
@@ -44,14 +44,14 @@ class AxoloCommandHandler:
             )
             return
 
-        # Trigger AutoPR analysis
+        # Trigger CodeFlow analysis
         from codeflow_engine.actions.pr_review_analyzer import PRReviewAnalyzer
 
         analyzer = PRReviewAnalyzer()
 
         # Post initial response
         await self.messaging.post_slack_response(
-            channel_id, f"🤖 Starting AutoPR analysis for PR #{pr_data['pr_number']}..."
+            channel_id, f"ðŸ¤– Starting CodeFlow analysis for PR #{pr_data['pr_number']}..."
         )
 
         try:
@@ -85,7 +85,7 @@ class AxoloCommandHandler:
                 )
 
     async def handle_status_command(self, command_data: dict[str, Any]) -> None:
-        """Handle /autopr-status command"""
+        """Handle /codeflow-status command"""
 
         channel_id = command_data["channel_id"]
         command_data["user_id"]
@@ -110,7 +110,7 @@ class AxoloCommandHandler:
                     "type": "header",
                     "text": {
                         "type": "plain_text",
-                        "text": f"📊 PR #{pr_data['pr_number']} Status",
+                        "text": f"ðŸ“Š PR #{pr_data['pr_number']} Status",
                     },
                 },
                 {
@@ -140,19 +140,19 @@ class AxoloCommandHandler:
         await self.messaging.post_slack_message(status_message)
 
     async def handle_assign_ai_command(self, command_data: dict[str, Any]) -> None:
-        """Handle /autopr-assign-ai command"""
+        """Handle /codeflow-assign-ai command"""
 
         channel_id = command_data["channel_id"]
         command_data["user_id"]
         text = command_data.get("text", "")
 
         # Parse AI tool from command text
-        ai_tool = text.strip().lower() if text.strip() else "autopr"
+        ai_tool = text.strip().lower() if text.strip() else "CodeFlow"
 
-        if ai_tool not in {"autopr", "copilot", "coderabbit"}:
+        if ai_tool not in {"CodeFlow", "copilot", "coderabbit"}:
             await self.messaging.post_error_response(
                 channel_id,
-                f"Unknown AI tool: {ai_tool}. Available tools: autopr, copilot, coderabbit",
+                f"Unknown AI tool: {ai_tool}. Available tools: CodeFlow, copilot, coderabbit",
             )
             return
 
@@ -169,7 +169,7 @@ class AxoloCommandHandler:
         await self._assign_ai_tool_to_pr(pr_data["pr_number"], ai_tool)
 
         await self.messaging.post_slack_response(
-            channel_id, f"✅ {ai_tool.title()} assigned to PR #{pr_data['pr_number']}"
+            channel_id, f"âœ… {ai_tool.title()} assigned to PR #{pr_data['pr_number']}"
         )
 
     async def _get_pr_from_channel_context(

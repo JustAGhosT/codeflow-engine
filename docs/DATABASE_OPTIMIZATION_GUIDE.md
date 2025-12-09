@@ -1,4 +1,4 @@
-# Database Optimization Guide
+﻿# Database Optimization Guide
 
 **Version:** 1.0  
 **Last Updated:** 2025-11-22  
@@ -8,7 +8,7 @@
 
 ## Overview
 
-This guide documents database optimization strategies, connection pooling configuration, indexing strategy, and performance tuning for AutoPR Engine's PostgreSQL and SQLite backends.
+This guide documents database optimization strategies, connection pooling configuration, indexing strategy, and performance tuning for CodeFlow Engine's PostgreSQL and SQLite backends.
 
 ---
 
@@ -25,12 +25,12 @@ This guide documents database optimization strategies, connection pooling config
 
 ## Connection Pooling
 
-### Current Implementation ✅
+### Current Implementation âœ…
 
-AutoPR Engine uses SQLAlchemy's QueuePool for production environments with configurable parameters:
+CodeFlow Engine uses SQLAlchemy's QueuePool for production environments with configurable parameters:
 
 ```python
-# autopr/database/config.py
+# CodeFlow/database/config.py
 POOL_CONFIG = {
     "pool_size": int(os.getenv("DB_POOL_SIZE", "10")),          # Base connections
     "max_overflow": int(os.getenv("DB_MAX_OVERFLOW", "20")),    # Additional under load
@@ -121,7 +121,7 @@ SELECT
     state,
     application_name
 FROM pg_stat_activity
-WHERE datname = 'autopr_db'
+WHERE datname = 'codeflow_db'
 GROUP BY state, application_name;
 
 -- Check connection limits
@@ -134,7 +134,7 @@ WHERE name = 'max_connections';
 SELECT pg_terminate_backend(pid)
 FROM pg_stat_activity
 WHERE 
-    datname = 'autopr_db'
+    datname = 'codeflow_db'
     AND state = 'idle'
     AND NOW() - query_start > interval '10 minutes';
 ```
@@ -143,9 +143,9 @@ WHERE
 
 ## Index Strategy
 
-### Current Indexes ✅
+### Current Indexes âœ…
 
-AutoPR Engine implements comprehensive indexing strategy across all tables:
+CodeFlow Engine implements comprehensive indexing strategy across all tables:
 
 #### Workflows Table
 ```sql
@@ -224,24 +224,24 @@ ORDER BY pg_relation_size(indexrelid) DESC;
 ### Index Best Practices
 
 **When to Add Indexes:**
-- ✅ Foreign keys (already indexed)
-- ✅ Frequently filtered columns (status, type)
-- ✅ Columns in JOIN conditions
-- ✅ Columns in ORDER BY/GROUP BY
-- ✅ Composite indexes for common query patterns
+- âœ… Foreign keys (already indexed)
+- âœ… Frequently filtered columns (status, type)
+- âœ… Columns in JOIN conditions
+- âœ… Columns in ORDER BY/GROUP BY
+- âœ… Composite indexes for common query patterns
 
 **When NOT to Add Indexes:**
-- ❌ Tables with < 1000 rows
-- ❌ Columns with low cardinality (few distinct values)
-- ❌ Columns rarely used in WHERE clauses
-- ❌ Write-heavy tables (indexes slow down INSERTs)
+- âŒ Tables with < 1000 rows
+- âŒ Columns with low cardinality (few distinct values)
+- âŒ Columns rarely used in WHERE clauses
+- âŒ Write-heavy tables (indexes slow down INSERTs)
 
 **Composite Index Order:**
 ```sql
--- ✅ Good: Most selective column first
+-- âœ… Good: Most selective column first
 CREATE INDEX idx_exec_status_workflow ON workflow_executions(status, workflow_id);
 
--- ❌ Bad: Less selective column first
+-- âŒ Bad: Less selective column first
 CREATE INDEX idx_exec_workflow_status ON workflow_executions(workflow_id, status);
 ```
 
@@ -253,19 +253,19 @@ CREATE INDEX idx_exec_workflow_status ON workflow_executions(workflow_id, status
 
 #### 1. Get Active Workflows
 ```python
-# ✅ Optimized (uses idx_workflows_status)
+# âœ… Optimized (uses idx_workflows_status)
 workflows = session.query(Workflow).filter(
     Workflow.status == 'active'
 ).order_by(Workflow.created_at.desc()).limit(100).all()
 
-# ❌ Not optimized (loads all, then filters in Python)
+# âŒ Not optimized (loads all, then filters in Python)
 workflows = session.query(Workflow).all()
 active = [w for w in workflows if w.status == 'active']
 ```
 
 #### 2. Get Recent Executions for Workflow
 ```python
-# ✅ Optimized (uses composite index)
+# âœ… Optimized (uses composite index)
 executions = session.query(WorkflowExecution).filter(
     WorkflowExecution.workflow_id == workflow_id,
     WorkflowExecution.status == 'completed'
@@ -274,12 +274,12 @@ executions = session.query(WorkflowExecution).filter(
 
 #### 3. Get Execution with Logs (N+1 Query Problem)
 ```python
-# ❌ N+1 queries (bad)
+# âŒ N+1 queries (bad)
 executions = session.query(WorkflowExecution).all()
 for execution in executions:
     logs = execution.logs  # Triggers separate query
 
-# ✅ Eager loading (single query with JOIN)
+# âœ… Eager loading (single query with JOIN)
 from sqlalchemy.orm import joinedload
 
 executions = session.query(WorkflowExecution).options(
@@ -291,7 +291,7 @@ executions = session.query(WorkflowExecution).options(
 ```python
 from sqlalchemy import func
 
-# ✅ Database aggregation (fast)
+# âœ… Database aggregation (fast)
 stats = session.query(
     func.count(WorkflowExecution.id).label('total'),
     func.avg(
@@ -323,7 +323,7 @@ for row in explain:
 
 **Pagination Best Practices:**
 ```python
-# ✅ Good: Limit + Offset with index
+# âœ… Good: Limit + Offset with index
 page = 1
 per_page = 50
 offset = (page - 1) * per_page
@@ -332,7 +332,7 @@ workflows = session.query(Workflow).order_by(
     Workflow.created_at.desc()
 ).limit(per_page).offset(offset).all()
 
-# ✅ Better: Keyset pagination (for large datasets)
+# âœ… Better: Keyset pagination (for large datasets)
 last_created_at = some_datetime
 workflows = session.query(Workflow).filter(
     Workflow.created_at < last_created_at
@@ -371,20 +371,20 @@ from prometheus_client import Counter, Histogram, Gauge
 
 # Query metrics
 query_duration = Histogram(
-    'autopr_db_query_duration_seconds',
+    'codeflow_db_query_duration_seconds',
     'Database query duration',
     ['operation', 'table']
 )
 
 query_counter = Counter(
-    'autopr_db_queries_total',
+    'codeflow_db_queries_total',
     'Total database queries',
     ['operation', 'table', 'status']
 )
 
 # Connection pool metrics
 pool_connections = Gauge(
-    'autopr_db_pool_connections',
+    'codeflow_db_pool_connections',
     'Database pool connections',
     ['state']  # checked_in, checked_out, overflow
 )
@@ -436,8 +436,8 @@ def after_cursor_execute(conn, cursor, statement, parameters, context, executema
 #!/bin/bash
 # backup_database.sh
 
-DB_NAME="autopr_db"
-BACKUP_DIR="/backups/autopr"
+DB_NAME="codeflow_db"
+BACKUP_DIR="/backups/CodeFlow"
 DATE=$(date +%Y%m%d_%H%M%S)
 BACKUP_FILE="$BACKUP_DIR/${DB_NAME}_${DATE}.sql.gz"
 
@@ -478,7 +478,7 @@ fi
 # restore_database.sh
 
 BACKUP_FILE=$1
-DB_NAME="autopr_db"
+DB_NAME="codeflow_db"
 
 # Drop existing database (CAUTION!)
 dropdb $DB_NAME
@@ -495,7 +495,7 @@ echo "Database restored from $BACKUP_FILE"
 **Point-in-Time Recovery (PITR):**
 ```bash
 # 1. Restore base backup
-pg_restore -d autopr_db base_backup.dump
+pg_restore -d codeflow_db base_backup.dump
 
 # 2. Configure recovery
 cat > recovery.conf << EOF
@@ -591,7 +591,7 @@ AND NOW() - query_start > interval '5 minutes';
 **Check PostgreSQL Memory:**
 ```sql
 SELECT 
-    pg_size_pretty(pg_database_size('autopr_db')) AS db_size,
+    pg_size_pretty(pg_database_size('codeflow_db')) AS db_size,
     pg_size_pretty(pg_total_relation_size('workflows')) AS workflows_size;
 ```
 
@@ -663,5 +663,5 @@ SELECT
 
 **Document Version:** 1.0  
 **Last Updated:** 2025-11-22  
-**Maintained by:** AutoPR Engine Team  
+**Maintained by:** CodeFlow Engine Team  
 **Review Frequency:** Quarterly

@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "amazon_q",
   "name": "Amazon Q Developer",
   "description": "AWS's AI-powered assistant for software development with deep AWS integration",
@@ -12,7 +12,7 @@
   "type": "ai",
   "source": "official",
   "priority": 62,
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "vendor": "Amazon Web Services",
   "website": "https://aws.amazon.com/q/developer/",
   "pricing_model": "subscription",

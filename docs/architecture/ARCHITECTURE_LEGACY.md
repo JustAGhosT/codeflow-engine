@@ -1,17 +1,17 @@
-# AutoPR Architecture
+﻿# CodeFlow Architecture
 
 ## Overview
 
-AutoPR is built on a hybrid architecture that leverages the strengths of both C# and Python,
+CodeFlow is built on a hybrid architecture that leverages the strengths of both C# and Python,
 connected via gRPC for high-performance inter-process communication. The system is designed with
 modularity, scalability, and maintainability as core principles, with a strong focus on
 extensibility through plugins and templates.
 
 ## AutoWeave: The Templating Engine
 
-### Role in AutoPR
+### Role in CodeFlow
 
-AutoWeave serves as the intelligent templating engine within AutoPR, providing a unified system for
+AutoWeave serves as the intelligent templating engine within CodeFlow, providing a unified system for
 template management, processing, and rendering across the platform. It handles:
 
 - **Template Definition**: Structured YAML/JSON-based template definitions with support for
@@ -25,10 +25,10 @@ template management, processing, and rendering across the platform. It handles:
 
 ### Future as a Standalone Product
 
-While currently integrated with AutoPR, AutoWeave is being developed as a standalone product with
+While currently integrated with CodeFlow, AutoWeave is being developed as a standalone product with
 these key goals:
 
-1. **Independent Deployment**: Can be used independently of AutoPR for template management needs
+1. **Independent Deployment**: Can be used independently of CodeFlow for template management needs
 2. **Broader Ecosystem Support**: Native integrations with CI/CD tools, IDEs, and other developer
    tools
 3. **Template Marketplace**: A central repository for sharing and discovering community templates
@@ -39,7 +39,7 @@ these key goals:
 - **Core Engine**: `@autoweave/template-engine` (TypeScript/Node.js)
 - **SDK**: `@autoweave/template-sdk` (TypeScript/Node.js)
 - **CLI**: `@autoweave/autoweave-cli` (TypeScript/Node.js)
-- **VS Code Extension**: `autopr.autoweave-vscode`
+- **VS Code Extension**: `codeflow.autoweave-vscode`
 
 ### Dependencies
 
@@ -59,24 +59,24 @@ AutoWeave maintains a clear dependency boundary:
 ```mermaid
 graph TD
     %% Core Packages
-    A[AutoPR.Core] --> B[AutoPR.Plugins]
-    A --> C[AutoPR.Extensions]
-    A --> D[AutoPR.TemplateEngine]
-    A --> E[AutoPR.Integration]
+    A[codeflow.Core] --> B[codeflow.Plugins]
+    A --> C[codeflow.Extensions]
+    A --> D[codeflow.TemplateEngine]
+    A --> E[codeflow.Integration]
 
     %% Language Runtimes
-    B --> F[AutoPR.Python]
-    B --> G[AutoPR.Node]
+    B --> F[codeflow.Python]
+    B --> G[codeflow.Node]
 
     %% Client Libraries
-    A --> H[@autopr/client]
-    A --> I[AutoPR.Client]
+    A --> H[@CodeFlow/client]
+    A --> I[codeflow.Client]
 
     %% Plugin Packages
-    B --> J[@autopr/plugin-github]
-    B --> K[@autopr/plugin-azure]
-    B --> L[@autopr/plugin-gitlab]
-    B --> M[@autopr/plugin-autoweave]
+    B --> J[@CodeFlow/plugin-github]
+    B --> K[@CodeFlow/plugin-azure]
+    B --> L[@CodeFlow/plugin-gitlab]
+    B --> M[@CodeFlow/plugin-autoweave]
 
     %% Template System
     D --> N[@autoweave/template-engine]
@@ -84,13 +84,13 @@ graph TD
     D --> P[@autoweave/template-registry]
 
     %% AI/ML Services
-    F --> Q[AutoPR.AI.Core]
-    Q --> R[AutoPR.AI.Training]
-    Q --> S[AutoPR.AI.Evaluators]
+    F --> Q[codeflow.AI.Core]
+    Q --> R[codeflow.AI.Training]
+    Q --> S[codeflow.AI.Evaluators]
 
     %% IDE Integrations
-    E --> T[@autopr/plugin-vscode]
-    E --> U[@autopr/plugin-jetbrains]
+    E --> T[@CodeFlow/plugin-vscode]
+    E --> U[@CodeFlow/plugin-jetbrains]
 
     %% Styling
     classDef core fill:#f9f,stroke:#333
@@ -320,4 +320,4 @@ graph TD
 ## Getting Started
 
 See the [Quick Start Guide](./QUICKSTART.md) for instructions on setting up a development
-environment and running AutoPR locally.
+environment and running CodeFlow locally.

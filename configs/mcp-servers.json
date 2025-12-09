@@ -1,11 +1,11 @@
-{
+﻿{
   "mcpServers": {
     "filesystem": {
       "command": "npx",
       "args": [
         "-y",
         "@modelcontextprotocol/server-filesystem",
-        "C:\\Users\\smitj\\repos\\autopr"
+        "C:\\Users\\smitj\\repos\\codeflow"
       ],
       "description": "Access to codeflow-engine repository files for reading/writing code, configs, and documentation"
     },
@@ -25,9 +25,9 @@
       "args": [
         "-y",
         "@modelcontextprotocol/server-postgres",
-        "postgresql://autopr:autopr_password@localhost:5432/autopr"
+        "postgresql://codeflow:codeflow_password@localhost:5432/codeflow"
       ],
-      "description": "PostgreSQL database access for autopr engine data and analytics"
+      "description": "PostgreSQL database access for codeflow engine data and analytics"
     },
     "slack": {
       "command": "npx",
@@ -89,7 +89,7 @@
       "args": [
         "-y",
         "enhanced-postgres-mcp-server",
-        "postgresql://autopr:autopr_password@localhost:5432/autopr"
+        "postgresql://codeflow:codeflow_password@localhost:5432/codeflow"
       ],
       "description": "Enhanced PostgreSQL server with additional features for data analysis"
     }

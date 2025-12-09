@@ -1,5 +1,5 @@
-"""
-AutoPR Workflow Engine
+﻿"""
+CodeFlow Workflow Engine
 
 Orchestrates workflow execution and manages workflow lifecycle.
 """
@@ -10,7 +10,7 @@ import logging
 import time
 from typing import Any
 
-from codeflow_engine.config import AutoPRConfig
+from codeflow_engine.config import CodeFlowConfig
 from codeflow_engine.exceptions import WorkflowError
 from codeflow_engine.utils.error_handlers import handle_workflow_error
 from codeflow_engine.workflows.base import Workflow
@@ -30,12 +30,12 @@ class WorkflowEngine:
     Handles workflow scheduling, execution, monitoring, and lifecycle management.
     """
 
-    def __init__(self, config: AutoPRConfig) -> None:
+    def __init__(self, config: CodeFlowConfig) -> None:
         """
         Initialize the workflow engine.
 
         Args:
-            config: AutoPR configuration object
+            config: CodeFlow configuration object
         """
         self.config = config
         self.workflows: dict[str, Workflow] = {}

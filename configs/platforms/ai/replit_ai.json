@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "replit_ai",
   "name": "replit",
   "display_name": "Replit AI",
@@ -12,7 +12,7 @@
   "type": "ai",
   "source": "https://replit.com",
   "priority": 65,
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "primary_language": "javascript",
   "framework": "express",
   "deployment_targets": ["azure", "vercel", "railway"],

@@ -1,8 +1,8 @@
-"""
+﻿"""
 AI-Enhanced Quality Analysis Module
 
 This module provides AI-powered code analysis capabilities for the Quality Engine,
-integrating with the AutoPR LLM provider system.
+integrating with the CodeFlow LLM provider system.
 """
 
 from codeflow_engine.actions.quality_engine.ai.ai_analyzer import AICodeAnalyzer

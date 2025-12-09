@@ -1,13 +1,13 @@
-# GitHub App Configuration Guide
+﻿# GitHub App Configuration Guide
 
-Complete settings for creating the "AutoPR" GitHub App.
+Complete settings for creating the "CodeFlow" GitHub App.
 
 ## Basic Information
 
 ### GitHub App name
 
 ```text
-AutoPR
+CodeFlow
 ```
 
 ### Homepage URL
@@ -45,15 +45,15 @@ http://localhost:3000/api/github-app/callback
 
 ### Expire user authorization tokens
 
-✅ **Check this box** - Provides refresh tokens for long-lived access
+âœ… **Check this box** - Provides refresh tokens for long-lived access
 
 ### Request user authorization (OAuth) during installation
 
-✅ **Check this box** - Allows identifying the installing user
+âœ… **Check this box** - Allows identifying the installing user
 
 ### Enable Device Flow
 
-❌ **Leave unchecked** - Not needed for web-based installation
+âŒ **Leave unchecked** - Not needed for web-based installation
 
 ## Post Installation
 
@@ -71,13 +71,13 @@ http://localhost:3000/setup
 
 ### Redirect on update
 
-✅ **Check this box** - Redirects users when repositories are added/removed
+âœ… **Check this box** - Redirects users when repositories are added/removed
 
 ## Webhook
 
 ### Active
 
-✅ **Check this box** - Enable webhook events
+âœ… **Check this box** - Enable webhook events
 
 ### Webhook URL
 
@@ -111,9 +111,9 @@ Generate a strong random secret (save this securely):
 
 **Minimum Required:**
 
-- Secrets: **Read and write** ✅
-- Metadata: **Read-only** ✅
-- Contents: **Read-only** ✅
+- Secrets: **Read and write** âœ…
+- Metadata: **Read-only** âœ…
+- Contents: **Read-only** âœ…
 
 ### Organization Permissions
 
@@ -127,21 +127,21 @@ Leave all as **No access** (unless you need user-specific data)
 
 Based on the permissions selected, subscribe to:
 
-✅ **Installation** - When the app is installed/uninstalled
+âœ… **Installation** - When the app is installed/uninstalled
 
-✅ **Installation repositories** - When repositories are added/removed from installation
+âœ… **Installation repositories** - When repositories are added/removed from installation
 
 **Optional (if you want more features):**
 
-- ❌ Push (not needed for setup)
-- ❌ Pull request (not needed for setup)
-- ❌ Issues (not needed for setup)
+- âŒ Push (not needed for setup)
+- âŒ Pull request (not needed for setup)
+- âŒ Issues (not needed for setup)
 
 ## Installation Target
 
 ### Where can this GitHub App be installed?
 
-**Recommended:** ✅ **Any account**
+**Recommended:** âœ… **Any account**
 
 This allows:
 
@@ -151,7 +151,7 @@ This allows:
 
 **Alternative:** If you only want it on your account:
 
-- ❌ **Only on this account** (@JustAGhosT)
+- âŒ **Only on this account** (@JustAGhosT)
 
 ## Summary Checklist
 
@@ -189,7 +189,7 @@ DEFAULT_ADMIN_PASSWORD=""
 1. **Test Installation:**
 
    ```text
-   https://github.com/apps/autopr/installations/new
+   https://github.com/apps/CodeFlow/installations/new
    ```
 
 2. **Verify Webhook:**
@@ -201,27 +201,27 @@ DEFAULT_ADMIN_PASSWORD=""
 3. **Check Secrets:**
 
    - After installation, verify secrets are created in the repository
-   - Go to: Repository → Settings → Secrets and variables → Actions
+   - Go to: Repository â†’ Settings â†’ Secrets and variables â†’ Actions
 
 ## Troubleshooting
 
 ### Webhook not receiving events
 
-- ✅ Verify webhook URL is publicly accessible (HTTPS required)
-- ✅ Check webhook secret matches in both GitHub and your app
-- ✅ Verify webhook is "Active" in GitHub App settings
+- âœ… Verify webhook URL is publicly accessible (HTTPS required)
+- âœ… Check webhook secret matches in both GitHub and your app
+- âœ… Verify webhook is "Active" in GitHub App settings
 
 ### Installation fails
 
-- ✅ Check callback URL is correct
-- ✅ Verify OAuth client ID/secret are correct
-- ✅ Ensure app has required permissions
+- âœ… Check callback URL is correct
+- âœ… Verify OAuth client ID/secret are correct
+- âœ… Ensure app has required permissions
 
 ### Secrets not being set
 
-- ✅ Verify app has "Secrets: Read and write" permission
-- ✅ Check installation has access to the repository
-- ✅ Verify encryption is working (libsodium-wrappers installed)
+- âœ… Verify app has "Secrets: Read and write" permission
+- âœ… Check installation has access to the repository
+- âœ… Verify encryption is working (libsodium-wrappers installed)
 
 ## Next Steps
 
@@ -237,7 +237,7 @@ DEFAULT_ADMIN_PASSWORD=""
 Add this to your README after creating the app:
 
 ```markdown
-[![Install AutoPR](https://img.shields.io/badge/Install-AutoPR-28a745?style=for-the-badge)](https://github.com/apps/autopr/installations/new)
+[![Install CodeFlow](https://img.shields.io/badge/Install-CodeFlow-28a745?style=for-the-badge)](https://github.com/apps/CodeFlow/installations/new)
 ```
 
-Replace `autopr` with your actual app slug (GitHub will show this after creation).
+Replace `CodeFlow` with your actual app slug (GitHub will show this after creation).

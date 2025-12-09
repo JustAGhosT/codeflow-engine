@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 Demonstration of Hybrid YAML + Template Approach
 Shows how the enhanced FileGenerator works with metadata-driven templates.
@@ -8,7 +8,7 @@ from pathlib import Path
 import sys
 
 
-# Add the autopr package to the path
+# Add the codeflow package to the path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from codeflow_engine.actions.prototype_enhancement.file_generators import FileGenerator

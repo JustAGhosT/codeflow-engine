@@ -1,10 +1,10 @@
-name: "Bildr Visual Flexibility Platform"
+﻿name: "Bildr Visual Flexibility Platform"
 category: "visual-development"
 description:
   "Highly visual no-code platform for building flexible web apps, Chrome extensions, and progressive
   web apps with Figma-like interface"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["visual-development", "flexible", "web-apps", "chrome-extensions", "pwa", "figma-like"]
 
 platform_info:

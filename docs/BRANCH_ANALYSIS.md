@@ -1,4 +1,4 @@
-# Branch Analysis and Merge Recommendations
+﻿# Branch Analysis and Merge Recommendations
 
 ## Summary
 
@@ -38,7 +38,7 @@ Analysis of remaining branches to determine what should be merged into `main`.
 - Changes from old repository structure
 
 **Analysis:**
-- ✅ **Modular file analyzer already exists in main** (`autopr/actions/platform_detection/analysis/`)
+- âœ… **Modular file analyzer already exists in main** (`codeflow/actions/platform_detection/analysis/`)
 - Branch is from old repository and significantly behind
 - Changes have already been incorporated into main
 - **Recommendation:** **DELETE** - feature already merged
@@ -65,14 +65,14 @@ Analysis of remaining branches to determine what should be merged into `main`.
 
 ## Recommendations
 
-### ✅ Safe to Delete:
+### âœ… Safe to Delete:
 1. **`feat/file-analyzer`** - Feature already in main
 2. **`feat/modular-file-analyzer`** - Feature already in main (same as above)
 
-### ⚠️ Review Before Deleting:
+### âš ï¸ Review Before Deleting:
 3. **`fix/repository-references`** - Check if `tools/codeflow-engine.code-workspace` needs the update
 
-### 📦 Keep as Backup:
+### ðŸ“¦ Keep as Backup:
 4. **`backup/current-work`** - Keep for reference, but don't merge (too outdated)
 
 ---

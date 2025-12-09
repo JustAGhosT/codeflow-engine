@@ -1,4 +1,4 @@
-# 21. Repository Structure and Monorepo vs Multi-Repo Strategy
+﻿# 21. Repository Structure and Monorepo vs Multi-Repo Strategy
 
 ## Status
 
@@ -15,7 +15,7 @@ The codeflow-engine project has grown significantly and now encompasses multiple
 1. **Core Engine**: The main automation and workflow engine
 2. **Web UI/Dashboard**: React-based user interface
 3. **VS Code Extension**: Editor integration
-4. **Desktop Application**: Electron-based desktop app (autopr-desktop)
+4. **Desktop Application**: Electron-based desktop app (codeflow-desktop)
 5. **Documentation Website**: Marketing and documentation site
 6. **Template System**: Reusable workflow templates
 7. **Infrastructure**: Kubernetes, Terraform, deployment configs
@@ -26,15 +26,15 @@ Currently, all these components live in a single monorepo, which has both advant
 
 ```
 codeflow-engine/
-├── codeflow_engine/        # Python core engine
-├── autopr-desktop/          # Electron desktop app
-├── vscode-extension/        # VS Code extension
-├── website/                 # Documentation/marketing site
-├── templates/               # Workflow templates
-├── infrastructure/          # K8s, Bicep, Terraform
-├── docs/                    # Documentation
-├── tools/                   # Development tools
-└── tests/                   # Test suite
+â”œâ”€â”€ codeflow_engine/        # Python core engine
+â”œâ”€â”€ codeflow-desktop/          # Electron desktop app
+â”œâ”€â”€ vscode-extension/        # VS Code extension
+â”œâ”€â”€ website/                 # Documentation/marketing site
+â”œâ”€â”€ templates/               # Workflow templates
+â”œâ”€â”€ infrastructure/          # K8s, Bicep, Terraform
+â”œâ”€â”€ docs/                    # Documentation
+â”œâ”€â”€ tools/                   # Development tools
+â””â”€â”€ tests/                   # Test suite
 ```
 
 ### Problems with Current Structure
@@ -281,13 +281,13 @@ Use tools like Nx or Turborepo to get multi-repo benefits while keeping monorepo
 
 ```
 codeflow-engine/
-├── packages/
-│   ├── core/           # Python package
-│   ├── web/            # React app
-│   ├── vscode/         # VS Code extension
-│   └── desktop/        # Electron app
-├── nx.json
-└── workspace.json
+â”œâ”€â”€ packages/
+â”‚   â”œâ”€â”€ core/           # Python package
+â”‚   â”œâ”€â”€ web/            # React app
+â”‚   â”œâ”€â”€ vscode/         # VS Code extension
+â”‚   â””â”€â”€ desktop/        # Electron app
+â”œâ”€â”€ nx.json
+â””â”€â”€ workspace.json
 ```
 
 **Decision**: Not chosen because it doesn't solve clone size, access control, or technology heterogeneity issues.

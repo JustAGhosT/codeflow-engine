@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 Example: Using the Enhanced Error Handler with AI Linting Fixer
 
@@ -15,7 +15,7 @@ from typing import Any
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from autopr.actions.ai_linting_fixer import (
+from codeflow.actions.ai_linting_fixer import (
     AILintingFixer,
     AILintingFixerInputs,
     DisplayConfig,
@@ -23,7 +23,7 @@ from autopr.actions.ai_linting_fixer import (
     OutputMode,
     create_error_context,
 )
-from autopr.actions.llm.manager import LLMProviderManager
+from codeflow.actions.llm.manager import LLMProviderManager
 
 
 def setup_error_handler() -> None:

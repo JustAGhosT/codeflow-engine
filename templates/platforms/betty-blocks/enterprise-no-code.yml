@@ -1,10 +1,10 @@
-name: "Betty Blocks Enterprise No-Code Application"
+﻿name: "Betty Blocks Enterprise No-Code Application"
 category: "enterprise"
 description:
   "Enterprise no-code platform for building scalable applications with AI toolkit and visual
   development environment"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags:
   [
     "enterprise",
@@ -59,9 +59,9 @@ platform_info:
     - "Limited flexibility for highly customized solutions"
 
   pricing:
-    starter: "€1,500/month for small teams"
-    smb: "€1,000/month for small-medium businesses"
-    enterprise: "€3,250/month for large organizations"
+    starter: "â‚¬1,500/month for small teams"
+    smb: "â‚¬1,000/month for small-medium businesses"
+    enterprise: "â‚¬3,250/month for large organizations"
     custom: "Custom pricing for specific requirements"
 
 variables:

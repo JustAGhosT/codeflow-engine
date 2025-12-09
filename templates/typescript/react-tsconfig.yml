@@ -1,10 +1,10 @@
-name: "React TypeScript Configuration"
+﻿name: "React TypeScript Configuration"
 category: "typescript"
 description:
   "TypeScript configuration optimized for React applications with modern ES features and strict type
   checking"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["typescript", "react", "configuration", "jsx", "es6"]
 
 template_info:

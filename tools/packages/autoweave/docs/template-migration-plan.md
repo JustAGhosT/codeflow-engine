@@ -1,8 +1,8 @@
-# AutoPR Template Repository Migration Plan
+﻿# CodeFlow Template Repository Migration Plan
 
 ## Overview
 
-This document outlines the strategy and steps for migrating AutoPR's template system from the main
+This document outlines the strategy and steps for migrating CodeFlow's template system from the main
 repository to a dedicated template repository. The migration will improve maintainability, enable
 independent versioning, and simplify template contributions.
 
@@ -134,23 +134,23 @@ independent versioning, and simplify template contributions.
 
 ```text
 
-autopr-templates/
-├── .github/
-│   └── workflows/
-├── templates/
-│   ├── docker/
-│   ├── deployment/
-│   ├── security/
-│   ├── testing/
-│   ├── documentation/
-│   ├── platforms/
-│   ├── integrations/
-│   ├── typescript/
-│   └── html/
-├── tests/
-├── scripts/
-├── pyproject.toml
-└── README.md
+codeflow-templates/
+â”œâ”€â”€ .github/
+â”‚   â””â”€â”€ workflows/
+â”œâ”€â”€ templates/
+â”‚   â”œâ”€â”€ docker/
+â”‚   â”œâ”€â”€ deployment/
+â”‚   â”œâ”€â”€ security/
+â”‚   â”œâ”€â”€ testing/
+â”‚   â”œâ”€â”€ documentation/
+â”‚   â”œâ”€â”€ platforms/
+â”‚   â”œâ”€â”€ integrations/
+â”‚   â”œâ”€â”€ typescript/
+â”‚   â””â”€â”€ html/
+â”œâ”€â”€ tests/
+â”œâ”€â”€ scripts/
+â”œâ”€â”€ pyproject.toml
+â””â”€â”€ README.md
 ```
 
 #### 3.2 Package Configuration
@@ -252,11 +252,11 @@ autopr-templates/
 4. Schedule regular check-ins
 5. Monitor progress against milestones
 
-# AutoPR Template Repository Migration Plan 2
+# CodeFlow Template Repository Migration Plan 2
 
 ## Overview 2
 
-This document outlines the strategy and steps for migrating AutoPR's template system from the main
+This document outlines the strategy and steps for migrating CodeFlow's template system from the main
 repository to a dedicated template repository. The migration will improve maintainability, enable
 independent versioning, and simplify template contributions.
 
@@ -388,23 +388,23 @@ independent versioning, and simplify template contributions.
 
 ```text
 
-autopr-templates/
-├── .github/
-│   └── workflows/
-├── templates/
-│   ├── docker/
-│   ├── deployment/
-│   ├── security/
-│   ├── testing/
-│   ├── documentation/
-│   ├── platforms/
-│   ├── integrations/
-│   ├── typescript/
-│   └── html/
-├── tests/
-├── scripts/
-├── pyproject.toml
-└── README.md
+codeflow-templates/
+â”œâ”€â”€ .github/
+â”‚   â””â”€â”€ workflows/
+â”œâ”€â”€ templates/
+â”‚   â”œâ”€â”€ docker/
+â”‚   â”œâ”€â”€ deployment/
+â”‚   â”œâ”€â”€ security/
+â”‚   â”œâ”€â”€ testing/
+â”‚   â”œâ”€â”€ documentation/
+â”‚   â”œâ”€â”€ platforms/
+â”‚   â”œâ”€â”€ integrations/
+â”‚   â”œâ”€â”€ typescript/
+â”‚   â””â”€â”€ html/
+â”œâ”€â”€ tests/
+â”œâ”€â”€ scripts/
+â”œâ”€â”€ pyproject.toml
+â””â”€â”€ README.md
 ```
 
 #### 3.2 Package Configuration 2

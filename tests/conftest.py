@@ -1,4 +1,4 @@
-"""Configuration and fixtures for pytest.
+﻿"""Configuration and fixtures for pytest.
 
 This module includes volume-based warning control and other test configurations.
 """
@@ -28,7 +28,7 @@ from aiohttp import ClientSession
 
 def get_volume_level() -> int:
     """Get the current volume level from environment or default to 500 (BALANCED)."""
-    return int(os.environ.get("AUTOPR_TEST_VOLUME_LEVEL", "500"))
+    return int(os.environ.get("CODEFLOW_TEST_VOLUME_LEVEL", "500"))
 
 
 def get_warning_filters(volume: int) -> list[str]:
@@ -137,8 +137,8 @@ def _ensure_event_loop():
 def pytest_configure(config):
     """Configure pytest with volume-based warning filters."""
     # Set default test volume if not already set
-    if "AUTOPR_TEST_VOLUME_LEVEL" not in os.environ:
-        os.environ["AUTOPR_TEST_VOLUME_LEVEL"] = (
+    if "CODEFLOW_TEST_VOLUME_LEVEL" not in os.environ:
+        os.environ["CODEFLOW_TEST_VOLUME_LEVEL"] = (
             "500"  # Default to balanced mode for tests
         )
 
@@ -233,7 +233,7 @@ def configure_warnings_per_test(request):
     """
     # Determine volume for this test from marker or env default
     marker = request.node.get_closest_marker("volume")
-    volume_str = os.environ.get("AUTOPR_TEST_VOLUME_LEVEL", "500")
+    volume_str = os.environ.get("CODEFLOW_TEST_VOLUME_LEVEL", "500")
     try:
         volume_env = int(volume_str)
     except ValueError:

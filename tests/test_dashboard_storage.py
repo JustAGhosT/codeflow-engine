@@ -1,4 +1,4 @@
-"""Tests for dashboard storage backends.
+﻿"""Tests for dashboard storage backends.
 
 Note: This file uses pytest assertions which are the standard testing pattern.
 The B101 warnings about assert are expected and correct for test files.
@@ -119,7 +119,7 @@ class TestGetStorageBackend:
 
     def test_default_is_memory(self, monkeypatch):
         """Test default backend is in-memory."""
-        monkeypatch.delenv("AUTOPR_STORAGE_BACKEND", raising=False)
+        monkeypatch.delenv("CODEFLOW_STORAGE_BACKEND", raising=False)
         # Clear singleton
         import codeflow_engine.dashboard.storage as storage_module
         storage_module._storage = None
@@ -129,7 +129,7 @@ class TestGetStorageBackend:
 
     def test_explicit_memory_backend(self, monkeypatch):
         """Test explicit memory backend selection."""
-        monkeypatch.setenv("AUTOPR_STORAGE_BACKEND", "memory")
+        monkeypatch.setenv("CODEFLOW_STORAGE_BACKEND", "memory")
         import codeflow_engine.dashboard.storage as storage_module
         storage_module._storage = None
 
@@ -138,7 +138,7 @@ class TestGetStorageBackend:
 
     def test_redis_fallback_to_memory(self, monkeypatch):
         """Test Redis falls back to memory when unavailable."""
-        monkeypatch.setenv("AUTOPR_STORAGE_BACKEND", "redis")
+        monkeypatch.setenv("CODEFLOW_STORAGE_BACKEND", "redis")
         monkeypatch.setenv("REDIS_URL", "redis://invalid:6379/0")
         import codeflow_engine.dashboard.storage as storage_module
         storage_module._storage = None
@@ -153,7 +153,7 @@ class TestGetStorageSingleton:
 
     def test_singleton(self, monkeypatch):
         """Test get_storage returns same instance."""
-        monkeypatch.delenv("AUTOPR_STORAGE_BACKEND", raising=False)
+        monkeypatch.delenv("CODEFLOW_STORAGE_BACKEND", raising=False)
         import codeflow_engine.dashboard.storage as storage_module
         storage_module._storage = None
 

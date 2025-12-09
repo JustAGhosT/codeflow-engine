@@ -1,8 +1,8 @@
-# AutoPR Engine - Database Schema Documentation
+﻿# CodeFlow Engine - Database Schema Documentation
 
 ## **Overview**
 
-AutoPR Engine uses PostgreSQL 15+ as its primary datastore. This document describes the complete database schema, relationships, indexing strategy, and data flow.
+CodeFlow Engine uses PostgreSQL 15+ as its primary datastore. This document describes the complete database schema, relationships, indexing strategy, and data flow.
 
 **Version**: 1.0  
 **Last Updated**: 2025-01-20  
@@ -608,7 +608,7 @@ LIMIT 100;
 
 ### **Connection Pooling**
 
-Recommended settings in `autopr/config/settings.py`:
+Recommended settings in `CodeFlow/config/settings.py`:
 
 ```python
 database:
@@ -626,7 +626,7 @@ database:
 
 ```bash
 # Full backup
-pg_dump -h $DB_HOST -U $DB_USER -Fc autopr > autopr_$(date +%Y%m%d).dump
+pg_dump -h $DB_HOST -U $DB_USER -Fc CodeFlow > codeflow_$(date +%Y%m%d).dump
 
 # Incremental backup (using pg_basebackup)
 pg_basebackup -h $DB_HOST -U $DB_USER -D /backups/base -Fp -Xs -P
@@ -720,7 +720,7 @@ ORDER BY failure_count DESC;
 
 ```sql
 SELECT 
-    pg_size_pretty(pg_database_size('autopr')) AS database_size,
+    pg_size_pretty(pg_database_size('CodeFlow')) AS database_size,
     pg_size_pretty(pg_total_relation_size('workflow_executions')) AS executions_size,
     pg_size_pretty(pg_total_relation_size('execution_logs')) AS logs_size;
 ```

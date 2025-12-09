@@ -1,4 +1,4 @@
-# GitHub App Conversion Complete ✅
+﻿# GitHub App Conversion Complete âœ…
 
 The GitHub App code has been successfully converted from Next.js/TypeScript to Python/FastAPI and integrated into codeflow-engine.
 
@@ -8,11 +8,11 @@ The GitHub App code has been successfully converted from Next.js/TypeScript to P
 
 All Next.js API routes have been converted to FastAPI routers:
 
-- ✅ `install/route.ts` → `autopr/integrations/github_app/install.py`
-- ✅ `callback/route.ts` → `autopr/integrations/github_app/callback.py`
-- ✅ `webhook/route.ts` → `autopr/integrations/github_app/webhook.py`
-- ✅ `github-secrets.ts` → `autopr/integrations/github_app/secrets.py`
-- ✅ `setup/page.tsx` → `autopr/integrations/github_app/setup.py`
+- âœ… `install/route.ts` â†’ `codeflow/integrations/github_app/install.py`
+- âœ… `callback/route.ts` â†’ `codeflow/integrations/github_app/callback.py`
+- âœ… `webhook/route.ts` â†’ `codeflow/integrations/github_app/webhook.py`
+- âœ… `github-secrets.ts` â†’ `codeflow/integrations/github_app/secrets.py`
+- âœ… `setup/page.tsx` â†’ `codeflow/integrations/github_app/setup.py`
 
 ### 2. Technology Stack
 
@@ -24,19 +24,19 @@ All Next.js API routes have been converted to FastAPI routers:
 ### 3. Integration Structure
 
 ```
-autopr/integrations/github_app/
-├── __init__.py          # Module exports
-├── install.py           # Installation OAuth flow
-├── callback.py          # OAuth callback handler
-├── webhook.py           # Webhook event handler
-├── secrets.py           # Secret encryption & configuration
-├── setup.py             # Setup completion page
-└── README.md            # Integration documentation
+codeflow/integrations/github_app/
+â”œâ”€â”€ __init__.py          # Module exports
+â”œâ”€â”€ install.py           # Installation OAuth flow
+â”œâ”€â”€ callback.py          # OAuth callback handler
+â”œâ”€â”€ webhook.py           # Webhook event handler
+â”œâ”€â”€ secrets.py           # Secret encryption & configuration
+â”œâ”€â”€ setup.py             # Setup completion page
+â””â”€â”€ README.md            # Integration documentation
 ```
 
 ### 4. Server Integration
 
-Created `autopr/server.py` - A FastAPI server that:
+Created `codeflow/server.py` - A FastAPI server that:
 - Includes all GitHub App routes
 - Can run alongside Flask dashboard
 - Provides health check endpoints
@@ -69,7 +69,7 @@ GITHUB_APP_CLIENT_SECRET=your_client_secret
 GITHUB_APP_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----"
 GITHUB_WEBHOOK_SECRET=your_webhook_secret
 GITHUB_APP_REDIRECT_URI=https://your-app.azurewebsites.net/api/github-app/callback
-GITHUB_APP_SLUG=autopr
+GITHUB_APP_SLUG=codeflow
 NEXT_PUBLIC_SITE_URL=https://your-app.azurewebsites.net
 ```
 
@@ -79,9 +79,9 @@ NEXT_PUBLIC_SITE_URL=https://your-app.azurewebsites.net
 
 ```bash
 # Run FastAPI server with GitHub App routes
-python -m autopr.server
+python -m codeflow.server
 # or
-uvicorn autopr.server:app --host 0.0.0.0 --port 8080
+uvicorn codeflow.server:app --host 0.0.0.0 --port 8080
 ```
 
 **Option B: Integrate with Flask Dashboard**
@@ -123,14 +123,14 @@ curl http://localhost:8080/setup?installation_id=123&account=test
 ## Files Created
 
 ### Python Code
-- `autopr/integrations/github_app/__init__.py`
-- `autopr/integrations/github_app/install.py`
-- `autopr/integrations/github_app/callback.py`
-- `autopr/integrations/github_app/webhook.py`
-- `autopr/integrations/github_app/secrets.py`
-- `autopr/integrations/github_app/setup.py`
-- `autopr/integrations/github_app/README.md`
-- `autopr/server.py`
+- `codeflow/integrations/github_app/__init__.py`
+- `codeflow/integrations/github_app/install.py`
+- `codeflow/integrations/github_app/callback.py`
+- `codeflow/integrations/github_app/webhook.py`
+- `codeflow/integrations/github_app/secrets.py`
+- `codeflow/integrations/github_app/setup.py`
+- `codeflow/integrations/github_app/README.md`
+- `codeflow/server.py`
 
 ### Documentation
 - `docs/GITHUB_APP_CONFIGURATION.md` (migrated)
@@ -168,11 +168,11 @@ curl http://localhost:8080/setup?installation_id=123&account=test
 ## Support
 
 For issues or questions:
-- See `autopr/integrations/github_app/README.md`
+- See `codeflow/integrations/github_app/README.md`
 - Check `docs/GITHUB_APP_SETUP.md` for setup instructions
 - Review `docs/GITHUB_APP_CONFIGURATION.md` for configuration details
 
 ## Status
 
-✅ **Conversion Complete** - All code converted and ready for testing!
+âœ… **Conversion Complete** - All code converted and ready for testing!
 

@@ -1,17 +1,17 @@
-# Migration Guide - Version 1.0.0
+﻿# Migration Guide - Version 1.0.0
 
 ## Overview
 
-This guide helps you migrate to the latest version of AutoPR Engine with new platform support, bug fixes, and UI improvements.
+This guide helps you migrate to the latest version of CodeFlow Engine with new platform support, bug fixes, and UI improvements.
 
 ---
 
 ## What's New
 
-### 🎯 Breaking Changes
+### ðŸŽ¯ Breaking Changes
 **None!** This release is fully backward compatible.
 
-### ✨ New Features
+### âœ¨ New Features
 - 10 new AI platforms supported
 - Platform Analytics Dashboard
 - Dark mode support
@@ -75,7 +75,7 @@ print(f"Confidence: {result.confidence_score}")
 If using the Tauri desktop app:
 
 ```bash
-cd autopr-desktop
+cd codeflow-desktop
 npm install  # Update dependencies
 npm run dev  # Start development server
 ```
@@ -142,12 +142,12 @@ condition = {
 | Anthropic Integration | Placeholder | Full API integration |
 | Workflow Conditions | Simple boolean | Complex expressions |
 | Parallel Execution | Placeholder | Async with error handling |
-| UI Dark Mode | ❌ | ✅ |
-| Loading States | ❌ | ✅ |
-| Error Boundaries | ❌ | ✅ |
-| Toast Notifications | ❌ | ✅ |
-| Keyboard Shortcuts | ❌ | ✅ |
-| Platform Analytics | ❌ | ✅ Full dashboard |
+| UI Dark Mode | âŒ | âœ… |
+| Loading States | âŒ | âœ… |
+| Error Boundaries | âŒ | âœ… |
+| Toast Notifications | âŒ | âœ… |
+| Keyboard Shortcuts | âŒ | âœ… |
+| Platform Analytics | âŒ | âœ… Full dashboard |
 
 ---
 
@@ -188,7 +188,7 @@ assert result.detected_platform == "base44"
 ### 3. Test UI
 
 ```bash
-cd autopr-desktop
+cd codeflow-desktop
 npm run dev
 ```
 
@@ -296,18 +296,18 @@ pytest
 
 ## Next Steps
 
-1. ✅ Complete migration
-2. ✅ Run tests
-3. ✅ Verify UI changes
-4. ✅ Test new platforms
-5. ✅ Enable dark mode
-6. ✅ Explore Platform Analytics
-7. ✅ Configure API keys (optional)
-8. ✅ Update team documentation
+1. âœ… Complete migration
+2. âœ… Run tests
+3. âœ… Verify UI changes
+4. âœ… Test new platforms
+5. âœ… Enable dark mode
+6. âœ… Explore Platform Analytics
+7. âœ… Configure API keys (optional)
+8. âœ… Update team documentation
 
 ---
 
-**Happy coding! 🚀**
+**Happy coding! ðŸš€**
 
 ---
 

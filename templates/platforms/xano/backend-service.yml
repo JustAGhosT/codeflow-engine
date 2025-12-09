@@ -1,10 +1,10 @@
-name: "Xano Backend-as-a-Service"
+﻿name: "Xano Backend-as-a-Service"
 category: "backend-service"
 description:
   "No-code backend platform providing scalable APIs, databases, and business logic for modern
   applications"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["backend-service", "api-builder", "database", "scalable", "no-code-backend", "relational-db"]
 
 platform_info:

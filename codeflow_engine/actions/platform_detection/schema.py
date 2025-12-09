@@ -1,4 +1,4 @@
-"""
+﻿"""
 Platform Configuration Schema
 
 Defines the structure and validation for platform configuration files.
@@ -143,7 +143,7 @@ class PlatformConfig:
     """
     Platform configuration container with validation.
 
-    This class represents the complete configuration for a platform that AutoPR can interact with.
+    This class represents the complete configuration for a platform that CodeFlow can interact with.
     It includes metadata, detection rules, and project configuration.
     """
 
@@ -189,7 +189,7 @@ class PlatformConfig:
     license: str = "MIT"
 
     # Technical metadata
-    min_autopr_version: str = "0.1.0"
+    min_codeflow_version: str = "0.1.0"
     dependencies: dict[str, str] = field(default_factory=dict)
     compatibility: dict[str, Any] = field(default_factory=dict)
 
@@ -312,7 +312,7 @@ class PlatformConfig:
             source=source or PlatformSource.COMMUNITY,
             license=data.get("license", "MIT"),
             # Technical metadata
-            min_autopr_version=data.get("min_autopr_version", "0.1.0"),
+            min_codeflow_version=data.get("min_codeflow_version", "0.1.0"),
             dependencies=data.get("dependencies", {}),
             compatibility=data.get("compatibility", {}),
             # Nested configurations

@@ -1,10 +1,10 @@
-"""
-AutoPR CLI Package
+﻿"""
+CodeFlow CLI Package
 
-Command-line interface for AutoPR Engine providing local development tools,
+Command-line interface for CodeFlow Engine providing local development tools,
 quality checks, and automation capabilities.
 """
 
 __version__ = "1.0.0"
-__author__ = "AutoPR Team"
-__description__ = "Command-line interface for AutoPR Engine"
+__author__ = "CodeFlow Team"
+__description__ = "Command-line interface for CodeFlow Engine"

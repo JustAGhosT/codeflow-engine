@@ -1,5 +1,5 @@
-"""
-AutoPR Integration Base Classes
+﻿"""
+CodeFlow Integration Base Classes
 
 Base classes and interfaces for integration implementation.
 """
@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 class Integration(ABC):
     """
-    Base class for all AutoPR integrations.
+    Base class for all CodeFlow integrations.
 
     Integrations provide connectivity to external services and platforms.
     """

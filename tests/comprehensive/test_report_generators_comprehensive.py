@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 Comprehensive tests for report generators module.
 """
@@ -549,7 +549,7 @@ class TestPDFReportGenerator:
         
         data = {"title": "Test Report", "author": "John Doe"}
         metadata = {
-            "creator": "AutoPR",
+            "creator": "CodeFlow",
             "subject": "Test Report",
             "keywords": "test, report, pdf"
         }

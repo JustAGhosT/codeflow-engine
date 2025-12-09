@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "platform_id",
   "name": "Platform Name",
   "category": "ai|cloud|core|vcs|ci_cd|deployment|monitoring|security|general",
@@ -36,7 +36,7 @@
   "source": "official|community|third_party",
   "license": "MIT",
 
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "dependencies": {},
   "compatibility": {},
 

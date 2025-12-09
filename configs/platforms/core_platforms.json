@@ -1,4 +1,4 @@
-{
+﻿{
   "version": "1.0",
   "description": "Configuration for core development platforms. Individual platform configurations are stored in the core/ subdirectory.",
   "platforms": [
@@ -85,7 +85,7 @@
       "package_scripts": 0.1
     },
     "categories": ["rapid_prototyping", "automation"],
-    "last_updated_by": "AutoPR Engine",
+    "last_updated_by": "CodeFlow Engine",
     "schema_version": "1.1.0"
   }
 }

@@ -1,9 +1,9 @@
-# Template metadata
+﻿# Template metadata
 template_id: hello_world
 title: Hello World Template
 description: A simple hello world template demonstrating template variables and conditionals
 version: 1.0.0
-author: AutoPR Team
+author: CodeFlow Team
 tags: [example, basic, hello-world]
 category: examples
 platforms: [all]
@@ -95,7 +95,7 @@ documentation: |
 # Template metadata for discovery
 discovery:
   short_description: A simple hello world template
-  icon: 👋
+  icon: ðŸ‘‹
   preview: |
     # Hello, [name]!
 

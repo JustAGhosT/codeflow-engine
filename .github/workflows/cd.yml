@@ -1,4 +1,4 @@
-name: Continuous Deployment
+﻿name: Continuous Deployment
 
 on:
   push:
@@ -19,8 +19,8 @@ jobs:
         with:
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
           environment: 'production'
-          resource_group: 'autopr-rg'
-          cluster_name: 'autopr-aks'
+          resource_group: 'codeflow-rg'
+          cluster_name: 'codeflow-aks'
 
       - name: Smoke Test
         run: |

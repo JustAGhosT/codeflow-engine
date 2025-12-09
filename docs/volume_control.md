@@ -1,8 +1,8 @@
-# Volume Control in AutoPR Engine
+﻿# Volume Control in CODEFLOW Engine
 
 ## Overview
 
-Volume control in AutoPR Engine allows you to adjust the depth and strictness of code analysis on a
+Volume control in CODEFLOW Engine allows you to adjust the depth and strictness of code analysis on a
 scale from 0 to 1000. This feature helps balance between thoroughness and performance based on your
 needs.
 
@@ -41,7 +41,7 @@ needs.
 
 ```python
 # Initialize crew with default volume (500)
-crew = AutoPRCrew()
+crew = CODEFLOWCrew()
 
 # Analyze repository with default volume
 report = await crew.analyze_repository("/path/to/repo")
@@ -73,12 +73,12 @@ task = crew._create_code_quality_task(
 
 ```bash
 # Set default volume (0-1000)
-AUTOPR_DEFAULT_VOLUME=500
+CODEFLOW_DEFAULT_VOLUME=500
 
 # Set volume-specific timeouts (in seconds)
-AUTOPR_VOLUME_LOW_TIMEOUT=60
-AUTOPR_VOLUME_MEDIUM_TIMEOUT=120
-AUTOPR_VOLUME_HIGH_TIMEOUT=300
+CODEFLOW_VOLUME_LOW_TIMEOUT=60
+CODEFLOW_VOLUME_MEDIUM_TIMEOUT=120
+CODEFLOW_VOLUME_HIGH_TIMEOUT=300
 ```
 
 ### Quality Inputs
@@ -128,7 +128,7 @@ Volume affects these `QualityInputs` parameters:
 
 ## API Reference
 
-### AutoPRCrew
+### CODEFLOWCrew
 
 #### analyze_repository
 

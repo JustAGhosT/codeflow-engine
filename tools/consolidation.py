@@ -1,6 +1,6 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
-AutoPR Consolidation Tool
+CodeFlow Consolidation Tool
 Handles all cleanup, migration, and optimization tasks
 """
 
@@ -41,8 +41,8 @@ class Consolidator:
             "tools/cleanup_duplicates.py",
             "tools/cleanup_consolidation.py",
             # Old actions
-            "autopr/actions/consolidated_quality_check.py",
-            "autopr/actions/run_dup_check.py",
+            "CodeFlow/actions/consolidated_quality_check.py",
+            "CodeFlow/actions/run_dup_check.py",
             # Old configs
             "tools/scripts/code_quality.py",
             "tools/whitespace_fixer/pre-commit-whitespace-fix.ps1",
@@ -81,8 +81,8 @@ class Consolidator:
         """Validate that system components exist"""
 
         required_components = [
-            "autopr/actions/quality_engine.py",
-            "autopr/actions/ai_linting_fixer/ai_linting_fixer.py",
+            "CodeFlow/actions/quality_engine.py",
+            "CodeFlow/actions/ai_linting_fixer/ai_linting_fixer.py",
             "tools/linter.py",
             "configs/config.yaml",
         ]

@@ -1,4 +1,4 @@
-[build-system]
+﻿[build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
@@ -47,12 +47,12 @@ Changelog = "https://github.com/JustAGhosT/codeflow-engine/blob/main/CHANGELOG.m
 Discussions = "https://github.com/JustAGhosT/codeflow-engine/discussions"
 
 [project.scripts]
-autopr = "codeflow_engine.cli.main:main"
-autopr-server = "codeflow_engine.server:main"
-autopr-worker = "codeflow_engine.worker:main"
-autopr-migration = "codeflow_engine.migration:main"
+codeflow = "codeflow_engine.cli.main:main"
+codeflow-server = "codeflow_engine.server:main"
+codeflow-worker = "codeflow_engine.worker:main"
+codeflow-migration = "codeflow_engine.migration:main"
 
-[project.entry-points."autopr.actions"]
+[project.entry-points."codeflow.actions"]
 platform_detector = "codeflow_engine.actions.platform_detector:PlatformDetector"
 pr_review_analyzer = "codeflow_engine.actions.pr_review_analyzer:PRReviewAnalyzer"
 issue_creator = "codeflow_engine.actions.issue_creator:IssueCreator"
@@ -60,13 +60,13 @@ ai_comment_analyzer = "codeflow_engine.actions.ai_comment_analyzer:AICommentAnal
 quality_gates = "codeflow_engine.actions.quality_gates:QualityGates"
 autogen_multi_agent = "codeflow_engine.actions.autogen_multi_agent:AutoGenMultiAgent"
 
-[project.entry-points."autopr.integrations"]
+[project.entry-points."codeflow.integrations"]
 github = "codeflow_engine.integrations.github:GitHubIntegration"
 linear = "codeflow_engine.integrations.linear:LinearIntegration"
 slack = "codeflow_engine.integrations.slack:SlackIntegration"
 axolo = "codeflow_engine.integrations.axolo:AxoloIntegration"
 
-[project.entry-points."autopr.llm_providers"]
+[project.entry-points."codeflow.llm_providers"]
 openai = "codeflow_engine.ai.providers.openai:OpenAIProvider"
 anthropic = "codeflow_engine.ai.providers.anthropic:AnthropicProvider"
 mistral = "codeflow_engine.ai.providers.mistral:MistralProvider"
@@ -129,13 +129,13 @@ Discussions = "https://github.com/JustAGhosT/codeflow-engine/discussions"
 
 # Deprecated: Use [project.scripts] instead (kept for backward compatibility)
 [tool.poetry.scripts]
-autopr = "codeflow_engine.cli.main:main"
-autopr-server = "codeflow_engine.server:main"
-autopr-worker = "codeflow_engine.worker:main"
-autopr-migration = "codeflow_engine.migration:main"
+codeflow = "codeflow_engine.cli.main:main"
+codeflow-server = "codeflow_engine.server:main"
+codeflow-worker = "codeflow_engine.worker:main"
+codeflow-migration = "codeflow_engine.migration:main"
 
 # Deprecated: Use [project.entry-points] instead (kept for backward compatibility)
-[tool.poetry.plugins."autopr.actions"]
+[tool.poetry.plugins."codeflow.actions"]
 "platform_detector" = "codeflow_engine.actions.platform_detector:PlatformDetector"
 "pr_review_analyzer" = "codeflow_engine.actions.pr_review_analyzer:PRReviewAnalyzer"
 "issue_creator" = "codeflow_engine.actions.issue_creator:IssueCreator"
@@ -143,13 +143,13 @@ autopr-migration = "codeflow_engine.migration:main"
 "quality_gates" = "codeflow_engine.actions.quality_gates:QualityGates"
 "autogen_multi_agent" = "codeflow_engine.actions.autogen_multi_agent:AutoGenMultiAgent"
 
-[tool.poetry.plugins."autopr.integrations"]
+[tool.poetry.plugins."codeflow.integrations"]
 "github" = "codeflow_engine.integrations.github:GitHubIntegration"
 "linear" = "codeflow_engine.integrations.linear:LinearIntegration"
 "slack" = "codeflow_engine.integrations.slack:SlackIntegration"
 "axolo" = "codeflow_engine.integrations.axolo:AxoloIntegration"
 
-[tool.poetry.plugins."autopr.llm_providers"]
+[tool.poetry.plugins."codeflow.llm_providers"]
 "openai" = "codeflow_engine.ai.providers.openai:OpenAIProvider"
 "anthropic" = "codeflow_engine.ai.providers.anthropic:AnthropicProvider"
 "mistral" = "codeflow_engine.ai.providers.mistral:MistralProvider"
@@ -230,7 +230,7 @@ norecursedirs = []
 # pytest-asyncio configuration
 asyncio_mode = "strict"
 asyncio_default_fixture_loop_scope = "function"
-# Warning filters are now controlled by volume settings in autopr/utils/volume_utils.py
+# Warning filters are now controlled by volume settings in codeflow/utils/volume_utils.py
 # Default to 'ignore' but will be overridden by volume settings when tests run
 filterwarnings = [
     # Always show deprecation warnings
@@ -496,7 +496,7 @@ ignore = [
 ]
 
 [tool.sphinx]
-project = "AutoPR Engine"
+project = "CodeFlow Engine"
 copyright = "2025, VeritasVault Team"
 author = "VeritasVault Team"
 extensions = [

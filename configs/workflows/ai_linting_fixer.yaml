@@ -1,11 +1,11 @@
-# =============================================================================
+﻿# =============================================================================
 # AI Linting Fixer - Workflow Integration Configuration
 # =============================================================================
 #
 # This configuration file demonstrates how to integrate the AI linting system
 # with various workflow orchestration platforms and execution environments.
 #
-# Author: AutoPR AI Systems
+# Author: CodeFlow AI Systems
 # Updated: 2025-01-29
 
 # =============================================================================
@@ -151,7 +151,7 @@ fastapi:
 
   api_config:
     title: "AI Linting Service"
-    description: "AutoPR AI-powered code linting microservice"
+    description: "CodeFlow AI-powered code linting microservice"
     version: "1.0.0"
     host: "0.0.0.0"
     port: 8000
@@ -220,7 +220,7 @@ github_actions:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -A
-          git diff --staged --quiet || git commit -m "🤖 AI: Auto-fix linting issues"
+          git diff --staged --quiet || git commit -m "ðŸ¤– AI: Auto-fix linting issues"
           git push
 
 # =============================================================================
@@ -267,13 +267,13 @@ kubernetes:
 
   job_config:
     name: "ai-linting-job"
-    namespace: "autopr"
+    namespace: "CodeFlow"
     restart_policy: "OnFailure"
     backoff_limit: 3
     active_deadline_seconds: 600
 
   pod_config:
-    image: "autopr/ai-linting:latest"
+    image: "CodeFlow/ai-linting:latest"
     resources:
       requests:
         cpu: "1000m"

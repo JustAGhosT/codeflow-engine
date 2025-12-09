@@ -1,10 +1,10 @@
-# GitHub Workflows
+﻿# GitHub Workflows
 
-This directory contains the GitHub Actions workflows for AutoPR Engine.
+This directory contains the GitHub Actions workflows for CODEFLOW Engine.
 
 ## Workflow Architecture
 
-AutoPR uses a **volume-aware, multi-stage workflow system** designed to provide fast feedback while
+CODEFLOW uses a **volume-aware, multi-stage workflow system** designed to provide fast feedback while
 maintaining comprehensive quality checks.
 
 ### Workflow Overview
@@ -26,7 +26,7 @@ repository volume settings.
 **Key Features:**
 
 - **Volume-based execution:** Different checks run based on volume level (0-1000)
-- **Conditional jobs:** Tests (vol≥1), Lint (vol≥200), Typecheck (vol≥400), Security (vol≥600)
+- **Conditional jobs:** Tests (volâ‰¥1), Lint (volâ‰¥200), Typecheck (volâ‰¥400), Security (volâ‰¥600)
 - **Manual dispatch:** Supports manual volume override
 - **Full test suite:** Complete pytest coverage with Codecov integration
 
@@ -97,13 +97,13 @@ repository volume settings.
 
 ### Volume Integration
 
-All workflows respect the AutoPR volume system:
+All workflows respect the CODEFLOW volume system:
 
 ```bash
 # Repository variables (set in GitHub settings)
-AUTOPR_VOLUME_PR=100      # PR volume
-AUTOPR_VOLUME_CHECKIN=50  # Push volume
-AUTOPR_VOLUME_DEV=200     # Development volume
+CODEFLOW_VOLUME_PR=100      # PR volume
+CODEFLOW_VOLUME_CHECKIN=50  # Push volume
+CODEFLOW_VOLUME_DEV=200     # Development volume
 ```
 
 ### Status Badges
@@ -192,17 +192,17 @@ Set these in GitHub repository settings:
 
 | Variable                | Description              | Default |
 | ----------------------- | ------------------------ | ------- |
-| `AUTOPR_VOLUME_PR`      | Volume for pull requests | 100     |
-| `AUTOPR_VOLUME_CHECKIN` | Volume for pushes        | 50      |
-| `AUTOPR_VOLUME_DEV`     | Volume for development   | 200     |
+| `CODEFLOW_VOLUME_PR`      | Volume for pull requests | 100     |
+| `CODEFLOW_VOLUME_CHECKIN` | Volume for pushes        | 50      |
+| `CODEFLOW_VOLUME_DEV`     | Volume for development   | 200     |
 
 ### Environment Variables
 
 | Variable                  | Description               | Default |
 | ------------------------- | ------------------------- | ------- |
 | `PYTHON_VERSION`          | Python version to use     | 3.13    |
-| `AUTOPR_PRECOMMIT_VOLUME` | Pre-commit volume         | 100     |
-| `AUTOPR_BG_BATCH`         | Background fix batch size | 30      |
+| `CODEFLOW_PRECOMMIT_VOLUME` | Pre-commit volume         | 100     |
+| `CODEFLOW_BG_BATCH`         | Background fix batch size | 30      |
 
 ## Support
 

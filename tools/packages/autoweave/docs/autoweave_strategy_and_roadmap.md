@@ -1,4 +1,4 @@
-# AutoWeave: Strategic Vision and Execution Plan
+﻿# AutoWeave: Strategic Vision and Execution Plan
 
 ## Executive Summary
 
@@ -34,11 +34,11 @@ standard for intelligent templating by 2026.
 
 | Feature              | AutoWeave      | Handlebars  | Jinja2         | Terraform |
 | -------------------- | -------------- | ----------- | -------------- | --------- |
-| AI/ML Capabilities   | ✅ Native      | ❌          | ❌             | ❌        |
-| Multi-Format Support | ✅ Unified     | ❌ JS-only  | ❌ Python-only | ✅        |
-| Version Control      | ✅ Built-in    | ❌ External | ❌ External    | ✅        |
-| CI/CD Integration    | ✅ Native      | ❌          | ❌             | ✅        |
-| Enterprise Features  | ✅ RBAC, Audit | ❌          | ❌             | Partial   |
+| AI/ML Capabilities   | âœ… Native      | âŒ          | âŒ             | âŒ        |
+| Multi-Format Support | âœ… Unified     | âŒ JS-only  | âŒ Python-only | âœ…        |
+| Version Control      | âœ… Built-in    | âŒ External | âŒ External    | âœ…        |
+| CI/CD Integration    | âœ… Native      | âŒ          | âŒ             | âœ…        |
+| Enterprise Features  | âœ… RBAC, Audit | âŒ          | âŒ             | Partial   |
 
 ### Target Audience
 
@@ -58,7 +58,7 @@ standard for intelligent templating by 2026.
 
 ### Q4 2025: Foundation
 
-- Launch as "AutoPR Templates" (integrated offering)
+- Launch as "CodeFlow Templates" (integrated offering)
 - Core AI template generation MVP
 - Basic marketplace with seed templates
 

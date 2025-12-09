@@ -1,10 +1,10 @@
-name: "Zapier Interfaces Automation-First Application"
+﻿name: "Zapier Interfaces Automation-First Application"
 category: "automation-first"
 description:
   "Automation-first no-code platform for creating apps with AI orchestration and seamless
   integration with thousands of external services"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags:
   [
     "automation-first",

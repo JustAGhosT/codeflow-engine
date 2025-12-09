@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "codegpt",
   "name": "CodeGPT",
   "description": "AI-powered coding assistant plugin for VS Code with customizable AI models",
@@ -12,7 +12,7 @@
   "type": "ai",
   "source": "official",
   "priority": 53,
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "vendor": "CodeGPT",
   "website": "https://codegpt.co/",
   "pricing_model": "freemium",

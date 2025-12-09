@@ -1,5 +1,5 @@
-"""
-AutoPR LLM Package - Modular LLM provider system.
+﻿"""
+CODEFLOW LLM Package - Modular LLM provider system.
 
 This package provides a unified interface for multiple LLM providers including:
 
@@ -71,7 +71,7 @@ def get_llm_provider_manager() -> ActionLLMProviderManager:
         return _provider_manager
 
     # Allow disabling LLM provider initialization in tests/CI to avoid network calls
-    if os.getenv("AUTOPR_DISABLE_LLM_INIT", "0") in {"1", "true", "True"}:
+    if os.getenv("CODEFLOW_DISABLE_LLM_INIT", "0") in {"1", "true", "True"}:
         # Create a manager with no providers to satisfy callers
         _provider_manager = ActionLLMProviderManager(
             {"default_provider": "none", "providers": {}}
@@ -80,42 +80,42 @@ def get_llm_provider_manager() -> ActionLLMProviderManager:
 
     # Load configuration from environment
     config: dict[str, Any] = {
-        "default_provider": os.getenv("AUTOPR_DEFAULT_LLM_PROVIDER", "openai"),
+        "default_provider": os.getenv("CODEFLOW_DEFAULT_LLM_PROVIDER", "openai"),
         "fallback_order": os.getenv(
-            "AUTOPR_LLM_FALLBACK_ORDER", "openai,anthropic,mistral"
+            "CODEFLOW_LLM_FALLBACK_ORDER", "openai,anthropic,mistral"
         ).split(","),
         "providers": {
             "openai": {
                 "api_key_env": "OPENAI_API_KEY",
-                "default_model": os.getenv("AUTOPR_OPENAI_MODEL", "gpt-4"),
+                "default_model": os.getenv("CODEFLOW_OPENAI_MODEL", "gpt-4"),
                 "base_url": os.getenv("OPENAI_API_BASE"),
             },
             "anthropic": {
                 "api_key_env": "ANTHROPIC_API_KEY",
                 "default_model": os.getenv(
-                    "AUTOPR_ANTHROPIC_MODEL", "claude-3-sonnet-20240229"
+                    "CODEFLOW_ANTHROPIC_MODEL", "claude-3-sonnet-20240229"
                 ),
             },
             "mistral": {
                 "api_key_env": "MISTRAL_API_KEY",
                 "default_model": os.getenv(
-                    "AUTOPR_MISTRAL_MODEL", "mistral-large-latest"
+                    "CODEFLOW_MISTRAL_MODEL", "mistral-large-latest"
                 ),
             },
             "groq": {
                 "api_key_env": "GROQ_API_KEY",
-                "default_model": os.getenv("AUTOPR_GROQ_MODEL", "mixtral-8x7b-32768"),
+                "default_model": os.getenv("CODEFLOW_GROQ_MODEL", "mixtral-8x7b-32768"),
             },
             "perplexity": {
                 "api_key_env": "PERPLEXITY_API_KEY",
                 "default_model": os.getenv(
-                    "AUTOPR_PERPLEXITY_MODEL", "llama-3.1-sonar-large-128k-online"
+                    "CODEFLOW_PERPLEXITY_MODEL", "llama-3.1-sonar-large-128k-online"
                 ),
             },
             "together": {
                 "api_key_env": "TOGETHER_API_KEY",
                 "default_model": os.getenv(
-                    "AUTOPR_TOGETHER_MODEL", "meta-llama/Llama-2-70b-chat-hf"
+                    "CODEFLOW_TOGETHER_MODEL", "meta-llama/Llama-2-70b-chat-hf"
                 ),
                 "base_url": "https://api.together.xyz/v1",
             },

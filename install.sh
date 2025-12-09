@@ -1,5 +1,5 @@
-#!/bin/bash
-# AutoPR Engine - Simple Installation Script
+﻿#!/bin/bash
+# CodeFlow Engine - Simple Installation Script
 # Usage: curl -sSL https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/install.sh | bash
 # Or: ./install.sh [--full|--dev|--minimal]
 
@@ -46,7 +46,7 @@ elif [ "$1" = "--docker" ]; then
 elif [ "$1" = "--action" ]; then
     INSTALL_TYPE="action"
 elif [ "$1" = "--version" ] || [ "$1" = "-v" ]; then
-    echo "AutoPR Engine Installer v${VERSION}"
+    echo "CodeFlow Engine Installer v${VERSION}"
     exit 0
 elif [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
     # Show banner in help output
@@ -58,7 +58,7 @@ elif [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
     echo "|_| |_|\__,_|\__\___/|_|   |_| \_\ |_____|_| |_|\__, |_|_| |_|\___|"
     echo "                                                |___/              "
     echo ""
-    echo "AutoPR - AI-Powered GitHub PR Automation and Issue Management"
+    echo "CodeFlow - AI-Powered GitHub PR Automation and Issue Management"
     echo ""
     echo "Usage: $0 [OPTIONS]"
     echo ""
@@ -124,7 +124,7 @@ check_prerequisites() {
 
 # Install via pip
 install_pip() {
-    print_status "Installing AutoPR Engine via pip..."
+    print_status "Installing CodeFlow Engine via pip..."
 
     # Recommend virtual environment
     if [ -z "$VIRTUAL_ENV" ] && [ "$INSTALL_TYPE" != "minimal" ]; then
@@ -134,14 +134,14 @@ install_pip() {
     case "$INSTALL_TYPE" in
         "minimal")
             print_status "Installing minimal package (core only, no extras)..."
-            pip3 install --no-deps autopr-engine || {
+            pip3 install --no-deps codeflow-engine || {
                 print_error "Installation failed"
                 exit 1
             }
             ;;
         "standard")
             print_status "Installing standard package with common dependencies..."
-            pip3 install autopr-engine || {
+            pip3 install codeflow-engine || {
                 print_error "Installation failed"
                 exit 1
             }
@@ -172,7 +172,7 @@ install_pip() {
                         rm -rf "${CLONE_DIR}"
                         exit 1
                     }
-                    print_status "Repository cloned to: ${CLONE_DIR}/autopr-engine"
+                    print_status "Repository cloned to: ${CLONE_DIR}/codeflow-engine"
                 else
                     print_error "Failed to clone repository"
                     rm -rf "${CLONE_DIR}"
@@ -182,7 +182,7 @@ install_pip() {
             ;;
     esac
 
-    print_success "AutoPR Engine installed successfully!"
+    print_success "CodeFlow Engine installed successfully!"
 }
 
 # Install via Docker
@@ -191,7 +191,7 @@ install_docker() {
 
     # Create directory if not in repo
     if [ ! -f "docker-compose.yml" ]; then
-        print_status "Creating autopr directory..."
+        print_status "Creating CodeFlow directory..."
         mkdir -p codeflow-engine && cd codeflow-engine || {
             print_error "Failed to create directory"
             exit 1
@@ -200,7 +200,7 @@ install_docker() {
         # Download docker-compose.yml with retry
         print_status "Downloading Docker Compose configuration..."
         for i in 1 2 3; do
-            if curl -sSL --fail https://raw.githubusercontent.com/JustAGhosT/autopr-engine/main/docker-compose.yml -o docker-compose.yml; then
+            if curl -sSL --fail https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/docker-compose.yml -o docker-compose.yml; then
                 break
             fi
             if [ "$i" -eq 3 ]; then
@@ -212,7 +212,7 @@ install_docker() {
         done
 
         for i in 1 2 3; do
-            if curl -sSL --fail https://raw.githubusercontent.com/JustAGhosT/autopr-engine/main/.env.example -o .env.example; then
+            if curl -sSL --fail https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/.env.example -o .env.example; then
                 break
             fi
             if [ "$i" -eq 3 ]; then
@@ -233,7 +233,7 @@ install_docker() {
 
     print_success "Docker setup complete!"
     echo ""
-    print_status "To start AutoPR Engine:"
+    print_status "To start CodeFlow Engine:"
     echo "  1. Edit .env with your API keys"
     echo "  2. Run: docker compose up -d"
 }
@@ -260,11 +260,11 @@ show_next_steps() {
     echo "     export GITHUB_TOKEN=ghp_your_token"
     echo "     export OPENAI_API_KEY=sk-your_key"
     echo ""
-    echo "  2. Run AutoPR CLI:"
-    echo "     autopr --help"
+    echo "  2. Run CodeFlow CLI:"
+    echo "     CodeFlow --help"
     echo ""
     echo "  3. Add to your GitHub repo:"
-    echo "     autopr init  # Creates .github/workflows/autopr.yml"
+    echo "     CodeFlow init  # Creates .github/workflows/codeflow.yml"
     echo ""
     echo "  4. Or use Docker:"
     echo "     docker-compose up -d"
@@ -279,10 +279,10 @@ setup_github_action() {
 
     mkdir -p .github/workflows
 
-    cat > .github/workflows/autopr.yml << 'EOF'
-# AutoPR Engine - AI-Powered PR Analysis
+    cat > .github/workflows/codeflow.yml << 'EOF'
+# CodeFlow Engine - AI-Powered PR Analysis
 # Generated by install.sh
-name: AutoPR Analysis
+name: CodeFlow Analysis
 
 on:
   pull_request:
@@ -307,20 +307,20 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install AutoPR Engine
-        run: pip install autopr-engine
+      - name: Install CodeFlow Engine
+        run: pip install codeflow-engine
 
       - name: Run PR Analysis
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          autopr analyze \
+          CodeFlow analyze \
             --repo ${{ github.repository }} \
             --pr ${{ github.event.pull_request.number }}
 EOF
 
-    print_success "Created .github/workflows/autopr.yml"
+    print_success "Created .github/workflows/codeflow.yml"
     print_warning "Remember to add OPENAI_API_KEY to your repository secrets!"
 }
 

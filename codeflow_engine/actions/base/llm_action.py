@@ -1,5 +1,5 @@
-"""
-LLM-specific action class for AutoPR.
+﻿"""
+LLM-specific action class for CodeFlow.
 """
 
 from typing import Any

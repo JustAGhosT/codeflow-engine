@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "github_copilot",
   "name": "GitHub Copilot",
   "description": "AI pair programmer by GitHub and OpenAI that helps you write better code with AI-powered code completions",
@@ -12,7 +12,7 @@
   "type": "ai",
   "source": "official",
   "priority": 70,
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "vendor": "GitHub",
   "website": "https://github.com/features/copilot",
   "pricing_model": "subscription",

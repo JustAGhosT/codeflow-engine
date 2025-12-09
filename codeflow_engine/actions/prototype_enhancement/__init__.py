@@ -1,4 +1,4 @@
-"""
+﻿"""
 Prototype Enhancement Package
 
 Modular prototype enhancement system that provides platform-specific enhancements
@@ -24,7 +24,7 @@ from codeflow_engine.actions.prototype_enhancement.platform_configs import (
 
 
 __version__ = "2.0.0"
-__author__ = "AutoPR Team"
+__author__ = "CodeFlow Team"
 
 # Main exports for backward compatibility
 __all__ = [

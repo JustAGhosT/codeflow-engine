@@ -1,9 +1,9 @@
-name: "Helmet Security Configuration Template"
+﻿name: "Helmet Security Configuration Template"
 category: "security"
 description:
   "Express.js Helmet security middleware configuration for enhanced web application security"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["security", "express", "helmet", "middleware", "web_security"]
 
 template_info:

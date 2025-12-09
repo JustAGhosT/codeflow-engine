@@ -1,10 +1,10 @@
-"""Dashboard State Storage Backends.
+﻿"""Dashboard State Storage Backends.
 
 Provides persistent storage for dashboard state with multiple backends:
 - InMemoryStorage: Fast, non-persistent (default for development)
 - RedisStorage: Persistent, shared across instances (for production)
 
-Configure via AUTOPR_STORAGE_BACKEND environment variable:
+Configure via CODEFLOW_STORAGE_BACKEND environment variable:
 - "memory" (default): In-memory storage
 - "redis": Redis storage (requires REDIS_URL)
 """
@@ -166,7 +166,7 @@ class RedisStorage(StorageBackend):
     # Minimum seconds between reconnection attempts
     RECONNECT_COOLDOWN = 5.0
 
-    def __init__(self, redis_url: str | None = None, key_prefix: str = "autopr:dashboard:"):
+    def __init__(self, redis_url: str | None = None, key_prefix: str = "CODEFLOW:dashboard:"):
         self._key_prefix = key_prefix
         self._redis_url = redis_url or os.getenv("REDIS_URL", "redis://localhost:6379/0")
         self._client = None
@@ -327,13 +327,13 @@ def get_storage_backend() -> StorageBackend:
     """Get configured storage backend.
 
     Configure via environment variables:
-    - AUTOPR_STORAGE_BACKEND: "memory" or "redis" (default: "memory")
+    - CODEFLOW_STORAGE_BACKEND: "memory" or "redis" (default: "memory")
     - REDIS_URL: Redis connection URL (required if backend is "redis")
 
     Returns:
         Configured storage backend instance.
     """
-    backend_type = os.getenv("AUTOPR_STORAGE_BACKEND", "memory").lower()
+    backend_type = os.getenv("CODEFLOW_STORAGE_BACKEND", "memory").lower()
 
     if backend_type == "redis":
         redis_storage = RedisStorage()

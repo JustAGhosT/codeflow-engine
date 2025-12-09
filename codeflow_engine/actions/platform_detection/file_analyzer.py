@@ -1,8 +1,8 @@
-"""
+﻿"""
 Legacy File Analyzer Module
 
 This module provides backward compatibility for the old FileAnalyzer interface.
-New code should use the modular analyzer in autopr.actions.platform_detection.analysis
+New code should use the modular analyzer in codeflow.actions.platform_detection.analysis
 """
 
 import json
@@ -26,7 +26,7 @@ class FileAnalyzer:
     delegating to the new modular implementation under the hood.
 
     .. deprecated:: 1.0.0
-       Use :class:`autopr.actions.platform_detection.analysis.FileAnalyzer` instead.
+       Use :class:`codeflow.actions.platform_detection.analysis.FileAnalyzer` instead.
     """
 
     def __init__(self, workspace_path: str = "."):
@@ -37,7 +37,7 @@ class FileAnalyzer:
         """
         warnings.warn(
             "FileAnalyzer is deprecated. "
-            "Use autopr.actions.platform_detection.analysis.create_file_analyzer() instead.",
+            "Use codeflow.actions.platform_detection.analysis.create_file_analyzer() instead.",
             DeprecationWarning,
             stacklevel=2,
         )

@@ -1,9 +1,9 @@
-# AutoPR Engine Configuration
+﻿# CodeFlow Engine Configuration
 
-This directory contains all configuration files for the AutoPR Engine project, organized by
+This directory contains all configuration files for the CodeFlow Engine project, organized by
 category.
 
-## 📁 Configuration Structure
+## ðŸ“ Configuration Structure
 
 ### Root Configuration Files
 
@@ -46,7 +46,7 @@ category.
   - Milestone configurations
   - Feature flag settings
 
-## 🔧 Configuration Management
+## ðŸ”§ Configuration Management
 
 ### Environment Variables
 
@@ -67,7 +67,7 @@ When updating configurations:
 3. Validate configuration syntax and schema
 4. Deploy changes incrementally
 
-## 📝 Configuration Best Practices
+## ðŸ“ Configuration Best Practices
 
 1. **Use descriptive names** for configuration files and options
 2. **Include comments** explaining complex configuration options
@@ -75,7 +75,7 @@ When updating configurations:
 4. **Version control** all configuration changes
 5. **Document dependencies** between different configuration files
 
-## 🔍 Quick Reference
+## ðŸ” Quick Reference
 
 - **Linting**: `.flake8`, `.markdownlint.json`
 - **Type Checking**: `mypy.ini`

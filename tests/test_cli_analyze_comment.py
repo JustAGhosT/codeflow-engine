@@ -1,4 +1,4 @@
-"""Unit tests for CLI analyze_comment command.
+﻿"""Unit tests for CLI analyze_comment command.
 
 Tests for:
 - analyze_comment CLI command
@@ -234,6 +234,6 @@ class TestCLIImports:
         
         assert result.exit_code == 0
         # Just check that a version is present in the output, not the specific version
-        assert "autopr" in result.output.lower() or "version" in result.output.lower() or any(
+        assert "codeflow" in result.output.lower() or "version" in result.output.lower() or any(
             part.count('.') >= 1 for part in result.output.split()
         )

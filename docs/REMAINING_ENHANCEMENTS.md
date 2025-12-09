@@ -1,4 +1,4 @@
-# Remaining Enhancements - GitHub Issues
+﻿# Remaining Enhancements - GitHub Issues
 
 This document tracks the remaining medium-priority bugs, performance improvements, UX enhancements, and documentation tasks that were identified during the comprehensive project analysis but not included in the initial production-ready baseline.
 
@@ -26,8 +26,8 @@ Currently, configuration errors may not provide sufficient detail for debugging.
 - [ ] Add test coverage for config validation errors
 
 **Files Affected:**
-- `autopr/config.py`
-- New: `autopr/config/validator.py`
+- `codeflow/config.py`
+- New: `codeflow/config/validator.py`
 - New: `tests/test_config_validation.py`
 
 **Estimated Effort:** 4-6 hours
@@ -53,8 +53,8 @@ Validate GitHub tokens on startup and provide clear feedback when tokens are inv
 - [ ] Add test coverage with mocked GitHub API responses
 
 **Files Affected:**
-- `autopr/integrations/github.py`
-- New: `autopr/integrations/github/token_validator.py`
+- `codeflow/integrations/github.py`
+- New: `codeflow/integrations/github/token_validator.py`
 - New: `tests/test_github_token_validation.py`
 
 **Estimated Effort:** 5-7 hours
@@ -83,10 +83,10 @@ Add resilient retry logic with exponential backoff for external API calls (GitHu
 - [ ] Add test coverage for retry scenarios
 
 **Files Affected:**
-- New: `autopr/integrations/retry.py`
-- `autopr/integrations/github.py`
-- `autopr/integrations/slack.py`
-- `autopr/integrations/linear.py`
+- New: `codeflow/integrations/retry.py`
+- `codeflow/integrations/github.py`
+- `codeflow/integrations/slack.py`
+- `codeflow/integrations/linear.py`
 - New: `tests/test_integration_retry.py`
 
 **Estimated Effort:** 6-8 hours
@@ -115,8 +115,8 @@ Implement webhook signature validation to ensure webhooks are from trusted sourc
 - [ ] Add test coverage for valid/invalid signatures
 
 **Files Affected:**
-- `autopr/webhooks/handler.py`
-- New: `autopr/webhooks/signature_validator.py`
+- `codeflow/webhooks/handler.py`
+- New: `codeflow/webhooks/signature_validator.py`
 - New: `tests/test_webhook_signature_validation.py`
 
 **Estimated Effort:** 4-6 hours
@@ -146,7 +146,7 @@ Identify and convert remaining synchronous I/O operations to async/await pattern
 - [ ] Update documentation with async patterns
 
 **Files Affected:**
-- Multiple files across `autopr/` directory
+- Multiple files across `codeflow/` directory
 - Database session management
 - File operations in dashboard
 - External API calls
@@ -177,9 +177,9 @@ Add rate limiting middleware to prevent API abuse and ensure fair resource alloc
 - [ ] Add test coverage for rate limit scenarios
 
 **Files Affected:**
-- New: `autopr/middleware/rate_limiter.py`
-- `autopr/main.py` (FastAPI middleware)
-- `autopr/dashboard/server.py` (Flask middleware)
+- New: `codeflow/middleware/rate_limiter.py`
+- `codeflow/main.py` (FastAPI middleware)
+- `codeflow/dashboard/server.py` (Flask middleware)
 - New: `tests/test_rate_limiting.py`
 
 **Estimated Effort:** 8-10 hours

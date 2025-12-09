@@ -1,5 +1,5 @@
-"""
-Git Hooks Management for AutoPR
+﻿"""
+Git Hooks Management for CodeFlow
 
 Provides functionality to install, manage, and execute git hooks
 for automated quality checks and file operations.
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class GitHooksManager:
-    """Manages git hooks for AutoPR automation."""
+    """Manages git hooks for CodeFlow automation."""
 
     def __init__(self, git_dir: str | None = None):
         self.git_dir = git_dir or self._find_git_dir()
@@ -62,7 +62,7 @@ class GitHooksManager:
             return None
 
     def install_hooks(self, config: dict[str, Any] | None = None) -> bool:
-        """Install AutoPR git hooks."""
+        """Install CodeFlow git hooks."""
         if not self.hooks_dir:
             logger.error("Not in a git repository")
             return False
@@ -96,7 +96,7 @@ class GitHooksManager:
 
             if installed_hooks:
                 logger.info(
-                    f"AutoPR git hooks installed successfully: {', '.join(installed_hooks)}"
+                    f"CodeFlow git hooks installed successfully: {', '.join(installed_hooks)}"
                 )
             else:
                 logger.info("No hooks were installed (none enabled in configuration)")
@@ -107,7 +107,7 @@ class GitHooksManager:
             return False
 
     def uninstall_hooks(self) -> bool:
-        """Remove AutoPR git hooks."""
+        """Remove CodeFlow git hooks."""
         if not self.hooks_dir:
             logger.error("Not in a git repository")
             return False
@@ -121,7 +121,7 @@ class GitHooksManager:
                     hook_path.unlink()
                     logger.info(f"Removed {hook_name} hook")
 
-            logger.info("AutoPR git hooks uninstalled successfully")
+            logger.info("CodeFlow git hooks uninstalled successfully")
             return True
 
         except Exception as e:
@@ -168,12 +168,12 @@ class GitHooksManager:
         auto_fix = config.get("auto_fix", False)
 
         return f"""#!/bin/bash
-# AutoPR Pre-commit Hook
+# CodeFlow Pre-commit Hook
 # Runs quality checks on staged files before commit
 
 set -e
 
-echo "🔍 AutoPR: Running pre-commit quality checks..."
+echo "ðŸ” CodeFlow: Running pre-commit quality checks..."
 
 # Get staged files using NUL-separated output for safety
 files_array=()
@@ -185,40 +185,40 @@ while IFS= read -r -d '' file; do
 done < <(git diff --cached --name-only --diff-filter=ACM -z)
 
 if [ ${{#files_array[@]}} -eq 0 ]; then
-    echo "✅ No relevant files staged for commit"
+    echo "âœ… No relevant files staged for commit"
     exit 0
 fi
 
-echo "📁 Processing ${{#files_array[@]}} staged files..."
+echo "ðŸ“ Processing ${{#files_array[@]}} staged files..."
 
-# Run AutoPR quality check with proper array expansion
-if python -m autopr.cli.main check \\
+# Run CodeFlow quality check with proper array expansion
+if python -m codeflow.cli.main check \\
     --mode {mode} \\
     --files "${{files_array[@]}}" \\
     --format json \\
-    --output /tmp/autopr_precommit_result.json; then
+    --output /tmp/codeflow_precommit_result.json; then
 
-    echo "✅ AutoPR quality checks passed"
+    echo "âœ… CodeFlow quality checks passed"
 
     # Apply auto-fixes if enabled
     if [ "{str(auto_fix).lower()}" = "true" ]; then
-        echo "🔧 AutoPR: Applying automatic fixes..."
-        if python -m autopr.cli.main check \\
+        echo "ðŸ”§ CodeFlow: Applying automatic fixes..."
+        if python -m codeflow.cli.main check \\
             --mode {mode} \\
             --files "${{files_array[@]}}" \\
             --auto-fix; then
 
             # Re-stage fixed files using proper array expansion
             git add -- "${{files_array[@]}}"
-            echo "✅ Auto-fixes applied and staged"
+            echo "âœ… Auto-fixes applied and staged"
         else
-            echo "⚠️  Auto-fix failed, but continuing with commit"
+            echo "âš ï¸  Auto-fix failed, but continuing with commit"
         fi
     fi
 
     exit 0
 else
-    echo "❌ AutoPR quality checks failed"
+    echo "âŒ CodeFlow quality checks failed"
     echo "Please fix the issues before committing"
     exit 1
 fi
@@ -227,30 +227,30 @@ fi
     def _generate_post_commit_hook(self, config: dict[str, Any] | None = None) -> str:
         """Generate post-commit hook content."""
         return """#!/bin/bash
-# AutoPR Post-commit Hook
+# CodeFlow Post-commit Hook
 # Collects metrics and updates history after commit
 
 set -e
 
-echo "📊 AutoPR: Collecting post-commit metrics..."
+echo "ðŸ“Š CodeFlow: Collecting post-commit metrics..."
 
 # Get commit hash
 COMMIT_HASH=$(git rev-parse HEAD)
 COMMIT_MESSAGE=$(git log -1 --pretty=format:%s)
 
 # Run metrics collection (non-blocking)
-python -m autopr.cli.main metrics collect \\
+python -m codeflow.cli.main metrics collect \\
     --commit-hash "$COMMIT_HASH" \\
     --commit-message "$COMMIT_MESSAGE" \\
     --background &
 
-echo "✅ AutoPR post-commit metrics collection started"
+echo "âœ… CodeFlow post-commit metrics collection started"
 """
 
     def _generate_commit_msg_hook(self, config: dict[str, Any] | None = None) -> str:
         """Generate commit-msg hook content."""
         return """#!/bin/bash
-# AutoPR Commit Message Hook
+# CodeFlow Commit Message Hook
 # Validates commit message format and content
 
 set -e
@@ -258,12 +258,12 @@ set -e
 COMMIT_MSG_FILE=$1
 COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
 
-echo "📝 AutoPR: Validating commit message..."
+echo "ðŸ“ CodeFlow: Validating commit message..."
 
 # Basic commit message validation
 COMMIT_PATTERN="^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\\(.+\\))?: .+"
 if [[ ! "$COMMIT_MSG" =~ $COMMIT_PATTERN ]]; then
-    echo "❌ Invalid commit message format"
+    echo "âŒ Invalid commit message format"
     echo "Expected format: <type>(<scope>): <description>"
     echo "Types: feat, fix, docs, style, refactor, test, chore, perf, ci, build, revert"
     echo "Example: feat(quality): add AI-enhanced file splitter"
@@ -272,11 +272,11 @@ fi
 
 # Check message length
 if [ ${#COMMIT_MSG} -gt 72 ]; then
-    echo "⚠️  Commit message is longer than 72 characters"
+    echo "âš ï¸  Commit message is longer than 72 characters"
     echo "Consider using a shorter description"
 fi
 
-echo "✅ Commit message validation passed"
+echo "âœ… Commit message validation passed"
 """
 
     def get_hooks_status(self) -> dict[str, bool]:
@@ -334,13 +334,13 @@ echo "✅ Commit message validation passed"
 
                     # Set git user config
                     subprocess.run(
-                        ["git", "config", "user.name", "AutoPR Test"],
+                        ["git", "config", "user.name", "CodeFlow Test"],
                         cwd=temp_dir,
                         capture_output=True,
                         check=True,
                     )
                     subprocess.run(
-                        ["git", "config", "user.email", "test@autopr.local"],
+                        ["git", "config", "user.email", "test@codeflow.local"],
                         cwd=temp_dir,
                         capture_output=True,
                         check=True,
@@ -348,7 +348,7 @@ echo "✅ Commit message validation passed"
 
                     # Create a test file and stage it
                     test_file = Path(temp_dir) / "test.py"
-                    test_file.write_text("# Test file for AutoPR pre-commit hook\n")
+                    test_file.write_text("# Test file for CodeFlow pre-commit hook\n")
 
                     subprocess.run(
                         ["git", "add", str(test_file)],
@@ -376,14 +376,14 @@ echo "✅ Commit message validation passed"
 
 
 def install_hooks(config_path: str | None = None) -> bool:
-    """Install AutoPR git hooks."""
+    """Install CodeFlow git hooks."""
     config = _load_config(config_path) if config_path else {}
     manager = GitHooksManager()
     return manager.install_hooks(config)
 
 
 def uninstall_hooks() -> bool:
-    """Uninstall AutoPR git hooks."""
+    """Uninstall CodeFlow git hooks."""
     manager = GitHooksManager()
     return manager.uninstall_hooks()
 

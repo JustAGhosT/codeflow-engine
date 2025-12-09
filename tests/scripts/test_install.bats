@@ -1,4 +1,4 @@
-#!/usr/bin/env bats
+﻿#!/usr/bin/env bats
 # Tests for install.sh
 # Run with: bats tests/scripts/test_install.bats
 # Install bats: npm install -g bats or apt install bats
@@ -32,13 +32,13 @@ run_installer() {
 @test "install.sh --version shows version" {
     run run_installer --version
     [ "$status" -eq 0 ]
-    [[ "$output" =~ "AutoPR Engine Installer v" ]]
+    [[ "$output" =~ "CodeFlow Engine Installer v" ]]
 }
 
 @test "install.sh -v shows version" {
     run run_installer -v
     [ "$status" -eq 0 ]
-    [[ "$output" =~ "AutoPR Engine Installer v" ]]
+    [[ "$output" =~ "CodeFlow Engine Installer v" ]]
 }
 
 @test "install.sh --help shows usage" {

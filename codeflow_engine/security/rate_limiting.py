@@ -1,5 +1,5 @@
-"""
-Rate Limiting Middleware for AutoPR Engine
+﻿"""
+Rate Limiting Middleware for CodeFlow Engine
 
 Implements request rate limiting to protect against DoS attacks and API abuse.
 Supports multiple backends (in-memory, Redis) and tiered rate limits.

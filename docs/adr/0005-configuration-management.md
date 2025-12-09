@@ -1,4 +1,4 @@
-# 5. Configuration Management
+﻿# 5. Configuration Management
 
 ## Status
 
@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-AutoPR requires flexible configuration to support:
+CodeFlow requires flexible configuration to support:
 
 - Multiple environments (dev, test, prod)
 - Different deployment scenarios (local, cloud, hybrid)

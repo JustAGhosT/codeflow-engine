@@ -1,4 +1,4 @@
-# 10. Monitoring and Observability
+﻿# 10. Monitoring and Observability
 
 ## Status
 
@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-AutoPR requires comprehensive monitoring to ensure reliability, performance, and quick issue
+CodeFlow requires comprehensive monitoring to ensure reliability, performance, and quick issue
 resolution.
 
 ## Decision

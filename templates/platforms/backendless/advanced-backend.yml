@@ -1,10 +1,10 @@
-name: "Backendless Advanced Backend Control"
+﻿name: "Backendless Advanced Backend Control"
 category: "advanced-backend"
 description:
   "Comprehensive backend-as-a-service platform with codeless logic, advanced data management, and
   full infrastructure control"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags:
   [
     "advanced-backend",

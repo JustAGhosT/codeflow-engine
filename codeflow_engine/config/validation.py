@@ -1,7 +1,7 @@
-"""
+﻿"""
 Configuration Validation Utilities
 
-This module provides comprehensive validation for AutoPR configuration,
+This module provides comprehensive validation for CodeFlow configuration,
 including environment-specific checks, security validations, and
 dependency verification.
 """
@@ -12,13 +12,13 @@ import re
 from typing import Any
 from urllib.parse import urlparse
 
-from codeflow_engine.config.settings import AutoPRSettings, Environment, LLMProvider
+from codeflow_engine.config.settings import CodeFlowSettings, Environment, LLMProvider
 
 
 class ConfigurationValidator:
-    """Validates AutoPR configuration for completeness and security."""
+    """Validates CodeFlow configuration for completeness and security."""
 
-    def __init__(self, settings: AutoPRSettings):
+    def __init__(self, settings: CodeFlowSettings):
         self.settings = settings
         self.errors: list[str] = []
         self.warnings: list[str] = []
@@ -300,12 +300,12 @@ class ConfigurationValidator:
                 )
 
 
-def validate_configuration(settings: AutoPRSettings) -> dict[str, Any]:
+def validate_configuration(settings: CodeFlowSettings) -> dict[str, Any]:
     """
     Validate configuration and return results.
 
     Args:
-        settings: AutoPRSettings instance to validate
+        settings: CodeFlowSettings instance to validate
 
     Returns:
         Dictionary with validation results
@@ -381,12 +381,12 @@ def check_environment_variables() -> dict[str, Any]:
     }
 
 
-def generate_config_report(settings: AutoPRSettings) -> str:
+def generate_config_report(settings: CodeFlowSettings) -> str:
     """
     Generate a comprehensive configuration report.
 
     Args:
-        settings: AutoPRSettings instance
+        settings: CodeFlowSettings instance
 
     Returns:
         Formatted configuration report
@@ -396,7 +396,7 @@ def generate_config_report(settings: AutoPRSettings) -> str:
 
     report = []
     report.append("=" * 60)
-    report.append("AutoPR Configuration Report")
+    report.append("CodeFlow Configuration Report")
     report.append("=" * 60)
     report.append("")
 
@@ -408,9 +408,9 @@ def generate_config_report(settings: AutoPRSettings) -> str:
 
     # Validation results
     if validation_result["valid"]:
-        report.append("✅ Configuration is valid")
+        report.append("âœ… Configuration is valid")
     else:
-        report.append("❌ Configuration has errors")
+        report.append("âŒ Configuration has errors")
 
     report.extend(
         (
@@ -422,27 +422,27 @@ def generate_config_report(settings: AutoPRSettings) -> str:
 
     # Errors
     if validation_result["errors"]:
-        report.append("🚨 Errors:")
+        report.append("ðŸš¨ Errors:")
         report.extend(f"  - {error}" for error in validation_result["errors"])
         report.append("")
 
     # Warnings
     if validation_result["warnings"]:
-        report.append("⚠️  Warnings:")
+        report.append("âš ï¸  Warnings:")
         report.extend(f"  - {warning}" for warning in validation_result["warnings"])
         report.append("")
 
     # Environment variable recommendations
     if env_check["recommendations"]:
-        report.append("💡 Recommendations:")
+        report.append("ðŸ’¡ Recommendations:")
         report.extend(f"  - {rec}" for rec in env_check["recommendations"])
         report.append("")
 
     # Configuration summary
     report.extend(
         (
-            "📋 Configuration Summary:",
-            f"  GitHub: {'✅' if settings.github.token or settings.github.app_id else '❌'}",
+            "ðŸ“‹ Configuration Summary:",
+            f"  GitHub: {'âœ…' if settings.github.token or settings.github.app_id else 'âŒ'}",
         )
     )
 
@@ -459,9 +459,9 @@ def generate_config_report(settings: AutoPRSettings) -> str:
     report.extend(
         (
             f"  LLM Providers: {', '.join(llm_providers) if llm_providers else 'None'}",
-            f"  Database: {'✅' if settings.database.url else '❌'}",
-            f"  Redis: {'✅' if settings.redis.url else '❌'}",
-            f"  Monitoring: {'✅' if settings.monitoring.enable_metrics else '❌'}",
+            f"  Database: {'âœ…' if settings.database.url else 'âŒ'}",
+            f"  Redis: {'âœ…' if settings.redis.url else 'âŒ'}",
+            f"  Monitoring: {'âœ…' if settings.monitoring.enable_metrics else 'âŒ'}",
             "",
             "=" * 60,
         )

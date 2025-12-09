@@ -1,5 +1,5 @@
-"""
-Volume-related utility functions for AutoPR.
+﻿"""
+Volume-related utility functions for CodeFlow.
 
 This module provides volume-based configuration and utilities that can be imported
 without creating circular dependencies between modules.

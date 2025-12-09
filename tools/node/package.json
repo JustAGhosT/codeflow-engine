@@ -1,5 +1,5 @@
-{
-  "name": "autopr-engine",
+﻿{
+  "name": "codeflow-engine",
   "version": "1.0.0",
   "description": "**AI-Powered GitHub PR Automation and Issue Management**",
   "main": "index.js",
@@ -12,16 +12,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JustAGhosT/autopr-engine.git"
+    "url": "git+https://github.com/JustAGhosT/codeflow-engine.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/JustAGhosT/autopr-engine/issues"
+    "url": "https://github.com/JustAGhosT/codeflow-engine/issues"
   },
-  "homepage": "https://github.com/JustAGhosT/autopr-engine#readme",
+  "homepage": "https://github.com/JustAGhosT/codeflow-engine#readme",
   "devDependencies": {
     "markdownlint-cli2": "^0.18.1"
   }

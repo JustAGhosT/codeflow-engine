@@ -1,5 +1,5 @@
-"""
-AutoPR Evaluation: Metrics Collector
+﻿"""
+CodeFlow Evaluation: Metrics Collector
 Comprehensive system for tracking performance, accuracy, and user satisfaction metrics.
 """
 
@@ -48,7 +48,7 @@ class EvaluationMetrics(BaseModel):
 
 
 class MetricsCollector:
-    def __init__(self, db_path: str = "autopr_metrics.db") -> None:
+    def __init__(self, db_path: str = "codeflow_metrics.db") -> None:
         self.db_path = db_path
         self.init_database()
 
@@ -101,7 +101,7 @@ class MetricsCollector:
                     rating INTEGER,  -- 1-5 scale
                     feedback_text TEXT,
                     category TEXT,  -- "helpful", "accurate", "fast", etc.
-                    autopr_action TEXT  -- what AutoPR did
+                    codeflow_action TEXT  -- what CodeFlow did
                 )
             """
             )
@@ -194,7 +194,7 @@ class MetricsCollector:
         rating: int,
         feedback_text: str | None = None,
         category: str | None = None,
-        autopr_action: str | None = None,
+        codeflow_action: str | None = None,
         comment_id: str | None = None,
     ) -> None:
         """Record user feedback."""
@@ -203,7 +203,7 @@ class MetricsCollector:
 
             cursor.execute(
                 """
-                INSERT INTO user_feedback (user_id, rating, feedback_text, category, autopr_action, comment_id)
+                INSERT INTO user_feedback (user_id, rating, feedback_text, category, codeflow_action, comment_id)
                 VALUES (?, ?, ?, ?, ?, ?)
             """,
                 (
@@ -211,7 +211,7 @@ class MetricsCollector:
                     rating,
                     feedback_text,
                     category,
-                    autopr_action,
+                    codeflow_action,
                     comment_id,
                 ),
             )
@@ -780,6 +780,6 @@ class MetricsCollector:
 
 
 # Convenience function for easy metrics collection
-def collect_autopr_metrics() -> "MetricsCollector":
+def collect_codeflow_metrics() -> "MetricsCollector":
     """Convenient function to get the global metrics collector."""
     return MetricsCollector()

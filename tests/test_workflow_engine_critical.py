@@ -1,4 +1,4 @@
-"""
+﻿"""
 Tests for Workflow Engine - Critical Components
 
 Tests for race condition fixes, input validation, and core functionality.
@@ -9,7 +9,7 @@ from datetime import datetime
 import pytest
 import pytest_asyncio
 
-from codeflow_engine.config import AutoPRConfig
+from codeflow_engine.config import CodeFlowConfig
 from codeflow_engine.exceptions import WorkflowError
 from codeflow_engine.workflows.engine import WorkflowEngine
 from codeflow_engine.workflows.base import Workflow
@@ -41,7 +41,7 @@ class MockWorkflow(Workflow):
 @pytest.fixture
 def config():
     """Create test configuration."""
-    return AutoPRConfig()
+    return CodeFlowConfig()
 
 
 @pytest_asyncio.fixture

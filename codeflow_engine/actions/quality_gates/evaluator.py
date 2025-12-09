@@ -1,4 +1,4 @@
-"""
+﻿"""
 Quality Gates Evaluator
 
 Core evaluation logic for quality gate validation.
@@ -44,7 +44,7 @@ class QualityGateValidator:
         recommendations: list[str] = []
 
         # Write modified content to temporary file for testing
-        temp_file = f"{inputs.file_path}.autopr_temp"
+        temp_file = f"{inputs.file_path}.codeflow_temp"
         try:
             with open(temp_file, "w", encoding="utf-8") as f:
                 f.write(inputs.modified_content)

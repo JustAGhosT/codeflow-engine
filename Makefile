@@ -1,4 +1,4 @@
-# AutoPR Engine - Development Makefile
+﻿# CodeFlow Engine - Development Makefile
 # =====================================
 # Usage: make [target]
 # Run 'make help' for available commands
@@ -28,7 +28,7 @@ NC := \033[0m
 
 help: ## Show this help message
 	@echo ""
-	@echo "AutoPR Engine - Development Commands"
+	@echo "CodeFlow Engine - Development Commands"
 	@echo "====================================="
 	@echo ""
 	@echo "$(BLUE)Installation:$(NC)"
@@ -48,19 +48,19 @@ help: ## Show this help message
 # INSTALLATION
 #------------------------------------------------------------------------------
 
-install: ## Install AutoPR Engine (standard)
-	@echo "$(BLUE)Installing AutoPR Engine...$(NC)"
+install: ## Install CodeFlow Engine (standard)
+	@echo "$(BLUE)Installing CodeFlow Engine...$(NC)"
 	$(PIP) install -e .
 	@echo "$(GREEN)Installation complete!$(NC)"
 
 install-dev: ## Install with development dependencies
-	@echo "$(BLUE)Installing AutoPR Engine (development mode)...$(NC)"
+	@echo "$(BLUE)Installing CodeFlow Engine (development mode)...$(NC)"
 	$(PIP) install -e ".[dev]"
 	pre-commit install
 	@echo "$(GREEN)Development installation complete!$(NC)"
 
 install-full: ## Install with all features
-	@echo "$(BLUE)Installing AutoPR Engine (full)...$(NC)"
+	@echo "$(BLUE)Installing CodeFlow Engine (full)...$(NC)"
 	$(PIP) install -e ".[full]"
 	@echo "$(GREEN)Full installation complete!$(NC)"
 
@@ -78,16 +78,16 @@ setup-poetry: ## Install using Poetry
 setup-action: ## Create GitHub Action workflow in current repo
 	@echo "$(BLUE)Setting up GitHub Action...$(NC)"
 	@mkdir -p .github/workflows
-	@if [ -f templates/quick-start/autopr-workflow.yml ]; then \
-		cp templates/quick-start/autopr-workflow.yml .github/workflows/autopr.yml; \
+	@if [ -f templates/quick-start/codeflow-workflow.yml ]; then \
+		cp templates/quick-start/codeflow-workflow.yml .github/workflows/codeflow.yml; \
 		echo "$(GREEN)Copied from local templates$(NC)"; \
-	elif curl -sSL --fail https://raw.githubusercontent.com/JustAGhosT/autopr-engine/main/templates/quick-start/autopr-workflow.yml -o .github/workflows/autopr.yml; then \
+	elif curl -sSL --fail https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/templates/quick-start/codeflow-workflow.yml -o .github/workflows/codeflow.yml; then \
 		echo "$(GREEN)Downloaded from GitHub$(NC)"; \
 	else \
 		echo "$(RED)Failed to set up GitHub Action$(NC)"; \
 		exit 1; \
 	fi
-	@echo "$(GREEN)Created .github/workflows/autopr.yml$(NC)"
+	@echo "$(GREEN)Created .github/workflows/codeflow.yml$(NC)"
 	@echo "$(YELLOW)Remember to add OPENAI_API_KEY to your repository secrets!$(NC)"
 
 #------------------------------------------------------------------------------
@@ -100,7 +100,7 @@ test: ## Run tests
 
 test-cov: ## Run tests with coverage
 	@echo "$(BLUE)Running tests with coverage...$(NC)"
-	pytest tests/ --cov=autopr --cov-report=html --cov-report=term
+	pytest tests/ --cov=CodeFlow --cov-report=html --cov-report=term
 
 test-fast: ## Run tests (fast mode, stop on first failure)
 	@echo "$(BLUE)Running tests (fast mode)...$(NC)"
@@ -108,32 +108,32 @@ test-fast: ## Run tests (fast mode, stop on first failure)
 
 lint: ## Run linting checks
 	@echo "$(BLUE)Running linters...$(NC)"
-	ruff check autopr/
-	mypy autopr/ --ignore-missing-imports
+	ruff check CodeFlow/
+	mypy CodeFlow/ --ignore-missing-imports
 
 lint-fix: ## Fix linting issues automatically
 	@echo "$(BLUE)Fixing linting issues...$(NC)"
-	ruff check autopr/ --fix
-	black autopr/
+	ruff check CodeFlow/ --fix
+	black CodeFlow/
 
 format: ## Format code with black and isort
 	@echo "$(BLUE)Formatting code...$(NC)"
-	black autopr/ tests/
-	isort autopr/ tests/
+	black CodeFlow/ tests/
+	isort CodeFlow/ tests/
 
 check: lint test ## Run all checks (lint + test)
 
 run: ## Run the CLI
-	@echo "$(BLUE)Running AutoPR CLI...$(NC)"
-	$(PYTHON) -m autopr.cli
+	@echo "$(BLUE)Running CodeFlow CLI...$(NC)"
+	$(PYTHON) -m codeflow.cli
 
 server: ## Run the API server
 	@echo "$(BLUE)Starting API server...$(NC)"
-	$(PYTHON) -m autopr.server --reload
+	$(PYTHON) -m codeflow.server --reload
 
 worker: ## Run the background worker
 	@echo "$(BLUE)Starting background worker...$(NC)"
-	$(PYTHON) -m autopr.worker
+	$(PYTHON) -m codeflow.worker
 
 #------------------------------------------------------------------------------
 # DOCKER
@@ -141,7 +141,7 @@ worker: ## Run the background worker
 
 docker-build: ## Build Docker image
 	@echo "$(BLUE)Building Docker image...$(NC)"
-	docker build -t autopr-engine:latest .
+	docker build -t codeflow-engine:latest .
 
 docker-up: ## Start all services with Docker Compose
 	@echo "$(BLUE)Starting Docker services...$(NC)"
@@ -155,7 +155,7 @@ docker-logs: ## View Docker logs
 	$(DOCKER_COMPOSE) logs -f
 
 docker-shell: ## Open shell in running container
-	$(DOCKER_COMPOSE) exec autopr-engine bash
+	$(DOCKER_COMPOSE) exec codeflow-engine bash
 
 docker-restart: docker-down docker-up ## Restart Docker services
 
@@ -202,7 +202,7 @@ docs: ## Build documentation
 quickstart: env install ## Quick start: create env and install
 	@echo ""
 	@echo "$(GREEN)============================================$(NC)"
-	@echo "$(GREEN)AutoPR Engine is ready!$(NC)"
+	@echo "$(GREEN)CodeFlow Engine is ready!$(NC)"
 	@echo "$(GREEN)============================================$(NC)"
 	@echo ""
 	@echo "Next steps:"

@@ -1,14 +1,14 @@
-# AutoPR Engine - Quick Start Templates
+﻿# CodeFlow Engine - Quick Start Templates
 
-Ready-to-use GitHub Action workflow templates for adding AutoPR to your repository.
+Ready-to-use GitHub Action workflow templates for adding CodeFlow to your repository.
 
 ## Available Templates
 
 | Template | Description | Use Case |
 |----------|-------------|----------|
-| [autopr-minimal.yml](autopr-minimal.yml) | ~20 lines, basic setup | Quick testing, simple repos |
-| [autopr-workflow.yml](autopr-workflow.yml) | Standard setup with comments | Most repositories |
-| [autopr-advanced.yml](autopr-advanced.yml) | Full-featured with multi-job | Enterprise, complex needs |
+| [codeflow-minimal.yml](codeflow-minimal.yml) | ~20 lines, basic setup | Quick testing, simple repos |
+| [codeflow-workflow.yml](codeflow-workflow.yml) | Standard setup with comments | Most repositories |
+| [codeflow-advanced.yml](codeflow-advanced.yml) | Full-featured with multi-job | Enterprise, complex needs |
 
 ## Quick Setup
 
@@ -26,23 +26,23 @@ Ready-to-use GitHub Action workflow templates for adding AutoPR to your reposito
 
 ```bash
 # Minimal (simplest)
-curl -sSL https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/templates/quick-start/autopr-minimal.yml \
-  -o .github/workflows/autopr.yml --create-dirs
+curl -sSL https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/templates/quick-start/codeflow-minimal.yml \
+  -o .github/workflows/codeflow.yml --create-dirs
 
 # Standard (recommended)
-curl -sSL https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/templates/quick-start/autopr-workflow.yml \
-  -o .github/workflows/autopr.yml --create-dirs
+curl -sSL https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/templates/quick-start/codeflow-workflow.yml \
+  -o .github/workflows/codeflow.yml --create-dirs
 
 # Advanced (full features)
-curl -sSL https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/templates/quick-start/autopr-advanced.yml \
-  -o .github/workflows/autopr.yml --create-dirs
+curl -sSL https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/templates/quick-start/codeflow-advanced.yml \
+  -o .github/workflows/codeflow.yml --create-dirs
 ```
 
 ### Option 2: Manual Copy
 
 1. Choose a template from above
 2. Copy the contents
-3. Create `.github/workflows/autopr.yml` in your repository
+3. Create `.github/workflows/codeflow.yml` in your repository
 4. Paste and commit
 
 ## Required Setup
@@ -70,7 +70,7 @@ For fallback support, add these optional secrets:
 
 ## Template Comparison
 
-### Minimal (`autopr-minimal.yml`)
+### Minimal (`codeflow-minimal.yml`)
 - ~20 lines of YAML
 - Triggers on PR open/sync
 - Basic analysis only
@@ -78,7 +78,7 @@ For fallback support, add these optional secrets:
 
 **Best for:** Quick testing, simple projects
 
-### Standard (`autopr-workflow.yml`)
+### Standard (`codeflow-workflow.yml`)
 - ~80 lines of YAML
 - Triggers on PR open/sync/reopen
 - Posts analysis as PR comment
@@ -86,10 +86,10 @@ For fallback support, add these optional secrets:
 
 **Best for:** Most repositories
 
-### Advanced (`autopr-advanced.yml`)
+### Advanced (`codeflow-advanced.yml`)
 - ~200 lines of YAML
 - Multiple trigger types
-- PR comment commands (`/autopr analyze`)
+- PR comment commands (`/CodeFlow analyze`)
 - Risk assessment and blocking
 - Automatic issue creation
 - Detailed reporting

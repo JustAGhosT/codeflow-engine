@@ -1,4 +1,4 @@
-# AutoPR Engine - Windows Installation Script
+﻿# CodeFlow Engine - Windows Installation Script
 # Usage: irm https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/install.ps1 | iex
 # Or: .\install.ps1 [-Full] [-Dev] [-Minimal] [-Docker]
 
@@ -104,10 +104,10 @@ function Test-Docker {
 }
 
 # Install via pip
-function Install-AutoPR {
+function Install-CodeFlow {
     param([string]$Type)
 
-    Write-Status "Installing AutoPR Engine via pip..."
+    Write-Status "Installing CodeFlow Engine via pip..."
 
     # Recommend virtual environment
     if (-not $env:VIRTUAL_ENV -and $Type -ne "Minimal") {
@@ -141,7 +141,7 @@ function Install-AutoPR {
     }
 
     if ($LASTEXITCODE -eq 0) {
-        Write-Success "AutoPR Engine installed successfully!"
+        Write-Success "CodeFlow Engine installed successfully!"
     } else {
         Write-Error "Installation failed"
         exit 1
@@ -153,14 +153,14 @@ function Install-Docker {
     Write-Status "Setting up Docker installation..."
 
     if (-not (Test-Path "docker-compose.yml")) {
-        Write-Status "Creating autopr directory..."
+        Write-Status "Creating CodeFlow directory..."
         New-Item -ItemType Directory -Force -Path "codeflow-engine" | Out-Null
         Set-Location "codeflow-engine"
 
         Write-Status "Downloading Docker Compose configuration..."
         try {
-            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/JustAGhosT/autopr-engine/main/docker-compose.yml" -OutFile "docker-compose.yml"
-            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/JustAGhosT/autopr-engine/main/.env.example" -OutFile ".env.example"
+            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/docker-compose.yml" -OutFile "docker-compose.yml"
+            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/.env.example" -OutFile ".env.example"
         } catch {
             Write-Error "Failed to download configuration files"
             exit 1
@@ -175,7 +175,7 @@ function Install-Docker {
 
     Write-Success "Docker setup complete!"
     Write-Host ""
-    Write-Status "To start AutoPR Engine:"
+    Write-Status "To start CodeFlow Engine:"
     Write-Host "  1. Edit .env with your API keys"
     Write-Host "  2. Run: docker compose up -d"
 }
@@ -185,14 +185,14 @@ function Install-GitHubAction {
     Write-Status "Setting up GitHub Action workflow..."
 
     $workflowDir = ".github\workflows"
-    $workflowFile = "$workflowDir\autopr.yml"
+    $workflowFile = "$workflowDir\codeflow.yml"
 
     if (-not (Test-Path $workflowDir)) {
         New-Item -ItemType Directory -Force -Path $workflowDir | Out-Null
     }
 
     try {
-        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/JustAGhosT/autopr-engine/main/templates/quick-start/autopr-workflow.yml" -OutFile $workflowFile
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/templates/quick-start/codeflow-workflow.yml" -OutFile $workflowFile
         Write-Success "Created $workflowFile"
         Write-Warning "Remember to add OPENAI_API_KEY to your repository secrets!"
     } catch {
@@ -214,8 +214,8 @@ function Show-NextSteps {
     Write-Host '     $env:GITHUB_TOKEN = "ghp_your_token"'
     Write-Host '     $env:OPENAI_API_KEY = "sk-your_key"'
     Write-Host ""
-    Write-Host "  2. Run AutoPR CLI:"
-    Write-Host "     autopr --help"
+    Write-Host "  2. Run CodeFlow CLI:"
+    Write-Host "     CodeFlow --help"
     Write-Host ""
     Write-Host "  3. Add to your GitHub repo:"
     Write-Host "     .\install.ps1 -Action"
@@ -229,7 +229,7 @@ function Main {
     Show-Banner
 
     if ($Version) {
-        Write-Host "AutoPR Engine Installer v$ScriptVersion"
+        Write-Host "CodeFlow Engine Installer v$ScriptVersion"
         exit 0
     }
 
@@ -254,13 +254,13 @@ function Main {
     if (-not (Test-Pip)) { exit 1 }
 
     if ($Minimal) {
-        Install-AutoPR -Type "Minimal"
+        Install-CodeFlow -Type "Minimal"
     } elseif ($Full) {
-        Install-AutoPR -Type "Full"
+        Install-CodeFlow -Type "Full"
     } elseif ($Dev) {
-        Install-AutoPR -Type "Dev"
+        Install-CodeFlow -Type "Dev"
     } else {
-        Install-AutoPR -Type "Standard"
+        Install-CodeFlow -Type "Standard"
     }
 
     Show-NextSteps

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Report Generator for Implementation Roadmap
 Handles analytics, reporting, and progress visualization
 """
@@ -186,7 +186,7 @@ th { background: #f8f9fa; font-weight: 600; }
         """
 
         formatted_html = build_basic_page(
-            header=PageHeader(title="AutoPR Implementation Report"),
+            header=PageHeader(title="CodeFlow Implementation Report"),
             generated_at=exec_summary["generated_at"],
             content_html=content_html,
             extra_css=extra_css,

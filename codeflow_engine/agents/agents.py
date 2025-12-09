@@ -1,4 +1,4 @@
-"""AutoPR Agents for code analysis and quality management."""
+﻿"""CodeFlow Agents for code analysis and quality management."""
 
 import asyncio
 import contextlib
@@ -106,7 +106,7 @@ class VolumeConfig(BaseModel):
 
 
 class BaseAgent:
-    """Base class for all AutoPR agents."""
+    """Base class for all CodeFlow agents."""
 
     def __init__(self, role: str, goal: str, backstory: str, **kwargs: Any) -> None:
         """Initialize the base agent."""
@@ -482,11 +482,11 @@ class QualityAgent(BaseAgent):
             return None
 
 
-class AutoPRCrew:
-    """Main crew for AutoPR operations."""
+class CodeFlowCrew:
+    """Main crew for CodeFlow operations."""
 
     def __init__(self, volume: int = 500, **kwargs: Any) -> None:
-        """Initialize the AutoPR crew."""
+        """Initialize the CodeFlow crew."""
         self.volume = volume
         self.linting_agent = LintingAgent(volume=volume, **kwargs)
         self.quality_agent = QualityAgent(volume=volume, **kwargs)

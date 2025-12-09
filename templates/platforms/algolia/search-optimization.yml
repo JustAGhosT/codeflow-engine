@@ -1,10 +1,10 @@
-name: "Algolia Search Optimization Service"
+﻿name: "Algolia Search Optimization Service"
 category: "search-service"
 description:
   "Advanced search-as-a-service platform for implementing fast, relevant, and intelligent search
   functionality in applications"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["search-service", "search-optimization", "instant-search", "ai-search", "search-analytics"]
 
 platform_info:

@@ -1,4 +1,4 @@
-"""GitHub App Setup Page.
+﻿"""GitHub App Setup Page.
 
 Displays setup completion status after installation.
 """
@@ -10,7 +10,7 @@ from fastapi.templating import Jinja2Templates
 setup_router = APIRouter(prefix="", tags=["github-app"])
 
 # Templates directory
-templates = Jinja2Templates(directory="autopr/integrations/github_app/templates")
+templates = Jinja2Templates(directory="CodeFlow/integrations/github_app/templates")
 
 
 @setup_router.get("/setup")
@@ -32,7 +32,7 @@ async def setup_page(
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Setup Complete - AutoPR</title>
+        <title>Setup Complete - CodeFlow</title>
         <style>
             body {{
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -80,8 +80,8 @@ async def setup_page(
     </head>
     <body>
         <div class="container">
-            <h1>Setup Complete! 🎉</h1>
-            {"<div class='success'>✅ GitHub App installed successfully for <strong>" + account + "</strong></div>" if account else ""}
+            <h1>Setup Complete! ðŸŽ‰</h1>
+            {"<div class='success'>âœ… GitHub App installed successfully for <strong>" + account + "</strong></div>" if account else ""}
             <div>
                 <h2>Next Steps</h2>
                 <ol>

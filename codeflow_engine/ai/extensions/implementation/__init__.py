@@ -1,7 +1,7 @@
-"""
+﻿"""
 Implementation Roadmap Package
 
-Modular implementation system for AutoPR extension roadmap.
+Modular implementation system for CodeFlow extension roadmap.
 """
 
 from .implementor import Phase1ExtensionImplementor

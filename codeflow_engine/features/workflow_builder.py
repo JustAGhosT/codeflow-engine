@@ -1,7 +1,7 @@
-"""
+﻿"""
 No-Code Workflow Builder Feature (POC)
 
-Visual drag-and-drop interface for creating AutoPR workflows without coding.
+Visual drag-and-drop interface for creating CodeFlow workflows without coding.
 
 TODO: PRODUCTION
 - [ ] Create React Flow-based visual editor frontend

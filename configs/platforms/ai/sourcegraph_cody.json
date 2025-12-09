@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "sourcegraph_cody",
   "name": "Sourcegraph Cody",
   "description": "AI coding assistant with deep codebase awareness and contextual understanding",
@@ -12,7 +12,7 @@
   "type": "ai",
   "source": "official",
   "priority": 75,
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "vendor": "Sourcegraph",
   "website": "https://sourcegraph.com/cody",
   "pricing_model": "freemium",

@@ -1,4 +1,4 @@
-# AutoPR Engine API Documentation
+﻿# CodeFlow Engine API Documentation
 
 **Version**: 1.0.0  
 **Base URL**: `http://localhost:8080`  
@@ -8,7 +8,7 @@
 
 ## **Overview**
 
-The AutoPR Engine provides a REST API for code quality checking, workflow management, and dashboard monitoring. This document describes all available endpoints, request/response formats, and authentication requirements.
+The CodeFlow Engine provides a REST API for code quality checking, workflow management, and dashboard monitoring. This document describes all available endpoints, request/response formats, and authentication requirements.
 
 ---
 
@@ -380,14 +380,14 @@ X-RateLimit-Reset: 1642680000
 ```yaml
 openapi: 3.0.0
 info:
-  title: AutoPR Engine API
+  title: CodeFlow Engine API
   version: 1.0.0
   description: AI-powered code quality and automation platform
 
 servers:
   - url: http://localhost:8080
     description: Development server
-  - url: https://api.autopr.example.com
+  - url: https://api.codeflow.example.com
     description: Production server
 
 paths:

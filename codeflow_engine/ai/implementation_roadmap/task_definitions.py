@@ -1,4 +1,4 @@
-"""
+﻿"""
 Task Definitions and Phase Configuration
 Centralized definitions for all implementation tasks and phases
 """
@@ -49,8 +49,8 @@ class TaskRegistry:
                 complexity="medium",
                 estimated_hours=4,
                 files_created=[
-                    "autopr/monitoring/sentry_config.py",
-                    "autopr/monitoring/__init__.py",
+                    "codeflow/monitoring/sentry_config.py",
+                    "codeflow/monitoring/__init__.py",
                     "requirements.txt",
                 ],
                 packages_required=["sentry-sdk[fastapi]>=1.32.0"],
@@ -62,9 +62,9 @@ class TaskRegistry:
                 complexity="medium",
                 estimated_hours=3,
                 files_created=[
-                    "autopr/logging/structured_logger.py",
-                    "autopr/logging/correlation.py",
-                    "autopr/logging/__init__.py",
+                    "codeflow/logging/structured_logger.py",
+                    "codeflow/logging/correlation.py",
+                    "codeflow/logging/__init__.py",
                 ],
                 packages_required=["structlog>=23.1.0", "python-json-logger>=2.0.7"],
             ),
@@ -75,10 +75,10 @@ class TaskRegistry:
                 complexity="high",
                 estimated_hours=6,
                 files_created=[
-                    "autopr/caching/redis_cache.py",
-                    "autopr/caching/cache_manager.py",
-                    "autopr/caching/decorators.py",
-                    "autopr/caching/__init__.py",
+                    "codeflow/caching/redis_cache.py",
+                    "codeflow/caching/cache_manager.py",
+                    "codeflow/caching/decorators.py",
+                    "codeflow/caching/__init__.py",
                 ],
                 packages_required=["redis>=4.6.0", "aioredis>=2.0.1"],
             ),
@@ -89,9 +89,9 @@ class TaskRegistry:
                 complexity="medium",
                 estimated_hours=4,
                 files_created=[
-                    "autopr/health/health_checks.py",
-                    "autopr/health/system_monitor.py",
-                    "autopr/health/__init__.py",
+                    "codeflow/health/health_checks.py",
+                    "codeflow/health/system_monitor.py",
+                    "codeflow/health/__init__.py",
                 ],
                 packages_required=["psutil>=5.9.0"],
             ),
@@ -102,9 +102,9 @@ class TaskRegistry:
                 complexity="high",
                 estimated_hours=5,
                 files_created=[
-                    "autopr/resilience/circuit_breaker.py",
-                    "autopr/resilience/retry_policies.py",
-                    "autopr/resilience/__init__.py",
+                    "codeflow/resilience/circuit_breaker.py",
+                    "codeflow/resilience/retry_policies.py",
+                    "codeflow/resilience/__init__.py",
                 ],
                 packages_required=["tenacity>=8.2.0"],
             ),
@@ -117,10 +117,10 @@ class TaskRegistry:
                 estimated_hours=8,
                 dependencies=["implement_structured_logging"],
                 files_created=[
-                    "autopr/database/postgresql.py",
-                    "autopr/database/migrations/",
-                    "autopr/database/models.py",
-                    "autopr/database/__init__.py",
+                    "codeflow/database/postgresql.py",
+                    "codeflow/database/migrations/",
+                    "codeflow/database/models.py",
+                    "codeflow/database/__init__.py",
                 ],
                 packages_required=["asyncpg>=0.30.0", "alembic>=1.12.0"],
             ),
@@ -132,9 +132,9 @@ class TaskRegistry:
                 estimated_hours=5,
                 dependencies=["create_health_checks"],
                 files_created=[
-                    "autopr/metrics/prometheus_metrics.py",
-                    "autopr/metrics/custom_metrics.py",
-                    "autopr/metrics/__init__.py",
+                    "codeflow/metrics/prometheus_metrics.py",
+                    "codeflow/metrics/custom_metrics.py",
+                    "codeflow/metrics/__init__.py",
                 ],
                 packages_required=["prometheus-client>=0.17.0"],
             ),
@@ -145,10 +145,10 @@ class TaskRegistry:
                 complexity="high",
                 estimated_hours=10,
                 files_created=[
-                    "autopr/auth/oauth2.py",
-                    "autopr/auth/providers.py",
-                    "autopr/auth/middleware.py",
-                    "autopr/auth/__init__.py",
+                    "codeflow/auth/oauth2.py",
+                    "codeflow/auth/providers.py",
+                    "codeflow/auth/middleware.py",
+                    "codeflow/auth/__init__.py",
                 ],
                 packages_required=["authlib>=1.2.1", "python-jose>=3.3.0"],
             ),
@@ -163,10 +163,10 @@ class TaskRegistry:
                     "implement_basic_circuit_breakers",
                 ],
                 files_created=[
-                    "autopr/ai/routing/llm_router.py",
-                    "autopr/ai/routing/load_balancer.py",
-                    "autopr/ai/routing/fallback_handler.py",
-                    "autopr/ai/routing/__init__.py",
+                    "codeflow/ai/routing/llm_router.py",
+                    "codeflow/ai/routing/load_balancer.py",
+                    "codeflow/ai/routing/fallback_handler.py",
+                    "codeflow/ai/routing/__init__.py",
                 ],
                 packages_required=["aiohttp>=3.8.5"],
             ),
@@ -201,10 +201,10 @@ class TaskRegistry:
                     "implement_advanced_llm_routing",
                 ],
                 files_created=[
-                    "autopr/ai/rag/vector_store.py",
-                    "autopr/ai/rag/document_processor.py",
-                    "autopr/ai/rag/retriever.py",
-                    "autopr/ai/rag/__init__.py",
+                    "codeflow/ai/rag/vector_store.py",
+                    "codeflow/ai/rag/document_processor.py",
+                    "codeflow/ai/rag/retriever.py",
+                    "codeflow/ai/rag/__init__.py",
                 ],
                 packages_required=["chromadb>=0.4.0", "sentence-transformers>=2.2.0"],
             ),
@@ -219,10 +219,10 @@ class TaskRegistry:
                     "setup_postgresql_integration",
                 ],
                 files_created=[
-                    "autopr/dashboard/analytics.py",
-                    "autopr/dashboard/templates/",
-                    "autopr/dashboard/static/",
-                    "autopr/dashboard/__init__.py",
+                    "codeflow/dashboard/analytics.py",
+                    "codeflow/dashboard/templates/",
+                    "codeflow/dashboard/static/",
+                    "codeflow/dashboard/__init__.py",
                 ],
                 packages_required=["streamlit>=1.25.0", "plotly>=5.15.0"],
             ),
@@ -234,10 +234,10 @@ class TaskRegistry:
                 estimated_hours=30,
                 dependencies=["implement_rag_system", "create_comprehensive_testing"],
                 files_created=[
-                    "autopr/ai/training/fine_tuning.py",
-                    "autopr/ai/training/data_preparation.py",
-                    "autopr/ai/training/model_deployment.py",
-                    "autopr/ai/training/__init__.py",
+                    "codeflow/ai/training/fine_tuning.py",
+                    "codeflow/ai/training/data_preparation.py",
+                    "codeflow/ai/training/model_deployment.py",
+                    "codeflow/ai/training/__init__.py",
                 ],
                 packages_required=[
                     "transformers>=4.30.0",
@@ -384,5 +384,5 @@ class ImplementationPhases:
         """Check if a phase has been completed"""
         from pathlib import Path
 
-        completion_file = Path.cwd() / f".autopr_phase_{phase_name}_complete"
+        completion_file = Path.cwd() / f".codeflow_phase_{phase_name}_complete"
         return completion_file.exists()

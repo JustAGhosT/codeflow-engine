@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "tabnine",
   "name": "Tabnine",
   "description": "AI-powered code completion tool that helps developers write code faster with whole-line and full-function completions",
@@ -12,7 +12,7 @@
   "type": "ai",
   "source": "official",
   "priority": 70,
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "vendor": "Tabnine",
   "website": "https://www.tabnine.com",
   "pricing_model": "freemium",

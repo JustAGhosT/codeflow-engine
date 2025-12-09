@@ -1,4 +1,4 @@
-# 13. Security Strategy
+﻿# 13. Security Strategy
 
 ## Status
 
@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-AutoPR handles sensitive data and requires robust security measures to protect:
+CodeFlow handles sensitive data and requires robust security measures to protect:
 
 - Repository access tokens
 - User credentials

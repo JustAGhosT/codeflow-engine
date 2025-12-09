@@ -1,10 +1,10 @@
-name: "Backup Script"
+﻿name: "Backup Script"
 category: "monitoring"
 description:
   "Bash script for automated backups of databases, files, and configurations with compression and
   timestamping"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["backup", "bash", "database", "files", "automation", "postgresql", "mysql"]
 
 template_info:
@@ -148,17 +148,17 @@ template: |
   RETENTION_DAYS={{ retention_days }}
   {% endif %}
 
-  echo "🔄 Starting backup at $(date)..."
+  echo "ðŸ”„ Starting backup at $(date)..."
 
   # Create backup directory
   mkdir -p "$BACKUP_DIR"
 
   {% if database_type != "none" %}
   # Database backup
-  echo "📊 Backing up {{ database_type }} database..."
+  echo "ðŸ“Š Backing up {{ database_type }} database..."
 
   if [ -z "${{{ database_url }}}" ]; then
-      echo "⚠️  Warning: {{ database_url }} environment variable not set, skipping database backup"
+      echo "âš ï¸  Warning: {{ database_url }} environment variable not set, skipping database backup"
   else
       {% if database_type == "postgresql" %}
       pg_dump "${{{ database_url }}}" > "$BACKUP_DIR/db_backup_$TIMESTAMP.sql"
@@ -167,69 +167,69 @@ template: |
       {% elif database_type == "mongodb" %}
       mongodump --uri="${{{ database_url }}}" --out="$BACKUP_DIR/mongodb_backup_$TIMESTAMP"
       {% endif %}
-      echo "✅ Database backup completed: db_backup_$TIMESTAMP.sql"
+      echo "âœ… Database backup completed: db_backup_$TIMESTAMP.sql"
   fi
   {% endif %}
 
   {% if backup_files %}
   # File backup
   if [ -d "{{ files_directory }}" ]; then
-      echo "📁 Backing up files from {{ files_directory }}..."
+      echo "ðŸ“ Backing up files from {{ files_directory }}..."
       {% if compression %}
       tar -czf "$BACKUP_DIR/files_backup_$TIMESTAMP.tar.gz" "{{ files_directory }}"
-      echo "✅ Files backup completed: files_backup_$TIMESTAMP.tar.gz"
+      echo "âœ… Files backup completed: files_backup_$TIMESTAMP.tar.gz"
       {% else %}
       cp -r "{{ files_directory }}" "$BACKUP_DIR/files_backup_$TIMESTAMP"
-      echo "✅ Files backup completed: files_backup_$TIMESTAMP/"
+      echo "âœ… Files backup completed: files_backup_$TIMESTAMP/"
       {% endif %}
   else
-      echo "⚠️  Warning: {{ files_directory }} directory not found, skipping file backup"
+      echo "âš ï¸  Warning: {{ files_directory }} directory not found, skipping file backup"
   fi
   {% endif %}
 
   {% if backup_config %}
   # Configuration backup
-  echo "⚙️  Backing up configuration files..."
+  echo "âš™ï¸  Backing up configuration files..."
   {% for config_file in config_files %}
   if [ -f "{{ config_file }}" ]; then
       cp "{{ config_file }}" "$BACKUP_DIR/{{ config_file.replace('/', '_').replace('.', '_') }}_backup_$TIMESTAMP"
-      echo "✅ Backed up: {{ config_file }}"
+      echo "âœ… Backed up: {{ config_file }}"
   else
-      echo "⚠️  Warning: {{ config_file }} not found"
+      echo "âš ï¸  Warning: {{ config_file }} not found"
   fi
   {% endfor %}
   {% endif %}
 
   {% if retention_days > 0 %}
   # Cleanup old backups
-  echo "🧹 Cleaning up backups older than {{ retention_days }} days..."
+  echo "ðŸ§¹ Cleaning up backups older than {{ retention_days }} days..."
   find "$BACKUP_DIR" -name "*backup*" -type f -mtime +{{ retention_days }} -delete 2>/dev/null || true
   find "$BACKUP_DIR" -name "*backup*" -type d -mtime +{{ retention_days }} -exec rm -rf {} + 2>/dev/null || true
-  echo "✅ Cleanup completed"
+  echo "âœ… Cleanup completed"
   {% endif %}
 
   {% if remote_backup %}
   # Remote backup
   if [ ! -z "{{ remote_destination }}" ]; then
-      echo "☁️  Uploading to remote destination..."
+      echo "â˜ï¸  Uploading to remote destination..."
       # Add your remote backup logic here
       # Examples:
       # AWS S3: aws s3 sync "$BACKUP_DIR" "{{ remote_destination }}"
       # rsync: rsync -av "$BACKUP_DIR/" "{{ remote_destination }}"
       # rclone: rclone sync "$BACKUP_DIR" "{{ remote_destination }}"
-      echo "✅ Remote backup completed"
+      echo "âœ… Remote backup completed"
   else
-      echo "⚠️  Warning: Remote destination not configured"
+      echo "âš ï¸  Warning: Remote destination not configured"
   fi
   {% endif %}
 
   # Calculate backup size
   BACKUP_SIZE=$(du -sh "$BACKUP_DIR" | cut -f1)
-  echo "📊 Total backup size: $BACKUP_SIZE"
+  echo "ðŸ“Š Total backup size: $BACKUP_SIZE"
 
-  echo "✅ Backup completed successfully at $(date)"
-  echo "📁 Backup location: $BACKUP_DIR"
+  echo "âœ… Backup completed successfully at $(date)"
+  echo "ðŸ“ Backup location: $BACKUP_DIR"
 
   # List recent backups
-  echo "📋 Recent backups:"
+  echo "ðŸ“‹ Recent backups:"
   ls -lah "$BACKUP_DIR" | grep backup | tail -5

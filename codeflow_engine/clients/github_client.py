@@ -1,4 +1,4 @@
-"""GitHub API client for AutoPR with retry logic and rate limiting."""
+﻿"""GitHub API client for CodeFlow with retry logic and rate limiting."""
 
 import asyncio
 from dataclasses import dataclass
@@ -65,7 +65,7 @@ class GitHubConfig:
         timeout: int = DEFAULT_TIMEOUT,
         max_retries: int = DEFAULT_RETRIES,
         backoff_factor: float = DEFAULT_BACKOFF_FACTOR,
-        user_agent: str = "AutoPR-GitHub-Client/1.0",
+        user_agent: str = "CodeFlow-GitHub-Client/1.0",
     ) -> None:
         self.token = token
         self.base_url = base_url.rstrip("/")

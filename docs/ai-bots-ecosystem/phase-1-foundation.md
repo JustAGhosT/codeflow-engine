@@ -1,4 +1,4 @@
-""" AutoPR Action: PR Review Analyzer Analyzes PR reviews from CodeRabbit and other AI tools to
+﻿""" CodeFlow Action: PR Review Analyzer Analyzes PR reviews from CodeRabbit and other AI tools to
 determine next steps """
 
 import json import re from typing import Dict, List, Any, Optional from pydantic import BaseModel
@@ -306,9 +306,9 @@ self.\_get_team_for_issue_type(issue['type']) }
 
         return summary
 
-# Entry point for AutoPR
+# Entry point for CodeFlow
 
-def run(inputs_dict: dict) -> dict: """AutoPR entry point""" inputs =
+def run(inputs_dict: dict) -> dict: """CodeFlow entry point""" inputs =
 PRReviewInputs(\*\*inputs_dict) analyzer = PRReviewAnalyzer() outputs =
 analyzer.analyze_pr_review(inputs) return outputs.dict()
 

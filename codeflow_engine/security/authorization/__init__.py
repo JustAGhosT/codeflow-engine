@@ -1,5 +1,5 @@
-"""
-Authorization module for AutoPR Engine.
+﻿"""
+Authorization module for CodeFlow Engine.
 
 This module provides comprehensive authorization and access control functionality
 including role-based access control (RBAC), resource-based permissions, audit logging,

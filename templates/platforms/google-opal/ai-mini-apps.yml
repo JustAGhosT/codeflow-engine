@@ -1,10 +1,10 @@
-name: "Google Opal AI Mini-Apps Template"
+﻿name: "Google Opal AI Mini-Apps Template"
 category: "vibe_coding_platform"
 description:
   "Google's experimental no-code AI mini-app builder - Describe, create, and share AI-powered
   applications using natural language"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["vibe_coding_platform", "ai_mini_apps", "no_code", "google_labs", "experimental"]
 
 platform_info:

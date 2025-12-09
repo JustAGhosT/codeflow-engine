@@ -1,10 +1,10 @@
-# AutoPR Architecture and Deployment Guide
+﻿# CodeFlow Architecture and Deployment Guide
 
 ## Domain Architecture
 
-AutoPR uses a two-domain architecture to separate concerns:
+CodeFlow uses a two-domain architecture to separate concerns:
 
-### 1. **autopr.io** - Marketing Website (Static Web App)
+### 1. **codeflow.io** - Marketing Website (Static Web App)
 
 - **Technology**: Next.js 16 (Static Site Generation)
 - **Deployment**: Azure Static Web App
@@ -17,7 +17,7 @@ AutoPR uses a two-domain architecture to separate concerns:
 
 **Custom Domain Configuration**: Now automatically configured via Bicep template. Certificate is automatically managed by Azure.
 
-### 2. **app.autopr.io** - Application Backend (Container App)
+### 2. **app.codeflow.io** - Application Backend (Container App)
 
 - **Technology**: FastAPI (Python 3.13)
 - **Deployment**: Azure Container Apps
@@ -32,8 +32,8 @@ AutoPR uses a two-domain architecture to separate concerns:
 
 ## Why Two Separate Domains?
 
-1. **Performance**: Static website (autopr.io) is faster and globally distributed via Azure Static Web Apps CDN
-2. **Scalability**: Backend (app.autopr.io) can scale independently based on API load
+1. **Performance**: Static website (codeflow.io) is faster and globally distributed via Azure Static Web Apps CDN
+2. **Scalability**: Backend (app.codeflow.io) can scale independently based on API load
 3. **Security**: API credentials and secrets are isolated to the backend
 4. **Development**: Website and backend can be developed and deployed independently
 5. **Cost**: Static Web Apps are cheaper for serving static content
@@ -45,33 +45,33 @@ There are TWO dashboards in this project:
 ### Marketing Website Dashboard (Next.js)
 
 - Location: `website/` directory
-- Served at: **autopr.io**
+- Served at: **codeflow.io**
 - Purpose: Public-facing marketing and documentation
 - Technology: React/Next.js with Tailwind CSS
 
 ### Application Dashboard (Python)
 
-- Location: `autopr/dashboard/` directory  
-- Served at: **app.autopr.io/**
+- Location: `CodeFlow/dashboard/` directory  
+- Served at: **app.codeflow.io/**
 - Purpose: Internal monitoring and quality checks
 - Technology: FastAPI + Jinja2 templates
 - Features: Real-time stats, quality checks, activity history
 
 ## Deployment Updates
 
-### Custom Domain Issue - FIXED ✅
+### Custom Domain Issue - FIXED âœ…
 
 **Problem**: Custom domain and certificate needed to be re-linked after each deployment
 
 **Solution**: Added custom domain configuration directly in the Bicep templates:
 
-**For autopr.io (Static Web App)**:
+**For codeflow.io (Static Web App)**:
 
 - Added `Microsoft.Web/staticSites/customDomains` resource to `website.bicep`
 - This resource automatically creates and maintains the custom domain binding
 - Azure manages the SSL certificate lifecycle (provisioning and renewal)
 
-**For app.autopr.io (Container App)**:
+**For app.codeflow.io (Container App)**:
 
 - Added `customDomains` configuration to the ingress settings in `codeflow-engine.bicep`
 - Specified `bindingType: 'SniEnabled'` for automatic SSL certificate management
@@ -85,7 +85,7 @@ There are TWO dashboards in this project:
 4. Azure provisions and manages SSL certificates automatically
 5. No manual intervention needed after deployments
 
-### Static Web App Routing - FIXED ✅
+### Static Web App Routing - FIXED âœ…
 
 **Problem**: SPA routing wasn't configured properly
 
@@ -100,11 +100,11 @@ There are TWO dashboards in this project:
 
 For custom domain setup, add these DNS records:
 
-### autopr.io (Static Web App)
+### codeflow.io (Static Web App)
 
 ```
 Type: CNAME
-Name: autopr.io (or @ for root domain)
+Name: codeflow.io (or @ for root domain)
 Value: <static-web-app-default-hostname>
 TTL: 3600
 ```
@@ -112,12 +112,12 @@ TTL: 3600
 The Static Web App default hostname can be found in the deployment outputs:
 ```bash
 az deployment group show \
-  --resource-group prod-rg-san-autopr \
+  --resource-group prod-rg-san-codeflow \
   --name website \
   --query properties.outputs.staticWebAppUrl.value
 ```
 
-### app.autopr.io (Container App)
+### app.codeflow.io (Container App)
 
 For the backend Container App, configure a CNAME record pointing to the Azure Container Apps FQDN:
 
@@ -131,7 +131,7 @@ TTL: 3600
 The Container App FQDN can be found in the deployment outputs:
 ```bash
 az deployment group show \
-  --resource-group prod-rg-san-autopr \
+  --resource-group prod-rg-san-codeflow \
   --name codeflow-engine \
   --query properties.outputs.containerAppUrl.value
 ```
@@ -145,43 +145,43 @@ az deployment group show \
 
 ## Verifying Deployments
 
-### Check Website (autopr.io)
+### Check Website (codeflow.io)
 
 ```bash
-curl -I https://autopr.io
+curl -I https://codeflow.io
 # Should return 200 OK with HTML content
 ```
 
-### Check Backend (app.autopr.io)
+### Check Backend (app.codeflow.io)
 
 ```bash
 # Dashboard
-curl https://app.autopr.io/
+curl https://app.codeflow.io/
 # Should return HTML dashboard
 
 # API
-curl https://app.autopr.io/api
+curl https://app.codeflow.io/api
 # Should return JSON with API info
 
 # Health check
-curl https://app.autopr.io/health
+curl https://app.codeflow.io/health
 # Should return JSON health status
 ```
 
 ## Common Issues
 
-### "Why is autopr.io not showing the website?"
+### "Why is codeflow.io not showing the website?"
 
 - Check DNS propagation (can take up to 48 hours)
 - Verify custom domain binding exists in Azure portal
 - Check that website build deployed successfully in GitHub Actions
 - Verify `staticwebapp.config.json` exists in the `out/` directory
 
-### "Why is app.autopr.io showing a health check at /"
+### "Why is app.codeflow.io showing a health check at /"
 
 - This is incorrect - it should show the Python dashboard
 - Check that `DASHBOARD_AVAILABLE` is True in server logs
-- Verify `autopr/dashboard/templates/index.html` exists in container
+- Verify `CodeFlow/dashboard/templates/index.html` exists in container
 - Check container logs for import errors
 
 ### "Certificate keeps expiring"
@@ -202,5 +202,5 @@ curl https://app.autopr.io/health
 - `infrastructure/bicep/website.bicep` - Static Web App infrastructure
 - `infrastructure/bicep/codeflow-engine.bicep` - Container App infrastructure  
 - `website/public/staticwebapp.config.json` - Routing configuration
-- `autopr/server.py` - FastAPI application entry point
-- `autopr/dashboard/router.py` - Dashboard routes
+- `CodeFlow/server.py` - FastAPI application entry point
+- `CodeFlow/dashboard/router.py` - Dashboard routes

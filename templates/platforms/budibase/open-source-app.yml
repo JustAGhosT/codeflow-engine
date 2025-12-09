@@ -1,10 +1,10 @@
-name: "Budibase Open-Source Application"
+﻿name: "Budibase Open-Source Application"
 category: "open-source"
 description:
   "Open-source low-code platform for building apps and workflows from any data source with
   self-hosting capabilities"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags:
   ["open-source", "low-code", "self-hosted", "workflow-automation", "internal-tools", "drag-drop"]
 

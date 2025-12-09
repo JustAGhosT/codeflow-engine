@@ -1,7 +1,7 @@
-"""
+﻿"""
 Models Package
 
-This package contains data models and schemas used throughout the AutoPR system.
+This package contains data models and schemas used throughout the CodeFlow system.
 """
 
 from pathlib import Path
@@ -18,7 +18,7 @@ if not artifacts_path.exists():
             '"""\n'
             "Artifacts Module\n\n"
             "This module contains data models for various artifacts "
-            "used in the AutoPR system.\n"
+            "used in the CodeFlow system.\n"
             '"""\n\n'
             "from dataclasses import dataclass\n"
             "from enum import Enum\n"

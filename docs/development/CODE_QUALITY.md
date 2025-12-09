@@ -1,11 +1,11 @@
-# Code Quality Management for AutoPR Engine
+﻿# Code Quality Management for CodeFlow Engine
 
-This document describes the code quality tools and processes implemented for the AutoPR Engine
+This document describes the code quality tools and processes implemented for the CodeFlow Engine
 project.
 
 ## Overview
 
-The AutoPR Engine project uses a comprehensive set of code quality tools to ensure consistent,
+The CodeFlow Engine project uses a comprehensive set of code quality tools to ensure consistent,
 maintainable, and secure code:
 
 - **Black**: Code formatting
@@ -120,7 +120,7 @@ python -m mypy . --config-file pyproject.toml
 python -m bandit -r . -c pyproject.toml
 
 # Run tests
-python -m pytest -v --cov=autopr --cov-report=term-missing
+python -m pytest -v --cov=CodeFlow --cov-report=term-missing
 
 # Check dependencies
 python -m safety check
@@ -143,7 +143,7 @@ All tools are configured in `pyproject.toml`:
 
 - Profile: black (compatible with Black)
 - Line length: 100 characters
-- Known first-party: autopr
+- Known first-party: CodeFlow
 - Known third-party packages listed
 
 ### Mypy Configuration

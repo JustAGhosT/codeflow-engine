@@ -1,5 +1,5 @@
-"""
-Linting Agent for AutoPR.
+﻿"""
+Linting Agent for CODEFLOW.
 This module provides the LintingAgent class which is responsible for identifying
 and fixing code style and quality issues in a codebase.
 """
@@ -118,7 +118,7 @@ class LintingAgent(BaseAgent[LintingInputs, LintingOutputs]):
             self.linting_fixer = AILintingFixer()
         except Exception as e:
             # In test mode or when AI components are not available, set to None
-            if os.getenv("AUTOPR_TEST_MODE") == "true" or "pytest" in sys.modules:
+            if os.getenv("CODEFLOW_TEST_MODE") == "true" or "pytest" in sys.modules:
                 logger.warning("AILintingFixer initialization failed in test mode: %s", e)
                 self.linting_fixer = None
             else:

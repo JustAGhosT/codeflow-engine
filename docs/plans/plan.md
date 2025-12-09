@@ -1,11 +1,11 @@
-# AutoPR Engine: Consolidated Modernization and Orchestration Plan
+﻿# CodeFlow Engine: Consolidated Modernization and Orchestration Plan
 
-**Project:** AutoPR Engine - AI-Powered GitHub PR Automation Platform  
+**Project:** CodeFlow Engine - AI-Powered GitHub PR Automation Platform  
 **Current Focus:** Quality Pipeline + Security Framework + Multi-tenant Orchestration
 
 ## Project Overview
 
-AutoPR Engine is an AI-powered automation platform that enhances GitHub pull request workflows
+CodeFlow Engine is an AI-powered automation platform that enhances GitHub pull request workflows
 through:
 
 - Multi-agent AI systems with memory and learning capabilities
@@ -42,12 +42,12 @@ through:
 
 This plan is organized into focused phases with detailed subplans:
 
-1. Quality Pipeline Implementation — see
+1. Quality Pipeline Implementation â€” see
    [plan-phase1-quality-pipeline.md](plan-phase1-quality-pipeline.md)
    - Current Step: Implement Comprehensive mode (all static analysis tools)
    - Key Components: Tool abstraction, modes, CI integration
 
-2. Security Authorization Framework — see
+2. Security Authorization Framework â€” see
    [plan-phase2-security-framework.md](plan-phase2-security-framework.md)
    - Current Step: Implement authorization utilities and manager access
    - Key Components: Auth models, decorators, utilities, audit logging
@@ -77,19 +77,19 @@ This plan is organized into focused phases with detailed subplans:
 - Test suite: improve coverage, fix flaky tests, add integration tests
 - Documentation: update README, ADRs, contribution guidelines, API docs
 
-### Phase 1: Foundation (Weeks 2–5)
+### Phase 1: Foundation (Weeks 2â€“5)
 
 - Core orchestration: agent lifecycle, zero-downtime deploys, multi-tenant routing
 - Multi-tenancy: isolation mechanisms, RBAC, self-service onboarding
 - Framework integration: adapter interface, LangChain, Semantic Kernel, health monitoring
 
-### Phase 2: Advanced Features (Weeks 5–8)
+### Phase 2: Advanced Features (Weeks 5â€“8)
 
 - Memo0 integration: tenant-aware memory, caching, batch operations
 - Observability: metrics, centralized logging, alerts
 - Security & compliance: encryption, audit logging, SOC2/GDPR controls
 
-### Phase 3: Production Readiness (Weeks 9–12)
+### Phase 3: Production Readiness (Weeks 9â€“12)
 
 - Kubernetes: Helm charts, multi-tenant operator, autoscaling
 - Cost optimization: usage analytics, quota, cost reporting
@@ -119,17 +119,17 @@ This plan is organized into focused phases with detailed subplans:
 
 ## Risks and Mitigations (from top-level PLAN.md)
 
-- Performance degradation at scale → load testing, autoscaling
-- Data isolation risks → strict isolation checks, audits
-- Breaking changes for users → backward compatibility, detailed migration guides, support
+- Performance degradation at scale â†’ load testing, autoscaling
+- Data isolation risks â†’ strict isolation checks, audits
+- Breaking changes for users â†’ backward compatibility, detailed migration guides, support
 
-## Detailed Task Backlog (appendix from autopr/PLAN.md)
+## Detailed Task Backlog (appendix from CodeFlow/PLAN.md)
 
 The following detailed checklist is consolidated from the modernization and quality pipeline plan.
 Refer to the linked phase documents for the authoritative implementation details.
 
 1. Modernize Architecture for Modularity & Extensibility (SOLID)
-   - Refactor `autopr/actions/` and `autopr/ai/` into smaller units and provider interfaces
+   - Refactor `CodeFlow/actions/` and `CodeFlow/ai/` into smaller units and provider interfaces
    - Implement plugin entry points and registry; add validation and dependency management
    - Centralize error handling, logging, configuration, and performance hooks
 

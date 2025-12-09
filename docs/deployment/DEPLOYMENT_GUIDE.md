@@ -1,4 +1,4 @@
-# AutoPR Engine - Production Deployment Guide
+﻿# CodeFlow Engine - Production Deployment Guide
 
 ## **Table of Contents**
 1. [Prerequisites](#prerequisites)
@@ -54,33 +54,33 @@
 ## **Architecture Overview**
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                      Load Balancer (HTTPS)                  │
-│                    (SSL Termination)                         │
-└────────────────────────┬────────────────────────────────────┘
-                         │
-         ┌───────────────┴───────────────┐
-         │                               │
-┌────────▼────────┐            ┌────────▼────────┐
-│  AutoPR Engine  │            │  AutoPR Engine  │
-│   (Primary)     │            │   (Replica)     │
-└────────┬────────┘            └────────┬────────┘
-         │                               │
-         └───────────────┬───────────────┘
-                         │
-         ┌───────────────┴───────────────┐
-         │                               │
-┌────────▼────────┐            ┌────────▼────────┐
-│   PostgreSQL    │            │     Redis       │
-│   (Primary)     │            │   (Primary)     │
-│                 │            │                 │
-│   (Replica) ────┤            │   (Replica) ────┤
-└─────────────────┘            └─────────────────┘
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                      Load Balancer (HTTPS)                  â”‚
+â”‚                    (SSL Termination)                         â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                         â”‚
+         â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+         â”‚                               â”‚
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”            â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  CodeFlow Engine  â”‚            â”‚  CodeFlow Engine  â”‚
+â”‚   (Primary)     â”‚            â”‚   (Replica)     â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”˜            â””â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+         â”‚                               â”‚
+         â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                         â”‚
+         â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+         â”‚                               â”‚
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”            â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚   PostgreSQL    â”‚            â”‚     Redis       â”‚
+â”‚   (Primary)     â”‚            â”‚   (Primary)     â”‚
+â”‚                 â”‚            â”‚                 â”‚
+â”‚   (Replica) â”€â”€â”€â”€â”¤            â”‚   (Replica) â”€â”€â”€â”€â”¤
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜            â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 **Components**:
 - **Load Balancer**: Nginx or cloud provider LB
-- **Application**: AutoPR Engine (stateless)
+- **Application**: CodeFlow Engine (stateless)
 - **Database**: PostgreSQL for persistent data
 - **Cache**: Redis for session/temporary data
 - **Workers**: Background task processors
@@ -93,9 +93,9 @@
 
 | Feature | Docker Compose | Kubernetes | AWS ECS | GCP Cloud Run | Azure Container Apps |
 |---------|---------------|------------|---------|---------------|---------------------|
-| **Ease of Setup** | ★★★★★ | ★★☆☆☆ | ★★★☆☆ | ★★★★☆ | ★★★☆☆ |
-| **Scalability** | ★★☆☆☆ | ★★★★★ | ★★★★☆ | ★★★★☆ | ★★★★☆ |
-| **Cost (Small)** | ★★★★★ | ★★☆☆☆ | ★★★☆☆ | ★★★★★ | ★★★★☆ |
+| **Ease of Setup** | â˜…â˜…â˜…â˜…â˜… | â˜…â˜…â˜†â˜†â˜† | â˜…â˜…â˜…â˜†â˜† | â˜…â˜…â˜…â˜…â˜† | â˜…â˜…â˜…â˜†â˜† |
+| **Scalability** | â˜…â˜…â˜†â˜†â˜† | â˜…â˜…â˜…â˜…â˜… | â˜…â˜…â˜…â˜…â˜† | â˜…â˜…â˜…â˜…â˜† | â˜…â˜…â˜…â˜…â˜† |
+| **Cost (Small)** | â˜…â˜…â˜…â˜…â˜… | â˜…â˜…â˜†â˜†â˜† | â˜…â˜…â˜…â˜†â˜† | â˜…â˜…â˜…â˜…â˜… | â˜…â˜…â˜…â˜…â˜† |
 | **Complexity** | Low | High | Medium | Low | Medium |
 | **Best For** | Dev/Staging | Large Scale | AWS Users | Serverless | Azure Users |
 
@@ -107,12 +107,12 @@
 
 ```
 Internet Gateway
-      ↓
+      â†“
 Application Load Balancer (ALB)
-      ↓
-ECS Fargate Tasks (AutoPR Engine)
-      ↓
-┌─────────────────┬─────────────────┐
+      â†“
+ECS Fargate Tasks (CodeFlow Engine)
+      â†“
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
 RDS PostgreSQL    ElastiCache Redis
 ```
 
@@ -124,7 +124,7 @@ RDS PostgreSQL    ElastiCache Redis
 # Create VPC
 aws ec2 create-vpc \
   --cidr-block 10.0.0.0/16 \
-  --tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=autopr-vpc}]'
+  --tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=codeflow-vpc}]'
 
 # Create public subnets (for ALB)
 aws ec2 create-subnet \
@@ -154,11 +154,11 @@ aws ec2 create-subnet \
 ```bash
 # Create RDS instance
 aws rds create-db-instance \
-  --db-instance-identifier autopr-db \
+  --db-instance-identifier codeflow-db \
   --db-instance-class db.t3.medium \
   --engine postgres \
   --engine-version 15.4 \
-  --master-username autopr_admin \
+  --master-username codeflow_admin \
   --master-user-password "$(openssl rand -base64 32)" \
   --allocated-storage 100 \
   --storage-type gp3 \
@@ -167,11 +167,11 @@ aws rds create-db-instance \
   --preferred-backup-window "03:00-04:00" \
   --multi-az \
   --vpc-security-group-ids sg-xxxxx \
-  --db-subnet-group-name autopr-db-subnet
+  --db-subnet-group-name codeflow-db-subnet
 
 # Wait for instance to be available
 aws rds wait db-instance-available \
-  --db-instance-identifier autopr-db
+  --db-instance-identifier codeflow-db
 ```
 
 #### **3. Setup ElastiCache Redis**
@@ -179,8 +179,8 @@ aws rds wait db-instance-available \
 ```bash
 # Create Redis cluster
 aws elasticache create-replication-group \
-  --replication-group-id autopr-redis \
-  --replication-group-description "AutoPR Engine Cache" \
+  --replication-group-id codeflow-redis \
+  --replication-group-description "CodeFlow Engine Cache" \
   --engine redis \
   --engine-version 7.0 \
   --cache-node-type cache.t3.medium \
@@ -188,7 +188,7 @@ aws elasticache create-replication-group \
   --automatic-failover-enabled \
   --at-rest-encryption-enabled \
   --transit-encryption-enabled \
-  --cache-subnet-group-name autopr-cache-subnet \
+  --cache-subnet-group-name codeflow-cache-subnet \
   --security-group-ids sg-xxxxx
 ```
 
@@ -197,23 +197,23 @@ aws elasticache create-replication-group \
 ```bash
 # Store database credentials
 aws secretsmanager create-secret \
-  --name autopr/prod/database \
+  --name CodeFlow/prod/database \
   --secret-string '{
-    "username":"autopr_admin",
+    "username":"codeflow_admin",
     "password":"<strong-password>",
-    "host":"autopr-db.xxxxx.us-east-1.rds.amazonaws.com",
+    "host":"codeflow-db.xxxxx.us-east-1.rds.amazonaws.com",
     "port":5432,
-    "database":"autopr"
+    "database":"CodeFlow"
   }'
 
 # Store GitHub token
 aws secretsmanager create-secret \
-  --name autopr/prod/github-token \
+  --name CodeFlow/prod/github-token \
   --secret-string "ghp_xxxxx"
 
 # Store OpenAI API key
 aws secretsmanager create-secret \
-  --name autopr/prod/openai-api-key \
+  --name CodeFlow/prod/openai-api-key \
   --secret-string "sk-xxxxx"
 ```
 
@@ -227,7 +227,7 @@ aws secretsmanager create-secret \
   "cpu": "2048",
   "memory": "4096",
   "executionRoleArn": "arn:aws:iam::xxxxx:role/ecsTaskExecutionRole",
-  "taskRoleArn": "arn:aws:iam::xxxxx:role/autoprTaskRole",
+  "taskRoleArn": "arn:aws:iam::xxxxx:role/CodeFlowTaskRole",
   "containerDefinitions": [
     {
       "name": "codeflow-engine",
@@ -239,21 +239,21 @@ aws secretsmanager create-secret \
         }
       ],
       "environment": [
-        {"name": "AUTOPR_ENV", "value": "production"},
-        {"name": "AUTOPR_LOG_LEVEL", "value": "INFO"}
+        {"name": "codeflow_ENV", "value": "production"},
+        {"name": "codeflow_LOG_LEVEL", "value": "INFO"}
       ],
       "secrets": [
         {
           "name": "GITHUB_TOKEN",
-          "valueFrom": "arn:aws:secretsmanager:us-east-1:xxxxx:secret:autopr/prod/github-token"
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:xxxxx:secret:CodeFlow/prod/github-token"
         },
         {
           "name": "OPENAI_API_KEY",
-          "valueFrom": "arn:aws:secretsmanager:us-east-1:xxxxx:secret:autopr/prod/openai-api-key"
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:xxxxx:secret:CodeFlow/prod/openai-api-key"
         },
         {
           "name": "DATABASE_URL",
-          "valueFrom": "arn:aws:secretsmanager:us-east-1:xxxxx:secret:autopr/prod/database:url::"
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:xxxxx:secret:CodeFlow/prod/database:url::"
         }
       ],
       "logConfiguration": {
@@ -281,7 +281,7 @@ aws secretsmanager create-secret \
 ```bash
 # Create ECS cluster
 aws ecs create-cluster \
-  --cluster-name autopr-cluster \
+  --cluster-name codeflow-cluster \
   --capacity-providers FARGATE FARGATE_SPOT \
   --default-capacity-provider-strategy \
     capacityProvider=FARGATE,weight=1 \
@@ -289,7 +289,7 @@ aws ecs create-cluster \
 
 # Create ECS service
 aws ecs create-service \
-  --cluster autopr-cluster \
+  --cluster codeflow-cluster \
   --service-name codeflow-engine \
   --task-definition codeflow-engine:1 \
   --desired-count 2 \
@@ -299,7 +299,7 @@ aws ecs create-service \
     securityGroups=[sg-xxxxx],
     assignPublicIp=DISABLED
   }" \
-  --load-balancers "targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:xxxxx:targetgroup/autopr-tg/xxxxx,containerName=codeflow-engine,containerPort=8080" \
+  --load-balancers "targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:xxxxx:targetgroup/codeflow-tg/xxxxx,containerName=codeflow-engine,containerPort=8080" \
   --health-check-grace-period-seconds 60
 ```
 
@@ -308,7 +308,7 @@ aws ecs create-service \
 ```bash
 # Create ALB
 aws elbv2 create-load-balancer \
-  --name autopr-alb \
+  --name codeflow-alb \
   --subnets subnet-xxxxx subnet-yyyyy \
   --security-groups sg-xxxxx \
   --scheme internet-facing \
@@ -317,7 +317,7 @@ aws elbv2 create-load-balancer \
 
 # Create target group
 aws elbv2 create-target-group \
-  --name autopr-tg \
+  --name codeflow-tg \
   --protocol HTTP \
   --port 8080 \
   --vpc-id vpc-xxxxx \
@@ -331,11 +331,11 @@ aws elbv2 create-target-group \
 
 # Create HTTPS listener
 aws elbv2 create-listener \
-  --load-balancer-arn arn:aws:elasticloadbalancing:us-east-1:xxxxx:loadbalancer/app/autopr-alb/xxxxx \
+  --load-balancer-arn arn:aws:elasticloadbalancing:us-east-1:xxxxx:loadbalancer/app/codeflow-alb/xxxxx \
   --protocol HTTPS \
   --port 443 \
   --certificates CertificateArn=arn:aws:acm:us-east-1:xxxxx:certificate/xxxxx \
-  --default-actions Type=forward,TargetGroupArn=arn:aws:elasticloadbalancing:us-east-1:xxxxx:targetgroup/autopr-tg/xxxxx
+  --default-actions Type=forward,TargetGroupArn=arn:aws:elasticloadbalancing:us-east-1:xxxxx:targetgroup/codeflow-tg/xxxxx
 ```
 
 #### **8. Configure Auto Scaling**
@@ -344,7 +344,7 @@ aws elbv2 create-listener \
 # Register scalable target
 aws application-autoscaling register-scalable-target \
   --service-namespace ecs \
-  --resource-id service/autopr-cluster/codeflow-engine \
+  --resource-id service/codeflow-cluster/codeflow-engine \
   --scalable-dimension ecs:service:DesiredCount \
   --min-capacity 2 \
   --max-capacity 10
@@ -352,7 +352,7 @@ aws application-autoscaling register-scalable-target \
 # Create scaling policy (CPU-based)
 aws application-autoscaling put-scaling-policy \
   --service-namespace ecs \
-  --resource-id service/autopr-cluster/codeflow-engine \
+  --resource-id service/codeflow-cluster/codeflow-engine \
   --scalable-dimension ecs:service:DesiredCount \
   --policy-name cpu-scaling \
   --policy-type TargetTrackingScaling \
@@ -386,7 +386,7 @@ docker push gcr.io/PROJECT_ID/codeflow-engine:latest
 
 ```bash
 # Create instance
-gcloud sql instances create autopr-db \
+gcloud sql instances create codeflow-db \
   --database-version=POSTGRES_15 \
   --tier=db-custom-2-7680 \
   --region=us-central1 \
@@ -396,12 +396,12 @@ gcloud sql instances create autopr-db \
   --enable-bin-log
 
 # Create database
-gcloud sql databases create autopr \
-  --instance=autopr-db
+gcloud sql databases create CodeFlow \
+  --instance=codeflow-db
 
 # Create user
-gcloud sql users create autopr_app \
-  --instance=autopr-db \
+gcloud sql users create codeflow_app \
+  --instance=codeflow-db \
   --password="$(openssl rand -base64 32)"
 ```
 
@@ -409,7 +409,7 @@ gcloud sql users create autopr_app \
 
 ```bash
 # Create Redis instance
-gcloud redis instances create autopr-redis \
+gcloud redis instances create codeflow-redis \
   --size=5 \
   --region=us-central1 \
   --redis-version=redis_7_0 \
@@ -431,10 +431,10 @@ gcloud run deploy codeflow-engine \
   --memory 4Gi \
   --timeout 300 \
   --concurrency 80 \
-  --set-env-vars AUTOPR_ENV=production \
+  --set-env-vars codeflow_ENV=production \
   --set-secrets GITHUB_TOKEN=github-token:latest,OPENAI_API_KEY=openai-key:latest \
-  --add-cloudsql-instances PROJECT_ID:us-central1:autopr-db \
-  --vpc-connector projects/PROJECT_ID/locations/us-central1/connectors/autopr-connector
+  --add-cloudsql-instances PROJECT_ID:us-central1:codeflow-db \
+  --vpc-connector projects/PROJECT_ID/locations/us-central1/connectors/codeflow-connector
 ```
 
 ---
@@ -450,9 +450,9 @@ gcloud run deploy codeflow-engine \
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: autopr
+  name: CodeFlow
   labels:
-    name: autopr
+    name: CodeFlow
     environment: production
 ```
 
@@ -463,13 +463,13 @@ metadata:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: autopr-secrets
-  namespace: autopr
+  name: codeflow-secrets
+  namespace: CodeFlow
 type: Opaque
 stringData:
   github-token: "ghp_xxxxx"
   openai-api-key: "sk-xxxxx"
-  database-url: "postgresql://user:pass@postgres:5432/autopr"
+  database-url: "postgresql://user:pass@postgres:5432/CodeFlow"
   redis-url: "redis://:pass@redis:6379/0"
 ```
 
@@ -480,13 +480,13 @@ stringData:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: autopr-config
-  namespace: autopr
+  name: codeflow-config
+  namespace: CodeFlow
 data:
-  AUTOPR_ENV: "production"
-  AUTOPR_LOG_LEVEL: "INFO"
-  AUTOPR_HOST: "0.0.0.0"
-  AUTOPR_PORT: "8080"
+  codeflow_ENV: "production"
+  codeflow_LOG_LEVEL: "INFO"
+  codeflow_HOST: "0.0.0.0"
+  codeflow_PORT: "8080"
   MAX_CONCURRENT_WORKFLOWS: "10"
   WORKFLOW_TIMEOUT: "300"
 ```
@@ -499,7 +499,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: codeflow-engine
-  namespace: autopr
+  namespace: CodeFlow
   labels:
     app: codeflow-engine
 spec:
@@ -530,26 +530,26 @@ spec:
         - name: GITHUB_TOKEN
           valueFrom:
             secretKeyRef:
-              name: autopr-secrets
+              name: codeflow-secrets
               key: github-token
         - name: OPENAI_API_KEY
           valueFrom:
             secretKeyRef:
-              name: autopr-secrets
+              name: codeflow-secrets
               key: openai-api-key
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
-              name: autopr-secrets
+              name: codeflow-secrets
               key: database-url
         - name: REDIS_URL
           valueFrom:
             secretKeyRef:
-              name: autopr-secrets
+              name: codeflow-secrets
               key: redis-url
         envFrom:
         - configMapRef:
-            name: autopr-config
+            name: codeflow-config
         resources:
           requests:
             cpu: "1000m"
@@ -585,7 +585,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: codeflow-engine
-  namespace: autopr
+  namespace: CodeFlow
   labels:
     app: codeflow-engine
 spec:
@@ -606,8 +606,8 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: autopr-ingress
-  namespace: autopr
+  name: codeflow-ingress
+  namespace: CodeFlow
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
@@ -616,10 +616,10 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - autopr.example.com
-    secretName: autopr-tls
+    - codeflow.example.com
+    secretName: codeflow-tls
   rules:
-  - host: autopr.example.com
+  - host: codeflow.example.com
     http:
       paths:
       - path: /
@@ -639,7 +639,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: codeflow-engine-hpa
-  namespace: autopr
+  namespace: CodeFlow
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -692,12 +692,12 @@ kubectl apply -f k8s/ingress.yaml
 kubectl apply -f k8s/hpa.yaml
 
 # Verify deployment
-kubectl get pods -n autopr
-kubectl get svc -n autopr
-kubectl get ingress -n autopr
+kubectl get pods -n CodeFlow
+kubectl get svc -n CodeFlow
+kubectl get ingress -n CodeFlow
 
 # Check logs
-kubectl logs -n autopr -l app=codeflow-engine --tail=100 -f
+kubectl logs -n CodeFlow -l app=codeflow-engine --tail=100 -f
 ```
 
 ---
@@ -710,9 +710,9 @@ Create separate configuration files:
 
 ```bash
 configs/
-├── development.yaml
-├── staging.yaml
-└── production.yaml
+â”œâ”€â”€ development.yaml
+â”œâ”€â”€ staging.yaml
+â””â”€â”€ production.yaml
 ```
 
 ### **Production Configuration Example**
@@ -853,10 +853,10 @@ Key metrics to monitor:
 
 ```bash
 # Automated daily backups
-0 2 * * * pg_dump -h $DB_HOST -U $DB_USER -d autopr | gzip > /backups/autopr-$(date +\%Y\%m\%d).sql.gz
+0 2 * * * pg_dump -h $DB_HOST -U $DB_USER -d CodeFlow | gzip > /backups/codeflow-$(date +\%Y\%m\%d).sql.gz
 
 # Retention: Keep last 30 days
-find /backups -name "autopr-*.sql.gz" -mtime +30 -delete
+find /backups -name "codeflow-*.sql.gz" -mtime +30 -delete
 ```
 
 ### **Disaster Recovery Plan**
@@ -881,10 +881,10 @@ find /backups -name "autopr-*.sql.gz" -mtime +30 -delete
 #### **Application Won't Start**
 ```bash
 # Check logs
-kubectl logs -n autopr -l app=codeflow-engine --tail=100
+kubectl logs -n CodeFlow -l app=codeflow-engine --tail=100
 
 # Verify secrets
-kubectl get secret -n autopr autopr-secrets -o yaml
+kubectl get secret -n CodeFlow codeflow-secrets -o yaml
 
 # Check database connectivity
 kubectl run -it --rm debug --image=postgres:15 --restart=Never -- psql $DATABASE_URL
@@ -893,11 +893,11 @@ kubectl run -it --rm debug --image=postgres:15 --restart=Never -- psql $DATABASE
 #### **High Memory Usage**
 ```bash
 # Check memory metrics
-kubectl top pods -n autopr
+kubectl top pods -n CodeFlow
 
 # Review workflow history size (should be limited to 1000)
 # Restart pods if needed
-kubectl rollout restart deployment/codeflow-engine -n autopr
+kubectl rollout restart deployment/codeflow-engine -n CodeFlow
 ```
 
 #### **Slow Performance**

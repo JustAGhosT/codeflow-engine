@@ -1,4 +1,4 @@
-# AI Enhanced File Splitter
+﻿# AI Enhanced File Splitter
 
 ## Overview
 
@@ -14,7 +14,7 @@ The AI Enhanced File Splitter is a sophisticated tool that intelligently splits 
 
 ## Installation
 
-The file splitter is included with the AutoPR system. No additional installation is required.
+The file splitter is included with the CodeFlow system. No additional installation is required.
 
 ## Quick Start
 
@@ -69,7 +69,7 @@ results = await splitter.process_files(["file1.py", "file2.py"])
 
 ## Integration
 
-The file splitter integrates seamlessly with the AutoPR quality engine:
+The file splitter integrates seamlessly with the CodeFlow quality engine:
 
 ```python
 from codeflow_engine.actions.quality_engine.engine import QualityEngine
@@ -89,4 +89,4 @@ For detailed usage instructions, see the [User Guide](USER_GUIDE.md).
 
 ## Contributing
 
-Contributions are welcome! Please see the main AutoPR contributing guidelines.
+Contributions are welcome! Please see the main CodeFlow contributing guidelines.

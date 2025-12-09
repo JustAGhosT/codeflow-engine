@@ -1,7 +1,7 @@
-"""
+﻿"""
 SQLAlchemy Database Models
 
-This module defines the database schema for AutoPR Engine using SQLAlchemy ORM.
+This module defines the database schema for CodeFlow Engine using SQLAlchemy ORM.
 All models inherit from the declarative Base class.
 
 TODO: Production considerations:
@@ -368,7 +368,7 @@ class WorkflowTrigger(Base, AuditMixin):
 class AllowedCommenter(Base, AuditMixin):
     """Allowed commenter model for PR comment filtering.
     
-    Tracks users who are authorized to have their comments processed by AutoPR.
+    Tracks users who are authorized to have their comments processed by CodeFlow.
     Users can be added manually via dashboard or automatically when they first comment.
     """
 
@@ -419,7 +419,7 @@ class CommentFilterSettings(Base, AuditMixin):
         Text,
         nullable=False,
         default="Thank you for your comment! User @{username} has been added to the allowed commenters list. "
-        "Comments from this user will now be processed. You can manage this in your AutoPR dashboard."
+        "Comments from this user will now be processed. You can manage this in your CodeFlow dashboard."
     )
     whitelist_mode: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=True,

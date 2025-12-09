@@ -1,5 +1,5 @@
-"""
-End-to-end tests for volume control in AutoPR Engine.
+﻿"""
+End-to-end tests for volume control in CodeFlow Engine.
 
 These tests verify the complete flow of volume control from the CrewAI orchestration
 down to individual agent tasks and quality inputs.
@@ -11,7 +11,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from codeflow_engine.agents.crew import AutoPRCrew
+from codeflow_engine.agents.crew import CodeFlowCrew
 from codeflow_engine.agents.models import CodeIssue, IssueSeverity, PlatformAnalysis
 from codeflow_engine.enums import QualityMode
 
@@ -81,7 +81,7 @@ class TestVolumeControlE2E:
     ):
         """Test that volume settings propagate correctly through the entire pipeline."""
         # Arrange
-        crew = AutoPRCrew(
+        crew = CodeFlowCrew(
             llm_model="gpt-4",
             volume=volume,
             code_quality_agent=mock_agents["code_quality"],
@@ -124,7 +124,7 @@ class TestVolumeControlE2E:
     ):
         """Test that volume affects the depth and thoroughness of analysis."""
         # Test with low volume (fast mode)
-        crew_low = AutoPRCrew(
+        crew_low = CodeFlowCrew(
             llm_model="gpt-4",
             volume=100,
             code_quality_agent=mock_agents["code_quality"],
@@ -134,7 +134,7 @@ class TestVolumeControlE2E:
         )
 
         # Test with high volume (comprehensive mode)
-        crew_high = AutoPRCrew(
+        crew_high = CodeFlowCrew(
             llm_model="gpt-4",
             volume=900,
             code_quality_agent=mock_agents["code_quality"],
@@ -196,7 +196,7 @@ class TestVolumeControlE2E:
         mock_agents["linting"].analyze_code.return_value = [lint_issue]
 
         # Test with low volume (should not auto-fix)
-        crew_low = AutoPRCrew(
+        crew_low = CodeFlowCrew(
             llm_model="gpt-4",
             volume=100,
             code_quality_agent=mock_agents["code_quality"],
@@ -207,7 +207,7 @@ class TestVolumeControlE2E:
         report_low = crew_low.analyze_repository(test_repo, auto_fix=False)
 
         # Test with high volume (should auto-fix)
-        crew_high = AutoPRCrew(
+        crew_high = CodeFlowCrew(
             llm_model="gpt-4",
             volume=900,
             code_quality_agent=mock_agents["code_quality"],

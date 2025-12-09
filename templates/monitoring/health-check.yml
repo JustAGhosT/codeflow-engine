@@ -1,9 +1,9 @@
-name: "Health Check Script Template"
+﻿name: "Health Check Script Template"
 category: "monitoring"
 description:
   "Comprehensive health check script for application monitoring and availability verification"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["monitoring", "health_check", "availability", "script", "devops"]
 
 template_info:
@@ -147,10 +147,10 @@ template: |
 
   # Success notification
   notify_success() {
-    log "${GREEN}✅ Health check passed for $APP_NAME${NC}"
+    log "${GREEN}âœ… Health check passed for $APP_NAME${NC}"
     {% if enable_notifications and notification_webhook %}
     curl -X POST -H 'Content-type: application/json' \
-      --data "{\"text\":\"✅ Health check PASSED for $APP_NAME\"}" \
+      --data "{\"text\":\"âœ… Health check PASSED for $APP_NAME\"}" \
       "$WEBHOOK_URL" 2>/dev/null || true
     {% endif %}
   }
@@ -158,10 +158,10 @@ template: |
   # Failure notification
   notify_failure() {
     local error_msg="$1"
-    log "${RED}❌ Health check failed for $APP_NAME: $error_msg${NC}"
+    log "${RED}âŒ Health check failed for $APP_NAME: $error_msg${NC}"
     {% if enable_notifications and notification_webhook %}
     curl -X POST -H 'Content-type: application/json' \
-      --data "{\"text\":\"❌ Health check FAILED for $APP_NAME: $error_msg\"}" \
+      --data "{\"text\":\"âŒ Health check FAILED for $APP_NAME: $error_msg\"}" \
       "$WEBHOOK_URL" 2>/dev/null || true
     {% endif %}
   }
@@ -175,12 +175,12 @@ template: |
       log "Checking HTTP health endpoint: $endpoint (attempt $((retries + 1))/$MAX_RETRIES)"
 
       if curl -f -s --max-time $TIMEOUT "$endpoint" > /dev/null 2>&1; then
-        log "${GREEN}✅ HTTP health check passed${NC}"
+        log "${GREEN}âœ… HTTP health check passed${NC}"
         return 0
       else
         retries=$((retries + 1))
         if [ $retries -lt $MAX_RETRIES ]; then
-          log "${YELLOW}⚠️ HTTP health check failed, retrying in 5 seconds...${NC}"
+          log "${YELLOW}âš ï¸ HTTP health check failed, retrying in 5 seconds...${NC}"
           sleep 5
         fi
       fi
@@ -198,10 +198,10 @@ template: |
     if [ ! -z "$DATABASE_URL" ]; then
       if command -v psql >/dev/null 2>&1; then
         if psql "$DATABASE_URL" -c "SELECT 1;" >/dev/null 2>&1; then
-          log "${GREEN}✅ Database connectivity check passed${NC}"
+          log "${GREEN}âœ… Database connectivity check passed${NC}"
           return 0
         else
-          log "${RED}❌ Database connectivity check failed${NC}"
+          log "${RED}âŒ Database connectivity check failed${NC}"
           return 1
         fi
       fi
@@ -211,10 +211,10 @@ template: |
     if [ ! -z "$MONGODB_URL" ]; then
       if command -v mongo >/dev/null 2>&1; then
         if mongo "$MONGODB_URL" --eval "db.runCommand('ping')" >/dev/null 2>&1; then
-          log "${GREEN}✅ MongoDB connectivity check passed${NC}"
+          log "${GREEN}âœ… MongoDB connectivity check passed${NC}"
           return 0
         else
-          log "${RED}❌ MongoDB connectivity check failed${NC}"
+          log "${RED}âŒ MongoDB connectivity check failed${NC}"
           return 1
         fi
       fi
@@ -224,16 +224,16 @@ template: |
     if [ ! -z "$REDIS_URL" ]; then
       if command -v redis-cli >/dev/null 2>&1; then
         if redis-cli -u "$REDIS_URL" ping >/dev/null 2>&1; then
-          log "${GREEN}✅ Redis connectivity check passed${NC}"
+          log "${GREEN}âœ… Redis connectivity check passed${NC}"
           return 0
         else
-          log "${RED}❌ Redis connectivity check failed${NC}"
+          log "${RED}âŒ Redis connectivity check failed${NC}"
           return 1
         fi
       fi
     fi
 
-    log "${YELLOW}⚠️ No database configuration found, skipping database check${NC}"
+    log "${YELLOW}âš ï¸ No database configuration found, skipping database check${NC}"
     return 0
   }
   {% endif %}
@@ -259,9 +259,9 @@ template: |
       if [ ! -z "$api" ]; then
         log "Checking external API: $api"
         if curl -f -s --max-time 10 "$api" > /dev/null 2>&1; then
-          log "${GREEN}✅ External API check passed: $api${NC}"
+          log "${GREEN}âœ… External API check passed: $api${NC}"
         else
-          log "${YELLOW}⚠️ External API check failed: $api${NC}"
+          log "${YELLOW}âš ï¸ External API check failed: $api${NC}"
           # Don't fail the entire health check for external APIs
         fi
       fi
@@ -278,23 +278,23 @@ template: |
     # Check disk space
     local disk_usage=$(df / | tail -1 | awk '{print $5}' | sed 's/%//')
     if [ "$disk_usage" -gt 90 ]; then
-      log "${RED}❌ Disk usage is critical: ${disk_usage}%${NC}"
+      log "${RED}âŒ Disk usage is critical: ${disk_usage}%${NC}"
       return 1
     elif [ "$disk_usage" -gt 80 ]; then
-      log "${YELLOW}⚠️ Disk usage is high: ${disk_usage}%${NC}"
+      log "${YELLOW}âš ï¸ Disk usage is high: ${disk_usage}%${NC}"
     else
-      log "${GREEN}✅ Disk usage is normal: ${disk_usage}%${NC}"
+      log "${GREEN}âœ… Disk usage is normal: ${disk_usage}%${NC}"
     fi
 
     # Check memory usage
     local mem_usage=$(free | grep Mem | awk '{printf("%.0f", $3/$2 * 100.0)}')
     if [ "$mem_usage" -gt 90 ]; then
-      log "${RED}❌ Memory usage is critical: ${mem_usage}%${NC}"
+      log "${RED}âŒ Memory usage is critical: ${mem_usage}%${NC}"
       return 1
     elif [ "$mem_usage" -gt 80 ]; then
-      log "${YELLOW}⚠️ Memory usage is high: ${mem_usage}%${NC}"
+      log "${YELLOW}âš ï¸ Memory usage is high: ${mem_usage}%${NC}"
     else
-      log "${GREEN}✅ Memory usage is normal: ${mem_usage}%${NC}"
+      log "${GREEN}âœ… Memory usage is normal: ${mem_usage}%${NC}"
     fi
 
     return 0

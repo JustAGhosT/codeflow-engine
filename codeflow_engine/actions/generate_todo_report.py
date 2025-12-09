@@ -1,4 +1,4 @@
-import os
+﻿import os
 import re
 
 import pydantic
@@ -8,7 +8,7 @@ from codeflow_engine.actions.base.action import Action
 
 class Inputs(pydantic.BaseModel):
     scan_path: str = "."
-    exclude_paths: list[str] = ["node_modules", ".next", "autopr"]
+    exclude_paths: list[str] = ["node_modules", ".next", "codeflow"]
 
 
 class Outputs(pydantic.BaseModel):
@@ -50,7 +50,7 @@ class GenerateTodoReport(Action[Inputs, Outputs]):
         if not todos:
             return Outputs(markdown_report="No TODOs found!", todo_count=0)
 
-        report = "### 📝 TODO Report\\n\\n"
+        report = "### ðŸ“ TODO Report\\n\\n"
         report += "| File | Line | Task |\\n"
         report += "|------|------|------|\\n"
         for todo in todos:

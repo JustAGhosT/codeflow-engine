@@ -1,7 +1,7 @@
-"""
+﻿"""
 Artifacts Module
 
-This module contains data models for various artifacts used in the AutoPR system.
+This module contains data models for various artifacts used in the CodeFlow system.
 """
 
 from dataclasses import dataclass

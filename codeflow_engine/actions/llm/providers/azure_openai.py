@@ -1,5 +1,5 @@
-"""
-Azure OpenAI Provider for AutoPR LLM system.
+﻿"""
+Azure OpenAI Provider for CodeFlow LLM system.
 
 Supports Azure OpenAI endpoints with custom configurations.
 """

@@ -1,4 +1,4 @@
-"""Test file to verify imports from the codebase."""
+﻿"""Test file to verify imports from the codebase."""
 
 from unittest.mock import patch
 
@@ -19,14 +19,14 @@ def test_import_volume_config():
 
 
 def test_import_crew():
-    """Test importing AutoPRCrew from crew.py."""
-    from codeflow_engine.agents.crew import AutoPRCrew
+    """Test importing CodeFlowCrew from crew.py."""
+    from codeflow_engine.agents.crew import CodeFlowCrew
 
-    assert AutoPRCrew is not None
+    assert CodeFlowCrew is not None
 
     # Test basic initialization with mocks
     with patch("codeflow_engine.agents.crew.get_llm_provider_manager"):
-        crew = AutoPRCrew(llm_model="test-model")
+        crew = CodeFlowCrew(llm_model="test-model")
         assert crew is not None
 
 

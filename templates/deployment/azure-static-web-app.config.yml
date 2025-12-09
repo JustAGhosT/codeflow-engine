@@ -1,10 +1,10 @@
-name: "Azure Static Web Apps Configuration"
+﻿name: "Azure Static Web Apps Configuration"
 category: "deployment"
 description:
   "Azure Static Web Apps configuration with routing, authentication, and security headers for React
   SPAs"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["azure", "static-web-apps", "spa", "routing", "authentication", "security"]
 
 template_info:

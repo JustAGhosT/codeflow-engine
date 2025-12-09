@@ -1,9 +1,9 @@
-name: "Integration Guide HTML Template"
+﻿name: "Integration Guide HTML Template"
 category: "html_template"
 description:
   "HTML template for integration setup guides with technical focus and step-by-step instructions"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["html", "integration", "guide", "documentation", "technical"]
 
 template_info:
@@ -168,7 +168,7 @@ template_content: |
           }
 
           h2::before {
-              content: '⚙️';
+              content: 'âš™ï¸';
               margin-right: 10px;
               font-size: 0.8em;
           }
@@ -360,7 +360,7 @@ template_content: |
           }
 
           .warning-box::before {
-              content: '⚠️ ';
+              content: 'âš ï¸ ';
               font-weight: bold;
           }
 

@@ -1,4 +1,4 @@
-"""GitHub App Integration for AutoPR.
+﻿"""GitHub App Integration for CodeFlow.
 
 Provides one-click installation and automatic secret configuration.
 """

@@ -1,4 +1,4 @@
-# 15. Testing Strategy
+﻿# 15. Testing Strategy
 
 ## Status
 
@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-AutoPR requires a comprehensive testing strategy to ensure:
+CodeFlow requires a comprehensive testing strategy to ensure:
 
 - Code quality and reliability
 - Prevention of regressions

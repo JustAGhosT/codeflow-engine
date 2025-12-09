@@ -1,4 +1,4 @@
-# Remaining Issues Template
+﻿# Remaining Issues Template
 
 This document contains issue templates for all remaining medium-priority and unaddressed items identified in the comprehensive project analysis. These can be copied and pasted into GitHub Issues.
 
@@ -24,7 +24,7 @@ Improve error handling and validation for configuration loading to provide clear
 1. Add schema validation for all configuration files (YAML/JSON)
 2. Provide specific error messages for common misconfiguration scenarios
 3. Implement graceful degradation with sensible defaults
-4. Add configuration validation command: `autopr config validate`
+4. Add configuration validation command: `codeflow config validate`
 
 **Acceptance Criteria:**
 - [ ] Schema validation for all config files implemented
@@ -60,13 +60,13 @@ Enhance GitHub token validation to verify token scopes and provide clear guidanc
 1. Add token scope verification at startup
 2. Check for required scopes: `repo`, `workflow`, `read:org`
 3. Provide detailed error messages indicating missing scopes
-4. Add `autopr auth check` command to validate tokens
+4. Add `codeflow auth check` command to validate tokens
 5. Include token scope documentation in setup guide
 
 **Acceptance Criteria:**
 - [ ] Token scope validation implemented
 - [ ] Clear error messages with required scopes listed
-- [ ] `autopr auth check` CLI command added
+- [ ] `codeflow auth check` CLI command added
 - [ ] Documentation updated with scope requirements
 - [ ] Tests for various token scope scenarios
 

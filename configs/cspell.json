@@ -1,4 +1,4 @@
-{
+﻿{
   "version": "0.2",
   "language": "en-US",
   "words": [
@@ -50,7 +50,7 @@
     "authors",
     "autogen",
     "automatically",
-    "autopr",
+    "CodeFlow",
     "Average",
     "AWS",
     "axolo",
@@ -931,7 +931,7 @@
     "mutations",
     "dangling",
     "JustAGhosT",
-    "AutoPR",
+    "CodeFlow",
     "GitHub",
     "PyPI",
     "CI",

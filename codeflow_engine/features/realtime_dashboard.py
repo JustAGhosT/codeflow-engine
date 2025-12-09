@@ -1,4 +1,4 @@
-"""
+﻿"""
 Real-Time Collaboration Dashboard Feature (POC)
 
 WebSocket-powered live activity feed for team collaboration.
@@ -81,7 +81,7 @@ class RealtimeDashboard:
             # Send connection confirmation
             emit('connected', {
                 'client_id': client_id,
-                'message': 'Connected to AutoPR real-time dashboard'
+                'message': 'Connected to CodeFlow real-time dashboard'
             })
             
             # Send current activity feed

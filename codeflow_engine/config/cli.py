@@ -1,8 +1,8 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
-AutoPR Configuration CLI Tool
+CODEFLOW Configuration CLI Tool
 
-Command-line interface for managing AutoPR configuration:
+Command-line interface for managing CODEFLOW configuration:
 - Validate configuration
 - Generate configuration reports
 - Check environment variables
@@ -15,7 +15,7 @@ import sys
 
 import click
 
-from codeflow_engine.config.settings import AutoPRSettings, Environment, get_settings
+from codeflow_engine.config.settings import CODEFLOWSettings, Environment, get_settings
 from codeflow_engine.config.validation import (
     check_environment_variables,
     generate_config_report,
@@ -24,9 +24,9 @@ from codeflow_engine.config.validation import (
 
 
 @click.group()
-@click.version_option(version="1.0.0", prog_name="autopr-config")
+@click.version_option(version="1.0.0", prog_name="codeflow-config")
 def cli():
-    """AutoPR Configuration Management CLI"""
+    """CODEFLOW Configuration Management CLI"""
 
 
 @cli.command()
@@ -42,10 +42,10 @@ def cli():
 )
 @click.option("--verbose", "-v", is_flag=True, help="Verbose output")
 def validate(config_file: str | None, format: str, verbose: bool):
-    """Validate AutoPR configuration."""
+    """Validate CODEFLOW configuration."""
     try:
         if config_file:
-            settings = AutoPRSettings.from_file(config_file)
+            settings = CODEFLOWSettings.from_file(config_file)
             click.echo(f"Loading configuration from: {config_file}")
         else:
             settings = get_settings()
@@ -58,17 +58,17 @@ def validate(config_file: str | None, format: str, verbose: bool):
         else:
             # Text format
             if validation_result["valid"]:
-                click.echo(click.style("✅ Configuration is valid!", fg="green"))
+                click.echo(click.style("âœ… Configuration is valid!", fg="green"))
             else:
-                click.echo(click.style("❌ Configuration has errors!", fg="red"))
+                click.echo(click.style("âŒ Configuration has errors!", fg="red"))
 
             if validation_result["errors"]:
-                click.echo(click.style("\n🚨 Errors:", fg="red"))
+                click.echo(click.style("\nðŸš¨ Errors:", fg="red"))
                 for error in validation_result["errors"]:
                     click.echo(f"  - {error}")
 
             if validation_result["warnings"]:
-                click.echo(click.style("\n⚠️  Warnings:", fg="yellow"))
+                click.echo(click.style("\nâš ï¸  Warnings:", fg="yellow"))
                 for warning in validation_result["warnings"]:
                     click.echo(f"  - {warning}")
 
@@ -96,7 +96,7 @@ def report(config_file: str | None, output: str | None):
     """Generate comprehensive configuration report."""
     try:
         settings = (
-            AutoPRSettings.from_file(config_file) if config_file else get_settings()
+            CODEFLOWSettings.from_file(config_file) if config_file else get_settings()
         )
 
         report_content = generate_config_report(settings)
@@ -130,28 +130,28 @@ def check_env(format: str):
             click.echo(json.dumps(env_check, indent=2))
         else:
             # Text format
-            click.echo("🔍 Environment Variable Check")
+            click.echo("ðŸ” Environment Variable Check")
             click.echo("=" * 40)
 
             if env_check["missing_important_vars"]:
                 click.echo(
-                    click.style("\n❌ Missing Important Variables:", fg="yellow")
+                    click.style("\nâŒ Missing Important Variables:", fg="yellow")
                 )
                 for var in env_check["missing_important_vars"]:
                     click.echo(f"  - {var}")
 
             if env_check["found_env_files"]:
-                click.echo(click.style("\n✅ Found .env Files:", fg="green"))
+                click.echo(click.style("\nâœ… Found .env Files:", fg="green"))
                 for file in env_check["found_env_files"]:
                     click.echo(f"  - {file}")
 
             if env_check["issues"]:
-                click.echo(click.style("\n🚨 Issues:", fg="red"))
+                click.echo(click.style("\nðŸš¨ Issues:", fg="red"))
                 for issue in env_check["issues"]:
                     click.echo(f"  - {issue}")
 
             if env_check["recommendations"]:
-                click.echo(click.style("\n💡 Recommendations:", fg="blue"))
+                click.echo(click.style("\nðŸ’¡ Recommendations:", fg="blue"))
                 for rec in env_check["recommendations"]:
                     click.echo(f"  - {rec}")
 
@@ -238,8 +238,8 @@ def generate(environment: str, output: str | None, format: str):
         elif format == "env":
             # Generate .env file format
             env_vars = [
-                f"# AutoPR Configuration for {environment} environment",
-                f"AUTOPR_ENVIRONMENT={environment}",
+                f"# CODEFLOW Configuration for {environment} environment",
+                f"CODEFLOW_ENVIRONMENT={environment}",
                 f"DEBUG={'true' if environment == 'development' else 'false'}",
                 "",
                 "# GitHub Configuration",
@@ -254,7 +254,7 @@ def generate(environment: str, output: str | None, format: str):
                 "# GROQ_API_KEY=your_groq_key_here",
                 "",
                 "# Database Configuration",
-                "DATABASE_URL=postgresql://user:password@localhost:5432/autopr",
+                "DATABASE_URL=postgresql://user:password@localhost:5432/CODEFLOW",
                 "",
                 "# Redis Configuration",
                 "REDIS_URL=redis://localhost:6379/0",
@@ -303,24 +303,24 @@ def test(config_file: str | None, provider: str | None):
     """Test configuration by attempting connections."""
     try:
         settings = (
-            AutoPRSettings.from_file(config_file) if config_file else get_settings()
+            CODEFLOWSettings.from_file(config_file) if config_file else get_settings()
         )
 
-        click.echo("🧪 Testing Configuration Connections")
+        click.echo("ðŸ§ª Testing Configuration Connections")
         click.echo("=" * 40)
 
         # Test GitHub connection
-        click.echo("\n📡 Testing GitHub connection...")
+        click.echo("\nðŸ“¡ Testing GitHub connection...")
         if settings.github.token:
-            click.echo("  ✅ GitHub token configured")
+            click.echo("  âœ… GitHub token configured")
             # Here you would add actual GitHub API test
         elif settings.github.app_id:
-            click.echo("  ✅ GitHub App ID configured")
+            click.echo("  âœ… GitHub App ID configured")
         else:
-            click.echo("  ❌ No GitHub authentication configured")
+            click.echo("  âŒ No GitHub authentication configured")
 
         # Test LLM providers
-        click.echo("\n🤖 Testing LLM providers...")
+        click.echo("\nðŸ¤– Testing LLM providers...")
         providers_to_test = (
             [provider] if provider else ["openai", "anthropic", "mistral", "groq"]
         )
@@ -328,28 +328,28 @@ def test(config_file: str | None, provider: str | None):
         for prov in providers_to_test:
             config = settings.get_provider_config(prov)
             if config.get("api_key"):
-                click.echo(f"  ✅ {prov.title()} API key configured")
+                click.echo(f"  âœ… {prov.title()} API key configured")
                 # Here you would add actual API test calls
             else:
-                click.echo(f"  ❌ {prov.title()} API key not configured")
+                click.echo(f"  âŒ {prov.title()} API key not configured")
 
         # Test database connection
-        click.echo("\n🗄️  Testing database connection...")
+        click.echo("\nðŸ—„ï¸  Testing database connection...")
         if settings.database.url:
-            click.echo("  ✅ Database URL configured")
+            click.echo("  âœ… Database URL configured")
             # Here you would add actual database connection test
         else:
-            click.echo("  ❌ Database URL not configured")
+            click.echo("  âŒ Database URL not configured")
 
         # Test Redis connection
-        click.echo("\n🔴 Testing Redis connection...")
+        click.echo("\nðŸ”´ Testing Redis connection...")
         if settings.redis.url:
-            click.echo("  ✅ Redis URL configured")
+            click.echo("  âœ… Redis URL configured")
             # Here you would add actual Redis connection test
         else:
-            click.echo("  ❌ Redis URL not configured")
+            click.echo("  âŒ Redis URL not configured")
 
-        click.echo("\n✅ Configuration test completed")
+        click.echo("\nâœ… Configuration test completed")
 
     except Exception as e:
         click.echo(click.style(f"Error testing configuration: {e}", fg="red"), err=True)
@@ -364,11 +364,11 @@ def show(config_file: str | None):
     """Show current configuration (with secrets masked)."""
     try:
         settings = (
-            AutoPRSettings.from_file(config_file) if config_file else get_settings()
+            CODEFLOWSettings.from_file(config_file) if config_file else get_settings()
         )
 
         safe_config = settings.to_safe_dict()
-        click.echo("📋 Current Configuration")
+        click.echo("ðŸ“‹ Current Configuration")
         click.echo("=" * 40)
         click.echo(json.dumps(safe_config, indent=2))
 

@@ -1,4 +1,4 @@
-# AutoPR Engine - Security Best Practices
+﻿# CodeFlow Engine - Security Best Practices
 
 ## **Table of Contents**
 1. [Overview](#overview)
@@ -16,13 +16,13 @@
 
 ## **Overview**
 
-AutoPR Engine handles sensitive data including GitHub tokens, API keys, and code repositories. This document outlines security best practices for production deployments.
+CodeFlow Engine handles sensitive data including GitHub tokens, API keys, and code repositories. This document outlines security best practices for production deployments.
 
 **Threat Model**: 
-- GitHub token compromise → Unauthorized repository access
-- API key leakage → Unauthorized AI service usage
-- Path traversal → Unauthorized file system access
-- Injection attacks → Code execution vulnerabilities
+- GitHub token compromise â†’ Unauthorized repository access
+- API key leakage â†’ Unauthorized AI service usage
+- Path traversal â†’ Unauthorized file system access
+- Injection attacks â†’ Code execution vulnerabilities
 
 ---
 
@@ -107,7 +107,7 @@ vault = Client(url='https://vault.example.com')
 vault.auth.approle.login(role_id=ROLE_ID, secret_id=SECRET_ID)
 
 # Fetch secrets
-secrets = vault.secrets.kv.v2.read_secret_version(path='autopr/prod')
+secrets = vault.secrets.kv.v2.read_secret_version(path='CodeFlow/prod')
 GITHUB_TOKEN = secrets['data']['data']['github_token']
 ```
 
@@ -115,13 +115,13 @@ GITHUB_TOKEN = secrets['data']['data']['github_token']
 ```bash
 # Store secrets
 aws secretsmanager create-secret \
-    --name autopr/prod/github-token \
+    --name CodeFlow/prod/github-token \
     --secret-string "ghp_..."
 
 # Retrieve in application
 import boto3
 client = boto3.client('secretsmanager', region_name='us-east-1')
-response = client.get_secret_value(SecretId='autopr/prod/github-token')
+response = client.get_secret_value(SecretId='CodeFlow/prod/github-token')
 GITHUB_TOKEN = response['SecretString']
 ```
 
@@ -131,7 +131,7 @@ from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 
 credential = DefaultAzureCredential()
-client = SecretClient(vault_url="https://autopr-vault.vault.azure.net", credential=credential)
+client = SecretClient(vault_url="https://codeflow-vault.vault.azure.net", credential=credential)
 
 GITHUB_TOKEN = client.get_secret("github-token").value
 ```
@@ -141,7 +141,7 @@ GITHUB_TOKEN = client.get_secret("github-token").value
 apiVersion: v1
 kind: Secret
 metadata:
-  name: autopr-secrets
+  name: codeflow-secrets
 type: Opaque
 stringData:
   github-token: ghp_...
@@ -158,11 +158,11 @@ stringData:
 ```nginx
 server {
     listen 443 ssl http2;
-    server_name autopr.example.com;
+    server_name codeflow.example.com;
     
     # SSL certificates
-    ssl_certificate /etc/letsencrypt/live/autopr.example.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/autopr.example.com/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/codeflow.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/codeflow.example.com/privkey.pem;
     
     # Strong SSL configuration
     ssl_protocols TLSv1.2 TLSv1.3;
@@ -229,7 +229,7 @@ IngressRules:
 
 ### **Path Traversal Prevention**
 ```python
-# IMPLEMENTED in autopr/dashboard/server.py
+# IMPLEMENTED in CodeFlow/dashboard/server.py
 
 def _validate_path(self, path_str: str) -> tuple[bool, str | None]:
     """Prevent directory traversal attacks"""
@@ -286,14 +286,14 @@ DATABASE_POOL_TIMEOUT=30
 ### **User Permissions**
 ```sql
 -- Create restricted user for application
-CREATE USER autopr_app WITH PASSWORD 'strong_random_password';
+CREATE USER codeflow_app WITH PASSWORD 'strong_random_password';
 
 -- Grant minimal required permissions
-GRANT CONNECT ON DATABASE autopr TO autopr_app;
-GRANT SELECT, INSERT, UPDATE ON ALL TABLES IN SCHEMA public TO autopr_app;
+GRANT CONNECT ON DATABASE CodeFlow TO codeflow_app;
+GRANT SELECT, INSERT, UPDATE ON ALL TABLES IN SCHEMA public TO codeflow_app;
 
 -- Revoke dangerous permissions
-REVOKE DELETE, TRUNCATE, DROP ON ALL TABLES IN SCHEMA public FROM autopr_app;
+REVOKE DELETE, TRUNCATE, DROP ON ALL TABLES IN SCHEMA public FROM codeflow_app;
 ```
 
 ### **Encryption at Rest**
@@ -338,7 +338,7 @@ CORS(app)
 # Production (restrictive)
 CORS(app, resources={
     r"/api/*": {
-        "origins": ["https://autopr.example.com"],
+        "origins": ["https://codeflow.example.com"],
         "methods": ["GET", "POST"],
         "allow_headers": ["Content-Type", "Authorization"]
     }
@@ -392,13 +392,13 @@ logger.error("path_traversal_attempt",
 # Install fail2ban
 sudo apt-get install fail2ban
 
-# Configure for AutoPR
+# Configure for CodeFlow
 # /etc/fail2ban/jail.local
-[autopr-api]
+[codeflow-api]
 enabled = true
 port = 443
-filter = autopr-api
-logpath = /var/log/autopr/access.log
+filter = codeflow-api
+logpath = /var/log/CodeFlow/access.log
 maxretry = 5
 bantime = 3600
 ```
@@ -420,34 +420,34 @@ def update_config():
 ## **OWASP Top 10 Compliance**
 
 ### **1. Broken Access Control**
-✅ **Mitigated**: Path validation, allowed directories, permission checks
+âœ… **Mitigated**: Path validation, allowed directories, permission checks
 
 ### **2. Cryptographic Failures**
-✅ **Mitigated**: TLS/SSL enforced, secrets in vault, encrypted database connections
+âœ… **Mitigated**: TLS/SSL enforced, secrets in vault, encrypted database connections
 
 ### **3. Injection**
-✅ **Mitigated**: Parameterized queries, input validation, Pydantic models
+âœ… **Mitigated**: Parameterized queries, input validation, Pydantic models
 
 ### **4. Insecure Design**
-✅ **Mitigated**: Security by design, principle of least privilege
+âœ… **Mitigated**: Security by design, principle of least privilege
 
 ### **5. Security Misconfiguration**
-⚠️ **TODO**: Harden production configuration, remove debug flags
+âš ï¸ **TODO**: Harden production configuration, remove debug flags
 
 ### **6. Vulnerable Components**
-⚠️ **TODO**: Regular dependency scanning (see TASK-3 in analysis)
+âš ï¸ **TODO**: Regular dependency scanning (see TASK-3 in analysis)
 
 ### **7. Authentication Failures**
-✅ **Mitigated**: Token-based auth, GitHub Apps, rate limiting
+âœ… **Mitigated**: Token-based auth, GitHub Apps, rate limiting
 
 ### **8. Software and Data Integrity**
-⚠️ **TODO**: Implement code signing, verify dependencies
+âš ï¸ **TODO**: Implement code signing, verify dependencies
 
 ### **9. Logging Failures**
-⚠️ **TODO**: Centralized logging, log aggregation (see DOC-7)
+âš ï¸ **TODO**: Centralized logging, log aggregation (see DOC-7)
 
 ### **10. Server-Side Request Forgery (SSRF)**
-✅ **Mitigated**: Whitelist allowed URLs, validate external requests
+âœ… **Mitigated**: Whitelist allowed URLs, validate external requests
 
 ---
 
@@ -494,7 +494,7 @@ gh auth token delete
 gh auth login --scopes repo,workflow
 
 # 3. Update in secrets manager
-vault kv put autopr/prod github_token="new_token"
+vault kv put CodeFlow/prod github_token="new_token"
 
 # 4. Restart application
 kubectl rollout restart deployment/codeflow-engine
@@ -528,4 +528,4 @@ gh api /user/events | jq '.[] | select(.created_at > "2025-01-01")'
 **Last Updated**: 2025-01-20  
 **Next Review**: 2025-04-20  
 
-**Contact**: `security@autopr.dev`
+**Contact**: `security@codeflow.dev`

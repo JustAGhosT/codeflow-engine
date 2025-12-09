@@ -1,17 +1,17 @@
-# AutoPR Developer Experience
+﻿# CodeFlow Developer Experience
 
-Welcome to the AutoPR Developer Experience documentation! This guide covers all the tools and integrations designed to make AutoPR seamlessly integrated into your development workflow.
+Welcome to the CodeFlow Developer Experience documentation! This guide covers all the tools and integrations designed to make CodeFlow seamlessly integrated into your development workflow.
 
-## 🚀 Quick Start
+## ðŸš€ Quick Start
 
 ### Installation
 
 ```bash
-# Install AutoPR Engine with all developer tools
+# Install CodeFlow Engine with all developer tools
 pip install codeflow-engine[full]
 
 # Or install in development mode
-git clone https://github.com/autopr/codeflow-engine.git
+git clone https://github.com/CodeFlow/codeflow-engine.git
 cd codeflow-engine
 pip install -e .
 ```
@@ -23,109 +23,109 @@ pip install -e .
 3. **Git Hooks**: Automate quality checks on commits
 4. **Dashboard**: Monitor and configure via web interface
 
-## 📟 Command Line Interface (CLI)
+## ðŸ“Ÿ Command Line Interface (CLI)
 
-The AutoPR CLI provides powerful command-line tools for code quality management.
+The CodeFlow CLI provides powerful command-line tools for code quality management.
 
 ### Basic Usage
 
 ```bash
 # Check quality of specific files
-autopr check --files file1.py file2.py
+CodeFlow check --files file1.py file2.py
 
 # Check entire directory
-autopr check --directory ./src --mode comprehensive
+CodeFlow check --directory ./src --mode comprehensive
 
 # Split large files
-autopr split large_file.py --max-lines 100
+CodeFlow split large_file.py --max-lines 100
 
 # Install git hooks
-autopr hooks --install
+CodeFlow hooks --install
 
 # Start dashboard
-autopr dashboard --port 8080
+CodeFlow dashboard --port 8080
 ```
 
 ### Quality Check Commands
 
 ```bash
 # Ultra-fast mode (minimal checks)
-autopr check --mode ultra-fast --files *.py
+CodeFlow check --mode ultra-fast --files *.py
 
 # Fast mode (recommended for daily use)
-autopr check --mode fast --directory ./src
+CodeFlow check --mode fast --directory ./src
 
 # Smart mode (context-aware)
-autopr check --mode smart --files *.py --volume 500
+CodeFlow check --mode smart --files *.py --volume 500
 
 # Comprehensive mode (all tools)
-autopr check --mode comprehensive --directory ./src
+CodeFlow check --mode comprehensive --directory ./src
 
 # AI-enhanced mode (with AI analysis)
-autopr check --mode ai-enhanced --files *.py
+CodeFlow check --mode ai-enhanced --files *.py
 ```
 
 ### File Operations
 
 ```bash
 # Split large files into manageable components
-autopr split large_file.py --max-lines 100 --output-dir ./split
+CodeFlow split large_file.py --max-lines 100 --output-dir ./split
 
 # Dry run to see what would be split
-autopr split large_file.py --max-lines 100 --dry-run
+CodeFlow split large_file.py --max-lines 100 --dry-run
 
 # Split with custom function limits
-autopr split large_file.py --max-functions 5 --output-dir ./split
+CodeFlow split large_file.py --max-functions 5 --output-dir ./split
 ```
 
 ### Git Hooks Management
 
 ```bash
 # Install git hooks
-autopr hooks --install
+CodeFlow hooks --install
 
 # Install with custom configuration
-autopr hooks --install --config hooks_config.json
+CodeFlow hooks --install --config hooks_config.json
 
 # Uninstall git hooks
-autopr hooks --uninstall
+CodeFlow hooks --uninstall
 
 # Check hook status
-autopr hooks
+CodeFlow hooks
 ```
 
 ### Configuration
 
 ```bash
 # Validate configuration
-autopr config --file autopr_config.json
+CodeFlow config --file codeflow_config.json
 
 # Auto-fix configuration issues
-autopr config --file autopr_config.json --fix
+CodeFlow config --file codeflow_config.json --fix
 ```
 
-## 🔌 VS Code Extension
+## ðŸ”Œ VS Code Extension
 
-The AutoPR VS Code extension provides seamless integration with your development environment.
+The CodeFlow VS Code extension provides seamless integration with your development environment.
 
 ### Installation
 
 1. Open VS Code
 2. Go to Extensions (Ctrl+Shift+X)
-3. Search for "AutoPR"
+3. Search for "CodeFlow"
 4. Click Install
 
 ### Features
 
 #### Commands Available
 
-- **AutoPR: Run Quality Check** - Check current file or workspace
-- **AutoPR: Check Current File** - Quick check of active file
-- **AutoPR: Check Workspace** - Check entire workspace
-- **AutoPR: Split Large File** - Split current file
-- **AutoPR: Auto-Fix Issues** - Automatically fix detected issues
-- **AutoPR: Show Dashboard** - Open web dashboard
-- **AutoPR: Configure** - Open settings
+- **CodeFlow: Run Quality Check** - Check current file or workspace
+- **CodeFlow: Check Current File** - Quick check of active file
+- **CodeFlow: Check Workspace** - Check entire workspace
+- **CodeFlow: Split Large File** - Split current file
+- **CodeFlow: Auto-Fix Issues** - Automatically fix detected issues
+- **CodeFlow: Show Dashboard** - Open web dashboard
+- **CodeFlow: Configure** - Open settings
 
 #### Context Menu Integration
 
@@ -145,12 +145,12 @@ Right-click on files or in the editor to access:
 
 ```json
 {
-    "autopr.enabled": true,
-    "autopr.qualityMode": "fast",
-    "autopr.autoFixEnabled": false,
-    "autopr.showNotifications": true,
-    "autopr.pythonPath": "python",
-    "autopr.maxFileSize": 10000
+    "codeflow.enabled": true,
+    "codeflow.qualityMode": "fast",
+    "codeflow.autoFixEnabled": false,
+    "codeflow.showNotifications": true,
+    "codeflow.pythonPath": "python",
+    "codeflow.maxFileSize": 10000
 }
 ```
 
@@ -159,25 +159,25 @@ Right-click on files or in the editor to access:
 #### Quick File Check
 1. Open a Python file
 2. Press `Ctrl+Shift+P` (Cmd+Shift+P on Mac)
-3. Type "AutoPR: Check Current File"
+3. Type "CodeFlow: Check Current File"
 4. View results in Problems panel
 
 #### Auto-Fix Issues
 1. Right-click in editor
-2. Select "AutoPR: Auto-Fix Issues"
+2. Select "CodeFlow: Auto-Fix Issues"
 3. Review changes in diff view
 4. Apply fixes
 
 #### Split Large File
 1. Open a large file (>500 lines)
 2. Press `Ctrl+Shift+P`
-3. Type "AutoPR: Split Large File"
+3. Type "CodeFlow: Split Large File"
 4. Configure split parameters
 5. Review and confirm split
 
-## 🔗 Git Hooks
+## ðŸ”— Git Hooks
 
-AutoPR git hooks automate quality checks and ensure code quality standards.
+CodeFlow git hooks automate quality checks and ensure code quality standards.
 
 ### Available Hooks
 
@@ -201,10 +201,10 @@ AutoPR git hooks automate quality checks and ensure code quality standards.
 
 ```bash
 # Install all hooks
-autopr hooks --install
+CodeFlow hooks --install
 
 # Install with custom configuration
-autopr hooks --install --config my_hooks_config.json
+CodeFlow hooks --install --config my_hooks_config.json
 ```
 
 ### Configuration
@@ -232,14 +232,14 @@ Create `hooks_config.json`:
 # Automatically runs on git commit
 git add file.py
 git commit -m "feat: add new feature"
-# AutoPR runs quality checks before commit
+# CodeFlow runs quality checks before commit
 ```
 
 #### Post-commit Hook
 ```bash
 # Runs after successful commit
 git commit -m "feat: add new feature"
-# AutoPR collects metrics and updates history
+# CodeFlow collects metrics and updates history
 ```
 
 #### Commit-msg Hook
@@ -250,21 +250,21 @@ git commit -m "invalid message"
 # Expected: <type>(<scope>): <description>
 ```
 
-## 📊 Web Dashboard
+## ðŸ“Š Web Dashboard
 
-The AutoPR dashboard provides a web-based interface for monitoring and configuration.
+The CodeFlow dashboard provides a web-based interface for monitoring and configuration.
 
 ### Starting the Dashboard
 
 ```bash
 # Start with default settings
-autopr dashboard
+CodeFlow dashboard
 
 # Custom host and port
-autopr dashboard --host 0.0.0.0 --port 9000
+CodeFlow dashboard --host 0.0.0.0 --port 9000
 
 # Open browser automatically
-autopr dashboard --open-browser
+CodeFlow dashboard --open-browser
 ```
 
 ### Dashboard Features
@@ -278,7 +278,7 @@ autopr dashboard --open-browser
 #### Quick Actions
 - **Run Quality Check**: Execute checks from web interface
 - **Split Large File**: File splitting with visual feedback
-- **Configuration**: Manage AutoPR settings
+- **Configuration**: Manage CodeFlow settings
 - **Refresh Data**: Update metrics in real-time
 
 #### Activity History
@@ -341,11 +341,11 @@ curl -X POST http://localhost:8080/api/config \
   }'
 ```
 
-## 🔧 Configuration
+## ðŸ”§ Configuration
 
 ### Global Configuration
 
-Create `~/.autopr/config.json`:
+Create `~/.codeflow/config.json`:
 
 ```json
 {
@@ -376,7 +376,7 @@ Create `~/.autopr/config.json`:
 
 ### Project Configuration
 
-Create `autopr.yaml` in your project root:
+Create `codeflow.yaml` in your project root:
 
 ```yaml
 quality:
@@ -410,13 +410,13 @@ file_splitting:
   output_directory: ./split
 ```
 
-## 🚀 Integration Examples
+## ðŸš€ Integration Examples
 
 ### CI/CD Pipeline Integration
 
 ```yaml
 # GitHub Actions example
-name: AutoPR Quality Check
+name: CodeFlow Quality Check
 on: [push, pull_request]
 
 jobs:
@@ -428,10 +428,10 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - name: Install AutoPR
+      - name: Install CodeFlow
         run: pip install codeflow-engine[full]
       - name: Run quality check
-        run: autopr check --mode comprehensive --directory ./src
+        run: CodeFlow check --mode comprehensive --directory ./src
 ```
 
 ### Pre-commit Integration
@@ -441,9 +441,9 @@ jobs:
 repos:
   - repo: local
     hooks:
-      - id: autopr-quality-check
-        name: AutoPR Quality Check
-        entry: autopr check --mode fast --files
+      - id: codeflow-quality-check
+        name: CodeFlow Quality Check
+        entry: CodeFlow check --mode fast --files
         language: system
         types: [python]
         pass_filenames: true
@@ -454,26 +454,26 @@ repos:
 ```json
 // .vscode/settings.json
 {
-    "autopr.enabled": true,
-    "autopr.qualityMode": "smart",
-    "autopr.autoFixEnabled": true,
-    "autopr.showNotifications": true,
-    "autopr.pythonPath": "python",
-    "autopr.maxFileSize": 10000
+    "codeflow.enabled": true,
+    "codeflow.qualityMode": "smart",
+    "codeflow.autoFixEnabled": true,
+    "codeflow.showNotifications": true,
+    "codeflow.pythonPath": "python",
+    "codeflow.maxFileSize": 10000
 }
 ```
 
-## 🐛 Troubleshooting
+## ðŸ› Troubleshooting
 
 ### Common Issues
 
 #### CLI Not Found
 ```bash
-# Ensure AutoPR is installed
+# Ensure CodeFlow is installed
 pip install codeflow-engine[full]
 
 # Check installation
-which autopr
+which CodeFlow
 
 # Reinstall if needed
 pip uninstall codeflow-engine
@@ -482,7 +482,7 @@ pip install codeflow-engine[full]
 
 #### VS Code Extension Issues
 1. Check Python path in settings
-2. Ensure AutoPR CLI is accessible
+2. Ensure CodeFlow CLI is accessible
 3. Restart VS Code after installation
 4. Check Output panel for error messages
 
@@ -492,8 +492,8 @@ pip install codeflow-engine[full]
 ls -la .git/hooks/
 
 # Reinstall hooks
-autopr hooks --uninstall
-autopr hooks --install
+CodeFlow hooks --uninstall
+CodeFlow hooks --install
 
 # Check permissions
 chmod +x .git/hooks/pre-commit
@@ -505,7 +505,7 @@ chmod +x .git/hooks/pre-commit
 netstat -an | grep 8080
 
 # Try different port
-autopr dashboard --port 9000
+CodeFlow dashboard --port 9000
 
 # Check dependencies
 pip install flask flask-cors
@@ -513,22 +513,22 @@ pip install flask flask-cors
 
 ### Getting Help
 
-- **Documentation**: [https://autopr.dev/docs](https://autopr.dev/docs)
-- **Issues**: [GitHub Issues](https://github.com/autopr/codeflow-engine/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/autopr/codeflow-engine/discussions)
-- **Discord**: [AutoPR Community](https://discord.gg/autopr)
+- **Documentation**: [https://codeflow.dev/docs](https://codeflow.dev/docs)
+- **Issues**: [GitHub Issues](https://github.com/CodeFlow/codeflow-engine/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/CodeFlow/codeflow-engine/discussions)
+- **Discord**: [CodeFlow Community](https://discord.gg/CodeFlow)
 
-## 🎯 Best Practices
+## ðŸŽ¯ Best Practices
 
 ### Development Workflow
 
 1. **Daily Development**:
    - Use VS Code extension for real-time feedback
-   - Run `autopr check --mode fast` before commits
+   - Run `CodeFlow check --mode fast` before commits
    - Enable auto-fix for common issues
 
 2. **Code Reviews**:
-   - Use `autopr check --mode comprehensive` for thorough analysis
+   - Use `CodeFlow check --mode comprehensive` for thorough analysis
    - Review AI-enhanced suggestions
    - Check file splitting recommendations
 
@@ -539,8 +539,8 @@ pip install flask flask-cors
 
 ### Configuration Management
 
-1. **Global Settings**: Use `~/.autopr/config.json` for personal preferences
-2. **Project Settings**: Use `autopr.yaml` for project-specific configuration
+1. **Global Settings**: Use `~/.codeflow/config.json` for personal preferences
+2. **Project Settings**: Use `codeflow.yaml` for project-specific configuration
 3. **Team Standards**: Share configuration files in version control
 
 ### Performance Optimization
@@ -552,4 +552,4 @@ pip install flask flask-cors
 
 ---
 
-*For more information, visit [https://autopr.dev](https://autopr.dev) or join our [Discord community](https://discord.gg/autopr).*
+*For more information, visit [https://codeflow.dev](https://codeflow.dev) or join our [Discord community](https://discord.gg/CodeFlow).*

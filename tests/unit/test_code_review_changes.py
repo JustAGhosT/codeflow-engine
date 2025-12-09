@@ -1,4 +1,4 @@
-"""
+﻿"""
 Unit tests for code review changes.
 
 Tests for bug fixes, refactorings, and enhancements implemented in the comprehensive code review.
@@ -11,34 +11,34 @@ from pathlib import Path
 # Test Bug Fix #1: IntegrationRegistry Import
 def test_integration_registry_import():
     """Test that IntegrationRegistry can be imported from engine module."""
-    from codeflow_engine.engine import AutoPREngine
+    from codeflow_engine.engine import CodeFlowEngine
     from codeflow_engine.integrations.registry import IntegrationRegistry
     
     # Should not raise ImportError
     assert IntegrationRegistry is not None
 
 
-# Test Bug Fix #4: AutoPRPermissionError
+# Test Bug Fix #4: CodeFlowPermissionError
 def test_permission_error_renamed():
-    """Test that AutoPRPermissionError exists and doesn't shadow built-in."""
-    from codeflow_engine.exceptions import AutoPRPermissionError
+    """Test that CodeFlowPermissionError exists and doesn't shadow built-in."""
+    from codeflow_engine.exceptions import CodeFlowPermissionError
     
     # Custom exception should exist
-    assert AutoPRPermissionError is not None
+    assert CodeFlowPermissionError is not None
     
     # Built-in PermissionError should still be accessible
     assert PermissionError is not None
     
     # They should be different classes
-    assert AutoPRPermissionError is not PermissionError
+    assert CodeFlowPermissionError is not PermissionError
 
 
 # Test Bug Fix #5: Type conversions in get_provider_config
 def test_provider_config_types():
     """Test that get_provider_config returns proper types."""
-    from codeflow_engine.config.settings import AutoPRSettings, LLMProvider
+    from codeflow_engine.config.settings import CodeFlowSettings, LLMProvider
     
-    settings = AutoPRSettings()
+    settings = CodeFlowSettings()
     config = settings.get_provider_config(LLMProvider.OPENAI)
     
     # Verify types are preserved (not converted to strings)
@@ -51,9 +51,9 @@ def test_provider_config_types():
 # Test Refactoring #2: Provider configuration consolidation
 def test_get_provider_specific_config():
     """Test the new _get_provider_specific_config helper method."""
-    from codeflow_engine.config.settings import AutoPRSettings, LLMProvider
+    from codeflow_engine.config.settings import CodeFlowSettings, LLMProvider
     
-    settings = AutoPRSettings()
+    settings = CodeFlowSettings()
     
     # Test that the helper method works for different providers
     openai_config = settings._get_provider_specific_config(LLMProvider.OPENAI)
@@ -70,9 +70,9 @@ def test_get_provider_specific_config():
 # Test Refactoring #3: Split initialization helpers
 def test_get_config_file_paths():
     """Test _get_config_file_paths helper method."""
-    from codeflow_engine.config.settings import AutoPRSettings
+    from codeflow_engine.config.settings import CodeFlowSettings
     
-    settings = AutoPRSettings()
+    settings = CodeFlowSettings()
     paths = settings._get_config_file_paths()
     
     # Should return a list of Path objects
@@ -82,17 +82,17 @@ def test_get_config_file_paths():
     
     # Should include expected paths
     path_strs = [str(p) for p in paths]
-    assert any("autopr.yaml" in p for p in path_strs)
-    assert any("autopr.yml" in p for p in path_strs)
+    assert any("codeflow.yaml" in p for p in path_strs)
+    assert any("codeflow.yml" in p for p in path_strs)
 
 
 def test_load_yaml_config():
     """Test _load_yaml_config helper method."""
-    from codeflow_engine.config.settings import AutoPRSettings
+    from codeflow_engine.config.settings import CodeFlowSettings
     import tempfile
     import yaml
     
-    settings = AutoPRSettings()
+    settings = CodeFlowSettings()
     
     # Test with valid YAML file
     with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
@@ -125,12 +125,12 @@ def test_max_workflow_history_constant():
 def test_handle_operation_error():
     """Test handle_operation_error helper function."""
     from codeflow_engine.engine import handle_operation_error
-    from codeflow_engine.exceptions import AutoPRException
+    from codeflow_engine.exceptions import CodeFlowException
     
     test_exception = ValueError("Test error")
     
     # Test that it raises the correct exception type
-    with pytest.raises(AutoPRException) as exc_info:
+    with pytest.raises(CodeFlowException) as exc_info:
         handle_operation_error("test_operation", test_exception)
     
     assert "test_operation failed" in str(exc_info.value)
@@ -206,15 +206,15 @@ def test_create_action_instance_helper():
 # Test Enhancement #2: Async context manager
 @pytest.mark.asyncio
 async def test_async_context_manager():
-    """Test async context manager support for AutoPREngine."""
-    from codeflow_engine.engine import AutoPREngine
-    from codeflow_engine.config import AutoPRConfig
+    """Test async context manager support for CodeFlowEngine."""
+    from codeflow_engine.engine import CodeFlowEngine
+    from codeflow_engine.config import CodeFlowConfig
     
-    config = AutoPRConfig()
+    config = CodeFlowConfig()
     config.github_token = "test_token"
     config.openai_api_key = "test_key"
     
-    engine = AutoPREngine(config)
+    engine = CodeFlowEngine(config)
     
     # Mock the methods on the instance
     with patch.object(engine, 'start', new_callable=AsyncMock) as mock_start, \
@@ -231,11 +231,11 @@ async def test_async_context_manager():
 @pytest.mark.asyncio
 async def test_async_context_manager_aenter():
     """Test __aenter__ method."""
-    from codeflow_engine.engine import AutoPREngine
-    from codeflow_engine.config import AutoPRConfig
+    from codeflow_engine.engine import CodeFlowEngine
+    from codeflow_engine.config import CodeFlowConfig
     
-    config = AutoPRConfig()
-    engine = AutoPREngine(config)
+    config = CodeFlowConfig()
+    engine = CodeFlowEngine(config)
     
     with patch.object(engine, 'start', new_callable=AsyncMock) as mock_start:
         result = await engine.__aenter__()
@@ -246,11 +246,11 @@ async def test_async_context_manager_aenter():
 @pytest.mark.asyncio
 async def test_async_context_manager_aexit():
     """Test __aexit__ method."""
-    from codeflow_engine.engine import AutoPREngine
-    from codeflow_engine.config import AutoPRConfig
+    from codeflow_engine.engine import CodeFlowEngine
+    from codeflow_engine.config import CodeFlowConfig
     
-    config = AutoPRConfig()
-    engine = AutoPREngine(config)
+    config = CodeFlowConfig()
+    engine = CodeFlowEngine(config)
     
     with patch.object(engine, 'stop', new_callable=AsyncMock) as mock_stop:
         await engine.__aexit__(None, None, None)
@@ -261,9 +261,9 @@ async def test_async_context_manager_aexit():
 def test_workflow_metrics_initialization():
     """Test that workflow metrics are properly initialized."""
     from codeflow_engine.workflows.engine import WorkflowEngine
-    from codeflow_engine.config import AutoPRConfig
+    from codeflow_engine.config import CodeFlowConfig
     
-    config = AutoPRConfig()
+    config = CodeFlowConfig()
     engine = WorkflowEngine(config)
     
     # Verify metrics dictionary is initialized
@@ -281,9 +281,9 @@ def test_workflow_metrics_initialization():
 async def test_update_metrics():
     """Test _update_metrics method."""
     from codeflow_engine.workflows.engine import WorkflowEngine
-    from codeflow_engine.config import AutoPRConfig
+    from codeflow_engine.config import CodeFlowConfig
     
-    config = AutoPRConfig()
+    config = CodeFlowConfig()
     engine = WorkflowEngine(config)
     
     # Test updating metrics for success
@@ -307,9 +307,9 @@ async def test_update_metrics():
 async def test_get_metrics():
     """Test get_metrics method."""
     from codeflow_engine.workflows.engine import WorkflowEngine
-    from codeflow_engine.config import AutoPRConfig
+    from codeflow_engine.config import CodeFlowConfig
     
-    config = AutoPRConfig()
+    config = CodeFlowConfig()
     engine = WorkflowEngine(config)
     
     # Add some test data
@@ -333,9 +333,9 @@ async def test_get_metrics():
 # Test Enhancement #4: Exponential backoff retry logic
 def test_retry_configuration():
     """Test that retry configuration is properly set."""
-    from codeflow_engine.config import AutoPRConfig
+    from codeflow_engine.config import CodeFlowConfig
     
-    config = AutoPRConfig()
+    config = CodeFlowConfig()
     
     # Verify retry configuration exists
     assert hasattr(config, 'workflow_retry_attempts')
@@ -350,9 +350,9 @@ def test_retry_configuration():
 async def test_exponential_backoff_calculation():
     """Test that exponential backoff retry configuration is available."""
     from codeflow_engine.workflows.engine import WorkflowEngine
-    from codeflow_engine.config import AutoPRConfig
+    from codeflow_engine.config import CodeFlowConfig
     
-    config = AutoPRConfig()
+    config = CodeFlowConfig()
     config.workflow_retry_attempts = 3
     config.workflow_retry_delay = 2
     
@@ -373,14 +373,14 @@ async def test_exponential_backoff_calculation():
 @pytest.mark.asyncio
 async def test_startup_validation():
     """Test that startup configuration validation is performed."""
-    from codeflow_engine.engine import AutoPREngine
-    from codeflow_engine.config import AutoPRConfig
+    from codeflow_engine.engine import CodeFlowEngine
+    from codeflow_engine.config import CodeFlowConfig
     from codeflow_engine.exceptions import ConfigurationError
     
     # Create config
-    config = AutoPRConfig()
+    config = CodeFlowConfig()
     
-    engine = AutoPREngine(config)
+    engine = CodeFlowEngine(config)
     
     # Mock config.validate() to return False
     with patch.object(config, 'validate', return_value=False):
@@ -393,10 +393,10 @@ async def test_startup_validation():
 
 def test_config_validate_method():
     """Test the config.validate() method."""
-    from codeflow_engine.config import AutoPRConfig
+    from codeflow_engine.config import CodeFlowConfig
     
     # Create config - validate should work with defaults
-    config = AutoPRConfig()
+    config = CodeFlowConfig()
     
     # Test that validate method exists
     assert hasattr(config, 'validate')
@@ -412,17 +412,17 @@ def test_config_validate_method():
 @pytest.mark.asyncio
 async def test_comprehensive_integration():
     """Integration test covering multiple enhancements."""
-    from codeflow_engine.engine import AutoPREngine
-    from codeflow_engine.config import AutoPRConfig
+    from codeflow_engine.engine import CodeFlowEngine
+    from codeflow_engine.config import CodeFlowConfig
     from codeflow_engine.workflows.engine import WorkflowEngine
     
     # Create valid config
-    config = AutoPRConfig()
+    config = CodeFlowConfig()
     config.github_token = "test_token"
     config.openai_api_key = "test_key"
     
     # Test that engine can be created with all enhancements
-    engine = AutoPREngine(config)
+    engine = CodeFlowEngine(config)
     
     # Verify components are initialized
     assert engine.config is not None

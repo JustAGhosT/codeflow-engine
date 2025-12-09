@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "phind",
   "name": "Phind",
   "description": "AI-powered search engine and code assistant specialized for developers",
@@ -12,7 +12,7 @@
   "type": "ai",
   "source": "official",
   "priority": 52,
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "vendor": "Phind",
   "website": "https://www.phind.com/",
   "pricing_model": "freemium",

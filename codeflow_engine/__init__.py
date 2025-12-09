@@ -1,5 +1,5 @@
 """
-AutoPR Engine - Automated Code Review and Quality Management System
+CodeFlow Engine - Automated Code Review and Quality Management System
 
 This package provides AI-powered code analysis, automated fixes, and quality assurance workflows.
 """
@@ -12,9 +12,9 @@ from codeflow_engine.actions.registry import ActionRegistry
 # from codeflow_engine.agents.agents import AgentManager  # Not implemented yet
 from codeflow_engine.ai.core.base import LLMProvider
 from codeflow_engine.ai.core.providers.manager import LLMProviderManager
-from codeflow_engine.config import AutoPRConfig
-from codeflow_engine.engine import AutoPREngine
-from codeflow_engine.exceptions import (AutoPRException, ConfigurationError,
+from codeflow_engine.config import CodeFlowConfig
+from codeflow_engine.engine import CodeFlowEngine
+from codeflow_engine.exceptions import (CodeFlowException, ConfigurationError,
                                IntegrationError)
 from codeflow_engine.integrations.base import Integration
 # from codeflow_engine.integrations.bitbucket.bitbucket_integration import \
@@ -49,7 +49,7 @@ __version__ = "1.0.1"
 # Public API exports
 __all__ = [
     "ActionRegistry",
-    "AutoPREngine",
+    "CodeFlowEngine",
     "MetricsCollector",
     "EnterpriseAuthorizationManager",
     "LLMProvider",
@@ -60,7 +60,7 @@ __all__ = [
 
 
 def configure_logging(level: str = "INFO", *, format_json: bool = False) -> None:
-    """Configure default logging for AutoPR Engine."""
+    """Configure default logging for CodeFlow Engine."""
 
     if format_json and STRUCTLOG_AVAILABLE and structlog_module:
         # Structured JSON logging
@@ -86,6 +86,6 @@ def configure_logging(level: str = "INFO", *, format_json: bool = False) -> None
         )
 
 
-log_level = os.getenv("AUTOPR_LOG_LEVEL", "INFO")
-json_logging = os.getenv("AUTOPR_JSON_LOGGING", "false").lower() == "true"
+log_level = os.getenv("CODEFLOW_LOG_LEVEL", "INFO")
+json_logging = os.getenv("CODEFLOW_JSON_LOGGING", "false").lower() == "true"
 configure_logging(level=log_level, format_json=json_logging)

@@ -1,7 +1,7 @@
-# AutoPR Engine Implementation Tasks Configuration
+﻿# CodeFlow Engine Implementation Tasks Configuration
 # This file defines the implementation roadmap and task definitions
-# for the AutoPR Engine project phases
-# NOT an Ansible playbook - this is a custom AutoPR Engine configuration file
+# for the CodeFlow Engine project phases
+# NOT an Ansible playbook - this is a custom CodeFlow Engine configuration file
 # File type: Custom YAML configuration (not Ansible)
 # Schema: None (custom format)
 immediate_priority:
@@ -13,8 +13,8 @@ immediate_priority:
     estimated_hours: 4
     dependencies: []
     files_created:
-      - "autopr/monitoring/sentry_config.py"
-      - "autopr/monitoring/__init__.py"
+      - "CodeFlow/monitoring/sentry_config.py"
+      - "CodeFlow/monitoring/__init__.py"
       - "requirements.txt"
     packages_required:
       - "sentry-sdk[fastapi]>=1.32.0"
@@ -27,9 +27,9 @@ immediate_priority:
     estimated_hours: 3
     dependencies: []
     files_created:
-      - "autopr/logging/structured_logger.py"
-      - "autopr/logging/correlation.py"
-      - "autopr/logging/__init__.py"
+      - "CodeFlow/logging/structured_logger.py"
+      - "CodeFlow/logging/correlation.py"
+      - "CodeFlow/logging/__init__.py"
     packages_required:
       - "structlog>=23.1.0"
       - "python-json-logger>=2.0.7"
@@ -42,10 +42,10 @@ immediate_priority:
     estimated_hours: 6
     dependencies: []
     files_created:
-      - "autopr/caching/redis_cache.py"
-      - "autopr/caching/cache_manager.py"
-      - "autopr/caching/decorators.py"
-      - "autopr/caching/__init__.py"
+      - "CodeFlow/caching/redis_cache.py"
+      - "CodeFlow/caching/cache_manager.py"
+      - "CodeFlow/caching/decorators.py"
+      - "CodeFlow/caching/__init__.py"
     packages_required:
       - "redis>=4.6.0"
       - "aioredis>=2.0.1"
@@ -58,9 +58,9 @@ immediate_priority:
     estimated_hours: 4
     dependencies: []
     files_created:
-      - "autopr/health/health_checks.py"
-      - "autopr/health/system_monitor.py"
-      - "autopr/health/__init__.py"
+      - "CodeFlow/health/health_checks.py"
+      - "CodeFlow/health/system_monitor.py"
+      - "CodeFlow/health/__init__.py"
     packages_required:
       - "psutil>=5.9.0"
 
@@ -72,9 +72,9 @@ immediate_priority:
     estimated_hours: 5
     dependencies: []
     files_created:
-      - "autopr/resilience/circuit_breaker.py"
-      - "autopr/resilience/retry_policies.py"
-      - "autopr/resilience/__init__.py"
+      - "CodeFlow/resilience/circuit_breaker.py"
+      - "CodeFlow/resilience/retry_policies.py"
+      - "CodeFlow/resilience/__init__.py"
     packages_required:
       - "tenacity>=8.2.0"
 
@@ -87,10 +87,10 @@ medium_priority:
     estimated_hours: 8
     dependencies: ["implement_structured_logging"]
     files_created:
-      - "autopr/database/postgresql.py"
-      - "autopr/database/migrations/"
-      - "autopr/database/models.py"
-      - "autopr/database/__init__.py"
+      - "CodeFlow/database/postgresql.py"
+      - "CodeFlow/database/migrations/"
+      - "CodeFlow/database/models.py"
+      - "CodeFlow/database/__init__.py"
     packages_required:
       - "asyncpg>=0.30.0"
       - "alembic>=1.12.0"
@@ -103,9 +103,9 @@ medium_priority:
     estimated_hours: 5
     dependencies: ["create_health_checks"]
     files_created:
-      - "autopr/metrics/prometheus_metrics.py"
-      - "autopr/metrics/custom_metrics.py"
-      - "autopr/metrics/__init__.py"
+      - "CodeFlow/metrics/prometheus_metrics.py"
+      - "CodeFlow/metrics/custom_metrics.py"
+      - "CodeFlow/metrics/__init__.py"
     packages_required:
       - "prometheus-client>=0.17.0"
 
@@ -117,9 +117,9 @@ medium_priority:
     estimated_hours: 6
     dependencies: ["setup_postgresql_integration"]
     files_created:
-      - "autopr/auth/oauth2.py"
-      - "autopr/auth/providers.py"
-      - "autopr/auth/__init__.py"
+      - "CodeFlow/auth/oauth2.py"
+      - "CodeFlow/auth/providers.py"
+      - "CodeFlow/auth/__init__.py"
     packages_required:
       - "authlib>=1.2.0"
       - "python-jose>=3.3.0"
@@ -132,9 +132,9 @@ medium_priority:
     estimated_hours: 8
     dependencies: ["setup_redis_caching", "implement_basic_circuit_breakers"]
     files_created:
-      - "autopr/ai/routing/llm_router.py"
-      - "autopr/ai/routing/load_balancer.py"
-      - "autopr/ai/routing/__init__.py"
+      - "CodeFlow/ai/routing/llm_router.py"
+      - "CodeFlow/ai/routing/load_balancer.py"
+      - "CodeFlow/ai/routing/__init__.py"
     packages_required:
       - "aiohttp>=3.8.0"
 
@@ -164,10 +164,10 @@ strategic_priority:
     estimated_hours: 15
     dependencies: ["setup_postgresql_integration", "implement_advanced_llm_routing"]
     files_created:
-      - "autopr/ai/rag/vector_store.py"
-      - "autopr/ai/rag/embeddings.py"
-      - "autopr/ai/rag/retrieval.py"
-      - "autopr/ai/rag/__init__.py"
+      - "CodeFlow/ai/rag/vector_store.py"
+      - "CodeFlow/ai/rag/embeddings.py"
+      - "CodeFlow/ai/rag/retrieval.py"
+      - "CodeFlow/ai/rag/__init__.py"
     packages_required:
       - "chromadb>=0.4.0"
       - "sentence-transformers>=2.2.0"
@@ -180,10 +180,10 @@ strategic_priority:
     estimated_hours: 12
     dependencies: ["implement_prometheus_metrics", "setup_postgresql_integration"]
     files_created:
-      - "autopr/dashboard/analytics.py"
-      - "autopr/dashboard/charts.py"
-      - "autopr/dashboard/static/"
-      - "autopr/dashboard/__init__.py"
+      - "CodeFlow/dashboard/analytics.py"
+      - "CodeFlow/dashboard/charts.py"
+      - "CodeFlow/dashboard/static/"
+      - "CodeFlow/dashboard/__init__.py"
     packages_required:
       - "plotly>=5.15.0"
       - "dash>=2.12.0"
@@ -196,10 +196,10 @@ strategic_priority:
     estimated_hours: 20
     dependencies: ["implement_rag_system", "create_comprehensive_testing"]
     files_created:
-      - "autopr/ai/training/fine_tuning.py"
-      - "autopr/ai/training/data_prep.py"
-      - "autopr/ai/training/evaluation.py"
-      - "autopr/ai/training/__init__.py"
+      - "CodeFlow/ai/training/fine_tuning.py"
+      - "CodeFlow/ai/training/data_prep.py"
+      - "CodeFlow/ai/training/evaluation.py"
+      - "CodeFlow/ai/training/__init__.py"
     packages_required:
       - "transformers>=4.30.0"
       - "datasets>=2.13.0"

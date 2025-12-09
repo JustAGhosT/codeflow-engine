@@ -1,7 +1,7 @@
-{
+﻿{
   "folders": [
     {
-      "name": "AutoPR Engine",
+      "name": "CODEFLOW Engine",
       "path": "."
     }
   ],
@@ -93,12 +93,12 @@
         "apiToken": "development"
       },
       "staging": {
-        "baseUrl": "https://staging-autopr.justaghost.com",
-        "apiToken": "{{$dotenv AUTOPR_API_TOKEN}}"
+        "baseUrl": "https://staging-codeflow.justaghost.com",
+        "apiToken": "{{$dotenv CODEFLOW_API_TOKEN}}"
       },
       "production": {
-        "baseUrl": "https://autopr.justaghost.com",
-        "apiToken": "{{$dotenv AUTOPR_PROD_API_TOKEN}}"
+        "baseUrl": "https://codeflow.justaghost.com",
+        "apiToken": "{{$dotenv CODEFLOW_PROD_API_TOKEN}}"
       }
     },
     "cSpell.words": [
@@ -130,7 +130,7 @@
       {
         "label": "Run Tests",
         "type": "shell",
-        "command": "pytest tests/ -v --cov=autopr --cov-report=xml --cov-report=html",
+        "command": "pytest tests/ -v --cov=CODEFLOW --cov-report=xml --cov-report=html",
         "group": "test",
         "presentation": {
           "echo": true,
@@ -154,7 +154,7 @@
       {
         "label": "Lint Code",
         "type": "shell",
-        "command": "flake8 . && mypy autopr/",
+        "command": "flake8 . && mypy CODEFLOW/",
         "group": "test",
         "presentation": {
           "echo": true,
@@ -166,7 +166,7 @@
       {
         "label": "Security Scan",
         "type": "shell",
-        "command": "bandit -r autopr/ && safety check",
+        "command": "bandit -r CODEFLOW/ && safety check",
         "group": "test",
         "presentation": {
           "echo": true,
@@ -178,7 +178,7 @@
       {
         "label": "Start Development Server",
         "type": "shell",
-        "command": "python -m autopr.server --reload --debug",
+        "command": "python -m codeflow.server --reload --debug",
         "group": "build",
         "presentation": {
           "echo": true,
@@ -191,7 +191,7 @@
       {
         "label": "Docker Build",
         "type": "shell",
-        "command": "docker build -t autopr-engine:dev .",
+        "command": "docker build -t codeflow-engine:dev .",
         "group": "build",
         "presentation": {
           "echo": true,
@@ -218,23 +218,23 @@
     "version": "0.2.0",
     "configurations": [
       {
-        "name": "AutoPR Engine Server",
+        "name": "CODEFLOW Engine Server",
         "type": "python",
         "request": "launch",
-        "program": "${workspaceFolder}/autopr/server.py",
+        "program": "${workspaceFolder}/CODEFLOW/server.py",
         "args": ["--debug", "--reload"],
         "console": "integratedTerminal",
         "env": {
           "PYTHONPATH": "${workspaceFolder}",
-          "AUTOPR_DEBUG": "true"
+          "CODEFLOW_DEBUG": "true"
         },
         "envFile": "${workspaceFolder}/.env"
       },
       {
-        "name": "AutoPR CLI",
+        "name": "CODEFLOW CLI",
         "type": "python",
         "request": "launch",
-        "program": "${workspaceFolder}/autopr/cli.py",
+        "program": "${workspaceFolder}/CODEFLOW/cli.py",
         "args": ["--help"],
         "console": "integratedTerminal",
         "env": {

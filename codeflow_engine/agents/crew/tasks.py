@@ -1,4 +1,4 @@
-"""Task creation and summary generation for the AutoPR Agent Framework."""
+﻿"""Task creation and summary generation for the CODEFLOW Agent Framework."""
 
 import os
 from pathlib import Path
@@ -182,9 +182,9 @@ def create_linting_task(repo_path: str | Path, context: dict[str, Any], agent: A
     # Determine autofix behavior based on volume with env-based override
     default_autofix_threshold = 600
     auto_fix = volume >= default_autofix_threshold
-    if os.getenv("AUTOPR_ENABLE_AUTOFIX", "0") in {"1", "true", "True"}:
+    if os.getenv("CODEFLOW_ENABLE_AUTOFIX", "0") in {"1", "true", "True"}:
         try:
-            min_vol = int(os.getenv("AUTOPR_AUTOFIX_MIN_VOLUME", "0"))
+            min_vol = int(os.getenv("CODEFLOW_AUTOFIX_MIN_VOLUME", "0"))
         except Exception:
             min_vol = 0
         auto_fix = volume >= min_vol

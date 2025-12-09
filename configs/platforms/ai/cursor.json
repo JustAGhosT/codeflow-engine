@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "cursor",
   "name": "Cursor",
   "description": "AI-first code editor with built-in pair programming and intelligent code assistance",
@@ -12,7 +12,7 @@
   "type": "ai",
   "source": "official",
   "priority": 55,
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "vendor": "Cursor",
   "website": "https://www.cursor.sh",
   "pricing_model": "freemium",

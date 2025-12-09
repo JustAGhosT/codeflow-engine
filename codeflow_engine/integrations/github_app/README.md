@@ -1,10 +1,10 @@
-# GitHub App Integration
+﻿# GitHub App Integration
 
-One-click installation and automatic secret configuration for AutoPR.
+One-click installation and automatic secret configuration for codeflow.
 
 ## Features
 
-- **One-click installation** - Install AutoPR to repositories with a single click
+- **One-click installation** - Install CodeFlow to repositories with a single click
 - **Automatic secret configuration** - Secrets are configured automatically during installation
 - **OAuth flow** - Secure GitHub App authentication
 - **Webhook handling** - Receives and processes GitHub App events
@@ -27,7 +27,7 @@ GITHUB_APP_CLIENT_SECRET=your_client_secret
 GITHUB_APP_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----"
 GITHUB_WEBHOOK_SECRET=your_webhook_secret
 GITHUB_APP_REDIRECT_URI=https://your-app.azurewebsites.net/api/github-app/callback
-GITHUB_APP_SLUG=autopr  # Your GitHub App slug
+GITHUB_APP_SLUG=CodeFlow  # Your GitHub App slug
 
 # Site Configuration
 NEXT_PUBLIC_SITE_URL=https://your-app.azurewebsites.net
@@ -60,7 +60,7 @@ Create a separate FastAPI app for GitHub App endpoints:
 
 ```python
 from fastapi import FastAPI
-from autopr.integrations.github_app import (
+from codeflow.integrations.github_app import (
     install_router,
     callback_router,
     webhook_router,
@@ -91,12 +91,12 @@ Convert the FastAPI routers to Flask blueprints if you prefer Flask-only.
 
 ## Usage
 
-1. User clicks "Install" button → Redirects to `/api/github-app/install`
-2. GitHub OAuth flow → User authorizes
-3. Callback → `/api/github-app/callback` receives code
-4. Webhook → GitHub sends installation event to `/api/github-app/webhook`
-5. Auto-config → Secrets are configured automatically
-6. Success → User redirected to `/setup` page
+1. User clicks "Install" button â†’ Redirects to `/api/github-app/install`
+2. GitHub OAuth flow â†’ User authorizes
+3. Callback â†’ `/api/github-app/callback` receives code
+4. Webhook â†’ GitHub sends installation event to `/api/github-app/webhook`
+5. Auto-config â†’ Secrets are configured automatically
+6. Success â†’ User redirected to `/setup` page
 
 ## Security
 

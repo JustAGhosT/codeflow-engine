@@ -1,10 +1,10 @@
-# AutoPR Engine Best Practices
+﻿# CodeFlow Engine Best Practices
 ## Engineering Standards & Guidelines
 
 **Status:** PROPOSED  
 **Version:** 1.0  
 **Date:** 2025-11-22  
-**Purpose:** Comprehensive best practices for AutoPR Engine development
+**Purpose:** Comprehensive best practices for CodeFlow Engine development
 
 ---
 
@@ -31,14 +31,14 @@
 Follow feature-based organization:
 
 ```
-autopr/
-├── feature_name/
-│   ├── __init__.py          # Public API
-│   ├── models.py            # Data models
-│   ├── service.py           # Business logic
-│   ├── repository.py        # Data access
-│   ├── schemas.py           # API schemas (Pydantic)
-│   └── routes.py            # API endpoints
+CodeFlow/
+â”œâ”€â”€ feature_name/
+â”‚   â”œâ”€â”€ __init__.py          # Public API
+â”‚   â”œâ”€â”€ models.py            # Data models
+â”‚   â”œâ”€â”€ service.py           # Business logic
+â”‚   â”œâ”€â”€ repository.py        # Data access
+â”‚   â”œâ”€â”€ schemas.py           # API schemas (Pydantic)
+â”‚   â””â”€â”€ routes.py            # API endpoints
 ```
 
 ### Dependency Injection
@@ -135,7 +135,7 @@ async def fetch_data(url: str) -> dict:
 
 # Bad: Blocking I/O in async function
 async def fetch_data(url: str) -> dict:
-    response = requests.get(url)  # ❌ Blocking!
+    response = requests.get(url)  # âŒ Blocking!
     return response.json()
 ```
 
@@ -145,7 +145,7 @@ Use custom exceptions:
 
 ```python
 # Define custom exceptions
-class WorkflowError(AutoPRException):
+class WorkflowError(CodeFlowException):
     """Workflow-related errors."""
 
 # Use in code
@@ -177,7 +177,7 @@ logger.info(
 )
 
 # Bad: String formatting
-logger.info(f"Workflow {workflow.id} took {duration}s")  # ❌
+logger.info(f"Workflow {workflow.id} took {duration}s")  # âŒ
 ```
 
 ---
@@ -360,7 +360,7 @@ from codeflow_engine.config import settings
 github_token = settings.github_token
 
 # Bad: Hardcoded secrets
-github_token = "ghp_xxxxxxxxxxxx"  # ❌ Never do this!
+github_token = "ghp_xxxxxxxxxxxx"  # âŒ Never do this!
 ```
 
 ### SQL Injection Prevention
@@ -374,7 +374,7 @@ workflow = await session.execute(
 )
 
 # Bad: String formatting
-query = f"SELECT * FROM workflows WHERE id = {workflow_id}"  # ❌
+query = f"SELECT * FROM workflows WHERE id = {workflow_id}"  # âŒ
 ```
 
 ### Authentication & Authorization
@@ -433,15 +433,15 @@ async def test_workflow_execution_success():
 
 ```
 tests/
-├── unit/              # Unit tests (fast, isolated)
-│   ├── workflows/
-│   └── integrations/
-├── integration/       # Integration tests
-│   ├── api/
-│   └── database/
-├── e2e/              # End-to-end tests
-└── fixtures/         # Shared fixtures
-    └── conftest.py
+â”œâ”€â”€ unit/              # Unit tests (fast, isolated)
+â”‚   â”œâ”€â”€ workflows/
+â”‚   â””â”€â”€ integrations/
+â”œâ”€â”€ integration/       # Integration tests
+â”‚   â”œâ”€â”€ api/
+â”‚   â””â”€â”€ database/
+â”œâ”€â”€ e2e/              # End-to-end tests
+â””â”€â”€ fixtures/         # Shared fixtures
+    â””â”€â”€ conftest.py
 ```
 
 ### Mocking
@@ -454,7 +454,7 @@ async def test_workflow_with_mocked_llm():
     mock_llm = AsyncMock()
     mock_llm.generate.return_value = "Mocked response"
     
-    with patch('autopr.ai.providers.openai.OpenAIProvider', return_value=mock_llm):
+    with patch('codeflow.ai.providers.openai.OpenAIProvider', return_value=mock_llm):
         result = await execute_workflow_with_llm()
     
     assert result.contains("Mocked response")
@@ -563,7 +563,7 @@ workflows = await session.execute(
 # Bad: N+1 query
 workflows = await session.execute(select(Workflow))
 for workflow in workflows:
-    executions = workflow.executions  # Separate query each time! ❌
+    executions = workflow.executions  # Separate query each time! âŒ
 ```
 
 ### Caching
@@ -612,7 +612,7 @@ async def process_multiple_workflows(workflow_ids: List[int]):
 async def process_multiple_workflows(workflow_ids: List[int]):
     results = []
     for wid in workflow_ids:
-        result = await process_workflow(wid)  # ❌ Sequential!
+        result = await process_workflow(wid)  # âŒ Sequential!
         results.append(result)
     return results
 ```
@@ -624,7 +624,7 @@ async def process_multiple_workflows(workflow_ids: List[int]):
 ### WCAG 2.1 AA Compliance
 
 **Required:**
-- Color contrast ≥ 4.5:1 for normal text
+- Color contrast â‰¥ 4.5:1 for normal text
 - All functionality keyboard accessible
 - ARIA attributes where needed
 - Focus indicators visible
@@ -648,9 +648,9 @@ async def process_multiple_workflows(workflow_ids: List[int]):
 </main>
 
 // Bad: Divs for everything
-<div className="nav">  {/* ❌ Use <nav> */}
+<div className="nav">  {/* âŒ Use <nav> */}
   <div className="nav-item">
-    <span onClick={...}>Home</span>  {/* ❌ Use <a> or <button> */}
+    <span onClick={...}>Home</span>  {/* âŒ Use <a> or <button> */}
   </div>
 </div>
 ```
@@ -691,18 +691,18 @@ RUN pip install poetry && poetry install --no-dev
 FROM python:3.12-slim
 
 # Non-root user
-RUN useradd -m -u 1000 autopr
-USER autopr
+RUN useradd -m -u 1000 CodeFlow
+USER CodeFlow
 
 WORKDIR /app
 COPY --from=builder /app/.venv .venv
-COPY autopr ./autopr
+COPY CodeFlow ./CodeFlow
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s \
   CMD curl -f http://localhost:8080/health || exit 1
 
-CMD [".venv/bin/python", "-m", "autopr.server"]
+CMD [".venv/bin/python", "-m", "codeflow.server"]
 ```
 
 ### CI/CD Pipeline
@@ -726,7 +726,7 @@ jobs:
       - name: Run linters
         run: ruff check .
       - name: Run tests
-        run: pytest --cov=autopr
+        run: pytest --cov=CodeFlow
       - name: Upload coverage
         uses: codecov/codecov-action@v3
 ```

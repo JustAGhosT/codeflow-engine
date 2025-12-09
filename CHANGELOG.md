@@ -1,4 +1,4 @@
-# Changelog
+﻿# Changelog
 
 All notable changes to CodeFlow Engine will be documented in this file.
 
@@ -18,5 +18,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Previous Versions]
 
-For version history prior to the repository split, see the original monorepo at tag `legacy-autopr-monorepo-final`.
+For version history prior to the repository split, see the original monorepo at tag `legacy-codeflow-monorepo-final`.
 

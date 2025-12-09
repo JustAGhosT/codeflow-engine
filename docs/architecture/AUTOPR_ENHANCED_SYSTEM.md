@@ -1,8 +1,8 @@
-# AutoPR Enhanced System Documentation
+﻿# CodeFlow Enhanced System Documentation
 
 ## Overview
 
-The AutoPR Enhanced System is a state-of-the-art AI-powered automation platform for GitHub pull
+The CodeFlow Enhanced System is a state-of-the-art AI-powered automation platform for GitHub pull
 request management. It combines multiple AI technologies, learning capabilities, and platform
 integrations to provide intelligent, automated responses to PR comments.
 
@@ -107,11 +107,11 @@ The system supports multiple AI providers with automatic fallback:
 
 ```python
 # Environment Configuration
-AUTOPR_DEFAULT_LLM_PROVIDER=openai
-AUTOPR_LLM_FALLBACK_ORDER=openai,anthropic,mistral,groq
-AUTOPR_OPENAI_MODEL=gpt-4
-AUTOPR_ANTHROPIC_MODEL=claude-3-sonnet-20240229
-AUTOPR_MISTRAL_MODEL=mistral-large-latest
+codeflow_DEFAULT_LLM_PROVIDER=openai
+codeflow_LLM_FALLBACK_ORDER=openai,anthropic,mistral,groq
+codeflow_OPENAI_MODEL=gpt-4
+codeflow_ANTHROPIC_MODEL=claude-3-sonnet-20240229
+codeflow_MISTRAL_MODEL=mistral-large-latest
 ```
 
 **Supported Providers:**
@@ -191,7 +191,7 @@ QDRANT_API_KEY=your_key
 
 ```yaml
 # GitHub Actions
-- Uses: autopr/comment-handler@v1
+- Uses: CodeFlow/comment-handler@v1
   with:
     github_token: ${{ secrets.GITHUB_TOKEN }}
     workflow: enhanced_pr_comment_handler
@@ -228,14 +228,14 @@ DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
 
 ```bash
 # LLM Configuration
-AUTOPR_DEFAULT_LLM_PROVIDER=openai
-AUTOPR_LLM_FALLBACK_ORDER=openai,anthropic,mistral
+codeflow_DEFAULT_LLM_PROVIDER=openai
+codeflow_LLM_FALLBACK_ORDER=openai,anthropic,mistral
 OPENAI_API_KEY=your_openai_key
 ANTHROPIC_API_KEY=your_anthropic_key
 MISTRAL_API_KEY=your_mistral_key
 
 # Memory System
-AUTOPR_MEMORY_SYSTEM=sqlite  # or mem0
+codeflow_MEMORY_SYSTEM=sqlite  # or mem0
 MEM0_LLM_PROVIDER=openai
 MEM0_LLM_MODEL=gpt-4
 
@@ -246,9 +246,9 @@ LINEAR_API_KEY=your_linear_key
 SLACK_WEBHOOK_URL=your_slack_webhook
 
 # Quality Gates
-AUTOPR_RUN_TESTS=true
-AUTOPR_CHECK_SECURITY=true
-AUTOPR_QUALITY_THRESHOLD=0.7
+codeflow_RUN_TESTS=true
+codeflow_CHECK_SECURITY=true
+codeflow_QUALITY_THRESHOLD=0.7
 ```
 
 **Team Routing:**
@@ -263,7 +263,7 @@ CRITICAL_ISSUE_CHANNEL=#critical-alerts
 
 ### Workflow Configuration
 
-**Basic Workflow (`tools/autopr/workflows/enhanced_pr_comment_handler.yaml`):**
+**Basic Workflow (`tools/CodeFlow/workflows/enhanced_pr_comment_handler.yaml`):**
 
 ```yaml
 name: "Enhanced PR Comment Handler"
@@ -292,15 +292,15 @@ pip install qdrant-client notion-client jira slack-sdk discord.py
 ### 2. Repository Setup
 
 ```bash
-# 1. Copy AutoPR files to your repository
-cp -r tools/autopr/ your-repo/tools/autopr/
+# 1. Copy CodeFlow files to your repository
+cp -r tools/CodeFlow/ your-repo/tools/CodeFlow/
 
 # 2. Configure environment variables
 cp .env.example .env
 # Edit .env with your API keys and preferences
 
 # 3. Set up GitHub Actions
-cp .github/workflows/autopr.yml your-repo/.github/workflows/
+cp .github/workflows/codeflow.yml your-repo/.github/workflows/
 ```
 
 ### 3. Database Initialization
@@ -309,7 +309,7 @@ cp .github/workflows/autopr.yml your-repo/.github/workflows/
 
 ```python
 # Database is created automatically on first use
-# Location: autopr_memory.db
+# Location: codeflow_memory.db
 ```
 
 **Mem0 (Requires Setup):**
@@ -330,14 +330,14 @@ QDRANT_PORT=6333
 
 **Comment:** "Please remove the console.log on line 42"
 
-**AutoPR Response:**
+**CodeFlow Response:**
 
 ````text
-🤖 AutoPR Enhanced Response (Confidence: 0.95)
+ðŸ¤– CodeFlow Enhanced Response (Confidence: 0.95)
 
 I've identified this as a simple cleanup request for debugging code.
 
-✅ Applied Fix: Removed 1 console.log statement
+âœ… Applied Fix: Removed 1 console.log statement
 
 - Quality Score: 0.98
 - Tests: Passed
@@ -351,16 +351,16 @@ This response was generated using AI analysis and learned patterns from 15 simil
 
 **Comment:** "This component seems to have performance issues with large datasets. Can we optimize this?"
 
-**AutoPR Response:**
+**CodeFlow Response:**
 
 ``` text
-🤖 AutoPR Enhanced Response (Confidence: 0.87)
+ðŸ¤– CodeFlow Enhanced Response (Confidence: 0.87)
 
 I've analyzed this as a performance optimization request requiring architectural changes.
 
-📝 Created Issue: [PERF-123](https://linear.app/team/issue/PERF-123)
+ðŸ“ Created Issue: [PERF-123](https://linear.app/team/issue/PERF-123)
 
-💡 AI Insights: Based on similar questions, you might also want to check:
+ðŸ’¡ AI Insights: Based on similar questions, you might also want to check:
 - Virtualization for large lists
 - Memoization of expensive calculations
 - Code splitting for better loading
@@ -372,16 +372,16 @@ This response was generated using AI analysis and learned patterns from 8 simila
 
 **Comment:** "This API endpoint might be vulnerable to SQL injection"
 
-**AutoPR Response:**
+**CodeFlow Response:**
 
 ````text
-🤖 AutoPR Enhanced Response (Confidence: 0.92)
+ðŸ¤– CodeFlow Enhanced Response (Confidence: 0.92)
 
 I've identified this as a critical security concern requiring immediate attention.
 
-📝 Created Issue: [SEC-456](<https://linear.app/team/issue/SEC-456)>
-🚨 Escalated to: @security-team
-📢 Notification sent to: #security-alerts
+ðŸ“ Created Issue: [SEC-456](<https://linear.app/team/issue/SEC-456)>
+ðŸš¨ Escalated to: @security-team
+ðŸ“¢ Notification sent to: #security-alerts
 
 Security Audit Results:
 
@@ -593,7 +593,7 @@ echo $ANTHROPIC_API_KEY  # Should not be empty
 
 # Solution: Check database permissions
 
-ls -la autopr_memory.db
+ls -la codeflow_memory.db
 
 # For Mem0, check Qdrant connection
 
@@ -609,7 +609,7 @@ curl <http://localhost:6333/health>
 
 # Solution: Lower quality threshold temporarily
 
-AUTOPR_QUALITY_THRESHOLD=0.5
+codeflow_QUALITY_THRESHOLD=0.5
 
 ```text
 
@@ -631,12 +631,12 @@ AUTOGEN_TIMEOUT=300  # 5 minutes
 
 # Enable detailed logging
 
-AUTOPR_DEBUG=true
-AUTOPR_LOG_LEVEL=DEBUG
+codeflow_DEBUG=true
+codeflow_LOG_LEVEL=DEBUG
 
 # Check system status
 
-python -m tools.autopr.actions.system_health_check
+python -m tools.codeflow.actions.system_health_check
 
 ```text
 
@@ -648,8 +648,8 @@ python -m tools.autopr.actions.system_health_check
 
 # Use faster providers for simple tasks
 
-AUTOPR_SIMPLE_TASK_PROVIDER=groq  # Fastest inference
-AUTOPR_COMPLEX_TASK_PROVIDER=openai  # Most capable
+codeflow_SIMPLE_TASK_PROVIDER=groq  # Fastest inference
+codeflow_COMPLEX_TASK_PROVIDER=openai  # Most capable
 
 ```text
 
@@ -659,8 +659,8 @@ AUTOPR_COMPLEX_TASK_PROVIDER=openai  # Most capable
 
 # Enable response caching
 
-AUTOPR_ENABLE_CACHE=true
-AUTOPR_CACHE_TTL=3600  # 1 hour
+codeflow_ENABLE_CACHE=true
+codeflow_CACHE_TTL=3600  # 1 hour
 
 ```text
 
@@ -670,8 +670,8 @@ AUTOPR_CACHE_TTL=3600  # 1 hour
 
 # Process multiple comments together
 
-AUTOPR_BATCH_SIZE=5
-AUTOPR_BATCH_TIMEOUT=30
+codeflow_BATCH_SIZE=5
+codeflow_BATCH_TIMEOUT=30
 
 ```text
 
@@ -691,11 +691,11 @@ AUTOPR_BATCH_TIMEOUT=30
 
 **Enterprise Support:**
 
-- Email: mailto:enterprise@autopr.dev
+- Email: mailto:enterprise@codeflow.dev
 - Slack Connect: Available for enterprise customers
 - Dedicated Success Manager: Premium plans
 
 ---
 
-*This documentation is maintained by the AutoPR team and updated regularly. For the latest version, visit our [documentation site](https://docs.autopr.dev).*
+*This documentation is maintained by the CodeFlow team and updated regularly. For the latest version, visit our [documentation site](https://docs.codeflow.dev).*
 ````

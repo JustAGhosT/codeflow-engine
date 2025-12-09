@@ -1,6 +1,6 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
-Test script for the AutoPR template system with provider support.
+Test script for the CodeFlow template system with provider support.
 """
 
 import logging
@@ -30,7 +30,7 @@ def test_jinja2_provider():
 
         # Initialize the template system with Jinja2 provider
         template_dirs = [
-            project_root / "autopr" / "templates" / "examples",  # Example templates
+            project_root / "CodeFlow" / "templates" / "examples",  # Example templates
         ]
 
         logger.info("Initializing Jinja2 template provider...")
@@ -91,7 +91,7 @@ def test_provider_fallback():
         )
 
         # Initialize providers
-        template_dirs = [project_root / "autopr" / "templates" / "examples"]
+        template_dirs = [project_root / "CodeFlow" / "templates" / "examples"]
         jinja2_provider = Jinja2TemplateProvider(template_dirs=template_dirs)
 
         # Create a failing AutoWeave provider
@@ -201,7 +201,7 @@ def run_common_tests(template_system, provider_name: str):
             logger.exception(f"Error searching for '{term}': {e}")
             return False
 
-    logger.info("\n✅ All common tests completed successfully!")
+    logger.info("\nâœ… All common tests completed successfully!")
     return True
 
 

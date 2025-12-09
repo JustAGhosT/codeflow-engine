@@ -1,20 +1,20 @@
-# AutoPR Engine Documentation
+﻿# CodeFlow Engine Documentation
 
-## 📚 **Documentation Index**
+## ðŸ“š **Documentation Index**
 
-Welcome to the AutoPR Engine documentation. This repository contains a comprehensive automated code
+Welcome to the CodeFlow Engine documentation. This repository contains a comprehensive automated code
 review and quality management system with AI-powered analysis capabilities.
 
-### 🎯 **Quick Access**
+### ðŸŽ¯ **Quick Access**
 
 - **[Naming Recommendations](../NAMING_RECOMMENDATIONS.md)** - Quick reference guide for program naming and branding
 - **[Program Name Suggestions](PROGRAM_NAME_SUGGESTIONS.md)** - Comprehensive naming analysis with 15+ options
 
-## 🏗️ **Architecture & Design**
+## ðŸ—ï¸ **Architecture & Design**
 
 ### **Core Components**
 
-- [Enhanced System Architecture](architecture/AUTOPR_ENHANCED_SYSTEM.md) - Comprehensive system
+- [Enhanced System Architecture](architecture/codeflow_ENHANCED_SYSTEM.md) - Comprehensive system
   design
 - [Package Architecture](architecture/packages.md) - Package structure and organization
 - [Template Catalog](architecture/template_catalog.md) - Template system architecture
@@ -38,7 +38,7 @@ review and quality management system with AI-powered analysis capabilities.
 - [Security Strategy](adr/0013-security-strategy.md)
 - [Caching Strategy](adr/0014-caching-strategy.md)
 
-## 🚀 **Getting Started**
+## ðŸš€ **Getting Started**
 
 ### **Quick Start**
 
@@ -52,7 +52,7 @@ review and quality management system with AI-powered analysis capabilities.
 - [Code Quality](development/CODE_QUALITY.md) - Code quality standards and tools
 - [AI Linting Fixer](development/ai_linting_fixer.md) - AI-powered linting and fixing
 
-## 📖 **User Guides**
+## ðŸ“– **User Guides**
 
 ### **Quality Engine**
 
@@ -63,10 +63,10 @@ review and quality management system with AI-powered analysis capabilities.
 ### **Development Tools**
 
 - [Modular Refactoring](development/MODULAR_REFACTORING_SUMMARY.md) - Refactoring documentation
-- [AutoWeave Integration](development/autopr_autoweave_integration.md) - Integration guide
+- [AutoWeave Integration](development/codeflow_autoweave_integration.md) - Integration guide
 - [Configuration Management](development/CONFIGURATION_EXTRACTION.md) - Configuration system
 
-## 🔧 **API Reference**
+## ðŸ”§ **API Reference**
 
 ### **Core API**
 
@@ -81,7 +81,7 @@ review and quality management system with AI-powered analysis capabilities.
 - [Linear Integration](api/linear.md) - Linear integration endpoints
 - [Custom Integrations](api/custom-integrations.md) - Building custom integrations
 
-## 🚀 **Deployment**
+## ðŸš€ **Deployment**
 
 ### **Deployment Options**
 
@@ -91,7 +91,7 @@ review and quality management system with AI-powered analysis capabilities.
 
 - [Configuration Management](development/CONFIGURATION_EXTRACTION.md) - Configuration system
 
-## 📋 **Planning & Roadmap**
+## ðŸ“‹ **Planning & Roadmap**
 
 ### **Current Plans**
 
@@ -108,7 +108,7 @@ review and quality management system with AI-powered analysis capabilities.
 - [Main Plan](plans/plan.md) - Overall project plan
 - [Legacy Plan](plans/PLAN_LEGACY.md) - Original project plan
 
-## 📊 **Analysis & Research**
+## ðŸ“Š **Analysis & Research**
 
 ### **Ecosystem Analysis**
 
@@ -116,7 +116,7 @@ review and quality management system with AI-powered analysis capabilities.
   ecosystem study
 - [AI Bots Ecosystem Directory](ai-bots-ecosystem/) - Detailed ecosystem documentation
 
-## 🛠️ **Development**
+## ðŸ› ï¸ **Development**
 
 ### **Development Guides**
 
@@ -126,13 +126,13 @@ review and quality management system with AI-powered analysis capabilities.
 - [AI Linting Fixer](development/ai_linting_fixer.md) - AI-powered linting and fixing
 - [Modular Refactoring Summary](development/MODULAR_REFACTORING_SUMMARY.md) - Refactoring
   documentation
-- [AutoPR AutoWeave Integration](development/autopr_autoweave_integration.md) - Integration guide
+- [CodeFlow AutoWeave Integration](development/codeflow_autoweave_integration.md) - Integration guide
 - [Configuration Extraction](development/CONFIGURATION_EXTRACTION.md) - Configuration management
 - [Platform Detection](development/platform_detection.md) - Platform detection implementation
 
 ### **Architecture**
 
-- [Enhanced System Architecture](architecture/AUTOPR_ENHANCED_SYSTEM.md) - Comprehensive system
+- [Enhanced System Architecture](architecture/codeflow_ENHANCED_SYSTEM.md) - Comprehensive system
   design
 - [Package Architecture](architecture/packages.md) - Package structure and organization
 - [Template Catalog](architecture/template_catalog.md) - Template system architecture
@@ -143,7 +143,7 @@ review and quality management system with AI-powered analysis capabilities.
 - [Code Quality](development/CODE_QUALITY.md) - Code quality standards and tools
 - [Platform Detection](development/platform_detection.md) - Platform identification system
 
-## 📊 **Templates & Examples**
+## ðŸ“Š **Templates & Examples**
 
 ### **Template System**
 
@@ -158,7 +158,7 @@ review and quality management system with AI-powered analysis capabilities.
 - [Integration Examples](../examples/integrations/) - Integration examples
 - [Custom Tool Examples](../examples/custom-tools/) - Custom tool implementations
 
-## 🤝 **Community & Support**
+## ðŸ¤ **Community & Support**
 
 ### **Getting Help**
 
@@ -174,9 +174,9 @@ review and quality management system with AI-powered analysis capabilities.
 
 ---
 
-## 📝 **Documentation Maintenance**
+## ðŸ“ **Documentation Maintenance**
 
-This documentation is maintained as part of the AutoPR Engine project. For questions, suggestions,
+This documentation is maintained as part of the CodeFlow Engine project. For questions, suggestions,
 or contributions to the documentation, please see the [Development Directory](development/).
 
 **Last Updated**: January 2025 **Version**: 1.1.0

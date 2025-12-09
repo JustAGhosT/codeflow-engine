@@ -1,4 +1,4 @@
-# AutoPR Engine API Reference
+﻿# CodeFlow Engine API Reference
 
 **Version:** 1.0.1  
 **Last Updated:** 2025-11-22  
@@ -24,7 +24,7 @@
 
 ## Overview
 
-AutoPR Engine provides RESTful APIs for:
+CodeFlow Engine provides RESTful APIs for:
 - **Dashboard Operations:** Monitoring, metrics, and system health
 - **Workflow Management:** Creating, executing, and monitoring workflows
 - **Quality Analysis:** Code quality checks and AI-powered reviews
@@ -33,18 +33,18 @@ AutoPR Engine provides RESTful APIs for:
 ### API Architecture
 
 ```
-┌──────────────┐
-│   Client     │
-└──────┬───────┘
-       │
-       ├─── HTTP/REST ───> Dashboard API (Flask, Port 8080)
-       │                   └── Metrics, Health, File Operations
-       │
-       ├─── HTTP/REST ───> Workflow API (FastAPI, Port 8000)
-       │                   └── Workflow CRUD, Execution, Validation
-       │
-       └─── WebSocket ───> Real-time API (Port 8080)
-                            └── Live updates, streaming logs
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚   Client     â”‚
+â””â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”˜
+       â”‚
+       â”œâ”€â”€â”€ HTTP/REST â”€â”€â”€> Dashboard API (Flask, Port 8080)
+       â”‚                   â””â”€â”€ Metrics, Health, File Operations
+       â”‚
+       â”œâ”€â”€â”€ HTTP/REST â”€â”€â”€> Workflow API (FastAPI, Port 8000)
+       â”‚                   â””â”€â”€ Workflow CRUD, Execution, Validation
+       â”‚
+       â””â”€â”€â”€ WebSocket â”€â”€â”€> Real-time API (Port 8080)
+                            â””â”€â”€ Live updates, streaming logs
 ```
 
 ---
@@ -173,12 +173,12 @@ All errors follow a consistent format:
 ### Sensitive Information Protection
 
 **Security Note:** All error messages are automatically sanitized to prevent information leakage:
-- Database credentials → `postgresql://[REDACTED]`
-- API keys → `ghp_[REDACTED]` or `sk-[REDACTED]`
-- File paths → `[FILE_PATH]`
-- Email addresses → `[EMAIL_REDACTED]`
-- IP addresses → `[IP_REDACTED]`
-- SQL queries → `[QUERY_REDACTED]`
+- Database credentials â†’ `postgresql://[REDACTED]`
+- API keys â†’ `ghp_[REDACTED]` or `sk-[REDACTED]`
+- File paths â†’ `[FILE_PATH]`
+- Email addresses â†’ `[EMAIL_REDACTED]`
+- IP addresses â†’ `[IP_REDACTED]`
+- SQL queries â†’ `[QUERY_REDACTED]`
 
 ---
 
@@ -883,7 +883,7 @@ Connect to WebSocket for real-time updates.
 const ws = new WebSocket('ws://localhost:8080/ws');
 
 ws.onopen = () => {
-  console.log('Connected to AutoPR WebSocket');
+  console.log('Connected to CodeFlow WebSocket');
   
   // Subscribe to workflow updates
   ws.send(JSON.stringify({
@@ -1249,7 +1249,7 @@ done
 import requests
 from typing import Dict, Any
 
-class AutoPRClient:
+class CodeFlowClient:
     def __init__(self, base_url: str, token: str):
         self.base_url = base_url
         self.headers = {
@@ -1295,7 +1295,7 @@ class AutoPRClient:
         return response.json()
 
 # Usage
-client = AutoPRClient("http://localhost:8000", "ghp_abc123...")
+client = CodeFlowClient("http://localhost:8000", "ghp_abc123...")
 
 # Create and execute workflow
 workflow = client.create_workflow({
@@ -1372,7 +1372,7 @@ print(f"Status: {status['status']}")
 3. **Enable Debug Logging:** Set `LOG_LEVEL=DEBUG` for detailed logs
 4. **Contact Support:**
    - Email: support@codeflow-engine.example.com
-   - Slack: #autopr-support
+   - Slack: #codeflow-support
    - GitHub Issues: https://github.com/owner/codeflow-engine/issues
 
 ### Reporting Issues
@@ -1389,4 +1389,4 @@ When reporting API issues, include:
 
 **Document Version:** 1.0.0  
 **Last Updated:** 2025-11-22  
-**Maintainer:** AutoPR Engine Team
+**Maintainer:** CodeFlow Engine Team

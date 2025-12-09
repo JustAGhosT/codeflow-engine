@@ -1,8 +1,8 @@
-# AutoPR Template Engine Architecture
+﻿# CodeFlow Template Engine Architecture
 
 ## Overview
 
-The AutoPR Template Engine is a robust, AI-powered system designed to automate and standardize
+The CodeFlow Template Engine is a robust, AI-powered system designed to automate and standardize
 template management across development and DevOps workflows. It provides a unified interface for
 creating, managing, and deploying templates with built-in validation, versioning, and compliance
 features.
@@ -277,8 +277,8 @@ interface ValidationResult {
 
 ### Immediate-term (Q2/Q3 2025)
 
-- [ ] **AutoPR Integration**
-- [ ] Native API and workflow support for AutoPR
+- [ ] **CodeFlow Integration**
+- [ ] Native API and workflow support for CodeFlow
 - [ ] User feedback and usage analytics collection
 - [ ] Validation of AI/ML authoring and validation in production
 - [ ] Preparation for broader CI/CD and cloud integrations

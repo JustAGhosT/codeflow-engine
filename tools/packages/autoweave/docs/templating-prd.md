@@ -1,11 +1,11 @@
-# AutoWeave: AI-Powered Template System - Product Requirements Document (PRD)
+﻿# AutoWeave: AI-Powered Template System - Product Requirements Document (PRD)
 
 ## Overview
 
 AutoWeave is a sophisticated templating system designed to streamline the creation, management, and
 deployment of code templates across various platforms and frameworks. This document outlines the
 comprehensive requirements, architecture, and implementation details for the AutoWeave templating
-system, including its modular architecture and integration with the AutoPR Engine.
+system, including its modular architecture and integration with the CodeFlow Engine.
 
 ## Problem Statement
 
@@ -51,7 +51,7 @@ The current template ecosystem faces several challenges:
 - Template validation and testing framework
 - Documentation generation
 - CLI tools for template management
-- Integration with AutoPR Engine
+- Integration with CodeFlow Engine
 - Support for multiple output formats (Markdown, YAML, JSON, etc.)
 - Template versioning and dependency management
 
@@ -146,33 +146,33 @@ The current template ecosystem faces several challenges:
 ```text
 
 templates/
-  ├── docker/                 # Docker configurations
-  │   ├── base.dockerfile.yml
-  │   ├── node.dockerfile.yml
-  │   └── python.dockerfile.yml
-  ├── deployment/            # CI/CD configurations
-  │   ├── github-actions/
-  │   ├── azure-pipelines/
-  │   └── netlify/
-  ├── security/              # Security configurations
-  │   ├── cors/
-  │   ├── headers/
-  │   └── middleware/
-  ├── docs/                  # Documentation templates
-  │   ├── api/
-  │   └── guides/
-  ├── testing/               # Test configurations
-  │   ├── unit/
-  │   ├── integration/
-  │   └── e2e/
-  ├── platforms/             # Platform-specific configs
-  │   ├── replit/
-  │   ├── codespaces/
-  │   └── gitpod/
-  └── integrations/          # Third-party integrations
-      ├── sentry/
-      ├── redis/
-      └── auth/
+  â”œâ”€â”€ docker/                 # Docker configurations
+  â”‚   â”œâ”€â”€ base.dockerfile.yml
+  â”‚   â”œâ”€â”€ node.dockerfile.yml
+  â”‚   â””â”€â”€ python.dockerfile.yml
+  â”œâ”€â”€ deployment/            # CI/CD configurations
+  â”‚   â”œâ”€â”€ github-actions/
+  â”‚   â”œâ”€â”€ azure-pipelines/
+  â”‚   â””â”€â”€ netlify/
+  â”œâ”€â”€ security/              # Security configurations
+  â”‚   â”œâ”€â”€ cors/
+  â”‚   â”œâ”€â”€ headers/
+  â”‚   â””â”€â”€ middleware/
+  â”œâ”€â”€ docs/                  # Documentation templates
+  â”‚   â”œâ”€â”€ api/
+  â”‚   â””â”€â”€ guides/
+  â”œâ”€â”€ testing/               # Test configurations
+  â”‚   â”œâ”€â”€ unit/
+  â”‚   â”œâ”€â”€ integration/
+  â”‚   â””â”€â”€ e2e/
+  â”œâ”€â”€ platforms/             # Platform-specific configs
+  â”‚   â”œâ”€â”€ replit/
+  â”‚   â”œâ”€â”€ codespaces/
+  â”‚   â””â”€â”€ gitpod/
+  â””â”€â”€ integrations/          # Third-party integrations
+      â”œâ”€â”€ sentry/
+      â”œâ”€â”€ redis/
+      â””â”€â”€ auth/
 ```
 
 #### 1.2 Template Metadata
@@ -184,7 +184,7 @@ Each template file should include metadata in YAML frontmatter:
 name: "Node.js Dockerfile"
 description: "Production-ready Dockerfile for Node.js applications"
 version: "1.0.0"
-author: "AutoPR Team"
+author: "CodeFlow Team"
 category: "docker"
 tags: ["node", "docker", "production"]
 dependencies:
@@ -224,19 +224,19 @@ variables:
 ```bash
 
 # List available templates
-autopr template list [--category=CATEGORY]
+CodeFlow template list [--category=CATEGORY]
 
 # Initialize a new template
-autopr template init PATH
+CodeFlow template init PATH
 
 # Validate template syntax
-autopr template validate PATH
+CodeFlow template validate PATH
 
 # Render a template with variables
-autopr template render TEMPLATE -o OUTPUT -v VARIABLES_JSON
+CodeFlow template render TEMPLATE -o OUTPUT -v VARIABLES_JSON
 
 # Package a template for distribution
-autopr template package PATH
+CodeFlow template package PATH
 ```
 
 #### 3.2 Template Discovery
@@ -298,9 +298,9 @@ autopr template package PATH
 
 ### 2. Integration Points
 
-#### 2.1 AutoPR Engine
+#### 2.1 CodeFlow Engine
 
-- **Workflow Integration**: Templates can be used in AutoPR workflows
+- **Workflow Integration**: Templates can be used in CodeFlow workflows
 - **Action Templates**: Predefined actions for common tasks
 - **Event Handlers**: Respond to repository events with templates
 
@@ -330,7 +330,7 @@ autopr template package PATH
 
 ### Phase 3: Integration & Scaling
 
-1. AutoPR Engine integration
+1. CodeFlow Engine integration
 2. CI/CD pipeline support
 3. Template registry
 4. Advanced security features
@@ -359,7 +359,7 @@ autopr template package PATH
 
 1. How to handle template versioning across different projects?
 2. What's the best way to handle template deprecation?
-3. How to manage template compatibility with different AutoPR versions?
+3. How to manage template compatibility with different CodeFlow versions?
 
 ### Risks & Mitigations
 
@@ -386,7 +386,7 @@ autopr template package PATH
 
 ### B. Integration Guide
 
-1. Using templates in AutoPR workflows
+1. Using templates in CodeFlow workflows
 2. Custom template development
 3. Extending the template system
 4. Troubleshooting common issues

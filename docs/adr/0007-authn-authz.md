@@ -1,4 +1,4 @@
-# 7. Authentication & Authorization
+﻿# 7. Authentication & Authorization
 
 ## Status
 
@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-AutoPR needs a robust security model to:
+CodeFlow needs a robust security model to:
 
 - Secure API endpoints
 - Manage user identities
@@ -36,7 +36,7 @@ We will implement a flexible authentication and authorization system with these 
    ```json
    {
      "sub": "user:123",
-     "iss": "autopr",
+     "iss": "CodeFlow",
      "exp": 1735689600,
      "iat": 1683158400,
      "scopes": ["repo:read", "repo:write"],

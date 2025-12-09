@@ -1,4 +1,4 @@
-# 11. Data Persistence Strategy
+﻿# 11. Data Persistence Strategy
 
 ## Status
 
@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-AutoPR requires reliable data storage for:
+CodeFlow requires reliable data storage for:
 
 - Repository configurations
 - User preferences

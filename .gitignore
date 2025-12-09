@@ -65,3 +65,7 @@ Thumbs.db
 # Build artifacts
 build-artifacts/
 
+# Credentials and sensitive files
+.credentials-*.json
+deployment-output.json
+

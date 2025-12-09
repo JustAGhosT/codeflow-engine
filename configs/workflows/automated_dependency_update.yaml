@@ -1,4 +1,4 @@
-# autopr/workflows/automated_dependency_update.yaml
+﻿# codeflow/workflows/automated_dependency_update.yaml
 automated_dependency_update:
   main: automated_dependency_update
   inputs:
@@ -16,4 +16,4 @@ automated_dependency_update:
       inputs:
         pull_request_number: "{{ pull_request.number }}"
         comment: |
-          📦 Dependency `{{ package_name }}` was updated and tests were run. See logs for details.
+          ðŸ“¦ Dependency `{{ package_name }}` was updated and tests were run. See logs for details.

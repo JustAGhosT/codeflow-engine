@@ -1,4 +1,4 @@
-# autopr/workflows/onboard_contributor.yaml
+﻿# codeflow/workflows/onboard_contributor.yaml
 onboard_contributor:
   main: onboard_contributor
   inputs:
@@ -9,6 +9,6 @@ onboard_contributor:
       inputs:
         pull_request_number: "{{ issue.number }}"
         comment: |
-          👋 Welcome to the project!
+          ðŸ‘‹ Welcome to the project!
           Please see our [CONTRIBUTING.md](../CONTRIBUTING.md) and [README.md](../README.md) for guidelines and tips.
           If you have any questions, feel free to ask!

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Example usage of the Quality Engine with dependency injection.
 """
 
@@ -67,8 +67,8 @@ async def run_quality_analysis(files: list[str]) -> None:
 if __name__ == "__main__":
     # Example files
     python_files = [
-        "autopr/actions/quality_engine/engine.py",
-        "autopr/actions/quality_engine/handler_registry.py",
+        "codeflow/actions/quality_engine/engine.py",
+        "codeflow/actions/quality_engine/handler_registry.py",
     ]
 
     # Run analysis

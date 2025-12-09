@@ -1,5 +1,5 @@
-"""
-AutoPR Action Base Classes
+﻿"""
+CodeFlow Action Base Classes
 
 Base classes and interfaces for action implementation.
 """

@@ -1,10 +1,10 @@
-name: "WaveMaker Enterprise Application"
+﻿name: "WaveMaker Enterprise Application"
 category: "enterprise"
 description:
   "Enterprise low-code platform for building modern, API-driven web and mobile applications with
   AI-generated code capabilities"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["enterprise", "low-code", "web-app", "mobile-app", "ai-generated", "angular", "java"]
 
 platform_info:

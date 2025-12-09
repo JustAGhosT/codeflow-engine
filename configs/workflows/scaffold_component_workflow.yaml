@@ -1,4 +1,4 @@
-# autopr/workflows/scaffold_component_workflow.yaml
+﻿# codeflow/workflows/scaffold_component_workflow.yaml
 scaffold_and_barrel:
   main: scaffold_and_barrel
   inputs:

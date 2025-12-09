@@ -1,7 +1,7 @@
-"""
+﻿"""
 Platform Configuration Validator
 
-Validates platform configuration files for AutoPR.
+Validates platform configuration files for CodeFlow.
 Checks both platform index files and individual platform configurations.
 """
 
@@ -136,7 +136,7 @@ def main() -> int:
 
     # Validate index files
     if index_files:
-        print_section("🔖 Validating Index Files")
+        print_section("ðŸ”– Validating Index Files")
         for file_path in index_files:
             is_valid, errors = validate_file(file_path)
             error_count = print_validation_result(file_path, is_valid, errors)
@@ -146,7 +146,7 @@ def main() -> int:
 
     # Validate platform files
     if platform_files:
-        print_section("🖥️  Validating Platform Files")
+        print_section("ðŸ–¥ï¸  Validating Platform Files")
         for file_path in platform_files:
             is_valid, errors = validate_file(file_path)
             error_count = print_validation_result(file_path, is_valid, errors)

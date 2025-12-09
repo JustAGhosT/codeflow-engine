@@ -1,4 +1,4 @@
-# 9. Error Handling Strategy
+﻿# 9. Error Handling Strategy
 
 ## Status
 
@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-AutoPR needs a consistent approach to handle errors across different components and services while
+CodeFlow needs a consistent approach to handle errors across different components and services while
 providing meaningful feedback.
 
 ## Decision
@@ -42,7 +42,7 @@ We will implement a comprehensive error handling strategy with the following com
       "resourceType": "repository",
       "id": "12345"
     },
-    "documentationUrl": "https://docs.autopr.dev/errors/RESOURCE_NOT_FOUND",
+    "documentationUrl": "https://docs.codeflow.dev/errors/RESOURCE_NOT_FOUND",
     "requestId": "req_1234567890",
     "timestamp": "2025-01-01T12:00:00Z"
   }

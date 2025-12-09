@@ -1,7 +1,7 @@
-# Configuration and Template Extraction
+﻿# Configuration and Template Extraction
 
 This document describes the systematic extraction and organization of embedded JSON and YAML
-configurations from the AutoPR engine codebase into a clean, maintainable directory structure.
+configurations from the CodeFlow engine codebase into a clean, maintainable directory structure.
 
 ## Overview
 
@@ -17,42 +17,42 @@ into two main directories:
 
 ````text
 configs/
-├── README.md                    # Configuration directory overview
-├── platforms/                  # Platform-specific configurations
-│   ├── replit.json             # Replit platform config
-│   ├── lovable.json            # Lovable.dev platform config
-│   ├── bolt.json               # Bolt.new platform config
-│   ├── same.json               # Same.new platform config
-│   └── emergent.json           # Emergent.sh platform config
-├── packages/                   # Package dependency configurations
-│   ├── security.json           # Security-related packages
-│   ├── testing.json            # Testing framework packages
-│   ├── performance.json        # Performance optimization packages
-│   ├── development.json        # Development tool packages
-│   └── monitoring.json         # Monitoring and logging packages
-├── workflows/                  # Workflow YAML files (21 files)
-│   ├── phase1_pr_review_workflow.yaml
-│   ├── phase2-rapid-prototyping.yaml
-│   ├── magic-fix.yaml
-│   ├── automated_dependency_update.yaml
-│   ├── branch_cleanup.yaml
-│   ├── changelog_updater.yaml
-│   ├── dead_code_report.yaml
-│   ├── enhanced_pr_comment_handler.yaml
-│   ├── onboard_contributor.yaml
-│   ├── pr_comment_handler.yaml
-│   ├── pr_size_labeler.yaml
-│   ├── quality_gate.yaml
-│   ├── release_drafter.yaml
-│   ├── scaffold_component_workflow.yaml
-│   ├── screenshot_gallery.yaml
-│   ├── security_audit.yaml
-│   ├── stale_issue_closer.yaml
-│   ├── tech_debt_report.yaml
-│   ├── update_documentation.yaml
-│   └── ...
-└── triggers/                   # Trigger configurations
-    └── main-triggers.yaml      # Main workflow triggers
+â”œâ”€â”€ README.md                    # Configuration directory overview
+â”œâ”€â”€ platforms/                  # Platform-specific configurations
+â”‚   â”œâ”€â”€ replit.json             # Replit platform config
+â”‚   â”œâ”€â”€ lovable.json            # Lovable.dev platform config
+â”‚   â”œâ”€â”€ bolt.json               # Bolt.new platform config
+â”‚   â”œâ”€â”€ same.json               # Same.new platform config
+â”‚   â””â”€â”€ emergent.json           # Emergent.sh platform config
+â”œâ”€â”€ packages/                   # Package dependency configurations
+â”‚   â”œâ”€â”€ security.json           # Security-related packages
+â”‚   â”œâ”€â”€ testing.json            # Testing framework packages
+â”‚   â”œâ”€â”€ performance.json        # Performance optimization packages
+â”‚   â”œâ”€â”€ development.json        # Development tool packages
+â”‚   â””â”€â”€ monitoring.json         # Monitoring and logging packages
+â”œâ”€â”€ workflows/                  # Workflow YAML files (21 files)
+â”‚   â”œâ”€â”€ phase1_pr_review_workflow.yaml
+â”‚   â”œâ”€â”€ phase2-rapid-prototyping.yaml
+â”‚   â”œâ”€â”€ magic-fix.yaml
+â”‚   â”œâ”€â”€ automated_dependency_update.yaml
+â”‚   â”œâ”€â”€ branch_cleanup.yaml
+â”‚   â”œâ”€â”€ changelog_updater.yaml
+â”‚   â”œâ”€â”€ dead_code_report.yaml
+â”‚   â”œâ”€â”€ enhanced_pr_comment_handler.yaml
+â”‚   â”œâ”€â”€ onboard_contributor.yaml
+â”‚   â”œâ”€â”€ pr_comment_handler.yaml
+â”‚   â”œâ”€â”€ pr_size_labeler.yaml
+â”‚   â”œâ”€â”€ quality_gate.yaml
+â”‚   â”œâ”€â”€ release_drafter.yaml
+â”‚   â”œâ”€â”€ scaffold_component_workflow.yaml
+â”‚   â”œâ”€â”€ screenshot_gallery.yaml
+â”‚   â”œâ”€â”€ security_audit.yaml
+â”‚   â”œâ”€â”€ stale_issue_closer.yaml
+â”‚   â”œâ”€â”€ tech_debt_report.yaml
+â”‚   â”œâ”€â”€ update_documentation.yaml
+â”‚   â””â”€â”€ ...
+â””â”€â”€ triggers/                   # Trigger configurations
+    â””â”€â”€ main-triggers.yaml      # Main workflow triggers
 
 ```text
 
@@ -60,34 +60,34 @@ configs/
 
 ``` text
 templates/
-├── README.md                   # Template directory overview
-├── typescript/                # TypeScript configuration templates
-│   ├── react-tsconfig.json    # React TypeScript config
-│   ├── vite-tsconfig.json     # Vite TypeScript config
-│   └── basic-tsconfig.json    # Basic TypeScript config
-├── build/                     # Build configuration templates
-│   ├── vite.config.js         # Vite build configuration
-│   ├── vitest.config.js       # Vitest testing configuration
-│   ├── next.config.js         # Next.js configuration
-│   └── pm2.config.js          # PM2 process manager config
-├── docker/                    # Dockerfile templates
-│   ├── react.dockerfile       # React application Dockerfile
-│   ├── node.dockerfile        # Node.js application Dockerfile
-│   └── generic.dockerfile     # Generic application Dockerfile
-├── testing/                   # Testing setup templates
-│   ├── test-setup.js          # Common test setup
-│   ├── jest.config.js         # Jest configuration
-│   ├── setupTests.ts          # React testing setup
-│   ├── App.test.tsx           # Sample React test
-│   └── playwright.config.ts   # Playwright E2E config
-├── deployment/                # Deployment configuration templates
-│   ├── azure-static-web-app.json  # Azure Static Web Apps config
-│   └── github-actions-test.yml    # GitHub Actions test workflow
-└── monitoring/                # Monitoring and backup scripts
-    ├── health-check.sh        # Health check script
-    ├── monitor.sh             # System monitoring script
-    ├── backup.sh              # Backup script
-    └── restore.sh             # Restore script
+â”œâ”€â”€ README.md                   # Template directory overview
+â”œâ”€â”€ typescript/                # TypeScript configuration templates
+â”‚   â”œâ”€â”€ react-tsconfig.json    # React TypeScript config
+â”‚   â”œâ”€â”€ vite-tsconfig.json     # Vite TypeScript config
+â”‚   â””â”€â”€ basic-tsconfig.json    # Basic TypeScript config
+â”œâ”€â”€ build/                     # Build configuration templates
+â”‚   â”œâ”€â”€ vite.config.js         # Vite build configuration
+â”‚   â”œâ”€â”€ vitest.config.js       # Vitest testing configuration
+â”‚   â”œâ”€â”€ next.config.js         # Next.js configuration
+â”‚   â””â”€â”€ pm2.config.js          # PM2 process manager config
+â”œâ”€â”€ docker/                    # Dockerfile templates
+â”‚   â”œâ”€â”€ react.dockerfile       # React application Dockerfile
+â”‚   â”œâ”€â”€ node.dockerfile        # Node.js application Dockerfile
+â”‚   â””â”€â”€ generic.dockerfile     # Generic application Dockerfile
+â”œâ”€â”€ testing/                   # Testing setup templates
+â”‚   â”œâ”€â”€ test-setup.js          # Common test setup
+â”‚   â”œâ”€â”€ jest.config.js         # Jest configuration
+â”‚   â”œâ”€â”€ setupTests.ts          # React testing setup
+â”‚   â”œâ”€â”€ App.test.tsx           # Sample React test
+â”‚   â””â”€â”€ playwright.config.ts   # Playwright E2E config
+â”œâ”€â”€ deployment/                # Deployment configuration templates
+â”‚   â”œâ”€â”€ azure-static-web-app.json  # Azure Static Web Apps config
+â”‚   â””â”€â”€ github-actions-test.yml    # GitHub Actions test workflow
+â””â”€â”€ monitoring/                # Monitoring and backup scripts
+    â”œâ”€â”€ health-check.sh        # Health check script
+    â”œâ”€â”€ monitor.sh             # System monitoring script
+    â”œâ”€â”€ backup.sh              # Backup script
+    â””â”€â”€ restore.sh             # Restore script
 ````
 
 ## Extraction Sources
@@ -103,7 +103,7 @@ templates/
 
 ### YAML Files Organized
 
-- **22 workflow YAML files** moved from `autopr/workflows/` to `configs/workflows/`
+- **22 workflow YAML files** moved from `CodeFlow/workflows/` to `configs/workflows/`
 - **triggers.yaml** moved to `configs/triggers/main-triggers.yaml`
 
 ## Benefits Achieved
@@ -187,4 +187,4 @@ tsconfig_content = load_template("typescript", "react-tsconfig.json")
 ```
 
 This extraction significantly improves the maintainability, reusability, and clarity of
-configuration management in the AutoPR engine while preserving all original functionality.
+configuration management in the CodeFlow engine while preserving all original functionality.

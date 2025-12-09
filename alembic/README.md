@@ -1,6 +1,6 @@
-# Alembic Database Migrations
+﻿# Alembic Database Migrations
 
-This directory contains database migrations for AutoPR Engine using Alembic.
+This directory contains database migrations for CodeFlow Engine using Alembic.
 
 ## **Quick Start**
 
@@ -10,7 +10,7 @@ Ensure your `DATABASE_URL` environment variable is set:
 
 ```bash
 # Development
-export DATABASE_URL="postgresql://autopr_user:autopr_password@localhost:5432/autopr"
+export DATABASE_URL="postgresql://codeflow_user:codeflow_password@localhost:5432/CodeFlow"
 
 # Production (use secrets management!)
 export DATABASE_URL="${DB_CONNECTION_STRING}"
@@ -179,7 +179,7 @@ def upgrade():
 
 ### **Development**
 
-1. Modify models in `autopr/database/models.py`
+1. Modify models in `CodeFlow/database/models.py`
 2. Generate migration: `poetry run alembic revision --autogenerate -m "Description"`
 3. Review generated migration in `alembic/versions/`
 4. Test migration: `poetry run alembic upgrade head`
@@ -190,7 +190,7 @@ def upgrade():
 
 1. **Backup Database**
    ```bash
-   pg_dump -h $DB_HOST -U $DB_USER -Fc autopr > backup_$(date +%Y%m%d_%H%M%S).dump
+   pg_dump -h $DB_HOST -U $DB_USER -Fc CodeFlow > backup_$(date +%Y%m%d_%H%M%S).dump
    ```
 
 2. **Review Migration**
@@ -322,7 +322,7 @@ For environments without direct database access:
 poetry run alembic upgrade head --sql > upgrade.sql
 
 # Apply manually
-psql -h $DB_HOST -U $DB_USER -d autopr -f upgrade.sql
+psql -h $DB_HOST -U $DB_USER -d CodeFlow -f upgrade.sql
 ```
 
 ### **Custom Migration Scripts**

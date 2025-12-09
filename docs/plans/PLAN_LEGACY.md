@@ -1,4 +1,4 @@
-# AutoPR Engine - Development Checklist
+﻿# CodeFlow Engine - Development Checklist
 
 ## Project Overview
 
@@ -32,7 +32,7 @@
 
 ### Completed Refactoring
 
-- [x] **LLM Provider System** (`autopr/actions/llm/`)
+- [x] **LLM Provider System** (`CodeFlow/actions/llm/`)
   - [x] `types.py` - Base types and interfaces
   - [x] `base.py` - Abstract provider class
   - [x] `providers/` - Provider implementations
@@ -44,7 +44,7 @@
   - [x] `quality_analyzer.py` - Advanced analysis
   - [x] `quality_metrics_modular.py` - Coordination
 
-- [x] **Axolo Integration** (`autopr/integrations/axolo/`)
+- [x] **Axolo Integration** (`CodeFlow/integrations/axolo/`)
   - [x] `config.py` - Configuration models
   - [x] `messaging.py` - Message handling
   - [x] `commands.py` - Command processors
@@ -72,7 +72,7 @@
 ### Remaining Issues
 
 - [ ] **Structlog Import**
-  - [ ] Fix issue in `autopr/__init__.py`
+  - [ ] Fix issue in `CodeFlow/__init__.py`
   - [ ] Remove temporary `# type: ignore` workaround
 
 - [ ] **Return Type Annotations**

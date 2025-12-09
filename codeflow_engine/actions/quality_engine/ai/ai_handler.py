@@ -1,4 +1,4 @@
-"""
+﻿"""
 AI Handler for Quality Engine
 
 Handles AI interactions for quality analysis.
@@ -149,10 +149,10 @@ async def initialize_llm_manager() -> Any | None:
             "default_provider": "openai",
         }
 
-        # Create an AutoPRConfig object with the required attributes
-        from codeflow_engine.config import AutoPRConfig
+        # Create an CodeFlowConfig object with the required attributes
+        from codeflow_engine.config import CodeFlowConfig
 
-        config_obj = AutoPRConfig(
+        config_obj = CodeFlowConfig(
             openai_api_key=config["providers"]["openai"]["api_key"],
             anthropic_api_key=config["providers"]["anthropic"]["api_key"],
             default_llm_provider=config.get("default_provider", "openai")

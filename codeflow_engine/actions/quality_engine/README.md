@@ -1,4 +1,4 @@
-# AutoPR Quality Engine
+﻿# CodeFlow Quality Engine
 
 A comprehensive, cross-platform code quality analysis engine with AI-enhanced capabilities and
 Windows compatibility.
@@ -15,51 +15,51 @@ Windows compatibility.
 
 ```text
 quality_engine/
-├── __init__.py                 # Main package initialization
-├── engine.py                   # Core quality engine implementation
-├── cli.py                      # Command-line interface
-├── models.py                   # Data models and enums
-├── config.py                   # Configuration management
-├── platform_detector.py        # Platform detection and adaptations
-├── tool_runner.py              # Tool execution and result processing
-├── summary.py                  # Result summarization
-├── di.py                       # Dependency injection container
-├── handler_registry.py         # Result handler management
-├── handler_base.py             # Base handler classes
-├── result_wrapper.py           # Result wrapping utilities
-├── example_usage.py            # Usage examples
-├── README.md                   # This file
-│
-├── tools/                      # Quality analysis tools
-│   ├── __init__.py            # Tool discovery and registration
-│   ├── tool_base.py           # Base tool interface
-│   ├── registry.py            # Tool registry
-│   ├── ruff_tool.py           # Python linting and formatting
-│   ├── mypy_tool.py           # Python type checking
-│   ├── bandit_tool.py         # Python security scanning
-│   ├── semgrep_tool.py        # Cross-platform static analysis (NEW)
-│   ├── interrogate_tool.py    # Python docstring coverage
-│   ├── pytest_tool.py         # Python testing
-│   ├── radon_tool.py          # Python complexity analysis
-│   ├── codeql_tool.py         # GitHub CodeQL (Linux/macOS)
-│   ├── windows_security_tool.py # Windows security scanner
-│   ├── eslint_tool.py         # JavaScript/TypeScript linting
-│   ├── sonarqube_tool.py      # SonarQube integration
-│   ├── dependency_scanner_tool.py # Dependency analysis
-│   └── performance_analyzer_tool.py # Performance analysis
-│
-├── handlers/                   # Result handlers
-│   ├── __init__.py            # Handler discovery
-│   ├── base.py                # Base handler classes
-│   └── ...                    # Specific handlers
-│
-├── ai/                        # AI-enhanced analysis
-│   ├── ai_modes.py            # AI analysis modes
-│   ├── ai_analyzer.py         # AI code analyzer
-│   └── ai_handler.py          # AI result handling
-│
-└── __tests__/                 # Test files
-    └── test_*.py              # Unit tests
+â”œâ”€â”€ __init__.py                 # Main package initialization
+â”œâ”€â”€ engine.py                   # Core quality engine implementation
+â”œâ”€â”€ cli.py                      # Command-line interface
+â”œâ”€â”€ models.py                   # Data models and enums
+â”œâ”€â”€ config.py                   # Configuration management
+â”œâ”€â”€ platform_detector.py        # Platform detection and adaptations
+â”œâ”€â”€ tool_runner.py              # Tool execution and result processing
+â”œâ”€â”€ summary.py                  # Result summarization
+â”œâ”€â”€ di.py                       # Dependency injection container
+â”œâ”€â”€ handler_registry.py         # Result handler management
+â”œâ”€â”€ handler_base.py             # Base handler classes
+â”œâ”€â”€ result_wrapper.py           # Result wrapping utilities
+â”œâ”€â”€ example_usage.py            # Usage examples
+â”œâ”€â”€ README.md                   # This file
+â”‚
+â”œâ”€â”€ tools/                      # Quality analysis tools
+â”‚   â”œâ”€â”€ __init__.py            # Tool discovery and registration
+â”‚   â”œâ”€â”€ tool_base.py           # Base tool interface
+â”‚   â”œâ”€â”€ registry.py            # Tool registry
+â”‚   â”œâ”€â”€ ruff_tool.py           # Python linting and formatting
+â”‚   â”œâ”€â”€ mypy_tool.py           # Python type checking
+â”‚   â”œâ”€â”€ bandit_tool.py         # Python security scanning
+â”‚   â”œâ”€â”€ semgrep_tool.py        # Cross-platform static analysis (NEW)
+â”‚   â”œâ”€â”€ interrogate_tool.py    # Python docstring coverage
+â”‚   â”œâ”€â”€ pytest_tool.py         # Python testing
+â”‚   â”œâ”€â”€ radon_tool.py          # Python complexity analysis
+â”‚   â”œâ”€â”€ codeql_tool.py         # GitHub CodeQL (Linux/macOS)
+â”‚   â”œâ”€â”€ windows_security_tool.py # Windows security scanner
+â”‚   â”œâ”€â”€ eslint_tool.py         # JavaScript/TypeScript linting
+â”‚   â”œâ”€â”€ sonarqube_tool.py      # SonarQube integration
+â”‚   â”œâ”€â”€ dependency_scanner_tool.py # Dependency analysis
+â”‚   â””â”€â”€ performance_analyzer_tool.py # Performance analysis
+â”‚
+â”œâ”€â”€ handlers/                   # Result handlers
+â”‚   â”œâ”€â”€ __init__.py            # Handler discovery
+â”‚   â”œâ”€â”€ base.py                # Base handler classes
+â”‚   â””â”€â”€ ...                    # Specific handlers
+â”‚
+â”œâ”€â”€ ai/                        # AI-enhanced analysis
+â”‚   â”œâ”€â”€ ai_modes.py            # AI analysis modes
+â”‚   â”œâ”€â”€ ai_analyzer.py         # AI code analyzer
+â”‚   â””â”€â”€ ai_handler.py          # AI result handling
+â”‚
+â””â”€â”€ __tests__/                 # Test files
+    â””â”€â”€ test_*.py              # Unit tests
 ```
 
 ## Available Tools
@@ -91,7 +91,7 @@ quality_engine/
 
 The Quality Engine automatically detects Windows and provides:
 
-1. **Tool Substitutions**: CodeQL → Semgrep (recommended cross-platform alternative)
+1. **Tool Substitutions**: CodeQL â†’ Semgrep (recommended cross-platform alternative)
 2. **Windows Security Tool**: Comprehensive security scanning for Windows
 3. **Platform Warnings**: Clear information about limitations and alternatives
 4. **User Confirmation**: Optional confirmation before running on Windows
@@ -102,34 +102,34 @@ The Quality Engine automatically detects Windows and provides:
 
 ```bash
 # Basic usage (smart mode is default)
-python -m autopr.actions.quality_engine
+python -m codeflow.actions.quality_engine
 
 # Fast mode - quick analysis with essential tools
-python -m autopr.actions.quality_engine --mode=fast
+python -m codeflow.actions.quality_engine --mode=fast
 
 # Smart mode - intelligent tool selection based on file types (default)
-python -m autopr.actions.quality_engine --mode=smart
+python -m codeflow.actions.quality_engine --mode=smart
 
 # Comprehensive mode - full analysis with all available tools
-python -m autopr.actions.quality_engine --mode=comprehensive
+python -m codeflow.actions.quality_engine --mode=comprehensive
 
 # AI-enhanced analysis (experimental)
-python -m autopr.actions.quality_engine --mode=ai_enhanced --ai-provider openai --ai-model gpt-4
+python -m codeflow.actions.quality_engine --mode=ai_enhanced --ai-provider openai --ai-model gpt-4
 
 # Auto-fix mode - automatically fix issues using AI
-python -m autopr.actions.quality_engine --mode=comprehensive --auto-fix --ai-provider openai --ai-model gpt-4
+python -m codeflow.actions.quality_engine --mode=comprehensive --auto-fix --ai-provider openai --ai-model gpt-4
 
 # Auto-fix with specific issue types
-python -m autopr.actions.quality_engine --auto-fix --fix-types E501 F401 F841 --max-fixes 25
+python -m codeflow.actions.quality_engine --auto-fix --fix-types E501 F401 F841 --max-fixes 25
 
 # Dry-run auto-fix (preview changes without applying)
-python -m autopr.actions.quality_engine --auto-fix --dry-run
+python -m codeflow.actions.quality_engine --auto-fix --dry-run
 
 # Windows mode (with confirmation)
-python -m autopr.actions.quality_engine.cli --files <files> --mode comprehensive
+python -m codeflow.actions.quality_engine.cli --files <files> --mode comprehensive
 
 # Skip Windows check
-python -m autopr.actions.quality_engine.cli --files <files> --skip-windows-check
+python -m codeflow.actions.quality_engine.cli --files <files> --skip-windows-check
 ```
 
 ### Available Modes
@@ -150,19 +150,19 @@ The Quality Engine is **disabled by default** in pre-commit hooks due to perform
 2. **isort** - Import sorting
 3. **Prettier** - JSON/YAML/Markdown formatting
 4. **Handle Unstaged Changes** - Automatically adds formatting changes
-5. **✅ Commit completes successfully**
+5. **âœ… Commit completes successfully**
 
 #### Manual Quality Checks
 
 ```bash
 # Run comprehensive analysis when needed
-python -m autopr.actions.quality_engine --mode=comprehensive
+python -m codeflow.actions.quality_engine --mode=comprehensive
 
 # Run smart analysis for quick checks
-python -m autopr.actions.quality_engine --mode=smart
+python -m codeflow.actions.quality_engine --mode=smart
 
 # Run fast analysis for essential checks
-python -m autopr.actions.quality_engine --mode=fast
+python -m codeflow.actions.quality_engine --mode=fast
 ```
 
 #### Re-enabling Quality Engine in Pre-commit
@@ -175,8 +175,8 @@ If you want to add Quality Engine back to pre-commit, uncomment the section in
 - repo: local
   hooks:
     - id: quality-engine
-      name: AutoPR Quality Engine
-      entry: python -m autopr.actions.quality_engine
+      name: CodeFlow Quality Engine
+      entry: python -m codeflow.actions.quality_engine
       language: system
       types: [python]
       args: [--mode=smart] # Use smart mode for pre-commit
@@ -191,7 +191,7 @@ seconds).
 ### CLI Options
 
 ```bash
-python -m autopr.actions.quality_engine [OPTIONS]
+python -m codeflow.actions.quality_engine [OPTIONS]
 
 Options:
   --mode {fast,comprehensive,ai_enhanced,smart}  Quality check mode (default: smart)
@@ -225,19 +225,19 @@ common code quality issues:
 
 ```bash
 # Basic auto-fix with default settings
-python -m autopr.actions.quality_engine --auto-fix
+python -m codeflow.actions.quality_engine --auto-fix
 
 # Auto-fix with specific issue types
-python -m autopr.actions.quality_engine --auto-fix --fix-types E501 F401 F841
+python -m codeflow.actions.quality_engine --auto-fix --fix-types E501 F401 F841
 
 # Limit the number of fixes applied
-python -m autopr.actions.quality_engine --auto-fix --max-fixes 25
+python -m codeflow.actions.quality_engine --auto-fix --max-fixes 25
 
 # Preview changes without applying them
-python -m autopr.actions.quality_engine --auto-fix --dry-run
+python -m codeflow.actions.quality_engine --auto-fix --dry-run
 
 # Combine with comprehensive analysis
-python -m autopr.actions.quality_engine --mode=comprehensive --auto-fix
+python -m codeflow.actions.quality_engine --mode=comprehensive --auto-fix
 ```
 
 #### Safety Features
@@ -256,7 +256,7 @@ python -m autopr.actions.quality_engine --mode=comprehensive --auto-fix
 - **Smart Mode**: ~10-30 seconds - Intelligent tool selection
 - **Comprehensive Mode**: ~60-120 seconds - All tools, thorough analysis
 
-#### Typical Results (AutoPR Engine Codebase)
+#### Typical Results (CodeFlow Engine Codebase)
 
 - **Fast Mode**: ~50-100 issues found
 - **Smart Mode**: ~500-1000 issues found
@@ -274,9 +274,9 @@ python -m autopr.actions.quality_engine --mode=comprehensive --auto-fix
 ### Programmatic Usage
 
 ```python
-from autopr.actions.quality_engine.engine import QualityEngine
-from autopr.actions.quality_engine.models import QualityInputs
-from autopr.utils.volume_utils import QualityMode
+from codeflow.actions.quality_engine.engine import QualityEngine
+from codeflow.actions.quality_engine.models import QualityInputs
+from codeflow.utils.volume_utils import QualityMode
 
 # Create engine
 engine = QualityEngine()
@@ -297,11 +297,11 @@ print(f"Found {result.total_issues_found} issues")
 The engine can be configured via `pyproject.toml`:
 
 ```toml
-[tool.autopr.quality_engine]
+[tool.codeflow.quality_engine]
 default_mode = "smart"
 enable_ai = false
 
-[tool.autopr.quality_engine.tools]
+[tool.codeflow.quality_engine.tools]
 ruff = { enabled = true, config = {} }
 semgrep = { enabled = true, rules = "auto", severity = "INFO,WARNING,ERROR" }
 bandit = { enabled = true, config = {} }
@@ -345,4 +345,4 @@ class MyCustomTool(Tool):
 
 ## License
 
-Part of the AutoPR project. See main project license.
+Part of the CodeFlow project. See main project license.

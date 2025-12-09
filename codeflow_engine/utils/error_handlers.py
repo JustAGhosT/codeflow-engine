@@ -1,13 +1,13 @@
-"""
+﻿"""
 Shared Error Handling Utilities
 
-Common error handling patterns used across the AutoPR engine.
+Common error handling patterns used across the CodeFlow engine.
 """
 
 import logging
 from typing import Any
 
-from codeflow_engine.exceptions import AutoPRException
+from codeflow_engine.exceptions import CodeFlowException
 
 
 logger = logging.getLogger(__name__)
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 def handle_operation_error(
     operation_name: str,
     exception: Exception,
-    error_class: type[AutoPRException] = AutoPRException,
+    error_class: type[CodeFlowException] = CodeFlowException,
     *,
     log_level: str = "exception",
     reraise: bool = True,
@@ -28,7 +28,7 @@ def handle_operation_error(
     Args:
         operation_name: Name of the operation that failed
         exception: The exception that was raised
-        error_class: Exception class to raise (default: AutoPRException)
+        error_class: Exception class to raise (default: CodeFlowException)
         log_level: Logging level to use ('exception', 'error', 'warning')
         reraise: Whether to reraise the exception after logging
         **kwargs: Additional keyword arguments passed to the error class

@@ -1,10 +1,10 @@
-name: "Flowise AI Agent Builder Template"
+﻿name: "Flowise AI Agent Builder Template"
 category: "ai_agent_builder"
 description:
   "#3 Best open-source AI agent builder - LLM-powered workflows with modular AI components and
   self-hosting"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["ai_agent_builder", "open_source", "llm_integration", "self_hosting", "developer_focused"]
 
 platform_info:

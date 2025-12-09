@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "claude_dev",
   "name": "Claude Dev",
   "description": "Anthropic's AI development environment for building with Claude AI models",
@@ -12,7 +12,7 @@
   "type": "ai",
   "source": "official",
   "priority": 50,
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "vendor": "Anthropic",
   "website": "https://www.anthropic.com/claude",
   "pricing_model": "paid",

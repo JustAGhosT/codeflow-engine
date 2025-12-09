@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "AWS Amplify",
   "category": "cloud_hosting",
   "description": "AWS service for building full-stack web and mobile applications",
@@ -39,7 +39,7 @@
   "is_active": true,
   "type": "general",
   "source": "community",
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "detection": {},
   "project_config": {},
   "is_beta": false,

@@ -1,4 +1,4 @@
-# Staging Environment Configuration
+﻿# Staging Environment Configuration
 # This file contains settings specific to the staging environment
 
 # Disable debug mode but enable detailed logging
@@ -38,8 +38,8 @@ redis:
 security:
   enable_cors: true
   allowed_origins:
-    - "https://staging.autopr.dev"
-    - "https://staging-api.autopr.dev"
+    - "https://staging.codeflow.dev"
+    - "https://staging-api.codeflow.dev"
   enable_csrf_protection: true
   rate_limit_per_minute: 120
   jwt_expiry: 3600 # 1 hour

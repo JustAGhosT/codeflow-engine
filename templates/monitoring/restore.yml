@@ -1,10 +1,10 @@
-name: "Restore Script"
+﻿name: "Restore Script"
 category: "monitoring"
 description:
   "Bash script for restoring databases, files, and configurations from backup files with validation
   and safety checks"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["restore", "bash", "database", "files", "recovery", "postgresql", "mysql"]
 
 template_info:
@@ -157,7 +157,7 @@ template: |
   # Handle special arguments
   case "$1" in
       "--list")
-          echo "📋 Available backup files:"
+          echo "ðŸ“‹ Available backup files:"
           {% if backup_dir %}
           if [ -d "$BACKUP_DIR" ]; then
               ls -lah "$BACKUP_DIR" | grep backup
@@ -191,7 +191,7 @@ template: |
   fi
 
   if [ -z "$BACKUP_FILE" ]; then
-      echo "❌ Error: No backup file specified"
+      echo "âŒ Error: No backup file specified"
       exit 1
   fi
 
@@ -201,45 +201,45 @@ template: |
       if [ -f "$BACKUP_DIR/$BACKUP_FILE" ]; then
           BACKUP_FILE="$BACKUP_DIR/$BACKUP_FILE"
       else
-          echo "❌ Error: Backup file not found: $BACKUP_FILE"
-          echo "💡 Try: $0 --list to see available backups"
+          echo "âŒ Error: Backup file not found: $BACKUP_FILE"
+          echo "ðŸ’¡ Try: $0 --list to see available backups"
           exit 1
       fi
       {% else %}
-      echo "❌ Error: Backup file not found: $BACKUP_FILE"
+      echo "âŒ Error: Backup file not found: $BACKUP_FILE"
       exit 1
       {% endif %}
   fi
 
-  echo "🔄 Starting restore from: $BACKUP_FILE"
+  echo "ðŸ”„ Starting restore from: $BACKUP_FILE"
 
   {% if validate_backup %}
   # Validate backup file
-  echo "🔍 Validating backup file..."
+  echo "ðŸ” Validating backup file..."
   if [ ! -r "$BACKUP_FILE" ]; then
-      echo "❌ Error: Cannot read backup file"
+      echo "âŒ Error: Cannot read backup file"
       exit 1
   fi
 
   # Check file size
   FILE_SIZE=$(stat -f%z "$BACKUP_FILE" 2>/dev/null || stat -c%s "$BACKUP_FILE" 2>/dev/null || echo "0")
   if [ "$FILE_SIZE" -eq 0 ]; then
-      echo "❌ Error: Backup file is empty"
+      echo "âŒ Error: Backup file is empty"
       exit 1
   fi
 
-  echo "✅ Backup file validation passed (Size: $(du -sh "$BACKUP_FILE" | cut -f1))"
+  echo "âœ… Backup file validation passed (Size: $(du -sh "$BACKUP_FILE" | cut -f1))"
   {% endif %}
 
   {% if confirm_restore %}
   # Confirmation prompt
   if [ "$DRY_RUN" != "true" ]; then
-      echo "⚠️  WARNING: This will restore data from backup and may overwrite existing data!"
-      echo "📁 Backup file: $BACKUP_FILE"
-      echo "📅 Backup date: $(stat -f%Sm "$BACKUP_FILE" 2>/dev/null || stat -c%y "$BACKUP_FILE" 2>/dev/null || echo "Unknown")"
+      echo "âš ï¸  WARNING: This will restore data from backup and may overwrite existing data!"
+      echo "ðŸ“ Backup file: $BACKUP_FILE"
+      echo "ðŸ“… Backup date: $(stat -f%Sm "$BACKUP_FILE" 2>/dev/null || stat -c%y "$BACKUP_FILE" 2>/dev/null || echo "Unknown")"
       read -p "Are you sure you want to continue? (yes/no): " CONFIRM
       if [ "$CONFIRM" != "yes" ]; then
-          echo "❌ Restore cancelled"
+          echo "âŒ Restore cancelled"
           exit 1
       fi
   fi
@@ -248,7 +248,7 @@ template: |
   {% if create_pre_restore_backup %}
   # Create pre-restore backup
   if [ "$DRY_RUN" != "true" ]; then
-      echo "💾 Creating pre-restore backup..."
+      echo "ðŸ’¾ Creating pre-restore backup..."
       PRE_RESTORE_TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
       # Check if database exists and create backup
@@ -259,7 +259,7 @@ template: |
           {% elif database_type == "mysql" %}
           mysqldump --single-transaction "${{{ database_url }}}" > "pre_restore_backup_$PRE_RESTORE_TIMESTAMP.sql" 2>/dev/null || true
           {% endif %}
-          echo "✅ Pre-restore backup created: pre_restore_backup_$PRE_RESTORE_TIMESTAMP.sql"
+          echo "âœ… Pre-restore backup created: pre_restore_backup_$PRE_RESTORE_TIMESTAMP.sql"
       fi
       {% endif %}
   fi
@@ -270,17 +270,17 @@ template: |
 
   if [[ "$BASENAME" == *.sql ]]; then
       # Database restore
-      echo "🗄️  Restoring database..."
+      echo "ðŸ—„ï¸  Restoring database..."
 
       if [ "$DRY_RUN" = "true" ]; then
-          echo "🔍 DRY RUN: Would restore database from $BACKUP_FILE"
+          echo "ðŸ” DRY RUN: Would restore database from $BACKUP_FILE"
           {% if database_url %}
-          echo "🔍 DRY RUN: Database URL: ${{{ database_url }}}"
+          echo "ðŸ” DRY RUN: Database URL: ${{{ database_url }}}"
           {% endif %}
       else
           {% if database_url %}
           if [ -z "${{{ database_url }}}" ]; then
-              echo "❌ Error: {{ database_url }} environment variable not set"
+              echo "âŒ Error: {{ database_url }} environment variable not set"
               exit 1
           fi
 
@@ -288,22 +288,22 @@ template: |
           # Try PostgreSQL first
           if psql "${{{ database_url }}}" -c '\q' 2>/dev/null; then
               psql "${{{ database_url }}}" < "$BACKUP_FILE"
-              echo "✅ PostgreSQL database restored successfully"
+              echo "âœ… PostgreSQL database restored successfully"
           {% if database_type == "auto" %}
           elif mysql -e "SELECT 1" 2>/dev/null; then
               mysql < "$BACKUP_FILE"
-              echo "✅ MySQL database restored successfully"
+              echo "âœ… MySQL database restored successfully"
           {% endif %}
           else
-              echo "❌ Error: Could not connect to database"
+              echo "âŒ Error: Could not connect to database"
               exit 1
           fi
           {% elif database_type == "mysql" %}
           mysql < "$BACKUP_FILE"
-          echo "✅ MySQL database restored successfully"
+          echo "âœ… MySQL database restored successfully"
           {% endif %}
           {% else %}
-          echo "❌ Error: Database URL not configured"
+          echo "âŒ Error: Database URL not configured"
           exit 1
           {% endif %}
       fi
@@ -311,10 +311,10 @@ template: |
   elif [[ "$BASENAME" == *.tar.gz ]] || [[ "$BASENAME" == *.tar ]]; then
       {% if restore_files %}
       # File restore
-      echo "📁 Restoring files..."
+      echo "ðŸ“ Restoring files..."
 
       if [ "$DRY_RUN" = "true" ]; then
-          echo "🔍 DRY RUN: Would extract $BACKUP_FILE to {{ files_destination }}"
+          echo "ðŸ” DRY RUN: Would extract $BACKUP_FILE to {{ files_destination }}"
           if [[ "$BASENAME" == *.tar.gz ]]; then
               tar -tzf "$BACKUP_FILE" | head -10
           else
@@ -330,39 +330,39 @@ template: |
           else
               tar -xf "$BACKUP_FILE" -C "{{ files_destination }}" --strip-components=1
           fi
-          echo "✅ Files restored to {{ files_destination }}"
+          echo "âœ… Files restored to {{ files_destination }}"
       fi
       {% else %}
-      echo "⚠️  File restoration is disabled"
+      echo "âš ï¸  File restoration is disabled"
       {% endif %}
 
   elif [[ "$BASENAME" == *_backup_* ]]; then
       {% if restore_config %}
       # Configuration file restore
-      echo "⚙️  Restoring configuration..."
+      echo "âš™ï¸  Restoring configuration..."
 
       # Extract original filename from backup name
       ORIGINAL_NAME=$(echo "$BASENAME" | sed 's/_backup_[0-9]*_[0-9]*$//')
 
       if [ "$DRY_RUN" = "true" ]; then
-          echo "🔍 DRY RUN: Would restore $BACKUP_FILE to $ORIGINAL_NAME"
+          echo "ðŸ” DRY RUN: Would restore $BACKUP_FILE to $ORIGINAL_NAME"
       else
           cp "$BACKUP_FILE" "$ORIGINAL_NAME"
-          echo "✅ Configuration restored: $ORIGINAL_NAME"
+          echo "âœ… Configuration restored: $ORIGINAL_NAME"
       fi
       {% else %}
-      echo "⚠️  Configuration restoration is disabled"
+      echo "âš ï¸  Configuration restoration is disabled"
       {% endif %}
 
   else
-      echo "❌ Error: Unknown backup file type: $BASENAME"
-      echo "💡 Supported types: *.sql, *.tar.gz, *.tar, *_backup_*"
+      echo "âŒ Error: Unknown backup file type: $BASENAME"
+      echo "ðŸ’¡ Supported types: *.sql, *.tar.gz, *.tar, *_backup_*"
       exit 1
   fi
 
   if [ "$DRY_RUN" = "true" ]; then
-      echo "🔍 DRY RUN completed - no changes were made"
+      echo "ðŸ” DRY RUN completed - no changes were made"
   else
-      echo "✅ Restore completed successfully at $(date)"
-      echo "💡 Remember to restart your application if needed"
+      echo "âœ… Restore completed successfully at $(date)"
+      echo "ðŸ’¡ Remember to restart your application if needed"
   fi

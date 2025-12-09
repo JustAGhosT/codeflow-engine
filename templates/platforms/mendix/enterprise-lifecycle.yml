@@ -1,10 +1,10 @@
-name: "Mendix Enterprise Lifecycle Management"
+﻿name: "Mendix Enterprise Lifecycle Management"
 category: "enterprise"
 description:
   "Enterprise low-code platform for end-to-end application lifecycle management with AI-assisted
   development"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags:
   [
     "enterprise",

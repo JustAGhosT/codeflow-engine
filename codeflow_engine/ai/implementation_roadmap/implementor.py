@@ -1,4 +1,4 @@
-"""
+﻿"""
 Main Implementation Roadmap Orchestrator
 Coordinates all modular components and maintains backward compatibility
 """
@@ -366,7 +366,7 @@ class Phase1ExtensionImplementor:
         # Check Python version
 
         # Check project structure
-        required_dirs = ["autopr", "autopr/actions", "autopr/ai"]
+        required_dirs = ["codeflow", "codeflow/actions", "codeflow/ai"]
         for dir_name in required_dirs:
             if not (self.project_root / dir_name).exists():
                 validation_results["warnings"].append(

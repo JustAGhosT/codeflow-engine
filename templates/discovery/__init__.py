@@ -1,4 +1,4 @@
-"""
+﻿"""
 Template Discovery System
 ========================
 
@@ -28,7 +28,7 @@ from discovery.format_generators import (
 )
 from discovery.qa_framework import QualityAssuranceFramework
 
-# Quality metrics have been moved to autopr.quality.template_metrics
+# Quality metrics have been moved to codeflow.quality.template_metrics
 # Import them directly from there when needed
 from discovery.report_generators import (
     HTMLReportGenerator,

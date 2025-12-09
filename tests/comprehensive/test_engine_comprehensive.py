@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 Comprehensive tests for engine module.
 """
@@ -14,7 +14,7 @@ import pytest
 
 # Import the modules we're testing
 try:
-    from codeflow_engine.actions.engine import (AutoPREngine, EngineConfig,
+    from codeflow_engine.actions.engine import (CodeFlowEngine, EngineConfig,
                                        EngineManager, EngineMonitor,
                                        EngineRunner, EngineState,
                                        EngineValidator)
@@ -511,36 +511,36 @@ class TestEngineManager:
         assert all(result.is_valid for result in results.values())
 
 
-class TestAutoPREngine:
-    """Test AutoPREngine class."""
+class TestCodeFlowEngine:
+    """Test CodeFlowEngine class."""
 
     @pytest.fixture
     def auto_pr_engine(self):
-        """Create an AutoPREngine instance for testing."""
+        """Create an CodeFlowEngine instance for testing."""
         config = EngineConfig(max_workers=2, timeout=60)
-        return AutoPREngine(config)
+        return CodeFlowEngine(config)
 
     def test_auto_pr_engine_initialization(self, auto_pr_engine):
-        """Test AutoPREngine initialization."""
+        """Test CodeFlowEngine initialization."""
         assert auto_pr_engine.config is not None
         assert auto_pr_engine.manager is not None
         assert auto_pr_engine.state is not None
 
     def test_initialize_engine(self, auto_pr_engine):
-        """Test initializing the AutoPR engine."""
+        """Test initializing the CodeFlow engine."""
         result = auto_pr_engine.initialize_engine()
         assert result is True
         assert auto_pr_engine.state.status == "initialized"
 
     def test_start_engine(self, auto_pr_engine):
-        """Test starting the AutoPR engine."""
+        """Test starting the CodeFlow engine."""
         auto_pr_engine.initialize_engine()
         result = auto_pr_engine.start_engine()
         assert result is True
         assert auto_pr_engine.state.status == "running"
 
     def test_stop_engine(self, auto_pr_engine):
-        """Test stopping the AutoPR engine."""
+        """Test stopping the CodeFlow engine."""
         auto_pr_engine.initialize_engine()
         auto_pr_engine.start_engine()
         result = auto_pr_engine.stop_engine()

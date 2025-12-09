@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 Format Generators Package
 =========================
@@ -43,5 +43,5 @@ __all__ = [
 
 # Version and metadata
 __version__ = "1.0.0"
-__author__ = "AutoPR Engine"
+__author__ = "CodeFlow Engine"
 __description__ = "Modular format generators for documentation generation"

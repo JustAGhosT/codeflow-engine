@@ -1,4 +1,4 @@
-# Tests for install.ps1
+﻿# Tests for install.ps1
 # Run with: pwsh -File tests/scripts/test_install.ps1
 # Or in PowerShell: Invoke-Pester tests/scripts/test_install.ps1
 
@@ -15,7 +15,7 @@ Describe "install.ps1" {
 
         It "Shows version with -Version flag" {
             $output = & $InstallScript -Version 2>&1
-            $output | Should -Match "AutoPR Engine Installer v"
+            $output | Should -Match "CodeFlow Engine Installer v"
         }
 
         It "Shows help with -Help flag" {
@@ -47,7 +47,7 @@ Describe "install.ps1" {
             $content | Should -Match "function Show-Help"
             $content | Should -Match "function Test-Python"
             $content | Should -Match "function Test-Pip"
-            $content | Should -Match "function Install-AutoPR"
+            $content | Should -Match "function Install-CodeFlow"
             $content | Should -Match "function Install-Docker"
             $content | Should -Match "function Install-GitHubAction"
             $content | Should -Match "function Show-NextSteps"

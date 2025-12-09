@@ -1,5 +1,5 @@
-"""
-Models for the AutoPR Crew module.
+﻿"""
+Models for the CodeFlow Crew module.
 
 This module provides data models and utility functions for the crew orchestration system.
 """

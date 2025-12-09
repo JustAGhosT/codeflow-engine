@@ -1,4 +1,4 @@
-# 3. Plugin System Architecture
+﻿# 3. Plugin System Architecture
 
 ## Status
 
@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-AutoPR needs an extensible plugin system to support:
+CodeFlow needs an extensible plugin system to support:
 
 - Third-party integrations
 - Custom workflows

@@ -1,9 +1,9 @@
-from enum import Enum
+﻿from enum import Enum
 
 
 class QualityMode(str, Enum):
     """
-    Defines the quality analysis modes for the AutoPR system.
+    Defines the quality analysis modes for the CodeFlow system.
 
     The modes control the depth and thoroughness of quality analysis,
     with higher modes performing more comprehensive but potentially slower analysis.

@@ -1,4 +1,4 @@
-# Future Enhancements - AutoPR Engine
+﻿# Future Enhancements - CodeFlow Engine
 
 This document tracks medium-priority items and enhancements identified during the comprehensive project analysis. These items are not blocking production deployment but represent valuable improvements for future iterations.
 
@@ -31,7 +31,7 @@ Enhance configuration error handling with more specific error messages, validati
 - [ ] Error messages guide users to solutions
 
 **Related Files:**
-- `autopr/config.py` (if exists)
+- `CodeFlow/config.py` (if exists)
 - Configuration loading modules
 
 ---
@@ -89,7 +89,7 @@ Implement comprehensive retry logic for external integrations (Slack, Linear, Gi
 - [ ] Integration tests with mock services
 
 **Related Files:**
-- `autopr/integrations/` directory
+- `CodeFlow/integrations/` directory
 - Integration-specific modules
 
 ---

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Test script for Axolo integration."""
 
 import asyncio
@@ -40,7 +40,7 @@ async def test_axolo_integration() -> None:
         ],
     }
 
-    await axolo.post_autopr_analysis(channel, test_analysis)
+    await axolo.post_codeflow_analysis(channel, test_analysis)
 
     # Cleanup
     await axolo.close()

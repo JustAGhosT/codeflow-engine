@@ -1,4 +1,4 @@
-# AutoPR Engine Design System
+﻿# CodeFlow Engine Design System
 ## Visual Identity & Component Library
 
 **Version:** 1.0.0  
@@ -9,7 +9,7 @@
 
 ## Overview
 
-This document defines the design system for AutoPR Engine's desktop application and web interfaces. It provides guidelines for maintaining visual consistency, ensuring accessibility, and building cohesive user experiences.
+This document defines the design system for CodeFlow Engine's desktop application and web interfaces. It provides guidelines for maintaining visual consistency, ensuring accessibility, and building cohesive user experiences.
 
 ---
 

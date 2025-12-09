@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "huggingface_code",
   "name": "Hugging Face Code",
   "description": "Open-source code assistance platform powered by Hugging Face's language models",
@@ -12,7 +12,7 @@
   "type": "ai",
   "source": "official",
   "priority": 54,
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "vendor": "Hugging Face",
   "website": "https://huggingface.co/",
   "pricing_model": "open_source",

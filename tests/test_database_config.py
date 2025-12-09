@@ -1,4 +1,4 @@
-"""
+﻿"""
 Comprehensive test suite for codeflow_engine.database.config module.
 
 Tests cover:
@@ -26,7 +26,7 @@ def clean_env(monkeypatch):
     env_vars = [
         "DATABASE_URL",
         "ENVIRONMENT",
-        "AUTOPR_SKIP_DB_INIT",
+        "CODEFLOW_SKIP_DB_INIT",
         "DB_POOL_SIZE",
         "DB_MAX_OVERFLOW",
         "DB_POOL_TIMEOUT",
@@ -38,7 +38,7 @@ def clean_env(monkeypatch):
     
     # Set safe defaults
     monkeypatch.setenv("DATABASE_URL", "sqlite:///:memory:")
-    monkeypatch.setenv("AUTOPR_SKIP_DB_INIT", "")
+    monkeypatch.setenv("CODEFLOW_SKIP_DB_INIT", "")
     
     yield monkeypatch
 
@@ -50,7 +50,7 @@ def reload_config():
         # Remove all related modules from cache
         modules_to_remove = [
             key for key in sys.modules.keys() 
-            if key.startswith("autopr.database")
+            if key.startswith("codeflow.database")
         ]
         for module in modules_to_remove:
             del sys.modules[module]
@@ -102,8 +102,8 @@ class TestEngineCreation:
         assert config.POOL_CONFIG["pool_pre_ping"] is True
     
     def test_skip_db_init_sets_engine_to_none(self, clean_env, reload_config):
-        """AUTOPR_SKIP_DB_INIT should prevent engine creation."""
-        clean_env.setenv("AUTOPR_SKIP_DB_INIT", "1")
+        """CODEFLOW_SKIP_DB_INIT should prevent engine creation."""
+        clean_env.setenv("CODEFLOW_SKIP_DB_INIT", "1")
         clean_env.setenv("DATABASE_URL", "sqlite:///:memory:")
         
         config = reload_config()
@@ -189,7 +189,7 @@ class TestSessionManagement:
     
     def test_get_db_raises_when_engine_is_none(self, clean_env, reload_config):
         """get_db should raise RuntimeError when engine is None."""
-        clean_env.setenv("AUTOPR_SKIP_DB_INIT", "1")
+        clean_env.setenv("CODEFLOW_SKIP_DB_INIT", "1")
         
         config = reload_config()
         
@@ -225,7 +225,7 @@ class TestDatabaseOperations:
     
     def test_init_db_raises_when_engine_is_none(self, clean_env, reload_config):
         """init_db should raise RuntimeError when engine is None."""
-        clean_env.setenv("AUTOPR_SKIP_DB_INIT", "1")
+        clean_env.setenv("CODEFLOW_SKIP_DB_INIT", "1")
         
         config = reload_config()
         
@@ -272,7 +272,7 @@ class TestDatabaseOperations:
     
     def test_drop_db_raises_when_engine_is_none(self, clean_env, reload_config):
         """drop_db should raise RuntimeError when engine is None."""
-        clean_env.setenv("AUTOPR_SKIP_DB_INIT", "1")
+        clean_env.setenv("CODEFLOW_SKIP_DB_INIT", "1")
         
         config = reload_config()
         
@@ -285,7 +285,7 @@ class TestHealthChecks:
     
     def test_get_connection_info_when_engine_is_none(self, clean_env, reload_config):
         """get_connection_info should return unavailable status when engine is None."""
-        clean_env.setenv("AUTOPR_SKIP_DB_INIT", "1")
+        clean_env.setenv("CODEFLOW_SKIP_DB_INIT", "1")
         
         config = reload_config()
         info = config.get_connection_info()

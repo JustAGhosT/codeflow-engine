@@ -1,4 +1,4 @@
-name: Deploy Website to Azure
+﻿name: Deploy Website to Azure
 
 on:
   push:
@@ -93,11 +93,11 @@ jobs:
 
       - name: Validate build output
         run: |
-          echo "✅ Website build successful!"
+          echo "âœ… Website build successful!"
           if [ -d "website/out" ]; then
             ls -la website/out/
             if [ -f "website/out/index.html" ] || [ -d "website/out/index" ]; then
-              echo "✅ Build output validated - index found"
+              echo "âœ… Build output validated - index found"
             else
               echo "::warning::index.html not found but build completed"
             fi
@@ -122,14 +122,14 @@ jobs:
       - name: Create Resource Group
         run: |
           az group create \
-            --name "${{ env.ENVIRONMENT }}-rg-${{ env.REGION_ABBR }}-autopr" \
+            --name "${{ env.ENVIRONMENT }}-rg-${{ env.REGION_ABBR }}-codeflow" \
             --location "${{ env.LOCATION }}" \
             --output none
 
       - name: Deploy Bicep Template
         run: |
           az deployment group create \
-            --resource-group "${{ env.ENVIRONMENT }}-rg-${{ env.REGION_ABBR }}-autopr" \
+            --resource-group "${{ env.ENVIRONMENT }}-rg-${{ env.REGION_ABBR }}-codeflow" \
             --template-file infrastructure/bicep/website.bicep \
             --parameters @infrastructure/bicep/website-parameters.json \
             --parameters regionAbbr=${{ env.REGION_ABBR }}

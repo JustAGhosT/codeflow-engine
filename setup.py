@@ -1,7 +1,7 @@
-"""
-Setup script for AutoPR Engine
+﻿"""
+Setup script for CodeFlow Engine
 
-Installs the AutoPR CLI and makes it available system-wide.
+Installs the CodeFlow CLI and makes it available system-wide.
 """
 
 import os
@@ -15,7 +15,7 @@ def read_readme():
     if os.path.exists(readme_path):
         with open(readme_path, encoding="utf-8") as f:
             return f.read()
-    return "AutoPR Engine - AI-Powered Code Quality and Automation"
+    return "CodeFlow Engine - AI-Powered Code Quality and Automation"
 
 
 # Read requirements
@@ -32,12 +32,12 @@ def read_requirements():
 setup(
     name="codeflow-engine",
     version="1.0.0",
-    author="AutoPR Team",
-    author_email="team@autopr.dev",
+    author="CodeFlow Team",
+    author_email="team@codeflow.dev",
     description="AI-Powered Code Quality and Automation Engine",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
-    url="https://github.com/autopr/codeflow-engine",
+    url="https://github.com/CodeFlow/codeflow-engine",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -77,8 +77,8 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "autopr=codeflow_engine.cli.main:cli",
-            "autopr-dashboard=codeflow_engine.dashboard.server:run_dashboard",
+            "CodeFlow=codeflow_engine.cli.main:cli",
+            "codeflow-dashboard=codeflow_engine.dashboard.server:run_dashboard",
         ],
     },
     include_package_data=True,
@@ -100,8 +100,8 @@ setup(
         "development-tools",
     ],
     project_urls={
-        "Bug Reports": "https://github.com/autopr/codeflow-engine/issues",
-        "Source": "https://github.com/autopr/codeflow-engine",
-        "Documentation": "https://autopr.dev/docs",
+        "Bug Reports": "https://github.com/CodeFlow/codeflow-engine/issues",
+        "Source": "https://github.com/CodeFlow/codeflow-engine",
+        "Documentation": "https://codeflow.dev/docs",
     },
 )

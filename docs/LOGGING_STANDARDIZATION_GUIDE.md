@@ -1,10 +1,10 @@
-# Logging Standardization Guide
+﻿# Logging Standardization Guide
 
 ## Overview
 
-AutoPR Engine uses **structlog** as the primary logging framework across the entire codebase. This guide documents the standardized logging approach, configuration, and best practices.
+CodeFlow Engine uses **structlog** as the primary logging framework across the entire codebase. This guide documents the standardized logging approach, configuration, and best practices.
 
-**Status:** ✅ Logging system standardized on structlog  
+**Status:** âœ… Logging system standardized on structlog  
 **Issue:** BUG-1 resolved - No dual logging system conflict (analysis found structlog only)  
 **Last Updated:** 2025-11-22
 
@@ -27,7 +27,7 @@ AutoPR Engine uses **structlog** as the primary logging framework across the ent
 
 ### Logging Framework: structlog
 
-AutoPR Engine uses **structlog** exclusively for all logging operations. Structlog provides:
+CodeFlow Engine uses **structlog** exclusively for all logging operations. Structlog provides:
 
 - **Structured logging** with key-value pairs
 - **Context binding** for request tracing
@@ -46,23 +46,23 @@ AutoPR Engine uses **structlog** exclusively for all logging operations. Structl
 ### Architecture Diagram
 
 ```
-┌─────────────────┐
-│  Application    │
-│     Code        │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│   structlog     │
-│   Logger        │
-└────────┬────────┘
-         │
-         ├──────────────┬──────────────┐
-         ▼              ▼              ▼
-┌──────────────┐  ┌──────────┐  ┌──────────┐
-│   Console    │  │   File   │  │  JSON    │
-│   Handler    │  │  Handler │  │ Handler  │
-└──────────────┘  └──────────┘  └──────────┘
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  Application    â”‚
+â”‚     Code        â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+         â”‚
+         â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚   structlog     â”‚
+â”‚   Logger        â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+         â”‚
+         â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+         â–¼              â–¼              â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚   Console    â”‚  â”‚   File   â”‚  â”‚  JSON    â”‚
+â”‚   Handler    â”‚  â”‚  Handler â”‚  â”‚ Handler  â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ---
@@ -72,7 +72,7 @@ AutoPR Engine uses **structlog** exclusively for all logging operations. Structl
 ### Basic Configuration
 
 ```python
-# autopr/config/logging.py
+# CodeFlow/config/logging.py
 
 import structlog
 import logging
@@ -151,7 +151,7 @@ configure_logging(
 configure_logging(
     level="INFO",
     json_logs=True,  # Structured JSON for log aggregation
-    log_file="/var/log/autopr/app.log"
+    log_file="/var/log/CodeFlow/app.log"
 )
 ```
 
@@ -160,7 +160,7 @@ configure_logging(
 configure_logging(
     level="INFO",
     json_logs=True,  # JSON output for ELK/Splunk
-    log_file="/var/log/autopr/production.log"
+    log_file="/var/log/CodeFlow/production.log"
 )
 ```
 
@@ -276,10 +276,10 @@ logger.critical("Redis connection lost", attempts=5, last_error="Connection refu
 Always use key-value pairs for structured data:
 
 ```python
-# ✅ GOOD: Structured with key-value pairs
+# âœ… GOOD: Structured with key-value pairs
 logger.info("workflow_started", workflow_id="wf-123", user_id="user-456")
 
-# ❌ BAD: Unstructured string interpolation
+# âŒ BAD: Unstructured string interpolation
 logger.info(f"Workflow wf-123 started by user-456")
 ```
 
@@ -314,7 +314,7 @@ With `json_logs=True`, logs are output as JSON:
   "steps_failed": 0,
   "timestamp": "2025-11-22T19:00:00.123456Z",
   "level": "info",
-  "logger": "autopr.workflows.engine"
+  "logger": "codeflow.workflows.engine"
 }
 ```
 
@@ -392,10 +392,10 @@ def execute_workflow(workflow_id: str):
 Structlog uses lazy evaluation for performance:
 
 ```python
-# ✅ GOOD: Lazy evaluation (only evaluated if logged)
+# âœ… GOOD: Lazy evaluation (only evaluated if logged)
 logger.debug("expensive_operation", result=expensive_function())
 
-# ✅ BETTER: Conditional evaluation
+# âœ… BETTER: Conditional evaluation
 if logger.isEnabledFor(logging.DEBUG):
     logger.debug("expensive_operation", result=expensive_function())
 ```
@@ -403,10 +403,10 @@ if logger.isEnabledFor(logging.DEBUG):
 ### Avoid String Formatting
 
 ```python
-# ✅ GOOD: Let structlog handle formatting
+# âœ… GOOD: Let structlog handle formatting
 logger.info("workflow_started", workflow_id=wf_id, user_id=user_id)
 
-# ❌ BAD: Pre-formatted strings
+# âŒ BAD: Pre-formatted strings
 logger.info(f"Workflow {wf_id} started by {user_id}")
 ```
 
@@ -537,7 +537,7 @@ configure_production_logging()
 # Logging configuration
 LOG_LEVEL=INFO
 LOG_FORMAT=json
-LOG_FILE=/var/log/autopr/production.log
+LOG_FILE=/var/log/CodeFlow/production.log
 
 # Structured logging fields
 SERVICE_NAME=codeflow-engine
@@ -594,7 +594,7 @@ Example Logstash configuration:
 {
   "input": {
     "file": {
-      "path": "/var/log/autopr/*.log",
+      "path": "/var/log/CodeFlow/*.log",
       "codec": "json"
     }
   },
@@ -606,7 +606,7 @@ Example Logstash configuration:
   "output": {
     "elasticsearch": {
       "hosts": ["localhost:9200"],
-      "index": "autopr-%{+YYYY.MM.dd}"
+      "index": "codeflow-%{+YYYY.MM.dd}"
     }
   }
 }
@@ -616,7 +616,7 @@ Example Logstash configuration:
 
 ## Best Practices
 
-### DO's ✅
+### DO's âœ…
 
 1. **Use structured logging** with key-value pairs
 2. **Include context** (workflow_id, user_id, request_id)
@@ -626,7 +626,7 @@ Example Logstash configuration:
 6. **Use exception()** for errors with stack traces
 7. **Bind context** for request and workflow scopes
 
-### DON'Ts ❌
+### DON'Ts âŒ
 
 1. **Don't log sensitive data** (passwords, tokens, API keys)
 2. **Don't use string interpolation** for log messages
@@ -715,15 +715,15 @@ if logger.isEnabledFor(logging.DEBUG):
 
 ## Conclusion
 
-AutoPR Engine's logging system is standardized on **structlog** for:
+CodeFlow Engine's logging system is standardized on **structlog** for:
 
-- ✅ **Consistency** across all modules
-- ✅ **Performance** with lazy evaluation
-- ✅ **Structured data** for analysis
-- ✅ **Production-ready** JSON output
-- ✅ **Integration** with monitoring systems
+- âœ… **Consistency** across all modules
+- âœ… **Performance** with lazy evaluation
+- âœ… **Structured data** for analysis
+- âœ… **Production-ready** JSON output
+- âœ… **Integration** with monitoring systems
 
-**BUG-1 Status:** ✅ **RESOLVED** - Single logging framework (structlog) confirmed
+**BUG-1 Status:** âœ… **RESOLVED** - Single logging framework (structlog) confirmed
 
 For questions or issues, see [Troubleshooting Guide](./TROUBLESHOOTING.md) or contact the DevOps team.
 
@@ -731,4 +731,4 @@ For questions or issues, see [Troubleshooting Guide](./TROUBLESHOOTING.md) or co
 
 **Last Updated:** 2025-11-22  
 **Version:** 1.0.0  
-**Maintained by:** AutoPR DevOps Team
+**Maintained by:** CodeFlow DevOps Team

@@ -1,5 +1,5 @@
-"""
-AutoPR Action: Multi-Platform Integrator
+﻿"""
+CodeFlow Action: Multi-Platform Integrator
 Integrates with various platforms for enhanced workflow coordination.
 """
 
@@ -132,13 +132,13 @@ def send_slack_notification(inputs: MultiPlatformInputs) -> MultiPlatformOutputs
 
         # Create rich Slack message
         message: dict[str, Any] = {
-            "text": f"🤖 AutoPR: {inputs.title}",
+            "text": f"ðŸ¤– CodeFlow: {inputs.title}",
             "blocks": [
                 {
                     "type": "header",
                     "text": {
                         "type": "plain_text",
-                        "text": f"🤖 AutoPR: {inputs.title}",
+                        "text": f"ðŸ¤– CodeFlow: {inputs.title}",
                     },
                 },
                 {
@@ -194,7 +194,7 @@ def send_discord_message(inputs: MultiPlatformInputs) -> MultiPlatformOutputs:
 
         # Create Discord embed
         embed: dict[str, Any] = {
-            "title": f"🤖 AutoPR: {inputs.title}",
+            "title": f"ðŸ¤– CodeFlow: {inputs.title}",
             "description": inputs.description,
             "color": 0x00FF00,  # Green
             "fields": [

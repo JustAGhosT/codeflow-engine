@@ -1,5 +1,5 @@
-"""
-Tests for CrewAI integration with volume control in AutoPR Engine.
+﻿"""
+Tests for CrewAI integration with volume control in CodeFlow Engine.
 """
 
 # mypy: ignore-errors
@@ -43,7 +43,7 @@ sys.modules["codeflow_engine.agents.platform_analysis_agent"] = Mock()
 sys.modules["codeflow_engine.agents.linting_agent"] = Mock()
 
 # Now import the rest of the modules
-from codeflow_engine.agents.crew import AutoPRCrew  # noqa: E402
+from codeflow_engine.agents.crew import CodeFlowCrew  # noqa: E402
 from codeflow_engine.utils.volume_utils import QualityMode, get_volume_config  # noqa: E402
 
 
@@ -165,8 +165,8 @@ def mock_agents(monkeypatch):
 def crew(mock_llm_provider_manager, mock_agents, monkeypatch):
     """Create a test crew instance with mocked dependencies."""
 
-    # Create a mock AutoPRCrew class that won't instantiate real agents
-    class MockAutoPRCrew:
+    # Create a mock CodeFlowCrew class that won't instantiate real agents
+    class MockCodeFlowCrew:
         def __init__(self, llm_model: str = "test-model", volume: int = 500, **kwargs):
             self.llm_model = llm_model
             self.volume = volume
@@ -185,15 +185,15 @@ def crew(mock_llm_provider_manager, mock_agents, monkeypatch):
                 }
             )
 
-    # Patch the AutoPRCrew class to use our mock
-    monkeypatch.setattr("codeflow_engine.agents.crew.main.AutoPRCrew", MockAutoPRCrew)
+    # Patch the CodeFlowCrew class to use our mock
+    monkeypatch.setattr("codeflow_engine.agents.crew.main.CodeFlowCrew", MockCodeFlowCrew)
 
     # Now create the crew - this will use our mock class
     with patch(
-        "autopr.actions.llm.get_llm_provider_manager",
+        "codeflow.actions.llm.get_llm_provider_manager",
         return_value=mock_llm_provider_manager,
     ):
-        return AutoPRCrew(llm_model="test-model", volume=500)
+        return CodeFlowCrew(llm_model="test-model", volume=500)
 
 
 @pytest.fixture
@@ -217,9 +217,9 @@ class TestCrewVolumeIntegration:
 
     @pytest.fixture
     def mock_crew_agent(self, mock_llm_provider_manager):
-        """Mock AutoPRCrew with dependencies."""
-        # Create a mock AutoPRCrew instance
-        mock_crew = MagicMock(spec=AutoPRCrew)
+        """Mock CodeFlowCrew with dependencies."""
+        # Create a mock CodeFlowCrew instance
+        mock_crew = MagicMock(spec=CodeFlowCrew)
         mock_crew.llm_model = "gpt-4"
         mock_crew.volume = 500  # Default to balanced volume
         mock_crew.llm_provider = mock_llm_provider_manager
@@ -242,7 +242,7 @@ class TestCrewVolumeIntegration:
         return mock_crew
 
     def test_crew_initialization(self, crew):
-        """Test that AutoPRCrew is initialized with correct parameters."""
+        """Test that CodeFlowCrew is initialized with correct parameters."""
         assert crew.llm_model == "test-model"
         assert crew.volume == 500
         assert hasattr(crew, "code_quality_agent")
@@ -250,14 +250,14 @@ class TestCrewVolumeIntegration:
         assert hasattr(crew, "linting_agent")
 
     def test_mock_crew_initialization(self, mock_crew_agent):
-        """Test that mock AutoPRCrew is initialized with correct parameters."""
+        """Test that mock CodeFlowCrew is initialized with correct parameters."""
         crew = mock_crew_agent
         assert crew.llm_model == "gpt-4"
         assert crew.volume == 500
         assert crew.llm_provider is not None
 
     def test_crew_analyze(self, crew):
-        """Test the analyze method of AutoPRCrew."""
+        """Test the analyze method of CodeFlowCrew."""
         # Call the analyze method
         result = crew.analyze()
 
@@ -298,16 +298,16 @@ class TestCrewVolumeIntegration:
         """Test that volume levels map to the correct quality modes."""
         # Use the crew's _create_quality_inputs method instead of get_volume_config
         # since the crew has its own volume mapping logic
-        from codeflow_engine.agents.crew.main import AutoPRCrew
+        from codeflow_engine.agents.crew.main import CodeFlowCrew
 
-        crew = AutoPRCrew(volume=500)  # Create a crew instance to access the method
+        crew = CodeFlowCrew(volume=500)  # Create a crew instance to access the method
         config = crew._create_quality_inputs(volume)
         assert config["mode"] == expected_mode
 
     def test_crew_with_custom_volume(self, mock_llm_provider_manager):
         """Test that crew respects custom volume settings."""
         # Create a crew with custom volume and inject the LLM provider to prevent volume override
-        crew = AutoPRCrew(
+        crew = CodeFlowCrew(
             llm_model="gpt-4",
             volume=800,  # High volume for thorough analysis
             llm_provider=mock_llm_provider_manager,  # Inject to prevent volume override

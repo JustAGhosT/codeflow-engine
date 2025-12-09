@@ -1,5 +1,5 @@
-"""
-Base Action class for AutoPR.
+﻿"""
+Base Action class for CodeFlow.
 """
 
 from abc import ABC, abstractmethod
@@ -16,7 +16,7 @@ TOutputs = TypeVar("TOutputs")
 
 class Action[TInputs, TOutputs](ABC):
     """
-    Base class for all AutoPR actions.
+    Base class for all CodeFlow actions.
 
     Actions are discrete units of work that can be executed as part of workflows.
     Each action has a name, description, inputs, and outputs.

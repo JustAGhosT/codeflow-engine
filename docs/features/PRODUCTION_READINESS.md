@@ -1,4 +1,4 @@
-# Production Readiness Guide
+﻿# Production Readiness Guide
 
 This document provides a comprehensive checklist for converting the three feature POCs (Real-time Dashboard, Workflow Builder, AI Learning System) into production-ready implementations.
 
@@ -12,15 +12,15 @@ All three features have been implemented as POCs with **28 TODO comments** marki
 
 | Feature | File | LOC | TODOs | Priority |
 |---------|------|-----|-------|----------|
-| Real-time Dashboard | `autopr/features/realtime_dashboard.py` | 370 | 13 | High |
-| Workflow Builder | `autopr/features/workflow_builder.py` | 500 | 5 | Medium |
-| AI Learning System | `autopr/features/ai_learning_system.py` | 536 | 10 | Low |
+| Real-time Dashboard | `codeflow/features/realtime_dashboard.py` | 370 | 13 | High |
+| Workflow Builder | `codeflow/features/workflow_builder.py` | 500 | 5 | Medium |
+| AI Learning System | `codeflow/features/ai_learning_system.py` | 536 | 10 | Low |
 
 ---
 
 ## Feature 1: Real-time Dashboard (13 TODOs)
 
-### File: `autopr/features/realtime_dashboard.py`
+### File: `codeflow/features/realtime_dashboard.py`
 
 #### Critical (P0) - Security & Scaling
 
@@ -132,7 +132,7 @@ All three features have been implemented as POCs with **28 TODO comments** marki
 
 ## Feature 2: Workflow Builder (5 TODOs)
 
-### File: `autopr/features/workflow_builder.py`
+### File: `codeflow/features/workflow_builder.py`
 
 #### High Priority (P1)
 
@@ -189,7 +189,7 @@ All three features have been implemented as POCs with **28 TODO comments** marki
 
 ## Feature 3: AI Learning System (10 TODOs)
 
-### File: `autopr/features/ai_learning_system.py`
+### File: `codeflow/features/ai_learning_system.py`
 
 #### Critical (P0) - ML Infrastructure
 
@@ -449,7 +449,7 @@ CREATE TABLE workflow_templates (
 
 ## References
 
-- Original POCs: `autopr/features/`
+- Original POCs: `codeflow/features/`
 - Database Schema: `docs/database/DATABASE_SCHEMA.md`
 - API Documentation: `docs/api/API_DOCUMENTATION.md`
 - Security Guide: `docs/security/SECURITY_BEST_PRACTICES.md`

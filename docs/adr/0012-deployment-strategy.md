@@ -1,4 +1,4 @@
-# 12. Deployment Strategy
+﻿# 12. Deployment Strategy
 
 ## Status
 
@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-AutoPR needs a reliable, repeatable deployment process that supports:
+CodeFlow needs a reliable, repeatable deployment process that supports:
 
 - Multiple environments (dev, staging, production)
 - Zero-downtime deployments
@@ -22,17 +22,17 @@ We will implement a GitOps-based deployment strategy using the following compone
 ```hcl
 
 # Example: Terraform module for ECS
-module "autopr_service" {
+module "codeflow_service" {
   source  = "terraform-aws-modules/ecs/aws//modules/service"
   version = "~> 5.0"
 
-  name          = "autopr-${var.environment}"
+  name          = "codeflow-${var.environment}"
   cluster_arn   = aws_ecs_cluster.main.arn
   desired_count = var.desired_count
 
   container_definitions = {
-    autopr = {
-      image = "${aws_ecr_repository.autopr.repository_url}:${var.image_tag}"
+    CodeFlow = {
+      image = "${aws_ecr_repository.codeflow.repository_url}:${var.image_tag}"
       port_mappings = [
         {
           containerPort = 8000
@@ -95,15 +95,15 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ steps.login-ecr.outputs.registry }}/autopr:${{ github.sha }}
-            ${{ steps.login-ecr.outputs.registry }}/autopr:latest
+            ${{ steps.login-ecr.outputs.registry }}/CodeFlow:${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/CodeFlow:latest
 
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: task-definition.json
-          service: autopr-service
-          cluster: autopr-cluster
+          service: codeflow-service
+          cluster: codeflow-cluster
           wait-for-service-stability: true
 ```
 

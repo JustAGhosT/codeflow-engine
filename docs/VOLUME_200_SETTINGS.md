@@ -1,11 +1,11 @@
-# Volume 200 Settings Documentation
+﻿# Volume 200 Settings Documentation
 
-This document describes the tool configurations that are active when the AutoPR Engine volume
+This document describes the tool configurations that are active when the CodeFlow Engine volume
 control is set to level 200.
 
 ## Volume Control System Overview
 
-The AutoPR Engine uses a HiFi-style volume control system with a 0-1000 scale in ticks of 5. Volume
+The CodeFlow Engine uses a HiFi-style volume control system with a 0-1000 scale in ticks of 5. Volume
 level 200 corresponds to a "LOW" setting that enables basic linting and quality checks while
 maintaining a relatively permissive development environment.
 

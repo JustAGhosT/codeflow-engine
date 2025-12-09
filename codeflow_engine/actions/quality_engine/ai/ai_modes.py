@@ -1,8 +1,8 @@
-"""
+﻿"""
 AI-Enhanced Quality Analysis Modes
 
 This module provides AI-powered code analysis capabilities for the Quality Engine,
-integrating with the AutoPR LLM provider system.
+integrating with the CodeFlow LLM provider system.
 """
 
 import json
@@ -45,7 +45,7 @@ CODE_REVIEW_PROMPT = (
     '      "line": 42,\n'
     '      "issue": "Inefficient algorithm implementation",\n'
     '      "explanation": (\n'
-    '          "The current approach has O(n²) complexity but could be optimized to O(n log n)."\n'
+    '          "The current approach has O(nÂ²) complexity but could be optimized to O(n log n)."\n'
     "      ),\n"
     '      "fix": (\n'
     '          "Use a more efficient sorting algorithm like quicksort instead of bubble sort."\n'

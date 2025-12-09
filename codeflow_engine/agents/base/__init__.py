@@ -1,7 +1,7 @@
-"""
-Base classes for AutoPR agents.
+﻿"""
+Base classes for CodeFlow agents.
 
-This module contains the base classes and utilities for all AutoPR agents.
+This module contains the base classes and utilities for all CodeFlow agents.
 """
 
 from codeflow_engine.agents.base.agent import BaseAgent

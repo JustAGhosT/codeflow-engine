@@ -1,10 +1,10 @@
-name: "Google Agent Development Kit (ADK) Template"
+﻿name: "Google Agent Development Kit (ADK) Template"
 category: "ai_agent_builder"
 description:
   "Google's enterprise-grade open-source framework for multi-agent system development - Powers
   Agentspace and Google CES"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags:
   ["ai_agent_builder", "multi_agent_systems", "google_cloud", "open_source", "enterprise_framework"]
 

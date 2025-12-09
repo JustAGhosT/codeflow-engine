@@ -1,4 +1,4 @@
-# 4. API Versioning Strategy
+﻿# 4. API Versioning Strategy
 
 ## Status
 
@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-As AutoPR evolves, we need a strategy for versioning our APIs to:
+As CodeFlow evolves, we need a strategy for versioning our APIs to:
 
 - Support backward compatibility
 - Enable smooth upgrades
@@ -31,7 +31,7 @@ We will implement the following versioning strategy:
    - Example: `/v1/api/templates`
 
 1. **Header Versioning**
-   - Header: `Accept: application/vnd.autopr.v1+json`
+   - Header: `Accept: application/vnd.codeflow.v1+json`
    - For content negotiation
 
 1. **Query Parameter** (for browser-based APIs)

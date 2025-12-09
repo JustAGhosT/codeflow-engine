@@ -1,4 +1,4 @@
-# Template Packaging & Modularization Plan
+﻿# Template Packaging & Modularization Plan
 
 ## Overview
 
@@ -38,16 +38,16 @@ maintainable template system with proper packaging and versioning.
 ```text
 
 packages/
-└── templates-core/               # Core templates package
-    ├── src/
-    │   ├── docker/              # Docker templates
-    │   ├── security/            # Security configs
-    │   ├── languages/           # Language-specific templates
-    │   ├── platforms/           # Platform configs
-    │   ├── docs/                # Documentation templates
-    │   └── discovery/           # Discovery templates
-    ├── tests/                   # Template tests
-    └── pyproject.toml           # Package configuration
+â””â”€â”€ templates-core/               # Core templates package
+    â”œâ”€â”€ src/
+    â”‚   â”œâ”€â”€ docker/              # Docker templates
+    â”‚   â”œâ”€â”€ security/            # Security configs
+    â”‚   â”œâ”€â”€ languages/           # Language-specific templates
+    â”‚   â”œâ”€â”€ platforms/           # Platform configs
+    â”‚   â”œâ”€â”€ docs/                # Documentation templates
+    â”‚   â””â”€â”€ discovery/           # Discovery templates
+    â”œâ”€â”€ tests/                   # Template tests
+    â””â”€â”€ pyproject.toml           # Package configuration
 ```
 
 ### Template Format
@@ -180,7 +180,7 @@ template:
    - Add new validation for template metadata
    - Integrate with CI/CD pipeline
 
-1. **Generator Modules** (`autopr/actions/prototype_enhancement/generators/`)
+1. **Generator Modules** (`codeflow/actions/prototype_enhancement/generators/`)
    - `docker_generator.py` - Update to use new template loader
    - `security_generator.py` - Migrate to new template format
    - `docs_generator.py` - Update for new template structure

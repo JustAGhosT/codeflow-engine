@@ -1,8 +1,8 @@
-# Comment Filtering Feature
+﻿# Comment Filtering Feature
 
 ## Overview
 
-The Comment Filtering feature allows you to control which GitHub users can have their PR comments processed by AutoPR. By default, comment filtering is enabled in whitelist mode, meaning only explicitly allowed users will have their comments processed.
+The Comment Filtering feature allows you to control which GitHub users can have their PR comments processed by CODEFLOW. By default, comment filtering is enabled in whitelist mode, meaning only explicitly allowed users will have their comments processed.
 
 ## Features
 
@@ -41,7 +41,7 @@ The system uses a singleton settings record with the following options:
 
 ## API Endpoints
 
-All endpoints require authentication if `AUTOPR_API_KEY` is configured.
+All endpoints require authentication if `CODEFLOW_API_KEY` is configured.
 
 ### Get Settings
 

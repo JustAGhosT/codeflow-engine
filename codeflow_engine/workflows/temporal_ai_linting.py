@@ -1,11 +1,11 @@
-"""
+﻿"""
 Temporal.io Workflow Integration for AI Linting System
 
 This module provides enterprise-grade workflow orchestration using Temporal.io
-for the AutoPR AI linting system. It demonstrates how to integrate our
+for the CodeFlow AI linting system. It demonstrates how to integrate our
 WorkflowContext architecture with real workflow orchestration.
 
-Author: AutoPR AI Systems
+Author: CodeFlow AI Systems
 """
 
 import asyncio
@@ -57,7 +57,7 @@ class AILintingWorkflow:
         """
         workflow_id = workflow.info().workflow_id
 
-        logger.info(f"🚀 Starting AI Linting Workflow: {workflow_id}")
+        logger.info(f"ðŸš€ Starting AI Linting Workflow: {workflow_id}")
 
         # Create workflow context for tracking
         workflow_context = WorkflowContext(
@@ -295,7 +295,7 @@ async def run_tests_activity(test_input: dict[str, Any]) -> dict[str, Any]:
 
         # For demo purposes, we'll simulate test execution
         # In a real implementation, this would run actual tests
-        logger.info(f"🧪 Running tests for {len(modified_files)} modified files")
+        logger.info(f"ðŸ§ª Running tests for {len(modified_files)} modified files")
 
         # Simulate test execution
         await asyncio.sleep(2)
@@ -370,9 +370,9 @@ async def commit_changes_activity(commit_input: dict[str, Any]) -> dict[str, Any
 
         # For demo purposes, simulate git operations
         # In real implementation, this would use git commands
-        logger.info(f"📝 Committing {len(files)} modified files")
+        logger.info(f"ðŸ“ Committing {len(files)} modified files")
 
-        commit_message = f"🤖 AI: {summary}\n\nAutomated via Temporal workflow"
+        commit_message = f"ðŸ¤– AI: {summary}\n\nAutomated via Temporal workflow"
 
         return {
             "success": True,
@@ -396,18 +396,18 @@ async def notify_completion_activity(
         workflow_id = notification_input["workflow_id"]
         linting_result = notification_input["linting_result"]
 
-        message = f"""🎉 AI Linting Workflow Completed!
+        message = f"""ðŸŽ‰ AI Linting Workflow Completed!
 
 **Workflow ID:** {workflow_id}
 **Issues Fixed:** {linting_result.get("issues_fixed", 0)}
 **Files Modified:** {len(linting_result.get("modified_files", []))}
-**Status:** Success ✅
+**Status:** Success âœ…
 
 View details in Temporal UI: https://cloud.temporal.io/workflows/{workflow_id}
 """
 
         # In real implementation, send to Slack/Teams/etc
-        logger.info(f"📢 Notification: {message}")
+        logger.info(f"ðŸ“¢ Notification: {message}")
 
         return {
             "success": True,
@@ -447,7 +447,7 @@ AI linting workflow `{workflow_id}` made changes but tests failed.
 """
 
         # In real implementation, create GitHub/Linear issue
-        logger.info(f"📋 Creating review issue: {issue_title}")
+        logger.info(f"ðŸ“‹ Creating review issue: {issue_title}")
 
         return {
             "success": True,
@@ -492,7 +492,7 @@ async def create_temporal_client() -> Client:
         api_key=api_key,
     )
 
-    logger.info(f"✅ Connected to Temporal Cloud: {namespace} at {address}")
+    logger.info(f"âœ… Connected to Temporal Cloud: {namespace} at {address}")
     return client
 
 
@@ -517,7 +517,7 @@ async def start_temporal_worker():
         ],
     )
 
-    logger.info("🚀 Starting Temporal worker for AI linting...")
+    logger.info("ðŸš€ Starting Temporal worker for AI linting...")
     await worker.run()
 
 

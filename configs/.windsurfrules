@@ -1,4 +1,4 @@
-
+﻿
 # Main Overview
 
 ## Development Guidelines
@@ -9,7 +9,7 @@
 - Always provide a complete PLAN with REASONING based on evidence from code and logs before making changes.
 - Explain your OBSERVATIONS clearly, then provide REASONING to identify the exact issue. Add console logs when needed to gather more information.
 
-The AutoPR Engine implements an AI-powered code quality and review system with several key business components:
+The CodeFlow Engine implements an AI-powered code quality and review system with several key business components:
 
 ## AI Linting and Code Quality
 
@@ -24,8 +24,8 @@ The core linting system uses specialized AI agents to detect and fix code issues
 File paths:
 
 ```python
-autopr/actions/ai_linting_fixer/agents.py
-autopr/actions/ai_linting_fixer/workflow.py
+CodeFlow/actions/ai_linting_fixer/agents.py
+CodeFlow/actions/ai_linting_fixer/workflow.py
 ```
 
 ## Platform Detection Engine
@@ -40,8 +40,8 @@ Implements sophisticated platform fingerprinting:
 File paths:
 
 ```python
-autopr/actions/platform_detection/detector.py
-autopr/actions/platform_detection/scoring.py
+CodeFlow/actions/platform_detection/detector.py
+CodeFlow/actions/platform_detection/scoring.py
 ```
 
 ## Quality Analysis System
@@ -57,8 +57,8 @@ Comprehensive code quality assessment:
 File paths:
 
 ```python
-autopr/actions/quality_engine/engine.py
-autopr/actions/quality_engine/ai/ai_analyzer.py
+CodeFlow/actions/quality_engine/engine.py
+CodeFlow/actions/quality_engine/ai/ai_analyzer.py
 ```
 
 ## Volume Control System
@@ -89,8 +89,8 @@ Manages phased implementation of software enhancements:
 File paths:
 
 ```python
-autopr/extensions/implementation/phase_manager.py
-autopr/extensions/implementation/task_executor.py
+CodeFlow/extensions/implementation/phase_manager.py
+CodeFlow/extensions/implementation/task_executor.py
 ```
 
 The system's core value lies in its AI-powered approach to code quality improvement, with sophisticated orchestration of multiple specialized components working together to analyze and enhance code quality.

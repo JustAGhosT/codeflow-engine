@@ -1,5 +1,5 @@
-"""
-AutoPR Action: AI Comment Analyzer.
+﻿"""
+CodeFlow Action: AI Comment Analyzer.
 
 Uses LLM to analyze PR comments and generate intelligent responses and fixes.
 """

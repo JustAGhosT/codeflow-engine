@@ -1,10 +1,10 @@
-# AutoPR Website Deployment Guide
+﻿# CodeFlow Website Deployment Guide
 
-This document describes the Next.js website and Azure deployment setup for autopr.io.
+This document describes the Next.js website and Azure deployment setup for codeflow.io.
 
 ## Overview
 
-The AutoPR Engine website is a Next.js application that provides:
+The CodeFlow Engine website is a Next.js application that provides:
 - **Home Page**: Project promotion and key features
 - **Installation Guide**: Step-by-step installation instructions  
 - **Download Page**: Links to various download methods (GitHub, PyPI, Docker)
@@ -20,14 +20,14 @@ The AutoPR Engine website is a Next.js application that provides:
 
 ### Azure Resources
 
-All resources follow the naming convention: `{env}-{resourcetype}-{region}-autopr`
+All resources follow the naming convention: `{env}-{resourcetype}-{region}-codeflow`
 
 #### Production Resources
 
-- **Static Web App**: `prod-stapp-san-autopr`
-- **Resource Group**: `prod-rg-san-autopr`
+- **Static Web App**: `prod-stapp-san-codeflow`
+- **Resource Group**: `prod-rg-san-codeflow`
 - **Location**: `eastus2` (East US 2) - Static Web Apps are only available in: westus2, centralus, eastus2, westeurope, eastasia
-- **Custom Domain**: `autopr.io`
+- **Custom Domain**: `codeflow.io`
 
 ## Local Development
 
@@ -68,12 +68,12 @@ To deploy the Azure infrastructure:
 ```bash
 # Create resource group first (if it doesn't exist)
 az group create \
-  --name prod-rg-san-autopr \
+  --name prod-rg-san-codeflow \
   --location "eastus2"
 
 # Deploy the Static Web App
 az deployment group create \
-  --resource-group prod-rg-san-autopr \
+  --resource-group prod-rg-san-codeflow \
   --template-file infrastructure/bicep/website.bicep \
   --parameters @infrastructure/bicep/website-parameters.json
 ```
@@ -96,8 +96,8 @@ After creating the Static Web App, retrieve the deployment token:
 
 ```bash
 az staticwebapp secrets list \
-  --name prod-stapp-san-autopr \
-  --resource-group prod-rg-san-autopr \
+  --name prod-stapp-san-codeflow \
+  --resource-group prod-rg-san-codeflow \
   --query "properties.apiKey" \
   --output tsv
 ```
@@ -109,47 +109,47 @@ az staticwebapp secrets list \
 2. **Get domain validation token**:
 ```bash
 az staticwebapp hostname show \
-  --name prod-stapp-san-autopr \
-  --resource-group prod-rg-san-autopr \
-  --hostname autopr.io
+  --name prod-stapp-san-codeflow \
+  --resource-group prod-rg-san-codeflow \
+  --hostname codeflow.io
 ```
 
 3. **Add DNS TXT record** to your domain provider:
    - Record type: TXT
-   - Name: `asuid.autopr.io` (or as specified by Azure)
+   - Name: `asuid.codeflow.io` (or as specified by Azure)
    - Value: (validation token from step 2)
 
 4. **Wait for validation** (usually 5-10 minutes)
 
 5. **Add CNAME record** (if not automatically created):
    - Record type: CNAME
-   - Name: `autopr.io` (or `www.autopr.io`)
+   - Name: `codeflow.io` (or `www.codeflow.io`)
    - Value: `{static-web-app-name}.azurestaticapps.net`
 
 ## Project Structure
 
 ```
 website/
-├── app/
-│   ├── page.tsx              # Home page
-│   ├── installation/
-│   │   └── page.tsx          # Installation guide
-│   ├── download/
-│   │   └── page.tsx          # Download page
-│   ├── layout.tsx             # Root layout
-│   └── globals.css           # Global styles
-├── public/                   # Static assets
-├── next.config.ts            # Next.js configuration
-├── package.json
-└── README.md
+â”œâ”€â”€ app/
+â”‚   â”œâ”€â”€ page.tsx              # Home page
+â”‚   â”œâ”€â”€ installation/
+â”‚   â”‚   â””â”€â”€ page.tsx          # Installation guide
+â”‚   â”œâ”€â”€ download/
+â”‚   â”‚   â””â”€â”€ page.tsx          # Download page
+â”‚   â”œâ”€â”€ layout.tsx             # Root layout
+â”‚   â””â”€â”€ globals.css           # Global styles
+â”œâ”€â”€ public/                   # Static assets
+â”œâ”€â”€ next.config.ts            # Next.js configuration
+â”œâ”€â”€ package.json
+â””â”€â”€ README.md
 
 infrastructure/bicep/
-├── website.bicep             # Azure infrastructure definition
-├── website-parameters.json   # Deployment parameters
-└── README-WEBSITE.md         # Infrastructure documentation
+â”œâ”€â”€ website.bicep             # Azure infrastructure definition
+â”œâ”€â”€ website-parameters.json   # Deployment parameters
+â””â”€â”€ README-WEBSITE.md         # Infrastructure documentation
 
 .github/workflows/
-└── deploy-website.yml        # CI/CD pipeline
+â””â”€â”€ deploy-website.yml        # CI/CD pipeline
 ```
 
 ## Next.js Configuration

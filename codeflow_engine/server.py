@@ -1,6 +1,6 @@
-"""AutoPR Server with GitHub App Integration and Dashboard.
+﻿"""CodeFlow Server with GitHub App Integration and Dashboard.
 
-FastAPI server that provides the AutoPR Engine API and dashboard UI.
+FastAPI server that provides the CodeFlow Engine API and dashboard UI.
 """
 
 import logging
@@ -62,7 +62,7 @@ async def root_fallback():
     Returns API information and available endpoints.
     """
     return {
-        "message": "AutoPR Engine API",
+        "message": "CodeFlow Engine API",
         "version": __version__,
         "dashboard": "not available (import failed)",
         "api_docs": "/docs",
@@ -93,7 +93,7 @@ def create_app() -> FastAPI:
         Configured FastAPI application
     """
     app = FastAPI(
-        title="AutoPR Engine",
+        title="CodeFlow Engine",
         description="AI-Powered GitHub PR Automation and Issue Management",
         version=__version__,
     )
@@ -137,7 +137,7 @@ def create_app() -> FastAPI:
     async def api_root():
         """API root endpoint."""
         return {
-            "message": "AutoPR Engine API",
+            "message": "CodeFlow Engine API",
             "version": __version__,
             "dashboard": "available" if DASHBOARD_AVAILABLE else "not configured",
             "github_app": "available" if GITHUB_APP_AVAILABLE else "not configured",

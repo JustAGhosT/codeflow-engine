@@ -1,4 +1,4 @@
-# autopr/workflows/security_audit.yaml
+﻿# codeflow/workflows/security_audit.yaml
 security_audit:
   main: security_audit
   steps:
@@ -11,5 +11,5 @@ security_audit:
       inputs:
         pull_request_number: 1 # For demo, post to PR #1
         comment: |
-          ### 🛡️ Security Audit Report
+          ### ðŸ›¡ï¸ Security Audit Report
           {{ audit_report }}

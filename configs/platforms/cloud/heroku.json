@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "Heroku",
   "category": "cloud_hosting",
   "description": "Platform as a service (PaaS) for deploying and managing applications",
@@ -28,7 +28,7 @@
   "is_active": true,
   "type": "general",
   "source": "community",
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "detection": {},
   "project_config": {},
   "is_beta": false,

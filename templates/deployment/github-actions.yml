@@ -1,8 +1,8 @@
-name: "GitHub Actions Deployment Template"
+﻿name: "GitHub Actions Deployment Template"
 category: "deployment"
 description: "GitHub Actions CI/CD workflow for automated testing, building, and deployment"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["deployment", "github_actions", "ci_cd", "automation", "workflow"]
 
 template_info:

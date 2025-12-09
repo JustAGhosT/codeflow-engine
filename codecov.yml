@@ -1,4 +1,4 @@
-# Codecov Configuration
+﻿# Codecov Configuration
 # Documentation: https://docs.codecov.com/docs/codecovyml-reference
 
 coverage:
@@ -14,7 +14,7 @@ coverage:
         threshold: 1%
         # Only consider files matching these patterns
         paths:
-          - "autopr/**"
+          - "codeflow/**"
         # Ignore missing coverage from these paths
         if_no_uploads: error
     # Status for changes in the PR (patch coverage)
@@ -53,7 +53,7 @@ comment:
 flags:
   unittests:
     paths:
-      - "autopr/**"
+      - "codeflow/**"
     carryforward: true
 
 # GitHub-specific configuration

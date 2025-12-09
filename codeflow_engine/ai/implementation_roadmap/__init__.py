@@ -1,5 +1,5 @@
-"""
-AutoPR Phase 1 Extensions Implementation Roadmap - Modular Architecture
+﻿"""
+CodeFlow Phase 1 Extensions Implementation Roadmap - Modular Architecture
 Automated setup script for production-grade enhancements with clean separation of concerns
 Implementation Roadmap Modular Package
 """
@@ -32,8 +32,8 @@ __all__ = [
 
 # Package metadata
 __version__ = "1.0.0"
-__author__ = "AutoPR Team"
-__description__ = "Modular implementation roadmap system for AutoPR Phase 1 extensions"
+__author__ = "CodeFlow Team"
+__description__ = "Modular implementation roadmap system for CodeFlow Phase 1 extensions"
 
 
 # Convenience functions for common operations

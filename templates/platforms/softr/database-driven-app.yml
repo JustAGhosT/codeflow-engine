@@ -1,10 +1,10 @@
-name: "Softr Database-Driven Application"
+﻿name: "Softr Database-Driven Application"
 category: "database-driven"
 description:
   "No-code platform for building dynamic, database-driven web applications, websites, and client
   portals with extensive data source integrations"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags:
   [
     "database-driven",

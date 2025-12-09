@@ -1,10 +1,10 @@
-name: "Alert Notification Script"
+﻿name: "Alert Notification Script"
 category: "monitoring"
 description:
   "Bash script for sending alerts and notifications with multiple delivery methods (email, Slack,
   webhooks, logging)"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["monitoring", "alerts", "notifications", "bash", "slack", "email", "webhooks"]
 
 template_info:
@@ -164,7 +164,7 @@ template: |
   {% endif %}
 
   # Format alert message
-  ALERT_MESSAGE="🚨 ALERT: $SERVICE_NAME failed - $ERROR_MESSAGE"
+  ALERT_MESSAGE="ðŸš¨ ALERT: $SERVICE_NAME failed - $ERROR_MESSAGE"
   {% if include_system_info %}
   SYSTEM_INFO="Host: $HOSTNAME | Uptime: $UPTIME | Load: $LOAD_AVG | Memory: $MEMORY_USAGE | Disk: $DISK_USAGE"
   FULL_MESSAGE="$ALERT_MESSAGE\n\nSystem Info: $SYSTEM_INFO\nTime: $TIMESTAMP"
@@ -175,19 +175,19 @@ template: |
   # Set alert emoji based on level
   case "$ALERT_LEVEL" in
       "info")
-          EMOJI="ℹ️"
+          EMOJI="â„¹ï¸"
           ;;
       "warning")
-          EMOJI="⚠️"
+          EMOJI="âš ï¸"
           ;;
       "error")
-          EMOJI="❌"
+          EMOJI="âŒ"
           ;;
       "critical")
-          EMOJI="🔥"
+          EMOJI="ðŸ”¥"
           ;;
       *)
-          EMOJI="🚨"
+          EMOJI="ðŸš¨"
           ;;
   esac
 

@@ -1,6 +1,6 @@
-"""FastAPI Dashboard Router.
+﻿"""FastAPI Dashboard Router.
 
-Provides dashboard UI and API endpoints for the AutoPR Engine.
+Provides dashboard UI and API endpoints for the CODEFLOW Engine.
 """
 
 import asyncio
@@ -163,7 +163,7 @@ class RateLimiter:
 
 
 # Rate limiter for quality check endpoint (configurable via env var)
-_rate_limit = int(os.getenv("AUTOPR_RATE_LIMIT", "10"))
+_rate_limit = int(os.getenv("CODEFLOW_RATE_LIMIT", "10"))
 quality_check_limiter = RateLimiter(requests_per_minute=_rate_limit)
 
 
@@ -173,7 +173,7 @@ quality_check_limiter = RateLimiter(requests_per_minute=_rate_limit)
 
 def get_api_key() -> str | None:
     """Get configured API key from environment."""
-    return os.getenv("AUTOPR_API_KEY")
+    return os.getenv("CODEFLOW_API_KEY")
 
 
 async def verify_api_key(
@@ -181,7 +181,7 @@ async def verify_api_key(
 ) -> str | None:
     """Verify API key if authentication is enabled.
 
-    If AUTOPR_API_KEY is set, requests must include matching X-API-Key header.
+    If CODEFLOW_API_KEY is set, requests must include matching X-API-Key header.
     If not set, all requests are allowed (open access).
     """
     required_key = get_api_key()
@@ -222,7 +222,7 @@ class DashboardState:
     - In-memory (default): Fast but not persistent
     - Redis: Persistent and shareable across instances
 
-    Configure via AUTOPR_STORAGE_BACKEND and REDIS_URL environment variables.
+    Configure via CODEFLOW_STORAGE_BACKEND and REDIS_URL environment variables.
     """
 
     # Storage keys
@@ -513,20 +513,20 @@ class DashboardState:
 
 def _get_config_path() -> Path:
     """Get configuration file path, handling container environments."""
-    config_dir = os.getenv("AUTOPR_CONFIG_DIR")
+    config_dir = os.getenv("CODEFLOW_CONFIG_DIR")
     if config_dir:
         return Path(config_dir) / "dashboard_config.json"
 
     xdg_config = os.getenv("XDG_CONFIG_HOME")
     if xdg_config:
-        return Path(xdg_config) / "autopr" / "dashboard_config.json"
+        return Path(xdg_config) / "CODEFLOW" / "dashboard_config.json"
 
     try:
         home = Path.home()
-        return home / ".autopr" / "dashboard_config.json"
+        return home / ".codeflow" / "dashboard_config.json"
     except (RuntimeError, OSError):
         # Use system temp directory when home is not available
-        return Path(tempfile.gettempdir()) / ".autopr" / "dashboard_config.json"
+        return Path(tempfile.gettempdir()) / ".codeflow" / "dashboard_config.json"
 
 
 def _get_client_ip(request: Request) -> str:

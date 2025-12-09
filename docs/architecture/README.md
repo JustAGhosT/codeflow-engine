@@ -1,12 +1,12 @@
-# AutoPR Engine Architecture
+﻿# CODEFLOW Engine Architecture
 
 ## Overview
 
-AutoPR Engine is a comprehensive AI-powered automation platform designed for GitHub pull request workflows. This document provides an overview of the system architecture and key components.
+CODEFLOW Engine is a comprehensive AI-powered automation platform designed for GitHub pull request workflows. This document provides an overview of the system architecture and key components.
 
 ## Architecture Documents
 
-- [**Enhanced System Architecture**](AUTOPR_ENHANCED_SYSTEM.md) - Comprehensive system design and implementation details
+- [**Enhanced System Architecture**](CODEFLOW_ENHANCED_SYSTEM.md) - Comprehensive system design and implementation details
 - [**Package Architecture**](packages.md) - Package structure and organization
 - [**Template Catalog**](template_catalog.md) - Template system and available templates
 - [**Legacy Architecture**](ARCHITECTURE_LEGACY.md) - Previous architecture for reference
@@ -15,7 +15,7 @@ AutoPR Engine is a comprehensive AI-powered automation platform designed for Git
 
 ### Core Engine
 
-The AutoPR Engine orchestrates the entire automation workflow:
+The CODEFLOW Engine orchestrates the entire automation workflow:
 
 - **Event Processing**: Handles GitHub webhooks and events
 - **Workflow Orchestration**: Manages multi-step automation workflows
@@ -44,6 +44,6 @@ The AutoPR Engine orchestrates the entire automation workflow:
 
 ## Getting Started
 
-For implementation details and system diagrams, see the [Enhanced System Architecture](AUTOPR_ENHANCED_SYSTEM.md) document.
+For implementation details and system diagrams, see the [Enhanced System Architecture](CODEFLOW_ENHANCED_SYSTEM.md) document.
 
 For development guides, visit the [Development Documentation](../development/).

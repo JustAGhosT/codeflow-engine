@@ -1,4 +1,4 @@
-# 16. Documentation Strategy
+﻿# 16. Documentation Strategy
 
 ## Status
 
@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-AutoPR requires comprehensive, accessible, and maintainable documentation to support:
+CodeFlow requires comprehensive, accessible, and maintainable documentation to support:
 
 - Developer onboarding and productivity
 - API consumers and integrators
@@ -47,7 +47,7 @@ We will implement a multi-layered documentation strategy with the following comp
 
 ```yaml
 # mkdocs.yml
-site_name: AutoPR Documentation
+site_name: CodeFlow Documentation
 theme:
   name: material
   features:

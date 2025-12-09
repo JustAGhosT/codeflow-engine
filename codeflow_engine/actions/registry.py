@@ -1,5 +1,5 @@
-"""
-AutoPR Action Registry
+﻿"""
+CodeFlow Action Registry
 
 Registry for managing and discovering actions.
 """

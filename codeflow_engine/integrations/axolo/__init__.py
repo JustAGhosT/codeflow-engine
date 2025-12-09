@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
-AutoPR Integration: Axolo Communication Hub
-Seamless GitHub ↔ Slack integration with ephemeral PR channels
+CodeFlow Integration: Axolo Communication Hub
+Seamless GitHub â†” Slack integration with ephemeral PR channels
 """
 
 import os

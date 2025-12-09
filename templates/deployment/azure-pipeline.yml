@@ -1,9 +1,9 @@
-name: "Azure DevOps Pipeline Template"
+﻿name: "Azure DevOps Pipeline Template"
 category: "deployment"
 description:
   "Azure DevOps CI/CD pipeline for automated testing, building, and deployment to Azure services"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["deployment", "azure_devops", "ci_cd", "azure", "pipeline"]
 
 template_info:

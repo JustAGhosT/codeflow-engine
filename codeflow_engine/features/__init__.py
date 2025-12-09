@@ -1,7 +1,7 @@
-"""
-AutoPR Features Module
+﻿"""
+CodeFlow Features Module
 
-This module contains POC implementations of advanced features for AutoPR Engine.
+This module contains POC implementations of advanced features for CodeFlow Engine.
 
 Features:
 - Real-time collaboration dashboard (WebSocket)

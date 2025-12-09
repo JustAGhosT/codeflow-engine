@@ -1,4 +1,4 @@
-"""
+﻿"""
 Database Configuration
 
 Handles SQLAlchemy engine creation, session management, and database initialization.
@@ -49,7 +49,7 @@ POOL_CONFIG = {
 
 # Create engine with appropriate pooling strategy
 # TODO: PRODUCTION - This will fail if PostgreSQL/psycopg2 not installed
-# Set AUTOPR_SKIP_DB_INIT=1 to skip database initialization during imports
+# Set CODEFLOW_SKIP_DB_INIT=1 to skip database initialization during imports
 def _create_engine():
     """Create database engine lazily."""
     if os.getenv("ENVIRONMENT") == "test":
@@ -89,8 +89,8 @@ def receive_checkout(dbapi_conn, connection_record, connection_proxy):
     pass
 
 
-# Create engine (skip if AUTOPR_SKIP_DB_INIT is set)
-if os.getenv("AUTOPR_SKIP_DB_INIT"):
+# Create engine (skip if CODEFLOW_SKIP_DB_INIT is set)
+if os.getenv("CODEFLOW_SKIP_DB_INIT"):
     engine = None  # type: ignore
 else:
     try:
@@ -146,7 +146,7 @@ def get_db() -> Generator:
     if engine is None:
         raise RuntimeError(
             "Database engine is not initialized. "
-            "Ensure DATABASE_URL is set and AUTOPR_SKIP_DB_INIT is not set when running DB operations. "
+            "Ensure DATABASE_URL is set and CODEFLOW_SKIP_DB_INIT is not set when running DB operations. "
             "Check that psycopg2-binary is installed: poetry add psycopg2-binary"
         )
     db = SessionLocal()
@@ -266,7 +266,7 @@ def get_connection_info() -> dict:
     if engine is None:
         return {
             "status": "unavailable",
-            "error": "Database engine not initialized (AUTOPR_SKIP_DB_INIT may be set)",
+            "error": "Database engine not initialized (CODEFLOW_SKIP_DB_INIT may be set)",
             "database_url": None,
         }
     

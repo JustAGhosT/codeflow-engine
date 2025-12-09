@@ -1,13 +1,13 @@
-# AutoPR Engine - GitHub Action Workflow
+﻿# CodeFlow Engine - GitHub Action Workflow
 # ========================================
-# Copy this file to .github/workflows/autopr.yml in your repository
+# Copy this file to .github/workflows/codeflow.yml in your repository
 # Then add OPENAI_API_KEY to your repository secrets
 #
 # Quick setup:
-#   curl -sSL https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/templates/quick-start/autopr-workflow.yml \
-#     -o .github/workflows/autopr.yml
+#   curl -sSL https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/templates/quick-start/codeflow-workflow.yml \
+#     -o .github/workflows/codeflow.yml
 
-name: AutoPR Analysis
+name: CodeFlow Analysis
 
 on:
   pull_request:
@@ -23,7 +23,7 @@ permissions:
 
 # Prevent duplicate runs on the same PR
 concurrency:
-  group: autopr-${{ github.head_ref || github.ref }}
+  group: codeflow-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -45,7 +45,7 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
 
-      - name: Install AutoPR Engine
+      - name: Install CodeFlow Engine
         run: pip install codeflow-engine
 
       - name: Run PR Analysis
@@ -55,7 +55,7 @@ jobs:
           # Optional: Add other AI providers
           # ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          autopr analyze \
+          CodeFlow analyze \
             --repo "${{ github.repository }}" \
             --pr "${{ github.event.pull_request.number }}" \
             --output json > analysis.json
@@ -69,7 +69,7 @@ jobs:
             const analysis = JSON.parse(fs.readFileSync('analysis.json', 'utf8'));
 
             // Create comment body
-            let body = `## AutoPR Analysis\n\n`;
+            let body = `## CodeFlow Analysis\n\n`;
             body += `**Summary:** ${analysis.summary || 'Analysis complete'}\n\n`;
 
             if (analysis.issues && analysis.issues.length > 0) {
@@ -87,7 +87,7 @@ jobs:
               }
             }
 
-            body += `\n---\n*Powered by [AutoPR Engine](https://github.com/JustAGhosT/codeflow-engine)*`;
+            body += `\n---\n*Powered by [CodeFlow Engine](https://github.com/JustAGhosT/codeflow-engine)*`;
 
             // Post comment
             github.rest.issues.createComment({

@@ -1,11 +1,11 @@
-"""
-AutoPR Dashboard Package
+﻿"""
+CODEFLOW Dashboard Package
 
-Web-based UI for monitoring and configuring AutoPR Engine.
+Web-based UI for monitoring and configuring CODEFLOW Engine.
 
 Storage Backends:
     Configure via environment variables:
-    - AUTOPR_STORAGE_BACKEND: "memory" (default) or "redis"
+    - CODEFLOW_STORAGE_BACKEND: "memory" (default) or "redis"
     - REDIS_URL: Redis connection URL (required if backend is "redis")
 """
 
@@ -60,5 +60,5 @@ __all__ = [
     "__version__",
 ]
 
-__author__ = "AutoPR Team"
-__description__ = "Web-based dashboard for AutoPR Engine"
+__author__ = "CODEFLOW Team"
+__description__ = "Web-based dashboard for CODEFLOW Engine"

@@ -1,4 +1,4 @@
-"""Configuration loading for the Quality Engine."""
+﻿"""Configuration loading for the Quality Engine."""
 
 import importlib
 import os
@@ -132,18 +132,18 @@ def load_config(config_path: str = "pyproject.toml") -> QualityEngineConfig:
             if config_path.endswith(".toml"):
                 file_config = _load_toml_config(config_path)
                 # Extract tool configuration from pyproject.toml
-                autopr_section = (
-                    cast("dict[str, Any] | None", file_config.get("autopr"))
+                codeflow_section = (
+                    cast("dict[str, Any] | None", file_config.get("codeflow"))
                     if file_config
                     else None
                 )
                 if (
-                    autopr_section
-                    and isinstance(autopr_section, dict)
-                    and "quality" in autopr_section
+                    codeflow_section
+                    and isinstance(codeflow_section, dict)
+                    and "quality" in codeflow_section
                 ):
                     _merge_quality_from_dict(
-                        cast("dict[str, Any]", autopr_section["quality"]),
+                        cast("dict[str, Any]", codeflow_section["quality"]),
                         default_config,
                     )
 

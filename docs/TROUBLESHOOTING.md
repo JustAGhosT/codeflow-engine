@@ -1,4 +1,4 @@
-# AutoPR Engine Troubleshooting Guide
+﻿# CodeFlow Engine Troubleshooting Guide
 
 **Version:** 1.0  
 **Last Updated:** 2025-11-22  
@@ -34,11 +34,11 @@ WorkflowError: Workflow engine is not running
 
 **Solution:**
 ```python
-from codeflow_engine import AutoPREngine
-from codeflow_engine.config import AutoPRConfig
+from codeflow_engine import CodeFlowEngine
+from codeflow_engine.config import CodeFlowConfig
 
 # Ensure engine is started
-engine = AutoPREngine(config)
+engine = CodeFlowEngine(config)
 await engine.start()  # Must call start() before executing workflows
 
 # Now you can execute workflows
@@ -47,7 +47,7 @@ await engine.execute_workflow("my-workflow", context)
 
 **Prevention:** Always use the async context manager:
 ```python
-async with AutoPREngine(config) as engine:
+async with CodeFlowEngine(config) as engine:
     # Engine automatically started and will be stopped
     await engine.execute_workflow("my-workflow", context)
 ```
@@ -70,13 +70,13 @@ WorkflowError: Workflow context validation failed: Workflow name contains invali
 
 **Valid Examples:**
 ```python
-# ✅ Good
+# âœ… Good
 context = {
     "workflow_name": "pr-review-workflow",
     "data": {"key": "safe value"}
 }
 
-# ❌ Bad
+# âŒ Bad
 context = {
     "workflow_name": "test'; DROP TABLE;--",  # SQL injection attempt
     "data": "<script>alert('xss')</script>"   # XSS attempt
@@ -120,7 +120,7 @@ export GITHUB_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----..."
 ```
 
 **Regenerate Token:**
-- Go to GitHub → Settings → Developer settings → Personal access tokens
+- Go to GitHub â†’ Settings â†’ Developer settings â†’ Personal access tokens
 - Generate new token with required scopes: `repo`, `workflow`
 
 ---
@@ -159,7 +159,7 @@ except RateLimitError as e:
 
 2. **Use multiple API keys with rotation:**
    ```yaml
-   # autopr.yml
+   # codeflow.yml
    api_keys:
      github:
        - token: $GITHUB_TOKEN_1
@@ -178,7 +178,7 @@ except RateLimitError as e:
 
 **Symptoms:**
 ```
-ConnectionError: Could not connect to database at postgresql://localhost:5432/autopr
+ConnectionError: Could not connect to database at postgresql://localhost:5432/CodeFlow
 ```
 
 **Cause:** Database not running or incorrect connection string.
@@ -197,7 +197,7 @@ docker ps | grep postgres
 **2. Verify connection string:**
 ```bash
 # Format: postgresql://user:password@host:port/database
-export DATABASE_URL="postgresql://autopr:password@localhost:5432/autopr_db"
+export DATABASE_URL="postgresql://CodeFlow:password@localhost:5432/codeflow_db"
 
 # Test connection
 psql $DATABASE_URL -c "SELECT 1"
@@ -215,7 +215,7 @@ sudo ufw status
 **4. Use SQLite for development:**
 ```bash
 # Fallback to SQLite
-export DATABASE_URL="sqlite:///./autopr.db"
+export DATABASE_URL="sqlite:///./codeflow.db"
 ```
 
 ---
@@ -262,7 +262,7 @@ pip install -e ".[dev]"
 
 **Symptoms:**
 ```
-ModuleNotFoundError: No module named 'autopr'
+ModuleNotFoundError: No module named 'CodeFlow'
 ```
 
 **Solutions:**
@@ -270,7 +270,7 @@ ModuleNotFoundError: No module named 'autopr'
 **1. Verify installation:**
 ```bash
 pip list | grep codeflow-engine
-python -c "import codeflow_engine; print(autopr.__version__)"
+python -c "import codeflow_engine; print(codeflow.__version__)"
 ```
 
 **2. Check virtual environment:**
@@ -306,18 +306,18 @@ Warning: Failed to load config from codeflow_engine.yaml
 **1. Check file location:**
 ```bash
 # Search for config files
-find . -name "autopr.y*ml" -o -name ".autopr.y*ml"
+find . -name "codeflow.y*ml" -o -name ".codeflow.y*ml"
 
 # Expected locations:
-# - ./autopr.yaml
-# - ./autopr.yml
-# - ~/.autopr.yaml
-# - ~/.autopr.yml
+# - ./codeflow.yaml
+# - ./codeflow.yml
+# - ~/.codeflow.yaml
+# - ~/.codeflow.yml
 ```
 
 **2. Create default configuration:**
 ```bash
-cat > autopr.yaml << EOF
+cat > codeflow.yaml << EOF
 repositories:
   - owner: your-org
     repos: ["your-repo"]
@@ -357,37 +357,37 @@ yaml.scanner.ScannerError: while scanning a simple key
 pip install yamllint
 
 # Check syntax
-yamllint autopr.yaml
+yamllint codeflow.yaml
 ```
 
 **2. Common YAML mistakes:**
 ```yaml
-# ❌ Wrong (tabs)
+# âŒ Wrong (tabs)
 integrations:
 	slack:
 		enabled: true
 
-# ✅ Correct (spaces)
+# âœ… Correct (spaces)
 integrations:
   slack:
     enabled: true
 
-# ❌ Wrong (unquoted special characters)
+# âŒ Wrong (unquoted special characters)
 password: P@ssw0rd!
 
-# ✅ Correct (quoted)
+# âœ… Correct (quoted)
 password: "P@ssw0rd!"
 ```
 
 **3. Test configuration:**
 ```python
-from codeflow_engine.config import AutoPRConfig
+from codeflow_engine.config import CodeFlowConfig
 
 try:
-    config = AutoPRConfig.from_file("autopr.yaml")
-    print("✅ Configuration valid")
+    config = CodeFlowConfig.from_file("codeflow.yaml")
+    print("âœ… Configuration valid")
 except Exception as e:
-    print(f"❌ Configuration error: {e}")
+    print(f"âŒ Configuration error: {e}")
 ```
 
 ---
@@ -407,7 +407,7 @@ WorkflowError: Workflow execution timed out after 3 attempts
 
 **1. Increase timeout:**
 ```python
-config = AutoPRConfig()
+config = CodeFlowConfig()
 config.workflow_timeout = 600  # Increase from 300 to 600 seconds
 ```
 
@@ -428,7 +428,7 @@ free -m
 **4. Enable debug logging:**
 ```bash
 export ENABLE_DEBUG_LOGGING=true
-export AUTOPR_LOG_LEVEL=DEBUG
+export codeflow_LOG_LEVEL=DEBUG
 ```
 
 ---
@@ -508,9 +508,9 @@ export REDIS_URL=redis://localhost:6379
 
 **2. Use database connection pooling:**
 ```python
-from codeflow_engine.config import AutoPRConfig
+from codeflow_engine.config import CodeFlowConfig
 
-config = AutoPRConfig()
+config = CodeFlowConfig()
 config.database_pool_size = 20
 config.database_pool_recycle = 3600
 ```
@@ -535,7 +535,7 @@ CREATE INDEX idx_workflows_created_at ON workflows(created_at);
 **Diagnosis:**
 ```bash
 # Check process CPU
-top -p $(pgrep -f autopr)
+top -p $(pgrep -f CodeFlow)
 
 # Profile Python code
 python -m cProfile -o profile.stats your_script.py
@@ -552,12 +552,12 @@ polling:
 
 **2. Use async operations:**
 ```python
-# ❌ Synchronous (blocks)
+# âŒ Synchronous (blocks)
 def process_item(item):
     result = requests.get(url)
     return result
 
-# ✅ Asynchronous
+# âœ… Asynchronous
 async def process_item(item):
     async with aiohttp.ClientSession() as session:
         result = await session.get(url)
@@ -681,7 +681,7 @@ alembic upgrade +1
 
 **3. Reset database (development only):**
 ```bash
-# ⚠️ WARNING: Destroys all data
+# âš ï¸ WARNING: Destroys all data
 alembic downgrade base
 alembic upgrade head
 ```
@@ -722,7 +722,7 @@ AND NOW() - query_start > interval '5 minutes';
 ```python
 # Increase timeout
 import sqlite3
-conn = sqlite3.connect('autopr.db', timeout=30.0)
+conn = sqlite3.connect('codeflow.db', timeout=30.0)
 ```
 
 **3. Use connection pooling:**
@@ -761,7 +761,7 @@ curl -H "Authorization: token $GITHUB_TOKEN" \
 ```
 
 **3. Regenerate token:**
-- Go to GitHub Settings → Developer settings → Personal access tokens
+- Go to GitHub Settings â†’ Developer settings â†’ Personal access tokens
 - Delete old token
 - Generate new with scopes: `repo`, `workflow`, `read:org`
 
@@ -771,7 +771,7 @@ curl -H "Authorization: token $GITHUB_TOKEN" \
 
 **Symptoms:**
 ```
-AutoPRPermissionError: Permission denied for resource
+CodeFlowPermissionError: Permission denied for resource
 ```
 
 **Solutions:**
@@ -783,8 +783,8 @@ gh api repos/OWNER/REPO | jq '.permissions'
 ```
 
 **2. Check organization settings:**
-- Go to Organization Settings → OAuth App access restrictions
-- Ensure AutoPR is authorized
+- Go to Organization Settings â†’ OAuth App access restrictions
+- Ensure CodeFlow is authorized
 
 **3. Use GitHub App instead:**
 ```bash
@@ -802,15 +802,15 @@ export GITHUB_PRIVATE_KEY_PATH=/path/to/key.pem
 **Method 1: Environment Variable**
 ```bash
 export ENABLE_DEBUG_LOGGING=true
-export AUTOPR_LOG_LEVEL=DEBUG
-python -m autopr.cli run
+export codeflow_LOG_LEVEL=DEBUG
+python -m codeflow.cli run
 ```
 
 **Method 2: Configuration**
 ```python
-from codeflow_engine.config import AutoPRConfig
+from codeflow_engine.config import CodeFlowConfig
 
-config = AutoPRConfig()
+config = CodeFlowConfig()
 config.enable_debug_logging = True
 ```
 
@@ -861,19 +861,19 @@ curl https://api.openai.com/v1/models \
 ### Common Log Messages
 
 **"Workflow execution completed"**
-- ✅ Normal - workflow finished successfully
+- âœ… Normal - workflow finished successfully
 
 **"Retrying workflow after Xs"**
-- ⚠️ Warning - workflow failed, being retried
+- âš ï¸ Warning - workflow failed, being retried
 
 **"Workflow execution timed out"**
-- ❌ Error - workflow exceeded timeout, check performance
+- âŒ Error - workflow exceeded timeout, check performance
 
 **"Workflow context validation failed"**
-- ❌ Error - invalid input, check parameters
+- âŒ Error - invalid input, check parameters
 
 **"Race condition detected"**
-- 🐛 Bug - contact support, this shouldn't happen post-fix
+- ðŸ› Bug - contact support, this shouldn't happen post-fix
 
 ---
 
@@ -884,10 +884,10 @@ curl https://api.openai.com/v1/models \
 1. **Check logs:**
    ```bash
    # View recent logs
-   tail -f logs/autopr.log
+   tail -f logs/codeflow.log
    
    # Search for errors
-   grep -i error logs/autopr.log | tail -20
+   grep -i error logs/codeflow.log | tail -20
    ```
 
 2. **Verify configuration:**
@@ -902,12 +902,12 @@ curl https://api.openai.com/v1/models \
 3. **Test basic functionality:**
    ```python
    import asyncio
-   from codeflow_engine import AutoPREngine
-   from codeflow_engine.config import AutoPRConfig
+   from codeflow_engine import CodeFlowEngine
+   from codeflow_engine.config import CodeFlowConfig
    
    async def test():
-       config = AutoPRConfig()
-       async with AutoPREngine(config) as engine:
+       config = CodeFlowConfig()
+       async with CodeFlowEngine(config) as engine:
            status = await engine.get_status()
            print("Engine status:", status)
    
@@ -990,11 +990,11 @@ alembic upgrade head
 redis-cli FLUSHALL
 
 # Restart with debug
-export AUTOPR_LOG_LEVEL=DEBUG
-python -m autopr.server --reload
+export codeflow_LOG_LEVEL=DEBUG
+python -m codeflow.server --reload
 
 # Test configuration
-python -c "from codeflow_engine.config import AutoPRConfig; print(AutoPRConfig().to_dict())"
+python -c "from codeflow_engine.config import CodeFlowConfig; print(CodeFlowConfig().to_dict())"
 
 # Check connectivity
 curl -v http://localhost:8080/api/status
@@ -1004,29 +1004,29 @@ curl -v http://localhost:8080/api/status
 
 ```python
 #!/usr/bin/env python3
-"""Health check script for AutoPR Engine"""
+"""Health check script for CodeFlow Engine"""
 import asyncio
 import sys
-from codeflow_engine import AutoPREngine
-from codeflow_engine.config import AutoPRConfig
+from codeflow_engine import CodeFlowEngine
+from codeflow_engine.config import CodeFlowConfig
 
 async def health_check():
     try:
-        config = AutoPRConfig()
+        config = CodeFlowConfig()
         if not config.validate():
-            print("❌ Configuration invalid")
+            print("âŒ Configuration invalid")
             return False
         
-        async with AutoPREngine(config) as engine:
+        async with CodeFlowEngine(config) as engine:
             status = await engine.get_status()
             if status['running']:
-                print("✅ Engine healthy")
+                print("âœ… Engine healthy")
                 return True
             else:
-                print("❌ Engine not running")
+                print("âŒ Engine not running")
                 return False
     except Exception as e:
-        print(f"❌ Health check failed: {e}")
+        print(f"âŒ Health check failed: {e}")
         return False
 
 if __name__ == "__main__":
@@ -1038,4 +1038,4 @@ if __name__ == "__main__":
 
 **Document Version:** 1.0  
 **Last Updated:** 2025-11-22  
-**Maintained by:** AutoPR Engine Team
+**Maintained by:** CodeFlow Engine Team

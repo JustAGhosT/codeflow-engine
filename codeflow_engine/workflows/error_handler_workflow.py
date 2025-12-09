@@ -1,7 +1,7 @@
-"""
+﻿"""
 Error Handler Workflow
 
-A specialized workflow for handling errors in AI linting fixer and other AutoPR components.
+A specialized workflow for handling errors in AI linting fixer and other CodeFlow components.
 This workflow integrates with the existing workflow system and provides comprehensive
 error tracking, categorization, and recovery capabilities.
 """
@@ -81,7 +81,7 @@ class ErrorHandlerWorkflowOutputs(BaseModel):
 
 class ErrorHandlerWorkflow(Workflow):
     """
-    Specialized workflow for handling errors in AutoPR components.
+    Specialized workflow for handling errors in CodeFlow components.
 
     This workflow provides:
     - Error categorization and severity assessment
@@ -95,7 +95,7 @@ class ErrorHandlerWorkflow(Workflow):
         """Initialize the error handler workflow."""
         super().__init__(
             name="error_handler",
-            description="Comprehensive error handling workflow for AutoPR components",
+            description="Comprehensive error handling workflow for CodeFlow components",
             version="1.0.0",
         )
 

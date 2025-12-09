@@ -1,9 +1,9 @@
-name: "Documentation Index HTML Template"
+﻿name: "Documentation Index HTML Template"
 category: "html_template"
 description:
   "Main documentation index template with statistics, hero section, and organized content sections"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["html", "documentation", "index", "dashboard", "statistics"]
 
 template_info:
@@ -281,7 +281,7 @@ template_content: |
           }
 
           .card-list li::before {
-              content: '→';
+              content: 'â†’';
               color: {{ styling.stats_colors.primary }};
               font-weight: bold;
               margin-right: 10px;
@@ -414,7 +414,7 @@ template_content: |
       <div class="footer-section">
           <div class="container">
               <div class="footer-content">
-                  <h3>AutoPR Template System</h3>
+                  <h3>CodeFlow Template System</h3>
                   <p>
                       Empowering developers with comprehensive templates and documentation
                       for rapid application development across multiple platforms.

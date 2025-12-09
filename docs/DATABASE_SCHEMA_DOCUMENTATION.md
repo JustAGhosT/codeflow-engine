@@ -1,8 +1,8 @@
-# Database Schema Documentation
+﻿# Database Schema Documentation
 
 ## Overview
 
-AutoPR Engine uses **PostgreSQL** as the primary database with **SQLAlchemy ORM** for data management. This document provides comprehensive documentation of the database schema, relationships, indexes, and design patterns.
+CodeFlow Engine uses **PostgreSQL** as the primary database with **SQLAlchemy ORM** for data management. This document provides comprehensive documentation of the database schema, relationships, indexes, and design patterns.
 
 **Database:** PostgreSQL 14+  
 **ORM:** SQLAlchemy 2.0+  
@@ -28,9 +28,9 @@ AutoPR Engine uses **PostgreSQL** as the primary database with **SQLAlchemy ORM*
 ## Schema Overview
 
 ### Database Name
-- **Development:** `autopr_dev`
-- **Staging:** `autopr_staging`
-- **Production:** `autopr_prod`
+- **Development:** `codeflow_dev`
+- **Staging:** `codeflow_staging`
+- **Production:** `codeflow_prod`
 
 ### Tables Summary
 
@@ -188,7 +188,7 @@ AutoPR Engine uses **PostgreSQL** as the primary database with **SQLAlchemy ORM*
   "config": {
     "cluster": "prod-us-east",
     "namespace": "production",
-    "image": "autopr:v1.2.3"
+    "image": "CodeFlow:v1.2.3"
   },
   "order_index": 0,
   "conditions": {
@@ -391,72 +391,72 @@ AutoPR Engine uses **PostgreSQL** as the primary database with **SQLAlchemy ORM*
 ## Entity Relationship Diagram
 
 ```
-┌─────────────────────┐
-│     workflows       │
-│ ─────────────────── │
-│ PK id (UUID)        │
-│    name (VARCHAR)   │
-│    status (VARCHAR) │
-│    config (JSONB)   │
-└──────────┬──────────┘
-           │
-           │ 1:N
-           ├──────────────────────────┐
-           │                          │
-           ▼                          ▼
-┌──────────────────────┐   ┌─────────────────────┐
-│  workflow_executions │   │   workflow_actions  │
-│ ──────────────────── │   │ ─────────────────── │
-│ PK id (UUID)         │   │ PK id (UUID)        │
-│ FK workflow_id       │   │ FK workflow_id      │
-│    execution_id      │   │    action_type      │
-│    status (VARCHAR)  │   │    order_index      │
-│    result (JSONB)    │   │    config (JSONB)   │
-└──────────┬───────────┘   └──────────┬──────────┘
-           │                          │
-           │ 1:N                      │
-           ▼                          │ (FK)
-┌──────────────────────┐              │
-│   execution_logs     │◄─────────────┘
-│ ──────────────────── │
-│ PK id (UUID)         │
-│ FK execution_id      │
-│ FK action_id         │
-│    level (VARCHAR)   │
-│    message (TEXT)    │
-└──────────────────────┘
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚     workflows       â”‚
+â”‚ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ â”‚
+â”‚ PK id (UUID)        â”‚
+â”‚    name (VARCHAR)   â”‚
+â”‚    status (VARCHAR) â”‚
+â”‚    config (JSONB)   â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+           â”‚
+           â”‚ 1:N
+           â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+           â”‚                          â”‚
+           â–¼                          â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  workflow_executions â”‚   â”‚   workflow_actions  â”‚
+â”‚ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ â”‚   â”‚ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ â”‚
+â”‚ PK id (UUID)         â”‚   â”‚ PK id (UUID)        â”‚
+â”‚ FK workflow_id       â”‚   â”‚ FK workflow_id      â”‚
+â”‚    execution_id      â”‚   â”‚    action_type      â”‚
+â”‚    status (VARCHAR)  â”‚   â”‚    order_index      â”‚
+â”‚    result (JSONB)    â”‚   â”‚    config (JSONB)   â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜   â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+           â”‚                          â”‚
+           â”‚ 1:N                      â”‚
+           â–¼                          â”‚ (FK)
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”              â”‚
+â”‚   execution_logs     â”‚â—„â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+â”‚ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ â”‚
+â”‚ PK id (UUID)         â”‚
+â”‚ FK execution_id      â”‚
+â”‚ FK action_id         â”‚
+â”‚    level (VARCHAR)   â”‚
+â”‚    message (TEXT)    â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 
-           │ 1:N
-           ▼
-┌──────────────────────┐
-│   workflow_triggers  │
-│ ──────────────────── │
-│ PK id (UUID)         │
-│ FK workflow_id       │
-│    trigger_type      │
-│    conditions (JSONB)│
-└──────────────────────┘
+           â”‚ 1:N
+           â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚   workflow_triggers  â”‚
+â”‚ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ â”‚
+â”‚ PK id (UUID)         â”‚
+â”‚ FK workflow_id       â”‚
+â”‚    trigger_type      â”‚
+â”‚    conditions (JSONB)â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 
-┌─────────────────────┐
-│   integrations      │
-│ ─────────────────── │
-│ PK id (UUID)        │
-│    name (VARCHAR)   │
-│    type (VARCHAR)   │
-│    enabled (BOOL)   │
-└──────────┬──────────┘
-           │
-           │ 1:N
-           ▼
-┌──────────────────────┐
-│ integration_events   │
-│ ──────────────────── │
-│ PK id (UUID)         │
-│ FK integration_id    │
-│    event_type        │
-│    payload (JSONB)   │
-│    status (VARCHAR)  │
-└──────────────────────┘
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚   integrations      â”‚
+â”‚ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ â”‚
+â”‚ PK id (UUID)        â”‚
+â”‚    name (VARCHAR)   â”‚
+â”‚    type (VARCHAR)   â”‚
+â”‚    enabled (BOOL)   â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+           â”‚
+           â”‚ 1:N
+           â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ integration_events   â”‚
+â”‚ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ â”‚
+â”‚ PK id (UUID)         â”‚
+â”‚ FK integration_id    â”‚
+â”‚    event_type        â”‚
+â”‚    payload (JSONB)   â”‚
+â”‚    status (VARCHAR)  â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ---
@@ -549,29 +549,29 @@ All foreign keys use appropriate CASCADE rules:
 
 ### One-to-Many Relationships
 
-1. **Workflow → Workflow Executions**
+1. **Workflow â†’ Workflow Executions**
    - One workflow can have many executions
-   - Cascade delete: Delete workflow → Delete all executions
+   - Cascade delete: Delete workflow â†’ Delete all executions
 
-2. **Workflow → Workflow Actions**
+2. **Workflow â†’ Workflow Actions**
    - One workflow can have many actions/steps
-   - Cascade delete: Delete workflow → Delete all actions
+   - Cascade delete: Delete workflow â†’ Delete all actions
 
-3. **Workflow → Workflow Triggers**
+3. **Workflow â†’ Workflow Triggers**
    - One workflow can have many triggers
-   - Cascade delete: Delete workflow → Delete all triggers
+   - Cascade delete: Delete workflow â†’ Delete all triggers
 
-4. **Workflow Execution → Execution Logs**
+4. **Workflow Execution â†’ Execution Logs**
    - One execution can have many log entries
-   - Cascade delete: Delete execution → Delete all logs
+   - Cascade delete: Delete execution â†’ Delete all logs
 
-5. **Integration → Integration Events**
+5. **Integration â†’ Integration Events**
    - One integration can have many events
-   - Cascade delete: Delete integration → Delete all events
+   - Cascade delete: Delete integration â†’ Delete all events
 
 ### Self-Referencing Relationships
 
-1. **Workflow Execution → Parent Execution**
+1. **Workflow Execution â†’ Parent Execution**
    - For tracking retry attempts
    - `parent_execution_id` references `workflow_executions.id`
    - NULL for original executions
@@ -675,7 +675,7 @@ class AuditMixin:
 
 ### Alembic Configuration
 
-AutoPR Engine uses Alembic for database migrations:
+CodeFlow Engine uses Alembic for database migrations:
 
 ```bash
 # Create a new migration
@@ -729,18 +729,18 @@ def downgrade():
 
 ### 1. UUID Usage
 
-✅ **DO:** Use UUIDs for primary keys
+âœ… **DO:** Use UUIDs for primary keys
 ```python
 id: Mapped[uuid.UUID] = mapped_column(
     UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
 )
 ```
 
-❌ **DON'T:** Use auto-incrementing integers (security risk, distributed system issues)
+âŒ **DON'T:** Use auto-incrementing integers (security risk, distributed system issues)
 
 ### 2. Timestamp Handling
 
-✅ **DO:** Always use timezone-aware timestamps
+âœ… **DO:** Always use timezone-aware timestamps
 ```python
 created_at: Mapped[datetime] = mapped_column(
     DateTime(timezone=True), 
@@ -748,11 +748,11 @@ created_at: Mapped[datetime] = mapped_column(
 )
 ```
 
-❌ **DON'T:** Use naive datetime objects
+âŒ **DON'T:** Use naive datetime objects
 
 ### 3. JSON Field Validation
 
-✅ **DO:** Validate JSON schemas at application level
+âœ… **DO:** Validate JSON schemas at application level
 ```python
 from pydantic import BaseModel
 
@@ -764,11 +764,11 @@ class WorkflowConfig(BaseModel):
 config = WorkflowConfig(**config_dict).dict()
 ```
 
-❌ **DON'T:** Store unvalidated JSON in database
+âŒ **DON'T:** Store unvalidated JSON in database
 
 ### 4. Foreign Key Cascades
 
-✅ **DO:** Use appropriate CASCADE rules
+âœ… **DO:** Use appropriate CASCADE rules
 ```python
 workflow_id: Mapped[uuid.UUID] = mapped_column(
     UUID(as_uuid=True), 
@@ -776,17 +776,17 @@ workflow_id: Mapped[uuid.UUID] = mapped_column(
 )
 ```
 
-❌ **DON'T:** Leave orphaned records in database
+âŒ **DON'T:** Leave orphaned records in database
 
 ### 5. Index Strategy
 
-✅ **DO:** Create indexes for frequent queries
+âœ… **DO:** Create indexes for frequent queries
 ```sql
 CREATE INDEX idx_workflow_executions_composite 
 ON workflow_executions(workflow_id, status, started_at);
 ```
 
-❌ **DON'T:** Over-index (every index has write cost)
+âŒ **DON'T:** Over-index (every index has write cost)
 
 ### 6. Soft Deletes (Future Enhancement)
 
@@ -875,8 +875,8 @@ alembic upgrade head
 
 ---
 
-**Document Status:** ✅ Complete  
-**DOC-2 Status:** ✅ **RESOLVED** - Comprehensive database schema documented  
+**Document Status:** âœ… Complete  
+**DOC-2 Status:** âœ… **RESOLVED** - Comprehensive database schema documented  
 **Last Updated:** 2025-11-22  
 **Version:** 1.0.0  
-**Maintained by:** AutoPR DevOps Team
+**Maintained by:** CodeFlow DevOps Team

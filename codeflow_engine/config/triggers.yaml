@@ -1,5 +1,5 @@
-# This file defines the triggers for your AutoPR workflows.
-# For more information, see the Triggers reference in the AutoPR documentation.
+﻿# This file defines the triggers for your CodeFlow workflows.
+# For more information, see the Triggers reference in the CodeFlow documentation.
 
 triggers:
   - type: label

@@ -1,4 +1,4 @@
-name: "Enhanced PR Comment Handler"
+﻿name: "Enhanced PR Comment Handler"
 description:
   "AI-powered PR comment handler with learning, quality gates, and multi-platform integration"
 
@@ -70,7 +70,7 @@ steps:
     inputs:
       branch_name: "{{ steps.extract_comment_data.outputs.branch_name }}"
       commit_message:
-        "🤖 AutoPR: {{ steps.apply_intelligent_fix.outputs.description }} [AI-validated]"
+        "ðŸ¤– CodeFlow: {{ steps.apply_intelligent_fix.outputs.description }} [AI-validated]"
       files_to_commit: "{{ steps.extract_comment_data.outputs.file_path }}"
     when: "{{ steps.validate_fix_quality.outputs.passed == true }}"
 
@@ -123,7 +123,7 @@ steps:
       action_type: "notify_team"
       platform: "{{ env.NOTIFICATION_PLATFORM | default('slack') }}"
       title:
-        "🤖 AutoPR: {{ steps.analyze_with_ai.outputs.intent | title }} in PR #{{
+        "ðŸ¤– CodeFlow: {{ steps.analyze_with_ai.outputs.intent | title }} in PR #{{
         steps.extract_comment_data.outputs.pr_number }}"
       description: |
         **Comment by @{{ steps.extract_comment_data.outputs.comment_author }}:**
@@ -132,9 +132,9 @@ steps:
         **AI Assessment:** {{ steps.analyze_with_ai.outputs.response_template }}
 
         {% if steps.commit_validated_fix.outputs.success %}
-        ✅ **Fix Applied:** {{ steps.apply_intelligent_fix.outputs.description }}
+        âœ… **Fix Applied:** {{ steps.apply_intelligent_fix.outputs.description }}
         {% elif steps.create_intelligent_issue.outputs.success %}
-        📝 **Issue Created:** {{ steps.create_intelligent_issue.outputs.platform_url }}
+        ðŸ“ **Issue Created:** {{ steps.create_intelligent_issue.outputs.platform_url }}
         {% endif %}
       priority: "{{ steps.analyze_with_ai.outputs.issue_priority }}"
       context_data:
@@ -146,25 +146,25 @@ steps:
     inputs:
       pr_number: "{{ steps.extract_comment_data.outputs.pr_number }}"
       comment_body: |
-        🤖 **AutoPR Enhanced Response** (Confidence: {{ steps.analyze_with_ai.outputs.confidence | round(2) }})
+        ðŸ¤– **CodeFlow Enhanced Response** (Confidence: {{ steps.analyze_with_ai.outputs.confidence | round(2) }})
 
         {{ steps.analyze_with_ai.outputs.response_template }}
 
         {% if steps.commit_validated_fix.outputs.success %}
-        ✅ **Applied Fix:** {{ steps.apply_intelligent_fix.outputs.description }}
+        âœ… **Applied Fix:** {{ steps.apply_intelligent_fix.outputs.description }}
         - Quality Score: {{ steps.validate_fix_quality.outputs.quality_score | round(2) }}
         - Tests: {{ 'Passed' if steps.validate_fix_quality.outputs.test_results else 'N/A' }}
         {% if steps.validate_fix_quality.outputs.warnings %}
-        - ⚠️ Warnings: {{ steps.validate_fix_quality.outputs.warnings | join(', ') }}
+        - âš ï¸ Warnings: {{ steps.validate_fix_quality.outputs.warnings | join(', ') }}
         {% endif %}
         {% endif %}
 
         {% if steps.create_intelligent_issue.outputs.success %}
-        📝 **Created Issue:** [{{ steps.create_intelligent_issue.outputs.platform_id }}]({{ steps.create_intelligent_issue.outputs.platform_url }})
+        ðŸ“ **Created Issue:** [{{ steps.create_intelligent_issue.outputs.platform_id }}]({{ steps.create_intelligent_issue.outputs.platform_url }})
         {% endif %}
 
         {% if steps.analyze_with_ai.outputs.intent == 'question' %}
-        💡 **AI Insights:** Based on similar questions, you might also want to check:
+        ðŸ’¡ **AI Insights:** Based on similar questions, you might also want to check:
         {% for rec in steps.get_learned_patterns.outputs.recommendations %}
         - {{ rec }}
         {% endfor %}

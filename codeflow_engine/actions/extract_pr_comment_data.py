@@ -1,5 +1,5 @@
-"""
-AutoPR Action: Extract PR Comment Data
+﻿"""
+CodeFlow Action: Extract PR Comment Data
 Extracts structured data from PR comment events for processing.
 """
 

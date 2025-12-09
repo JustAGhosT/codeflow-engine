@@ -1,6 +1,6 @@
-# Platform Detection Configuration
+﻿# Platform Detection Configuration
 
-This document describes the configuration structure for platform detection in AutoPR Engine.
+This document describes the configuration structure for platform detection in CodeFlow Engine.
 
 ## Overview
 
@@ -42,7 +42,7 @@ category:
       "content_patterns": 0.05
     },
     "categories": ["category_name"],
-    "last_updated_by": "AutoPR Engine",
+    "last_updated_by": "CodeFlow Engine",
     "schema_version": "1.1.0"
   }
 }

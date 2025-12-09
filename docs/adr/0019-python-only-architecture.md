@@ -1,4 +1,4 @@
-# 19. Python-Only Architecture Decision
+﻿# 19. Python-Only Architecture Decision
 
 ## Status
 
@@ -261,14 +261,14 @@ While using a single language, the architecture maintains clear separation of co
 
 ```
 codeflow_engine/
-├── engine/           # Domain Layer (core business logic)
-├── actions/          # Application Layer (use cases, workflows)
-├── integrations/     # Infrastructure Layer (external services)
-├── ai/              # AI/ML Layer (LLM providers, agents)
-├── database/        # Data Layer (models, repositories)
-├── config/          # Configuration Layer (settings, validation)
-├── security/        # Security Layer (auth, validation)
-└── server.py        # Presentation Layer (API endpoints)
+â”œâ”€â”€ engine/           # Domain Layer (core business logic)
+â”œâ”€â”€ actions/          # Application Layer (use cases, workflows)
+â”œâ”€â”€ integrations/     # Infrastructure Layer (external services)
+â”œâ”€â”€ ai/              # AI/ML Layer (LLM providers, agents)
+â”œâ”€â”€ database/        # Data Layer (models, repositories)
+â”œâ”€â”€ config/          # Configuration Layer (settings, validation)
+â”œâ”€â”€ security/        # Security Layer (auth, validation)
+â””â”€â”€ server.py        # Presentation Layer (API endpoints)
 ```
 
 ### Domain-Driven Design Principles
@@ -293,7 +293,7 @@ codeflow_engine/
 
 3. **Plugin Architecture**: Extensibility without core changes
    ```python
-   [tool.poetry.plugins."autopr.actions"]
+   [tool.poetry.plugins."codeflow.actions"]
    "platform_detector" = "codeflow_engine.actions.platform_detector:PlatformDetector"
    ```
 
@@ -371,12 +371,12 @@ If performance becomes a critical issue, migration options include:
 **Example Structure**:
 ```
 codeflow_engine/
-├── core/                    # Python code
-├── extensions/
-│   └── fast_parser/        # Rust extension
-│       ├── Cargo.toml
-│       ├── src/lib.rs      # Rust code
-│       └── pyproject.toml  # maturin config
+â”œâ”€â”€ core/                    # Python code
+â”œâ”€â”€ extensions/
+â”‚   â””â”€â”€ fast_parser/        # Rust extension
+â”‚       â”œâ”€â”€ Cargo.toml
+â”‚       â”œâ”€â”€ src/lib.rs      # Rust code
+â”‚       â””â”€â”€ pyproject.toml  # maturin config
 ```
 
 **Expected Gains**: 10-50x on CPU-bound operations, maintains Python ecosystem benefits
@@ -416,13 +416,13 @@ codeflow_engine/
 
 ```
 Is performance actually a problem? (Profile first!)
-├── No → Stay with Python-only
-└── Yes → Is it CPU-bound or I/O-bound?
-    ├── I/O-bound → Optimize async, add caching, horizontal scaling
-    └── CPU-bound → Profile specific functions
-        ├── <5% of codebase hot → Use Rust via PyO3
-        ├── Entire module/service → Consider C# microservice
-        └── Multiple services → Evaluate polyglot architecture
+â”œâ”€â”€ No â†’ Stay with Python-only
+â””â”€â”€ Yes â†’ Is it CPU-bound or I/O-bound?
+    â”œâ”€â”€ I/O-bound â†’ Optimize async, add caching, horizontal scaling
+    â””â”€â”€ CPU-bound â†’ Profile specific functions
+        â”œâ”€â”€ <5% of codebase hot â†’ Use Rust via PyO3
+        â”œâ”€â”€ Entire module/service â†’ Consider C# microservice
+        â””â”€â”€ Multiple services â†’ Evaluate polyglot architecture
 ```
 
 ### Rust Migration Example

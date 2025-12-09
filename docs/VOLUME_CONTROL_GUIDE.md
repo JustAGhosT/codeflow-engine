@@ -1,13 +1,13 @@
-# 🎛️ AutoPR Volume Control System Guide
+﻿# ðŸŽ›ï¸ CodeFlow Volume Control System Guide
 
-## 🎯 Overview
+## ðŸŽ¯ Overview
 
-The AutoPR Volume Control System provides **HiFi-style volume control** for your development
+The CodeFlow Volume Control System provides **HiFi-style volume control** for your development
 environment, allowing you to adjust the strictness of linting and quality checks from 0-1000 in
 ticks of 5. This system was successfully integrated from PR #14 and provides granular control over
 your development experience.
 
-## 🚀 Quick Start
+## ðŸš€ Quick Start
 
 ### Check Current Status
 
@@ -43,7 +43,7 @@ python scripts/volume-control/main.py commit down 1
 python scripts/volume-control/main.py autofix
 ```
 
-## 📊 Volume Levels
+## ðŸ“Š Volume Levels
 
 | Volume   | Level   | Description                 | Use Case                      |
 | -------- | ------- | --------------------------- | ----------------------------- |
@@ -53,9 +53,9 @@ python scripts/volume-control/main.py autofix
 | 700-800  | HIGH    | Strict checks               | Code review, quality focus    |
 | 900-1000 | MAXIMUM | Nuclear - everything blocks | Production, strict compliance |
 
-## 🛠️ Integrated Components
+## ðŸ› ï¸ Integrated Components
 
-### ✅ Successfully Integrated from PR #14
+### âœ… Successfully Integrated from PR #14
 
 1. **Volume Control System**
    - `scripts/volume-control/main.py` - Main CLI interface
@@ -81,7 +81,7 @@ python scripts/volume-control/main.py autofix
    - `.flake8` - Python linting configuration
    - `.yamlignore` - YAML file exclusions
 
-## 🎮 Usage Examples
+## ðŸŽ® Usage Examples
 
 ### Development Workflow
 
@@ -127,7 +127,7 @@ python scripts/volume-control/main.py autofix
    python scripts/volume-control/main.py autofix
    ```
 
-## 🔧 Configuration
+## ðŸ”§ Configuration
 
 ### Tool Configurations
 
@@ -154,18 +154,18 @@ ls scripts/volume-control/configs/
 code scripts/volume-control/configs/python.json
 ```
 
-## 🎯 Integration with Quality Engine
+## ðŸŽ¯ Integration with Quality Engine
 
-The volume control system integrates seamlessly with the AutoPR Quality Engine:
+The volume control system integrates seamlessly with the CodeFlow Quality Engine:
 
 ```bash
 # Run Quality Engine with volume-aware settings
-python -m autopr.actions.quality_engine --mode=smart
+python -m codeflow.actions.quality_engine --mode=smart
 
 # The Quality Engine automatically respects volume settings
 ```
 
-## 🔍 Monitoring and Debugging
+## ðŸ” Monitoring and Debugging
 
 ### Check Active Tools
 
@@ -185,7 +185,7 @@ python scripts/volume-control/main.py debug
 python scripts/volume-control/main.py status --verbose
 ```
 
-## 🚨 Troubleshooting
+## ðŸš¨ Troubleshooting
 
 ### Common Issues
 
@@ -212,9 +212,9 @@ python scripts/volume-control/main.py dev 75
 python scripts/volume-control/main.py commit 200
 ```
 
-## 🎉 Benefits
+## ðŸŽ‰ Benefits
 
-### ✅ What We Achieved
+### âœ… What We Achieved
 
 1. **Granular Control**: Fine-tuned development experience
 2. **Separate Dev/Commit Volumes**: Different strictness for different contexts
@@ -222,7 +222,7 @@ python scripts/volume-control/main.py commit 200
 4. **IDE Integration**: Seamless editor experience
 5. **Comprehensive Documentation**: Clear usage guidelines
 
-### 🚀 Key Features
+### ðŸš€ Key Features
 
 - **HiFi-style Volume Control**: 0-1000 scale with 5-tick increments
 - **Dual Volume System**: Separate dev and commit environments
@@ -231,20 +231,20 @@ python scripts/volume-control/main.py commit 200
 - **IDE Support**: Cursor, Windsurf, VS Code integration
 - **Pre-commit Integration**: Automated quality gates
 
-## 📈 Next Steps
+## ðŸ“ˆ Next Steps
 
 1. **Customize Configurations**: Adjust tool settings to your preferences
 2. **Set Up Workflows**: Configure volume levels for different scenarios
 3. **Team Integration**: Share volume settings with your team
 4. **CI/CD Integration**: Use volume control in automated pipelines
 
-## 🎯 Success Metrics
+## ðŸŽ¯ Success Metrics
 
-- ✅ **Volume Control System**: Fully integrated and functional
-- ✅ **Auto-fix Feature**: Working with Quality Engine integration
-- ✅ **IDE Integration**: Cursor and Windsurf rules integrated
-- ✅ **Documentation**: Comprehensive guides and examples
-- ✅ **Configuration Management**: Flexible tool configurations
-- ✅ **Pre-commit Integration**: Automated quality gates
+- âœ… **Volume Control System**: Fully integrated and functional
+- âœ… **Auto-fix Feature**: Working with Quality Engine integration
+- âœ… **IDE Integration**: Cursor and Windsurf rules integrated
+- âœ… **Documentation**: Comprehensive guides and examples
+- âœ… **Configuration Management**: Flexible tool configurations
+- âœ… **Pre-commit Integration**: Automated quality gates
 
-The volume control system is now **fully operational** and ready for production use! 🎉
+The volume control system is now **fully operational** and ready for production use! ðŸŽ‰

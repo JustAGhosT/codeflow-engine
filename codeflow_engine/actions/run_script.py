@@ -1,4 +1,4 @@
-import asyncio
+﻿import asyncio
 
 import pydantic
 
@@ -58,7 +58,7 @@ class RunScript(Action[Inputs, Outputs]):
         return await self.run(inputs)
 
 
-# This allows you to test the action manually by running `python -m autopr.actions.run_script`
+# This allows you to test the action manually by running `python -m codeflow.actions.run_script`
 if __name__ == "__main__":
     from codeflow_engine.tests.utils import run_action_manually
 

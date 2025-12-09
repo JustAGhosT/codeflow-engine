@@ -1,5 +1,5 @@
-"""
-AutoPR AI/LLM Base Classes
+﻿"""
+CodeFlow AI/LLM Base Classes
 
 Base classes and interfaces for AI/LLM provider implementation.
 """

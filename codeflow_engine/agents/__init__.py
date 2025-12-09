@@ -1,19 +1,19 @@
-"""
-AutoPR Agent Framework
+﻿"""
+CodeFlow Agent Framework
 
 This module provides agent-based orchestration for code quality analysis using CrewAI.
 
 ## Agents
 
 ### Base Classes
-- `BaseAgent`: Base class for all AutoPR agents
+- `BaseAgent`: Base class for all CodeFlow agents
 - `VolumeConfig`: Configuration for volume-based quality control
 
 ### Concrete Agents
 - `LintingAgent`: Identifies and fixes code style and quality issues
 
 ### Crew Orchestration
-- `AutoPRCrew`: Main orchestrator for code analysis agents
+- `CodeFlowCrew`: Main orchestrator for code analysis agents
 
 Note: This is the updated agent framework. Legacy agent imports have been removed.
 """
@@ -27,7 +27,7 @@ from codeflow_engine.agents.agents import BaseAgent, VolumeConfig
 from codeflow_engine.agents.code_quality_agent import CodeQualityInputs, CodeQualityOutputs
 
 # Import crew from the crew module
-from codeflow_engine.agents.crew.main import AutoPRCrew
+from codeflow_engine.agents.crew.main import CodeFlowCrew
 
 # Import linting agent and its types
 from codeflow_engine.agents.linting_agent import LintingAgent, LintingInputs, LintingOutputs
@@ -55,7 +55,7 @@ warnings.warn(
 
 __all__ = [
     # Crew
-    "AutoPRCrew",
+    "CodeFlowCrew",
     # Base classes
     "BaseAgent",
     "CodeAnalysisReport",

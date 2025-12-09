@@ -1,5 +1,5 @@
-"""
-AutoPR Action: Issue Creator
+﻿"""
+CodeFlow Action: Issue Creator
 Creates GitHub issues and Linear tickets based on AI analysis
 """
 
@@ -199,7 +199,7 @@ class IssueCreator:
 
         if "security" in labels:
             comment = """
-🔒 **Security Issue Detected**
+ðŸ”’ **Security Issue Detected**
 
 This issue was automatically detected by AI security analysis.
 
@@ -215,7 +215,7 @@ This issue was automatically detected by AI security analysis.
 
         elif "typescript" in labels:
             comment = """
-⚡ **TypeScript Issue Detected**
+âš¡ **TypeScript Issue Detected**
 
 This TypeScript issue has been automatically detected and can be resolved autonomously.
 
@@ -271,7 +271,7 @@ A Linear ticket has been created for autonomous resolution.
             "input": {
                 "issueId": issue_id,
                 "body": """
-🤖 **Charlie Assignment**
+ðŸ¤– **Charlie Assignment**
 
 @charlie this TypeScript issue is ready for autonomous implementation.
 
@@ -339,7 +339,7 @@ A Linear ticket has been created for autonomous resolution.
 
         # Send Slack notification to Charlie channel
         slack_message = {
-            "text": "🤖 Charlie: New TypeScript Issues Assigned",
+            "text": "ðŸ¤– Charlie: New TypeScript Issues Assigned",
             "attachments": [
                 {
                     "color": "good",
@@ -353,7 +353,7 @@ A Linear ticket has been created for autonomous resolution.
                             "title": "Tickets",
                             "value": "\n".join(
                                 [
-                                    f"• <{ticket['url']}|{ticket['title']}>"
+                                    f"â€¢ <{ticket['url']}|{ticket['title']}>"
                                     for ticket in charlie_tickets
                                 ]
                             ),
@@ -490,9 +490,9 @@ A Linear ticket has been created for autonomous resolution.
         return [label_map.get(name, "label_general_id") for name in label_names]
 
 
-# Entry point for AutoPR
+# Entry point for CodeFlow
 def run(inputs_dict: dict) -> dict:
-    """AutoPR entry point"""
+    """CodeFlow entry point"""
     inputs = IssueCreatorInputs(**inputs_dict)
     creator = IssueCreator()
     outputs = creator.create_issues_and_tickets(inputs)

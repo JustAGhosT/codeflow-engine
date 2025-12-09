@@ -1,4 +1,4 @@
-"""Minimal pytest test to diagnose import issues."""
+﻿"""Minimal pytest test to diagnose import issues."""
 
 from pathlib import Path
 import sys
@@ -17,9 +17,9 @@ def test_import_paths():
 def test_import_crew():
     """Test importing the crew module."""
     try:
-        from codeflow_engine.agents.crew import AutoPRCrew
+        from codeflow_engine.agents.crew import CodeFlowCrew
 
-        assert AutoPRCrew is not None
+        assert CodeFlowCrew is not None
     except Exception:
         import traceback
 

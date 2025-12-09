@@ -1,4 +1,4 @@
-"""GitHub App Installation Handler.
+﻿"""GitHub App Installation Handler.
 
 Initiates the OAuth flow for GitHub App installation.
 """
@@ -42,8 +42,8 @@ async def install_app(
     )
 
     # Build GitHub OAuth URL
-    # Replace 'autopr' with your actual GitHub App slug after creation
-    github_app_slug = os.getenv("GITHUB_APP_SLUG", "autopr")
+    # Replace 'codeflow' with your actual GitHub App slug after creation
+    github_app_slug = os.getenv("GITHUB_APP_SLUG", "codeflow")
     github_auth_url = f"https://github.com/apps/{github_app_slug}/installations/new"
 
     # Build query parameters

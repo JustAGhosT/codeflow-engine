@@ -1,4 +1,4 @@
-"""Detailed test to diagnose import issues in pytest."""
+﻿"""Detailed test to diagnose import issues in pytest."""
 
 import importlib
 import os
@@ -54,10 +54,10 @@ def test_import_crew():
             # Try to import the module
             module = importlib.import_module(module_path)
 
-            # Check for AutoPRCrew class
-            if hasattr(module, "AutoPRCrew"):
-                return module.AutoPRCrew
-            msg = f"AutoPRCrew not found in {module_path}"
+            # Check for CodeFlowCrew class
+            if hasattr(module, "CodeFlowCrew"):
+                return module.CodeFlowCrew
+            msg = f"CodeFlowCrew not found in {module_path}"
             raise AttributeError(msg)
 
     except Exception:

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Command-line interface for the Quality Engine.
 """
 
@@ -13,7 +13,7 @@ from codeflow_engine.actions.quality_engine.models import QualityInputs, Quality
 
 def main() -> None:
     """Main CLI entry point for the Quality Engine."""
-    parser = argparse.ArgumentParser(description="AutoPR Quality Engine")
+    parser = argparse.ArgumentParser(description="CodeFlow Quality Engine")
     parser.add_argument(
         "--mode",
         choices=["fast", "comprehensive", "ai_enhanced", "smart"],

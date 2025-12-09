@@ -1,5 +1,5 @@
-"""
-Configuration and template loading utilities for the AutoPR prototype enhancement system.
+﻿"""
+Configuration and template loading utilities for the CodeFlow prototype enhancement system.
 
 This module provides utilities to load externalized configuration files and templates
 from the organized configs/ and templates/ directories.

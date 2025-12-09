@@ -1,5 +1,5 @@
-"""
-AutoPR Action: AutoGen Multi-Agent Integration
+﻿"""
+CodeFlow Action: AutoGen Multi-Agent Integration
 Collaborative PR comment handling using specialized AutoGen agents.
 """
 

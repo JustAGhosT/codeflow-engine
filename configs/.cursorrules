@@ -1,8 +1,8 @@
-# AutoPR Engine - Cursor Development Rules
+﻿# CodeFlow Engine - Cursor Development Rules
 
 ## Project Overview
 
-The AutoPR Engine is a multi-faceted automated code review and quality management system that implements AI-powered code analysis, automated fixes, and quality assurance workflows.
+The CodeFlow Engine is a multi-faceted automated code review and quality management system that implements AI-powered code analysis, automated fixes, and quality assurance workflows.
 
 ## Development Guidelines
 
@@ -47,11 +47,11 @@ The AutoPR Engine is a multi-faceted automated code review and quality managemen
 
 ### File Organization
 
-- **Core implementation**: `autopr/ai/implementation_roadmap.py`
-- **Quality metrics**: `autopr/quality/metrics_collector.py`
-- **AI agents**: `autopr/actions/ai_linting_fixer/agents.py`
-- **Authorization**: `autopr/security/authorization/enterprise_manager.py`
-- **Platform detection**: `autopr/actions/platform_detector.py`
+- **Core implementation**: `CodeFlow/ai/implementation_roadmap.py`
+- **Quality metrics**: `CodeFlow/quality/metrics_collector.py`
+- **AI agents**: `CodeFlow/actions/ai_linting_fixer/agents.py`
+- **Authorization**: `CodeFlow/security/authorization/enterprise_manager.py`
+- **Platform detection**: `CodeFlow/actions/platform_detector.py`
 
 ### Development Workflow
 

@@ -1,4 +1,4 @@
-"""
+﻿"""
 LLM Provider Manager
 
 Manages different LLM providers and their configurations.
@@ -11,7 +11,7 @@ from typing import Any
 
 from codeflow_engine.ai.core.base import (CompletionRequest, LLMMessage, LLMProvider,
                                  LLMResponse)
-from codeflow_engine.config import AutoPRConfig
+from codeflow_engine.config import CodeFlowConfig
 from codeflow_engine.utils.resilience import CircuitBreaker, CircuitBreakerOpenError
 
 logger = logging.getLogger(__name__)
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 class LLMProviderManager:
     """Manages multiple LLM providers and routes requests appropriately."""
 
-    def __init__(self, config: AutoPRConfig):
+    def __init__(self, config: CodeFlowConfig):
         self.config = config
         self.providers: dict[str, LLMProvider] = {}
         self.default_provider: str | None = None

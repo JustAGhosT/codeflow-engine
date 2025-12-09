@@ -1,5 +1,5 @@
-"""
-AutoPR Action: AutoGen Multi-Agent Implementation
+﻿"""
+CodeFlow Action: AutoGen Multi-Agent Implementation
 Uses AutoGen for complex multi-agent development tasks
 """
 
@@ -656,9 +656,9 @@ Please work together to create a complete, production-ready solution.
         return formatted_conversations
 
 
-# Entry point for AutoPR
+# Entry point for CodeFlow
 def run(inputs_dict: dict[str, Any]) -> dict[str, Any]:
-    """AutoPR entry point"""
+    """CodeFlow entry point"""
     inputs = AutoGenInputs(**inputs_dict)
 
     # Check if AutoGen is available before attempting to instantiate

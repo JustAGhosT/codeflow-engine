@@ -1,4 +1,4 @@
-# Migration History Preservation Decision
+﻿# Migration History Preservation Decision
 
 ## Decision: Fresh Start Approach
 
@@ -9,7 +9,7 @@ For this migration, we are using a **fresh start** approach for all repositories
   - Cleaner separation between repositories
   - Avoids complexity of git filter-repo/subtree split
   - Each repo starts with a clean history focused on its purpose
-  - Original monorepo history preserved via tag `legacy-autopr-monorepo-final`
+  - Original monorepo history preserved via tag `legacy-codeflow-monorepo-final`
 
 ## History Preservation by Repository
 
@@ -27,12 +27,12 @@ For this migration, we are using a **fresh start** approach for all repositories
 To access the original monorepo history:
 
 ```bash
-git checkout legacy-autopr-monorepo-final
+git checkout legacy-codeflow-monorepo-final
 ```
 
 Or view the tag:
 ```bash
-git show legacy-autopr-monorepo-final
+git show legacy-codeflow-monorepo-final
 ```
 
 ## Migration Date

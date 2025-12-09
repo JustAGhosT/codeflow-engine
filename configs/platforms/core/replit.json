@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "replit",
   "name": "Replit",
   "category": "rapid_prototyping",
@@ -15,7 +15,7 @@
   "documentation_url": "",
   "source": "community",
   "license": "MIT",
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "detection": {
     "files": [".replit", "replit.nix", "pyproject.toml", ".replit.json"],
     "dependencies": ["@replit/database", "replit-py"],

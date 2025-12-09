@@ -1,6 +1,6 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
-AutoPR Code Linter
+CodeFlow Code Linter
 Tool for all code quality checks and AI-powered fixes
 """
 
@@ -134,7 +134,7 @@ class CodeLinter:
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="AutoPR Code Linter")
+    parser = argparse.ArgumentParser(description="CodeFlow Code Linter")
     parser.add_argument(
         "--mode",
         choices=["fast", "comprehensive", "ai_only", "smart"],

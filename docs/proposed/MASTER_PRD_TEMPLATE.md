@@ -1,5 +1,5 @@
-# Master Product Requirements Document (PRD) - TEMPLATE
-## AutoPR Engine
+﻿# Master Product Requirements Document (PRD) - TEMPLATE
+## CodeFlow Engine
 
 **Status:** PROPOSED TEMPLATE  
 **Purpose:** This template should be adapted with actual business metrics, targets, and stakeholder input  

@@ -1,8 +1,8 @@
-name: "CORS Configuration Template"
+﻿name: "CORS Configuration Template"
 category: "security"
 description: "Cross-Origin Resource Sharing (CORS) configuration for secure API access control"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags: ["security", "cors", "api", "cross_origin", "web_security"]
 
 template_info:

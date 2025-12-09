@@ -1,5 +1,5 @@
-"""
-AutoPR Workflow Base Classes
+﻿"""
+CodeFlow Workflow Base Classes
 
 Base classes and interfaces for workflow implementation.
 """
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class Workflow(ABC):
     """
-    Base class for all AutoPR workflows.
+    Base class for all CodeFlow workflows.
 
     Workflows define automated processes that can be triggered by events
     or executed manually. Each workflow has inputs, outputs, and execution logic.

@@ -1,5 +1,5 @@
-"""
-AutoPR Action: Mem0 Memory Integration
+﻿"""
+CodeFlow Action: Mem0 Memory Integration
 Advanced memory system using Mem0 for persistent, intelligent memory across interactions.
 """
 
@@ -21,7 +21,7 @@ except ImportError:
 class Mem0MemoryInputs(BaseModel):
     action_type: str  # "add_memory", "search_memory", "get_insights", "update_memory"
     user_id: str | None = None
-    agent_id: str = "autopr_agent"
+    agent_id: str = "codeflow_agent"
     memory_content: str | None = None
     metadata: dict[str, Any] = {}
     query: str | None = None
@@ -74,11 +74,11 @@ class Mem0MemoryManager:
     def add_memory(self, inputs: Mem0MemoryInputs) -> Mem0MemoryOutputs:
         """Add a new memory to the system."""
         try:
-            # Enhanced metadata with AutoPR context
+            # Enhanced metadata with CodeFlow context
             enhanced_metadata = {
                 **inputs.metadata,
                 "timestamp": datetime.now().isoformat(),
-                "source": "autopr",
+                "source": "CodeFlow",
                 "agent_id": inputs.agent_id,
                 "memory_type": inputs.metadata.get("memory_type", "general"),
             }

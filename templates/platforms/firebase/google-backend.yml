@@ -1,10 +1,10 @@
-name: "Firebase Google Backend Platform"
+﻿name: "Firebase Google Backend Platform"
 category: "google-backend"
 description:
   "Google's comprehensive backend-as-a-service platform with real-time database, authentication,
   hosting, and cloud functions"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags:
   [
     "google-backend",

@@ -1,4 +1,4 @@
-# AI Enhanced File Splitter - User Guide
+﻿# AI Enhanced File Splitter - User Guide
 
 ## Overview
 
@@ -77,7 +77,7 @@ except ProcessingError as e:
 
 ## Integration
 
-The file splitter integrates seamlessly with the AutoPR quality engine:
+The file splitter integrates seamlessly with the CodeFlow quality engine:
 
 ```python
 from codeflow_engine.actions.quality_engine.engine import QualityEngine

@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "google_ai_studio",
   "name": "Google AI Studio",
   "description": "Google's AI development platform with Gemini integration for code generation and assistance",
@@ -12,7 +12,7 @@
   "type": "ai",
   "source": "official",
   "priority": 61,
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "vendor": "Google",
   "website": "https://ai.google.dev/",
   "pricing_model": "freemium",

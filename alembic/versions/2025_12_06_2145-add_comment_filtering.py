@@ -1,4 +1,4 @@
-"""Add comment filtering tables
+﻿"""Add comment filtering tables
 
 Revision ID: 9a1b2c3d4e5f
 Revises: 8f7f9c9512ec
@@ -53,7 +53,7 @@ def upgrade() -> None:
             sa.Text(),
             nullable=False,
             server_default='Thank you for your comment! User @{username} has been added to the allowed commenters list. '
-            'Comments from this user will now be processed. You can manage this in your AutoPR dashboard.'
+            'Comments from this user will now be processed. You can manage this in your CodeFlow dashboard.'
         ),
         sa.Column('whitelist_mode', sa.Boolean(), nullable=False, server_default='true'),
         sa.Column('created_at', sa.DateTime(timezone=True), nullable=False, server_default=sa.text('now()')),

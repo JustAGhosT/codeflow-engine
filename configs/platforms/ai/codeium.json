@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "codeium",
   "name": "Codeium",
   "description": "Free AI code completion and chat assistant with support for multiple programming languages",
@@ -12,7 +12,7 @@
   "type": "ai",
   "source": "official",
   "priority": 60,
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "vendor": "Codeium",
   "website": "https://codeium.com",
   "pricing_model": "freemium",

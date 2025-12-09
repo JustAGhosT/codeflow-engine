@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "continue",
   "name": "Continue",
   "description": "Open-source AI code assistant for VS Code and JetBrains IDEs",
@@ -12,7 +12,7 @@
   "type": "ai",
   "source": "official",
   "priority": 58,
-  "min_autopr_version": "0.1.0",
+  "min_codeflow_version": "0.1.0",
   "vendor": "Continue",
   "website": "https://continue.dev",
   "pricing_model": "open_source",

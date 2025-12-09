@@ -1,12 +1,12 @@
-# Contributing to AutoPR Engine
+﻿# Contributing to CodeFlow Engine
 
-Thank you for your interest in contributing to AutoPR Engine! We welcome contributions from the community.
+Thank you for your interest in contributing to CodeFlow Engine! We welcome contributions from the community.
 
 ## How to Contribute
 
 ### Development Workflow
 
-AutoPR Engine uses a **volume-aware, multi-stage workflow system** for automated quality checks:
+CodeFlow Engine uses a **volume-aware, multi-stage workflow system** for automated quality checks:
 
 #### Workflow Stages
 
@@ -27,7 +27,7 @@ AutoPR Engine uses a **volume-aware, multi-stage workflow system** for automated
    - Full test suite with coverage
    - Type checking (MyPy)
    - Linting (Ruff) with volume-based rules
-   - Security checks (volume ≥ 600)
+   - Security checks (volume â‰¥ 600)
 
 4. **Background Fixer** (Maintenance)
    - Scheduled daily runs
@@ -81,7 +81,7 @@ pip install -e ".[dev]"
 pytest
 
 # Run with live reload
-python -m autopr.server --reload
+python -m codeflow.server --reload
 ```
 
 ## Testing
@@ -91,7 +91,7 @@ python -m autopr.server --reload
 pytest
 
 # Run with coverage
-pytest --cov=autopr --cov-report=html
+pytest --cov=CodeFlow --cov-report=html
 
 # Run specific test categories
 pytest tests/actions/      # Action tests

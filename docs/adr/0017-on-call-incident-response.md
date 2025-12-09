@@ -1,4 +1,4 @@
-# 17. On-Call and Incident Response
+﻿# 17. On-Call and Incident Response
 
 ## Status
 
@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-AutoPR requires a robust on-call and incident response process to ensure:
+CodeFlow requires a robust on-call and incident response process to ensure:
 
 - High availability and reliability
 - Rapid detection and resolution of issues

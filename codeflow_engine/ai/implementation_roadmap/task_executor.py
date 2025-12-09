@@ -1,4 +1,4 @@
-"""
+﻿"""
 Task Executor for Implementation Roadmap
 Handles the execution of individual implementation tasks
 """
@@ -105,10 +105,10 @@ class TaskExecutor:
         execution.logs.append("Setting up Sentry monitoring...")
 
         # Create monitoring directory and basic Sentry config
-        monitoring_dir = self.project_root / "autopr" / "monitoring"
+        monitoring_dir = self.project_root / "CodeFlow" / "monitoring"
         monitoring_dir.mkdir(parents=True, exist_ok=True)
 
-        sentry_config = '''"""Sentry Configuration for AutoPR"""
+        sentry_config = '''"""Sentry Configuration for CodeFlow"""
 import sentry_sdk
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 import os
@@ -131,7 +131,7 @@ def initialize_sentry():
         )
         await self._add_requirement("sentry-sdk[fastapi]>=1.32.0")
 
-        execution.logs.append("✅ Sentry monitoring setup complete")
+        execution.logs.append("âœ… Sentry monitoring setup complete")
         return execution
 
     async def _implement_structured_logging(
@@ -140,10 +140,10 @@ def initialize_sentry():
         """Implement structured JSON logging"""
         execution.logs.append("Implementing structured logging...")
 
-        logging_dir = self.project_root / "autopr" / "logging"
+        logging_dir = self.project_root / "CodeFlow" / "logging"
         logging_dir.mkdir(parents=True, exist_ok=True)
 
-        logger_config = '''"""Structured Logging for AutoPR"""
+        logger_config = '''"""Structured Logging for CodeFlow"""
 import structlog
 import logging
 from contextvars import ContextVar
@@ -173,17 +173,17 @@ def get_logger(name: str = __name__):
         )
         await self._add_requirement("structlog>=23.1.0")
 
-        execution.logs.append("✅ Structured logging implementation complete")
+        execution.logs.append("âœ… Structured logging implementation complete")
         return execution
 
     async def _setup_redis_caching(self, execution: TaskExecution) -> TaskExecution:
         """Setup Redis caching"""
         execution.logs.append("Setting up Redis caching...")
 
-        caching_dir = self.project_root / "autopr" / "caching"
+        caching_dir = self.project_root / "CodeFlow" / "caching"
         caching_dir.mkdir(parents=True, exist_ok=True)
 
-        redis_cache = '''"""Redis Cache for AutoPR"""
+        redis_cache = '''"""Redis Cache for CodeFlow"""
 import redis.asyncio as redis
 import pickle
 import os
@@ -222,17 +222,17 @@ cache = RedisCache()
         )
         await self._add_requirement("redis>=4.6.0")
 
-        execution.logs.append("✅ Redis caching setup complete")
+        execution.logs.append("âœ… Redis caching setup complete")
         return execution
 
     async def _create_health_checks(self, execution: TaskExecution) -> TaskExecution:
         """Create health check endpoints"""
         execution.logs.append("Creating health checks...")
 
-        health_dir = self.project_root / "autopr" / "health"
+        health_dir = self.project_root / "CodeFlow" / "health"
         health_dir.mkdir(parents=True, exist_ok=True)
 
-        health_checks = '''"""Health Checks for AutoPR"""
+        health_checks = '''"""Health Checks for CodeFlow"""
 try:
     import psutil  # type: ignore[import-not-found]
 except Exception:
@@ -268,7 +268,7 @@ health_checker = HealthChecker()
         )
         await self._add_requirement("psutil>=5.9.0")
 
-        execution.logs.append("✅ Health checks created")
+        execution.logs.append("âœ… Health checks created")
         return execution
 
     async def _implement_basic_circuit_breakers(
@@ -277,10 +277,10 @@ health_checker = HealthChecker()
         """Implement circuit breaker pattern"""
         execution.logs.append("Implementing circuit breakers...")
 
-        resilience_dir = self.project_root / "autopr" / "resilience"
+        resilience_dir = self.project_root / "CodeFlow" / "resilience"
         resilience_dir.mkdir(parents=True, exist_ok=True)
 
-        circuit_breaker = '''"""Circuit Breaker for AutoPR"""
+        circuit_breaker = '''"""Circuit Breaker for CodeFlow"""
 import asyncio
 import time
 from enum import Enum
@@ -338,7 +338,7 @@ class CircuitBreaker:
         )
         await self._add_requirement("tenacity>=8.2.0")
 
-        execution.logs.append("✅ Circuit breakers implemented")
+        execution.logs.append("âœ… Circuit breakers implemented")
         return execution
 
     async def _create_placeholder_implementation(
@@ -371,7 +371,7 @@ class CircuitBreaker:
         for requirement in task.packages_required:
             await self._add_requirement(requirement)
 
-        execution.logs.append(f"✅ Placeholder for {task.name} created")
+        execution.logs.append(f"âœ… Placeholder for {task.name} created")
         return execution
 
     # Helper methods

@@ -1,7 +1,7 @@
-"""
-AutoPR CLI - Command Line Interface
+﻿"""
+CodeFlow CLI - Command Line Interface
 
-Main entry point for AutoPR command line operations.
+Main entry point for CodeFlow command line operations.
 """
 
 import argparse
@@ -30,9 +30,9 @@ from codeflow_engine.actions.quality_engine.models import QualityMode
 from codeflow_engine.actions.registry import ActionRegistry
 # from codeflow_engine.agents.agents import AgentManager  # Not implemented yet
 from codeflow_engine.ai.core.providers.manager import LLMProviderManager
-from codeflow_engine.config import AutoPRConfig
-from codeflow_engine.engine import AutoPREngine
-from codeflow_engine.exceptions import AutoPRException, ConfigurationError
+from codeflow_engine.config import CodeFlowConfig
+from codeflow_engine.engine import CodeFlowEngine
+from codeflow_engine.exceptions import CodeFlowException, ConfigurationError
 from codeflow_engine.quality.metrics_collector import MetricsCollector
 from codeflow_engine.database.config import get_db
 from codeflow_engine.database.models import IntegrationEvent
@@ -46,11 +46,11 @@ logger = logging.getLogger(__name__)
 
 
 @click.group()
-@click.version_option(version="1.0.1", prog_name="autopr")
+@click.version_option(version="1.0.1", prog_name="codeflow")
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose logging")
 @click.option("--quiet", "-q", is_flag=True, help="Suppress output")
 def cli(verbose: bool, quiet: bool):
-    """AutoPR Engine - AI-Powered Code Quality and Automation Tool"""
+    """CodeFlow Engine - AI-Powered Code Quality and Automation Tool"""
     if verbose:
         logging.getLogger().setLevel(logging.DEBUG)
     if quiet:
@@ -145,7 +145,7 @@ def split(
 @click.option("--install", is_flag=True, help="Install git hooks")
 @click.option("--uninstall", is_flag=True, help="Remove git hooks")
 def hooks(config: str, install: bool, uninstall: bool):
-    """Manage git hooks for AutoPR (Coming Soon)"""
+    """Manage git hooks for CodeFlow (Coming Soon)"""
     click.echo("The git hooks management feature is under development and will be available in a future release.")
 
 
@@ -154,7 +154,7 @@ def hooks(config: str, install: bool, uninstall: bool):
 @click.option("--host", default="localhost", help="Host for the dashboard")
 @click.option("--open-browser", is_flag=True, help="Open browser automatically")
 def dashboard(port: int, host: str, open_browser: bool):
-    """Start the AutoPR dashboard (Coming Soon)"""
+    """Start the CodeFlow dashboard (Coming Soon)"""
     click.echo("The dashboard feature is under development and will be available in a future release.")
 
 
@@ -162,7 +162,7 @@ def dashboard(port: int, host: str, open_browser: bool):
 @click.option("--file", "-f", help="Configuration file to validate")
 @click.option("--fix", is_flag=True, help="Automatically fix configuration issues")
 def config(file: str, fix: bool):
-    """Validate and manage AutoPR configuration (Coming Soon)"""
+    """Validate and manage CodeFlow configuration (Coming Soon)"""
     click.echo("The config validation feature is under development and will be available in a future release.")
 
 
@@ -273,12 +273,12 @@ async def _run_file_split(
 
         if result.success:
             click.echo(
-                f"✅ Split successful! Created {len(result.components)} components"
+                f"âœ… Split successful! Created {len(result.components)} components"
             )
             if not dry_run and output_dir:
                 _save_split_components(result.components, output_dir, file_path)
         else:
-            click.echo(f"❌ Split failed: {result.errors}")
+            click.echo(f"âŒ Split failed: {result.errors}")
 
     except Exception as e:
         logger.exception(f"File split failed: {e}")
@@ -300,9 +300,9 @@ def _manage_git_hooks(config: str, install: bool, uninstall: bool):
 
 
 def _start_dashboard(port: int, host: str, open_browser: bool):
-    """Start the AutoPR dashboard"""
+    """Start the CodeFlow dashboard"""
     try:
-        click.echo(f"Starting AutoPR dashboard on http://{host}:{port}")
+        click.echo(f"Starting CodeFlow dashboard on http://{host}:{port}")
         # TODO: Implement dashboard server
         click.echo("Dashboard feature coming soon!")
     except Exception as e:
@@ -311,9 +311,9 @@ def _start_dashboard(port: int, host: str, open_browser: bool):
 
 
 def _validate_config(file: str, fix: bool):
-    """Validate AutoPR configuration"""
+    """Validate CodeFlow configuration"""
     try:
-        click.echo("Validating AutoPR configuration...")
+        click.echo("Validating CodeFlow configuration...")
         # TODO: Implement configuration validation
         click.echo("Configuration validation feature coming soon!")
     except Exception as e:
@@ -359,9 +359,9 @@ def _generate_text_report(result) -> str:
     """Generate text report from quality results"""
     report = []
     report.append("=" * 60)
-    report.append("AutoPR Quality Check Report")
+    report.append("CodeFlow Quality Check Report")
     report.append("=" * 60)
-    report.append(f"Success: {'✅' if result.success else '❌'}")
+    report.append(f"Success: {'âœ…' if result.success else 'âŒ'}")
     report.append(f"Total Issues: {result.total_issues_found}")
     report.append(f"Processing Time: {getattr(result, 'processing_time', 0):.2f}s")
     report.append("")
@@ -378,10 +378,10 @@ def _generate_html_report(result) -> str:
     """Generate HTML report from quality results"""
     return f"""
     <html>
-    <head><title>AutoPR Quality Report</title></head>
+    <head><title>CodeFlow Quality Report</title></head>
     <body>
-        <h1>AutoPR Quality Check Report</h1>
-        <p>Success: {'✅' if result.success else '❌'}</p>
+        <h1>CodeFlow Quality Check Report</h1>
+        <p>Success: {'âœ…' if result.success else 'âŒ'}</p>
         <p>Total Issues: {result.total_issues_found}</p>
     </body>
     </html>
@@ -407,21 +407,21 @@ def _save_split_components(components, output_dir: str, original_file: str):
 
 def _install_git_hooks(config: str):
     """Install git hooks"""
-    click.echo("Installing AutoPR git hooks...")
+    click.echo("Installing CodeFlow git hooks...")
     # TODO: Implement git hooks installation
     click.echo("Git hooks installation coming soon!")
 
 
 def _uninstall_git_hooks():
     """Uninstall git hooks"""
-    click.echo("Removing AutoPR git hooks...")
+    click.echo("Removing CodeFlow git hooks...")
     # TODO: Implement git hooks removal
     click.echo("Git hooks removal coming soon!")
 
 
 def _show_git_hooks_status():
     """Show git hooks status"""
-    click.echo("Checking AutoPR git hooks status...")
+    click.echo("Checking CodeFlow git hooks status...")
     # TODO: Implement git hooks status check
     click.echo("Git hooks status check coming soon!")
 

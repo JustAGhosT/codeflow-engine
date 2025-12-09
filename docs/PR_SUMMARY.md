@@ -1,11 +1,11 @@
-# PR Summary: Fix Custom Domain Persistence and Improve Dashboard Availability
+﻿# PR Summary: Fix Custom Domain Persistence and Improve Dashboard Availability
 
 ## Issues Addressed
 
 This PR fixes two critical deployment issues reported by users:
 
-### 1. Custom Domain Re-linking After Each Deploy ✅
-**Problem**: The custom domain (autopr.io) and SSL certificate needed to be manually re-linked in the Azure Portal after each deployment.
+### 1. Custom Domain Re-linking After Each Deploy âœ…
+**Problem**: The custom domain (codeflow.io) and SSL certificate needed to be manually re-linked in the Azure Portal after each deployment.
 
 **Root Cause**: The Bicep infrastructure template created the Static Web App but did not include a `customDomains` resource to automatically configure the custom domain binding.
 
@@ -22,9 +22,9 @@ This PR fixes two critical deployment issues reported by users:
 - `infrastructure/bicep/website.json` - Auto-regenerated from Bicep
 - `infrastructure/bicep/README-WEBSITE.md` - Updated documentation
 
-### 2. Landing Page Showing Health Check Instead of Dashboard ✅
+### 2. Landing Page Showing Health Check Instead of Dashboard âœ…
 
-**Problem**: Users reported seeing a health check response at `/` on app.autopr.io instead of the dashboard.
+**Problem**: Users reported seeing a health check response at `/` on app.codeflow.io instead of the dashboard.
 
 **Root Cause Analysis**: 
 - The dashboard router is correctly configured to handle `/` 
@@ -39,25 +39,25 @@ This PR fixes two critical deployment issues reported by users:
 - Improved error visibility for troubleshooting deployment issues
 
 **Files Changed**:
-- `autopr/server.py` - Added logging and fallback route
+- `codeflow/server.py` - Added logging and fallback route
 
 ## Additional Improvements
 
-### Static Web App Routing Configuration ✅
+### Static Web App Routing Configuration âœ…
 
 - Added `website/public/staticwebapp.config.json` for proper Next.js SPA routing
 - Configured navigation fallback to handle client-side routing
 - Set appropriate cache headers
 - Configured 404 handling
 
-### Architecture Documentation ✅
+### Architecture Documentation âœ…
 
 - Created comprehensive `docs/ARCHITECTURE_AND_DEPLOYMENT.md`
-- Clarifies the two-domain architecture (autopr.io vs app.autopr.io)
+- Clarifies the two-domain architecture (codeflow.io vs app.codeflow.io)
 - Explains the separation between marketing website and API backend
 - Provides troubleshooting guide
 
-### Security Improvements ✅
+### Security Improvements âœ…
 
 
 - Tightened Content Security Policy in staticwebapp.config.json
@@ -65,7 +65,7 @@ This PR fixes two critical deployment issues reported by users:
 - Kept minimal `unsafe-inline` only for Next.js generated styles
 - All code passes CodeQL security scan with 0 alerts
 
-### Code Quality ✅
+### Code Quality âœ…
 
 - Moved fallback route function to module level for testability
 - Added proper docstrings
@@ -74,13 +74,13 @@ This PR fixes two critical deployment issues reported by users:
 
 ## Testing Performed
 
-### Static Analysis ✅
+### Static Analysis âœ…
 
 - Bicep template validation: `az bicep build` - PASSED
 - CodeQL security scan - 0 alerts
 - Code review - All feedback addressed
 
-### Build Verification ✅
+### Build Verification âœ…
 
 
 - Next.js website build: `npm run build` - SUCCESS
@@ -107,7 +107,7 @@ This PR fixes two critical deployment issues reported by users:
 ```bash
 # Deploy updated Bicep template
 az deployment group create \
-  --resource-group prod-rg-san-autopr \
+  --resource-group prod-rg-san-codeflow \
   --template-file infrastructure/bicep/website.bicep \
   --parameters @infrastructure/bicep/website-parameters.json
 ```
@@ -123,25 +123,25 @@ After deployment, verify:
 
 1. **Custom Domain**:
    ```bash
-   curl -I https://autopr.io
+   curl -I https://codeflow.io
    # Should return 200 OK with HTML
    ```
 
 2. **Backend Dashboard**:
    ```bash
-   curl https://app.autopr.io/
+   curl https://app.codeflow.io/
    # Should return HTML dashboard or JSON with clear error message
    ```
 
 3. **Health Check**:
    ```bash
-   curl https://app.autopr.io/health
+   curl https://app.codeflow.io/health
    # Should return JSON health status
    ```
 
 ## Security Summary
 
-✅ **No vulnerabilities introduced**
+âœ… **No vulnerabilities introduced**
 
 - CodeQL scan: 0 alerts
 - CSP policy tightened

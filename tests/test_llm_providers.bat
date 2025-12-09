@@ -1,10 +1,10 @@
-@echo off
+﻿@echo off
 REM Batch file to run the comprehensive LLM provider test suite
 REM Usage: test_llm_providers.bat
 
 echo.
 echo ========================================
-echo   AutoPR LLM Provider Test Suite
+echo   CodeFlow LLM Provider Test Suite
 echo ========================================
 echo.
 

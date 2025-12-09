@@ -1,8 +1,8 @@
-"""
+﻿"""
 Database Module
 
 This module provides database connection management, session handling,
-and model imports for the AutoPR Engine.
+and model imports for the CodeFlow Engine.
 
 Usage:
     from codeflow_engine.database import get_db, Base, Workflow

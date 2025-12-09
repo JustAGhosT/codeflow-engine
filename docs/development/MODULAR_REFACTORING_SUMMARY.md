@@ -1,4 +1,4 @@
-# Modular AI Linting Fixer Refactoring Summary
+﻿# Modular AI Linting Fixer Refactoring Summary
 
 ## Overview
 
@@ -8,7 +8,7 @@ and follows the Single Responsibility Principle.
 
 ## New Modular Structure
 
-### 1. **Models** (`autopr/actions/ai_linting_fixer/models.py`)
+### 1. **Models** (`CodeFlow/actions/ai_linting_fixer/models.py`)
 
 - **Purpose**: Centralized data models and Pydantic schemas
 - **Key Classes**:
@@ -20,7 +20,7 @@ and follows the Single Responsibility Principle.
   - `WorkflowContext`, `WorkflowEvent`, `WorkflowResult` - Workflow integration
   - `PerformanceMetrics` - Performance tracking data
 
-### 2. **Linting Detector** (`autopr/actions/ai_linting_fixer/linting_detector.py`)
+### 2. **Linting Detector** (`CodeFlow/actions/ai_linting_fixer/linting_detector.py`)
 
 - **Purpose**: Detect and parse linting issues using flake8
 - **Key Features**:
@@ -29,7 +29,7 @@ and follows the Single Responsibility Principle.
   - Filter issues by type and file patterns
   - Generate issue summaries
 
-### 3. **Code Analyzer** (`autopr/actions/ai_linting_fixer/code_analyzer.py`)
+### 3. **Code Analyzer** (`CodeFlow/actions/ai_linting_fixer/code_analyzer.py`)
 
 - **Purpose**: Analyze code quality, complexity, and validation
 - **Key Features**:
@@ -39,7 +39,7 @@ and follows the Single Responsibility Principle.
   - Code metrics and smell detection
   - Resource usage monitoring
 
-### 4. **AI Agent Manager** (`autopr/actions/ai_linting_fixer/ai_agent_manager.py`)
+### 4. **AI Agent Manager** (`CodeFlow/actions/ai_linting_fixer/ai_agent_manager.py`)
 
 - **Purpose**: Manage AI agents and their specializations
 - **Key Features**:
@@ -49,7 +49,7 @@ and follows the Single Responsibility Principle.
   - Confidence score calculation
   - Code block extraction from responses
 
-### 5. **File Manager** (`autopr/actions/ai_linting_fixer/file_manager.py`)
+### 5. **File Manager** (`CodeFlow/actions/ai_linting_fixer/file_manager.py`)
 
 - **Purpose**: Handle file operations and backups
 - **Key Features**:
@@ -59,7 +59,7 @@ and follows the Single Responsibility Principle.
   - Backup management and cleanup
   - Directory operations
 
-### 6. **Issue Fixer** (`autopr/actions/ai_linting_fixer/issue_fixer.py`)
+### 6. **Issue Fixer** (`CodeFlow/actions/ai_linting_fixer/issue_fixer.py`)
 
 - **Purpose**: Core logic for fixing linting issues with AI
 - **Key Features**:
@@ -68,7 +68,7 @@ and follows the Single Responsibility Principle.
   - Integrate with error handling and validation
   - Manage fix attempts and results
 
-### 7. **Performance Tracker** (`autopr/actions/ai_linting_fixer/performance_tracker.py`)
+### 7. **Performance Tracker** (`CodeFlow/actions/ai_linting_fixer/performance_tracker.py`)
 
 - **Purpose**: Track and analyze performance metrics
 - **Key Features**:
@@ -78,7 +78,7 @@ and follows the Single Responsibility Principle.
   - Performance report generation
   - Metrics export and history
 
-### 8. **Orchestration** (`autopr/actions/ai_linting_fixer/orchestration.py`)
+### 8. **Orchestration** (`CodeFlow/actions/ai_linting_fixer/orchestration.py`)
 
 - **Purpose**: Handle workflow orchestration systems
 - **Key Features**:
@@ -87,7 +87,7 @@ and follows the Single Responsibility Principle.
   - Execution with different orchestrators
   - Fallback to standalone mode
 
-### 9. **Error Handler** (`autopr/actions/ai_linting_fixer/error_handler.py`)
+### 9. **Error Handler** (`CodeFlow/actions/ai_linting_fixer/error_handler.py`)
 
 - **Purpose**: Comprehensive error handling and categorization
 - **Key Features**:
@@ -96,7 +96,7 @@ and follows the Single Responsibility Principle.
   - Error context and tracking
   - Integration with display system
 
-### 10. **Display** (`autopr/actions/ai_linting_fixer/display.py`)
+### 10. **Display** (`CodeFlow/actions/ai_linting_fixer/display.py`)
 
 - **Purpose**: User interface and output formatting
 - **Key Features**:
@@ -141,7 +141,7 @@ and follows the Single Responsibility Principle.
 
 - Support for multiple orchestration systems
 - Flexible execution modes
-- Integration with existing AutoPR workflows
+- Integration with existing CodeFlow workflows
 
 ## Usage Examples
 

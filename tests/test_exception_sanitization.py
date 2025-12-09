@@ -1,4 +1,4 @@
-"""
+﻿"""
 Tests for Exception Sanitization and Information Leakage Prevention
 
 Tests BUG-9 fix: Ensures sensitive information is not exposed in error messages.
@@ -6,7 +6,7 @@ Tests BUG-9 fix: Ensures sensitive information is not exposed in error messages.
 
 import pytest
 from codeflow_engine.exceptions import (
-    AutoPRException,
+    CodeFlowException,
     ConfigurationError,
     WorkflowError,
     AuthenticationError,
@@ -63,7 +63,7 @@ class TestSanitizeErrorMessage:
         """Test that file paths are redacted."""
         messages = [
             "File not found: /home/user/app/sensitive_config.py",
-            "Error in module: /var/www/autopr/secrets.py",
+            "Error in module: /var/www/CodeFlow/secrets.py",
             "Windows path error: C:\\Users\\Admin\\Documents\\config.py",
         ]
         
@@ -154,12 +154,12 @@ class TestSanitizeErrorMessage:
             assert "[REDACTED]" not in sanitized
 
 
-class TestAutoPRExceptionSanitization:
-    """Tests for AutoPRException sanitization methods."""
+class TestCodeFlowExceptionSanitization:
+    """Tests for CodeFlowException sanitization methods."""
     
     def test_get_user_message_sanitizes(self):
         """Test that get_user_message() returns sanitized message."""
-        exc = AutoPRException(
+        exc = CodeFlowException(
             "Internal error: postgresql://user:pass@localhost/db",
             error_code="TEST_ERROR"
         )
@@ -173,7 +173,7 @@ class TestAutoPRExceptionSanitization:
     def test_get_internal_message_preserves(self):
         """Test that get_internal_message() preserves full message."""
         original = "Internal error: postgresql://user:pass@localhost/db"
-        exc = AutoPRException(original, error_code="TEST_ERROR")
+        exc = CodeFlowException(original, error_code="TEST_ERROR")
         
         internal_msg = exc.get_internal_message()
         
@@ -182,7 +182,7 @@ class TestAutoPRExceptionSanitization:
     
     def test_custom_user_message(self):
         """Test that custom user messages are used when provided."""
-        exc = AutoPRException(
+        exc = CodeFlowException(
             "Internal error with sensitive data",
             error_code="TEST_ERROR",
             user_message="A friendly error message for users"
@@ -269,8 +269,8 @@ class TestSpecificExceptions:
 class TestHandleExceptionSafely:
     """Tests for handle_exception_safely function."""
     
-    def test_handle_autopr_exception(self):
-        """Test handling of AutoPRException."""
+    def test_handle_codeflow_exception(self):
+        """Test handling of CodeFlowException."""
         exc = WorkflowError(
             "Internal workflow error with sensitive data",
             workflow_name="test-workflow"

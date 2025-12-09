@@ -1,5 +1,5 @@
-"""
-Platform Analysis Agent for AutoPR.
+﻿"""
+Platform Analysis Agent for CodeFlow.
 
 This module provides the PlatformAnalysisAgent class which is responsible for
 analyzing codebases to detect the underlying platform, frameworks, and technologies.

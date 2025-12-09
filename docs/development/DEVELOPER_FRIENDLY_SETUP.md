@@ -1,11 +1,11 @@
-# Developer-Friendly Setup Guide
+﻿# Developer-Friendly Setup Guide
 
-## 🎯 Overview
+## ðŸŽ¯ Overview
 
-We've made AutoPR Engine much more developer-friendly by reducing the overwhelming number of quality
+We've made CodeFlow Engine much more developer-friendly by reducing the overwhelming number of quality
 check errors. The focus is now on **functionality first, polish later**.
 
-## 🚀 Quick Start
+## ðŸš€ Quick Start
 
 ### 1. Basic Setup
 
@@ -33,9 +33,9 @@ python scripts/quick-check.py
 python scripts/volume.py autofix
 ```
 
-## 📋 Quality Check Levels
+## ðŸ“‹ Quality Check Levels
 
-### 🟢 Level 1: Essential Checks (Recommended for Development)
+### ðŸŸ¢ Level 1: Essential Checks (Recommended for Development)
 
 - Basic syntax validation
 - Import verification
@@ -44,7 +44,7 @@ python scripts/volume.py autofix
 
 **Command:** `python scripts/quick-check.py`
 
-### 🟡 Level 2: Standard Checks (Before Committing)
+### ðŸŸ¡ Level 2: Standard Checks (Before Committing)
 
 - All Level 1 checks
 - Import sorting (isort)
@@ -53,7 +53,7 @@ python scripts/volume.py autofix
 
 **Command:** `python scripts/volume.py autofix`
 
-### 🔴 Level 3: Comprehensive Checks (Before Release)
+### ðŸ”´ Level 3: Comprehensive Checks (Before Release)
 
 - All Level 2 checks
 - Type checking (mypy)
@@ -61,9 +61,9 @@ python scripts/volume.py autofix
 - Performance metrics
 - Documentation coverage
 
-**Command:** `python -m autopr.actions.quality_engine --mode=comprehensive`
+**Command:** `python -m codeflow.actions.quality_engine --mode=comprehensive`
 
-## 🔧 Configuration Changes
+## ðŸ”§ Configuration Changes
 
 ### What We Changed
 
@@ -75,12 +75,12 @@ python scripts/volume.py autofix
 
 ### Key Benefits
 
-- ✅ **Faster feedback**: Essential checks run in seconds
-- ✅ **Less overwhelming**: Focus on critical issues only
-- ✅ **Developer productivity**: Code first, polish later
-- ✅ **Gradual improvement**: Can still run comprehensive checks when needed
+- âœ… **Faster feedback**: Essential checks run in seconds
+- âœ… **Less overwhelming**: Focus on critical issues only
+- âœ… **Developer productivity**: Code first, polish later
+- âœ… **Gradual improvement**: Can still run comprehensive checks when needed
 
-## 🛠️ Available Scripts
+## ðŸ› ï¸ Available Scripts
 
 ### `scripts/quick-check.py`
 
@@ -100,7 +100,7 @@ python scripts/volume.py autofix
   - `status`: Show current volume levels
   - `autofix`: Fix issues at current level
 
-## 📊 Error Reduction
+## ðŸ“Š Error Reduction
 
 | Tool   | Before        | After         | Reduction |
 | ------ | ------------- | ------------- | --------- |
@@ -109,7 +109,7 @@ python scripts/volume.py autofix
 | Flake8 | ~300+ errors  | ~10-30 errors | 90%+      |
 | Total  | ~1000+ errors | ~30-90 errors | **90%+**  |
 
-## 🎯 Development Workflow
+## ðŸŽ¯ Development Workflow
 
 ### Daily Development
 
@@ -130,7 +130,7 @@ python scripts/volume.py autofix
 2. Address all issues
 3. Release
 
-## 🔄 CI/CD Integration
+## ðŸ”„ CI/CD Integration
 
 ### PR Checks (`.github/workflows/pr-checks.yml`)
 
@@ -144,27 +144,27 @@ python scripts/volume.py autofix
 - **Performance testing**: Load and stress tests
 - **Security scanning**: Comprehensive security analysis
 
-## 🚨 When to Use Strict Mode
+## ðŸš¨ When to Use Strict Mode
 
 ### Development Phase
 
-- ✅ Use permissive mode
-- ✅ Focus on functionality
-- ✅ Quick iterations
+- âœ… Use permissive mode
+- âœ… Focus on functionality
+- âœ… Quick iterations
 
 ### Release Preparation
 
-- ✅ Enable comprehensive checks
-- ✅ Address all quality issues
-- ✅ Ensure production readiness
+- âœ… Enable comprehensive checks
+- âœ… Address all quality issues
+- âœ… Ensure production readiness
 
 ### Legacy Code
 
-- ✅ Use permissive mode initially
-- ✅ Gradually improve over time
-- ✅ Don't let perfect be the enemy of good
+- âœ… Use permissive mode initially
+- âœ… Gradually improve over time
+- âœ… Don't let perfect be the enemy of good
 
-## 💡 Tips for Developers
+## ðŸ’¡ Tips for Developers
 
 ### 1. Start with Quick Checks
 
@@ -199,11 +199,11 @@ python scripts/volume.py autofix
 - **Ruff**: Linting (essential rules only)
 - **MyPy**: Type checking (disabled for development)
 
-## 🔧 Customization
+## ðŸ”§ Customization
 
 ### Volume Control System
 
-AutoPR uses a HiFi-style volume control system (0-1000) to configure check strictness:
+CodeFlow uses a HiFi-style volume control system (0-1000) to configure check strictness:
 
 ```bash
 # Check current volume levels
@@ -250,16 +250,16 @@ For one-off comprehensive checks:
 
 ```bash
 # Run comprehensive checks
-python -m autopr.actions.quality_engine --mode=comprehensive
+python -m codeflow.actions.quality_engine --mode=comprehensive
 
 # Enable MyPy strict mode for specific modules
-mypy autopr --strict
+mypy CodeFlow --strict
 
 # Run all Ruff rules on specific files
 ruff check path/to/file.py --select=ALL
 ```
 
-## 📞 Getting Help
+## ðŸ“ž Getting Help
 
 ### Common Issues
 
@@ -277,4 +277,4 @@ ruff check path/to/file.py --select=ALL
 ---
 
 **Remember**: The goal is to make development faster and more enjoyable while maintaining code
-quality. Start simple, improve gradually! 🚀
+quality. Start simple, improve gradually! ðŸš€

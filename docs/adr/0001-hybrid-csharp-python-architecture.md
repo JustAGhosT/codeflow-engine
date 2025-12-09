@@ -1,4 +1,4 @@
-# 1. Hybrid C#/Python Architecture
+﻿# 1. Hybrid C#/Python Architecture
 
 ## Status
 
@@ -8,7 +8,7 @@ This ADR was originally proposed but never implemented. The project was successf
 
 ## Context
 
-AutoPR requires both high-performance code execution and advanced AI/ML capabilities. We need to
+CodeFlow requires both high-performance code execution and advanced AI/ML capabilities. We need to
 balance performance, development velocity, and maintainability while leveraging the strengths of
 different technologies.
 

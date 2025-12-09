@@ -1,10 +1,10 @@
-name: "n8n AI Agent Builder Template"
+﻿name: "n8n AI Agent Builder Template"
 category: "ai_agent_builder"
 description:
   "#1 Best AI agent builder - Highly customizable workflows with self-hosting and advanced
   automation"
 version: "1.0.0"
-author: "AutoPR Template System"
+author: "CodeFlow Template System"
 tags:
   [
     "ai_agent_builder",

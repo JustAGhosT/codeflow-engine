@@ -1,9 +1,9 @@
-# AutoPR Engine Templates
+﻿# CodeFlow Engine Templates
 
-This directory contains all templates for the AutoPR Engine project, organized by category and use
+This directory contains all templates for the CodeFlow Engine project, organized by category and use
 case.
 
-## 📁 Template Structure
+## ðŸ“ Template Structure
 
 ### Platform Templates
 
@@ -103,7 +103,7 @@ case.
   - Test coverage reports
   - Compliance reports
 
-## 🎯 Template Usage
+## ðŸŽ¯ Template Usage
 
 ### Template Selection
 
@@ -135,7 +135,7 @@ Templates are validated using `scripts/validate_templates.py` to ensure:
 - Consistent naming conventions
 - Proper organization structure
 
-## 📝 Template Development
+## ðŸ“ Template Development
 
 ### Creating New Templates
 
@@ -155,7 +155,7 @@ When creating new templates:
 4. **Testing**: Test templates with various inputs
 5. **Versioning**: Maintain template version compatibility
 
-## 🔍 Quick Reference
+## ðŸ” Quick Reference
 
 - **Platform Integration**: `platforms/` directory
 - **Code Analysis**: `use-cases/` directory
@@ -166,7 +166,7 @@ When creating new templates:
 - **Documentation**: `documentation/` directory
 - **Integrations**: `integrations/` directory
 
-## 📚 Additional Resources
+## ðŸ“š Additional Resources
 
 - [Template Development Guide](docs/development/template-development.md)
 - [Template API Reference](docs/api/templates.md)
