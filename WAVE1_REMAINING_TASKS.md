@@ -10,19 +10,23 @@
 ### High Priority (Complete within 2 weeks)
 
 #### 1. Security: Remove Credentials from Git History
+
 **Priority:** HIGH  
 **Effort:** 2-3 hours  
 **Risk:** Medium (requires coordination)  
 **Owner:** TBD
 
 **Steps:**
+
 1. Identify all credential files in git history
-2. Use BFG Repo-Cleaner or `git filter-branch`
-3. Test on a copy of the repository first
-4. Coordinate with team before force-pushing
-5. Update all remotes after cleanup
+2.
+3. Use BFG Repo-Cleaner or `git filter-branch`
+4. Test on a copy of the repository first
+5. Coordinate with team before force-pushing
+6. Update all remotes after cleanup
 
 **Command:**
+
 ```bash
 # Using BFG (recommended)
 java -jar bfg.jar --delete-files credentials-*.json
@@ -36,12 +40,14 @@ git gc --prune=now --aggressive
 ---
 
 #### 2. CI/CD: Add Build Verification Tests
+
 **Priority:** HIGH  
 **Effort:** 4-6 hours  
 **Risk:** Low  
 **Owner:** TBD
 
 **Tasks:**
+
 - [ ] Add build verification test to codeflow-engine CI
 - [ ] Add build verification test to codeflow-desktop CI
 - [ ] Add build verification test to codeflow-vscode-extension CI
@@ -50,6 +56,7 @@ git gc --prune=now --aggressive
 - [ ] Verify installable packages
 
 **Implementation:**
+
 - Add test job that installs built package
 - Verify package imports correctly
 - Verify CLI commands work
@@ -61,12 +68,14 @@ git gc --prune=now --aggressive
 ---
 
 #### 3. CI/CD: Add Smoke Tests for Deployments
+
 **Priority:** HIGH  
 **Effort:** 6-8 hours  
 **Risk:** Medium  
 **Owner:** TBD
 
 **Tasks:**
+
 - [ ] Create smoke test script for codeflow-engine
 - [ ] Add smoke test to deployment workflow
 - [ ] Test health endpoints
@@ -75,6 +84,7 @@ git gc --prune=now --aggressive
 - [ ] Verify external service connections
 
 **Implementation:**
+
 - Create `scripts/smoke-test.sh` and `scripts/smoke-test.ps1`
 - Add smoke test step after deployment
 - Test critical endpoints: `/health`, `/api/v1/status`
@@ -89,12 +99,14 @@ git gc --prune=now --aggressive
 ### Medium Priority (Complete within 1 month)
 
 #### 4. Security: Implement Azure Key Vault Integration
+
 **Priority:** MEDIUM  
 **Effort:** 8-12 hours  
 **Risk:** Medium  
 **Owner:** TBD
 
 **Tasks:**
+
 - [ ] Research Azure Key Vault SDK
 - [ ] Create Key Vault client wrapper
 - [ ] Update deployment scripts to use Key Vault
@@ -103,6 +115,7 @@ git gc --prune=now --aggressive
 - [ ] Test in staging environment
 
 **Implementation:**
+
 - Use `azure-keyvault-secrets` Python package
 - Create `codeflow_engine/security/keyvault.py`
 - Update `deploy-codeflow-engine.ps1` to fetch secrets
@@ -115,12 +128,14 @@ git gc --prune=now --aggressive
 ---
 
 #### 5. Deployment: Add Rollback Capabilities
+
 **Priority:** MEDIUM  
 **Effort:** 6-8 hours  
 **Risk:** Low  
 **Owner:** TBD
 
 **Tasks:**
+
 - [ ] Add version tracking to deployments
 - [ ] Create rollback script
 - [ ] Add rollback to deployment workflow
@@ -128,6 +143,7 @@ git gc --prune=now --aggressive
 - [ ] Document rollback process
 
 **Implementation:**
+
 - Store deployment version in Azure/Config
 - Create `rollback-deployment.ps1` script
 - Add rollback step to CI/CD workflows
@@ -139,18 +155,21 @@ git gc --prune=now --aggressive
 ---
 
 #### 6. Testing: Add Unit Tests Where Missing
+
 **Priority:** MEDIUM  
 **Effort:** Ongoing (incremental)  
 **Risk:** Low  
 **Owner:** TBD
 
 **Tasks:**
+
 - [ ] Identify components with <50% coverage
 - [ ] Prioritize critical components
 - [ ] Add tests incrementally
 - [ ] Target: >80% coverage for critical code
 
 **Implementation:**
+
 - Run coverage report: `pytest --cov`
 - Identify gaps
 - Add tests during feature development
@@ -164,12 +183,14 @@ git gc --prune=now --aggressive
 ### Low Priority (Complete as needed)
 
 #### 7. Deployment: Add Script Validation Tests
+
 **Priority:** LOW  
 **Effort:** 4-6 hours  
 **Risk:** Low  
 **Owner:** TBD
 
 **Tasks:**
+
 - [ ] Create test framework for PowerShell scripts
 - [ ] Add validation tests for deployment scripts
 - [ ] Test error handling paths
@@ -177,6 +198,7 @@ git gc --prune=now --aggressive
 - [ ] Add to CI/CD
 
 **Implementation:**
+
 - Use Pester for PowerShell testing
 - Create `tests/scripts/` directory
 - Add tests for each deployment script
@@ -188,12 +210,14 @@ git gc --prune=now --aggressive
 ---
 
 #### 8. CI/CD: Add Deployment Workflows for Infrastructure Repos
+
 **Priority:** LOW  
 **Effort:** 4-6 hours  
 **Risk:** Low  
 **Owner:** TBD
 
 **Tasks:**
+
 - [ ] Create manual deployment workflow for codeflow-infrastructure
 - [ ] Create manual deployment workflow for codeflow-azure-setup
 - [ ] Create manual deployment workflow for codeflow-orchestration
@@ -201,6 +225,7 @@ git gc --prune=now --aggressive
 - [ ] Add deployment notifications
 
 **Implementation:**
+
 - Use `workflow_dispatch` trigger
 - Add environment protection rules
 - Add deployment steps
@@ -212,12 +237,14 @@ git gc --prune=now --aggressive
 ---
 
 #### 9. Documentation: Document Script Structure
+
 **Priority:** LOW  
 **Effort:** 2-4 hours  
 **Risk:** Low  
 **Owner:** TBD
 
 **Tasks:**
+
 - [ ] Document deployment script structure
 - [ ] Document parameter usage
 - [ ] Document error handling
@@ -225,6 +252,7 @@ git gc --prune=now --aggressive
 - [ ] Create script reference guide
 
 **Implementation:**
+
 - Add comprehensive comments to scripts
 - Create `docs/scripts/` directory
 - Document each script's purpose and usage
@@ -238,16 +266,19 @@ git gc --prune=now --aggressive
 ## Completion Tracking
 
 ### Week 1 (High Priority)
+
 - [ ] Task 1: Remove credentials from git history
 - [ ] Task 2: Add build verification tests
 - [ ] Task 3: Add smoke tests for deployments
 
 ### Week 2-4 (Medium Priority)
+
 - [ ] Task 4: Implement Azure Key Vault integration
 - [ ] Task 5: Add rollback capabilities
 - [ ] Task 6: Add unit tests (ongoing)
 
 ### Ongoing (Low Priority)
+
 - [ ] Task 7: Add script validation tests
 - [ ] Task 8: Add deployment workflows
 - [ ] Task 9: Document script structure
@@ -271,4 +302,3 @@ git gc --prune=now --aggressive
 - ✅ Low priority tasks completed as needed
 - ✅ No blockers for Wave 2 progress
 - ✅ All tasks documented and tested
-

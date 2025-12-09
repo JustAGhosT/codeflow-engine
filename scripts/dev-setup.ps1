@@ -138,6 +138,12 @@ Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Next steps:" -ForegroundColor Yellow
 Write-Host "1. Open VS Code workspace: codeflow.code-workspace" -ForegroundColor White
-Write-Host "2. Review each repository's README for specific setup instructions" -ForegroundColor White
-Write-Host "3. Run tests to verify setup: Use VS Code tasks or run manually" -ForegroundColor White
+Write-Host "2. Set up local services (optional):" -ForegroundColor White
+Write-Host "   cd codeflow-engine && docker-compose up -d" -ForegroundColor Gray
+Write-Host "3. Review each repository's README for specific setup instructions" -ForegroundColor White
+Write-Host "4. Run tests to verify setup: Use VS Code tasks or run manually" -ForegroundColor White
+Write-Host ""
+Write-Host "For more information, see:" -ForegroundColor Yellow
+Write-Host "- Quick Start: codeflow-engine/docs/deployment/QUICK_START.md" -ForegroundColor Gray
+Write-Host "- Contributing: See CONTRIBUTING.md in each repository" -ForegroundColor Gray
 

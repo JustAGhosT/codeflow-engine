@@ -6,7 +6,7 @@ This guide covers deploying the complete CodeFlow stack, including all component
 
 ## Architecture Overview
 
-```
+``` text
 ┌─────────────────────────────────────────────────────────────┐
 │                        Internet                              │
 └───────────────┬─────────────────────────────────────────────┘
@@ -33,6 +33,7 @@ This guide covers deploying the complete CodeFlow stack, including all component
 ```
 
 **Components:**
+
 - **Website**: Next.js static site (Azure Static Web Apps)
 - **Engine**: Python API server (Azure Container Apps)
 - **Extension**: VS Code extension (VS Code Marketplace)
@@ -45,12 +46,14 @@ This guide covers deploying the complete CodeFlow stack, including all component
 ## Prerequisites
 
 ### Required
+
 - Azure subscription with contributor access
 - GitHub account with all repositories
 - Domain name (optional but recommended)
 - SSL certificates (auto-provisioned by Azure)
 
 ### Tools
+
 - Azure CLI
 - Docker
 - Node.js 20+
@@ -97,6 +100,7 @@ az deployment group create \
 ```
 
 This creates:
+
 - Azure Container Apps Environment
 - Azure Database for PostgreSQL
 - Azure Cache for Redis
@@ -195,7 +199,8 @@ az staticwebapp create \
 
 ### 3.2 Configure GitHub Actions
 
-1. Get deployment token:
+#### 1. Get deployment token
+
 ```bash
 DEPLOY_TOKEN=$(az staticwebapp secrets list \
   --name codeflow-website \
@@ -203,12 +208,13 @@ DEPLOY_TOKEN=$(az staticwebapp secrets list \
   --query properties.apiKey -o tsv)
 ```
 
-2. Add to GitHub Secrets:
-   - Repository: `codeflow-website`
-   - Secret: `AZURE_STATIC_WEB_APPS_API_TOKEN`
-   - Value: `$DEPLOY_TOKEN`
+#### 2. Add to GitHub Secrets
 
-3. Push to main branch (deploys automatically)
+- Repository: `codeflow-website`
+- Secret: `AZURE_STATIC_WEB_APPS_API_TOKEN`
+- Value: `$DEPLOY_TOKEN`
+
+#### 3. Push to main branch (deploys automatically)
 
 ### 3.3 Configure Custom Domain
 
@@ -220,7 +226,8 @@ az staticwebapp hostname set \
 ```
 
 Add DNS CNAME:
-```
+
+``` text
 www.codeflow.io → codeflow-website.azurestaticapps.net
 ```
 
@@ -261,11 +268,13 @@ Desktop app configuration:
 ### 5.1 Health Check Endpoints
 
 **Engine:**
+
 ```bash
 curl https://$ENGINE_URL/health
 ```
 
 **Website:**
+
 ```bash
 curl https://www.codeflow.io/health
 ```
@@ -345,23 +354,26 @@ az redis update \
 
 ### Test Full Stack
 
-1. **Website → Engine:**
+#### 1. **Website → Engine:**
+
 ```bash
 # Test API call from website
 curl -X GET https://www.codeflow.io/api/status \
   -H "Origin: https://www.codeflow.io"
 ```
 
-2. **Extension → Engine:**
-   - Open VS Code
-   - Install CodeFlow extension
-   - Run "CodeFlow: Check Current File"
-   - Verify API call succeeds
+#### 2. **Extension → Engine:**
 
-3. **Desktop → Engine:**
-   - Open Desktop app
-   - Connect to Engine
-   - Verify connection status
+- Open VS Code
+- Install CodeFlow extension
+- Run "CodeFlow: Check Current File"
+- Verify API call succeeds
+
+#### 3. **Desktop → Engine:**
+
+- Open Desktop app
+- Connect to Engine
+- Verify connection status
 
 ---
 
@@ -395,7 +407,8 @@ az containerapp revision activate \
 
 ### Engine Not Responding
 
-1. Check Container App logs:
+#### 1. Check Container App logs
+
 ```bash
 az containerapp logs show \
   --name codeflow-engine \
@@ -403,9 +416,11 @@ az containerapp logs show \
   --follow
 ```
 
-2. Verify database connectivity
-3. Check environment variables
-4. Verify image is correct version
+#### 2. Verify database connectivity
+
+#### 3. Check environment variables
+
+#### 4. Verify image is correct version
 
 ### Website Not Loading
 
@@ -479,6 +494,6 @@ az containerapp logs show \
 ## Support
 
 For issues or questions:
+
 - GitHub Issues: [codeflow-orchestration/issues](https://github.com/JustAGhosT/codeflow-orchestration/issues)
 - Documentation: See individual component guides
-
