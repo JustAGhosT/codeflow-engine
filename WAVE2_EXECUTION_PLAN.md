@@ -63,52 +63,52 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
 
 ##### Architecture Documentation
 
-- [ ] **System architecture diagrams**
+- [x] **System architecture diagrams**
 
-  - [ ] High-level system diagram
-  - [ ] Component relationships
-  - [ ] Data flow diagram
-  - [ ] Deployment architecture
-  - [ ] Network topology
+  - [x] High-level system diagram - ARCHITECTURE.md
+  - [x] Component relationships - ARCHITECTURE.md
+  - [x] Data flow diagram - ARCHITECTURE.md
+  - [x] Deployment architecture - ARCHITECTURE.md
+  - [x] Network topology - ARCHITECTURE.md
 
-- [ ] **Component interaction diagrams**
+- [x] **Component interaction diagrams**
 
-  - [ ] codeflow-engine internal architecture
-  - [ ] Extension ↔ Engine communication
-  - [ ] Desktop ↔ Engine communication
-  - [ ] Website integration points
+  - [x] codeflow-engine internal architecture - ARCHITECTURE.md
+  - [x] Extension ↔ Engine communication - ARCHITECTURE.md
+  - [x] Desktop ↔ Engine communication - ARCHITECTURE.md
+  - [x] Website integration points - ARCHITECTURE.md
 
-- [ ] **Data flow diagrams**
-  - [ ] GitHub webhook flow
-  - [ ] PR processing flow
-  - [ ] Issue creation flow
-  - [ ] Database interactions
+- [x] **Data flow diagrams**
+  - [x] GitHub webhook flow - ARCHITECTURE.md
+  - [x] PR processing flow - ARCHITECTURE.md
+  - [x] Issue creation flow - ARCHITECTURE.md
+  - [x] Database interactions - ARCHITECTURE.md
 
 ##### API Documentation
 
-- [ ] **codeflow-engine API docs**
+- [x] **codeflow-engine API docs**
 
-  - [ ] REST API endpoints
-  - [ ] WebSocket API
-  - [ ] Authentication
-  - [ ] Rate limiting
-  - [ ] Error codes
-  - [ ] Request/response examples
-  - [ ] OpenAPI/Swagger spec
+  - [x] REST API endpoints - API.md
+  - [x] WebSocket API - API.md
+  - [x] Authentication - API.md
+  - [x] Rate limiting - API.md
+  - [x] Error codes - API.md
+  - [x] Request/response examples - API.md
+  - [x] OpenAPI/Swagger spec - Available at /docs endpoint
 
 - [ ] **Extension API docs**
 
-  - [ ] VS Code extension API
-  - [ ] Command reference
-  - [ ] Configuration options
-  - [ ] Extension points
+  - [ ] VS Code extension API - TODO (can reference package.json)
+  - [ ] Command reference - TODO
+  - [ ] Configuration options - TODO
+  - [ ] Extension points - TODO
 
 - [ ] **Integration guides**
-  - [ ] GitHub App setup
-  - [ ] Linear integration
-  - [ ] Slack integration
-  - [ ] Axolo integration
-  - [ ] Custom integrations
+  - [ ] GitHub App setup - TODO
+  - [ ] Linear integration - TODO
+  - [ ] Slack integration - TODO
+  - [ ] Axolo integration - TODO
+  - [ ] Custom integrations - TODO
 
 ##### Troubleshooting Guides
 
