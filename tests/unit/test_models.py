@@ -3,97 +3,95 @@
 import pytest
 from datetime import datetime
 
-from codeflow_engine.models.events import WorkflowEvent
-from codeflow_engine.models.artifacts import Artifact
-from codeflow_engine.models.config import WorkflowConfig
+from codeflow_engine.models.artifacts import (
+    PrototypeEnhancerInputs,
+    PrototypeEnhancerOutputs,
+    EnhancementType,
+)
 
 
-class TestWorkflowEvent:
-    """Test cases for WorkflowEvent model."""
+class TestPrototypeEnhancerInputs:
+    """Test cases for PrototypeEnhancerInputs model."""
 
-    def test_workflow_event_creation(self):
-        """Test workflow event creation with required fields."""
-        event = WorkflowEvent(
-            type="test_event",
-            payload={"key": "value"}
+    def test_prototype_enhancer_inputs_creation(self):
+        """Test prototype enhancer inputs creation."""
+        inputs = PrototypeEnhancerInputs(
+            platform="python",
+            enhancement_type=EnhancementType.PRODUCTION,
+            project_path="/path/to/project"
         )
         
-        assert event.type == "test_event"
-        assert event.payload == {"key": "value"}
+        assert inputs.platform == "python"
+        assert inputs.enhancement_type == EnhancementType.PRODUCTION
+        assert inputs.project_path == "/path/to/project"
+        assert inputs.config is None
+        assert inputs.dry_run is False
 
-    def test_workflow_event_with_timestamp(self):
-        """Test workflow event with timestamp."""
-        timestamp = datetime.now()
-        event = WorkflowEvent(
-            type="test_event",
-            payload={},
-            timestamp=timestamp
+    def test_prototype_enhancer_inputs_with_config(self):
+        """Test prototype enhancer inputs with config."""
+        config = {"key": "value"}
+        inputs = PrototypeEnhancerInputs(
+            platform="python",
+            enhancement_type=EnhancementType.PRODUCTION,
+            project_path="/path/to/project",
+            config=config
         )
         
-        assert event.timestamp == timestamp
+        assert inputs.config == config
 
-    def test_workflow_event_validation(self):
-        """Test workflow event validation."""
-        # Valid event
-        event = WorkflowEvent(
-            type="test",
-            payload={}
-        )
-        assert event.type == "test"
-        
-        # Empty payload is valid
-        event = WorkflowEvent(
-            type="test",
-            payload={}
-        )
-        assert event.payload == {}
-
-
-class TestArtifact:
-    """Test cases for Artifact model."""
-
-    def test_artifact_creation(self):
-        """Test artifact creation."""
-        artifact = Artifact(
-            name="test_artifact",
-            content="test content",
-            type="text"
+    def test_prototype_enhancer_inputs_dry_run(self):
+        """Test prototype enhancer inputs with dry_run."""
+        inputs = PrototypeEnhancerInputs(
+            platform="python",
+            enhancement_type=EnhancementType.PRODUCTION,
+            project_path="/path/to/project",
+            dry_run=True
         )
         
-        assert artifact.name == "test_artifact"
-        assert artifact.content == "test content"
-        assert artifact.type == "text"
+        assert inputs.dry_run is True
 
-    def test_artifact_with_metadata(self):
-        """Test artifact with metadata."""
+
+class TestPrototypeEnhancerOutputs:
+    """Test cases for PrototypeEnhancerOutputs model."""
+
+    def test_prototype_enhancer_outputs_creation(self):
+        """Test prototype enhancer outputs creation."""
+        outputs = PrototypeEnhancerOutputs(
+            success=True,
+            message="Enhancement completed",
+            generated_files=["file1.py"],
+            modified_files=["file2.py"],
+            next_steps=["Step 1", "Step 2"]
+        )
+        
+        assert outputs.success is True
+        assert outputs.message == "Enhancement completed"
+        assert len(outputs.generated_files) == 1
+        assert len(outputs.modified_files) == 1
+        assert len(outputs.next_steps) == 2
+        assert outputs.metadata is None
+
+    def test_prototype_enhancer_outputs_with_metadata(self):
+        """Test prototype enhancer outputs with metadata."""
         metadata = {"key": "value"}
-        artifact = Artifact(
-            name="test",
-            content="content",
-            type="text",
+        outputs = PrototypeEnhancerOutputs(
+            success=True,
+            message="Test",
+            generated_files=[],
+            modified_files=[],
+            next_steps=[],
             metadata=metadata
         )
         
-        assert artifact.metadata == metadata
+        assert outputs.metadata == metadata
 
 
-class TestWorkflowConfig:
-    """Test cases for WorkflowConfig model."""
+class TestEnhancementType:
+    """Test cases for EnhancementType enum."""
 
-    def test_workflow_config_creation(self):
-        """Test workflow config creation."""
-        config = WorkflowConfig(
-            name="test_workflow",
-            enabled=True
-        )
-        
-        assert config.name == "test_workflow"
-        assert config.enabled is True
-
-    def test_workflow_config_defaults(self):
-        """Test workflow config defaults."""
-        config = WorkflowConfig(name="test")
-        
-        # Check default values if any
-        assert config.name == "test"
+    def test_enhancement_type_values(self):
+        """Test enhancement type enum values."""
+        assert EnhancementType.PRODUCTION == "production"
+        assert EnhancementType.TESTING == "testing"
+        assert EnhancementType.SECURITY == "security"
 
