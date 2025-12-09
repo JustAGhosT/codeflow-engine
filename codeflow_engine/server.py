@@ -11,10 +11,12 @@ from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, Response
 
+from codeflow_engine.config.settings import CodeFlowSettings
 from codeflow_engine.health.health_checker import HealthChecker
+from codeflow_engine.utils.logging import get_logger, setup_logging
 
-# Set up logging
-logger = logging.getLogger(__name__)
+# Set up logging (will be configured properly in create_app)
+logger = get_logger(__name__)
 
 # Import dashboard router and version
 try:
