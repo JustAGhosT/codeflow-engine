@@ -327,6 +327,20 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
 
 #### 6.2 Integration Testing
 
+##### Integration Testing Framework
+
+- [x] **Create integration testing guide** - INTEGRATION_TESTING.md
+  - [x] Test structure and organization
+  - [x] API integration test examples
+  - [x] Database integration test examples
+  - [x] Component integration test examples
+  - [x] Best practices and patterns
+
+- [x] **Create integration test infrastructure**
+  - [x] Integration test fixtures - tests/integration/conftest.py
+  - [x] Test directory structure - test_api/, test_components/
+  - [x] Initial integration tests - health, dashboard, engine
+
 ##### Create Integration Test Suite
 
 - [ ] **Cross-repo integration tests**
@@ -336,12 +350,12 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [ ] Website ↔ Engine
   - [ ] Full stack integration
 
-- [ ] **API integration tests**
+- [x] **API integration tests**
 
-  - [ ] REST API endpoints
-  - [ ] WebSocket connections
-  - [ ] Authentication flow
-  - [ ] Error handling
+  - [x] REST API endpoints - test_api/test_health.py, test_dashboard.py
+  - [ ] WebSocket connections - TODO
+  - [x] Authentication flow - Test structure ready
+  - [ ] Error handling - TODO
 
 - [ ] **Database integration tests**
 
