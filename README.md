@@ -30,6 +30,8 @@ The CodeFlow Orchestration repository serves as the central hub for:
 - [Dependency Management](./docs/DEPENDENCY_MANAGEMENT.md) - Dependency update process
 - [Monitoring & Observability](./docs/MONITORING_OBSERVABILITY.md) - Monitoring strategy
 - [Full Stack Deployment](./docs/FULL_STACK_DEPLOYMENT.md) - Complete deployment guide
+- [Shared Libraries Plan](./docs/SHARED_LIBRARIES_PLAN.md) - Wave 4: Shared libraries strategy
+- [Optimization Plan](./docs/OPTIMIZATION_PLAN.md) - Wave 4: Performance and cost optimization
 
 ### Scripts
 
