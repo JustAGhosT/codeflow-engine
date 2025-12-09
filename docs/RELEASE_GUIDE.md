@@ -255,6 +255,7 @@ vsce publish
 ### Build Errors
 
 **TypeScript compilation errors:**
+
 ```bash
 # Clean and rebuild
 rm -rf node_modules out
@@ -263,6 +264,7 @@ npm run compile
 ```
 
 **Package errors:**
+
 ```bash
 # Verify package.json is valid
 npm run package -- --yarn
@@ -274,6 +276,7 @@ npm audit
 ### Publishing Errors
 
 **Authentication failed:**
+
 ```bash
 # Re-login
 vsce logout
@@ -281,11 +284,13 @@ vsce login <publisher-id>
 ```
 
 **Version already exists:**
+
 - Increment version in `package.json`
 - Update CHANGELOG.md
 - Retry publish
 
 **Marketplace validation errors:**
+
 - Check `package.json` for required fields
 - Verify all icons/images exist
 - Check README.md formatting
@@ -317,6 +322,6 @@ vsce login <publisher-id>
 ## Support
 
 For issues or questions:
+
 - GitHub Issues: [codeflow-vscode-extension/issues](https://github.com/JustAGhosT/codeflow-vscode-extension/issues)
 - Documentation: [README.md](./README.md)
-
