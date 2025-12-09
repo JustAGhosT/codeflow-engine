@@ -1,0 +1,107 @@
+version: "3.8"
+
+services:
+  # PostgreSQL database
+  postgres:
+    image: postgres:15-alpine
+    container_name: codeflow-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: codeflow
+      POSTGRES_USER: codeflow
+      POSTGRES_PASSWORD: codeflow_dev_password
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - codeflow-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U codeflow -d codeflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis cache
+  redis:
+    image: redis:7-alpine
+    container_name: codeflow-redis
+    restart: unless-stopped
+    command: redis-server --requirepass codeflow_dev_password
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - codeflow-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # CodeFlow Engine (optional - for full stack testing)
+  codeflow-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: codeflow-engine
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      # Core configuration
+      CODEFLOW_ENV: development
+      CODEFLOW_LOG_LEVEL: DEBUG
+      CODEFLOW_HOST: 0.0.0.0
+      CODEFLOW_PORT: 8000
+
+      # Database
+      DATABASE_URL: postgresql://codeflow:codeflow_dev_password@postgres:5432/codeflow
+
+      # Redis
+      REDIS_URL: redis://:codeflow_dev_password@redis:6379/0
+
+      # GitHub (optional - set in .env)
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+
+      # AI Providers (optional - set in .env)
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    volumes:
+      - .:/app
+      - codeflow_data:/app/data
+      - codeflow_logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - codeflow-network
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    profiles:
+      - fullstack
+
+# Persistent volumes
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  codeflow_data:
+    driver: local
+  codeflow_logs:
+    driver: local
+
+# Networks
+networks:
+  codeflow-network:
+    driver: bridge
+
