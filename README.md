@@ -8,7 +8,7 @@ This repository provides orchestration scripts and workflows to deploy, manage, 
 
 ## Repository Structure
 
-```
+``` text
 codeflow-orchestration/
 ├── scripts/
 │   ├── deploy-all.ps1          # Deploy entire stack (PowerShell)
@@ -40,6 +40,7 @@ codeflow-orchestration/
 ### Deploy Entire Stack
 
 **PowerShell (Windows):**
+
 ```powershell
 .\scripts\deploy-all.ps1 `
   -OrgCode nl `
@@ -51,6 +52,7 @@ codeflow-orchestration/
 ```
 
 **Bash (Linux/Mac):**
+
 ```bash
 ./scripts/deploy-all.sh \
   --org-code nl \
@@ -110,6 +112,7 @@ The orchestration script deploys components in the following order:
 ```
 
 This script will:
+
 - Clone all component repositories (if not already present)
 - Install dependencies for each component
 - Set up local development environment
@@ -126,6 +129,7 @@ Pulls latest changes from all component repositories.
 ## CI/CD
 
 The `.github/workflows/deploy-stack.yml` workflow can:
+
 - Deploy the entire stack on demand
 - Deploy specific components
 - Validate all components before deployment
@@ -140,4 +144,3 @@ The `.github/workflows/deploy-stack.yml` workflow can:
 ## License
 
 MIT
-

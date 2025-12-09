@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 # Deploys the entire CodeFlow stack to Azure.
 #
 # Usage:
@@ -136,14 +136,14 @@ if ! should_skip "azure-setup"; then
     fi
     
     if [[ -f "$OUTPUT_JSON" ]]; then
-      echo "  ✓ Azure infrastructure created"
-      echo "  ✓ Environment summary: $OUTPUT_JSON"
+      echo "  âœ“ Azure infrastructure created"
+      echo "  âœ“ Environment summary: $OUTPUT_JSON"
     else
-      echo "  ✗ Failed to create Azure infrastructure"
+      echo "  âœ— Failed to create Azure infrastructure"
       exit 1
     fi
   else
-    echo "  ⚠ codeflow-azure-setup not found, skipping..."
+    echo "  âš  codeflow-azure-setup not found, skipping..."
   fi
   echo ""
 fi
@@ -162,9 +162,9 @@ if ! should_skip "infrastructure"; then
     
     ./deploy-codeflow-engine.sh "$ENVIRONMENT" "$REGION_SHORT" "$LOCATION" "$LOCATION" "" "" "$ORG_CODE" "$PROJECT"
     
-    echo "  ✓ Core infrastructure deployed"
+    echo "  âœ“ Core infrastructure deployed"
   else
-    echo "  ⚠ codeflow-infrastructure not found, skipping..."
+    echo "  âš  codeflow-infrastructure not found, skipping..."
   fi
   echo ""
 fi
@@ -175,10 +175,10 @@ if ! should_skip "engine"; then
   ENGINE_PATH="$REPO_ROOT/../codeflow-engine"
   
   if [[ -d "$ENGINE_PATH" ]]; then
-    echo "  ⚠ Engine deployment requires container image build"
-    echo "  See: codeflow-engine/.github/workflows/deploy-autopr-engine.yml"
+    echo "  âš  Engine deployment requires container image build"
+    echo "  See: codeflow-engine/.github/workflows/deploy-codeflow-engine.yml"
   else
-    echo "  ⚠ codeflow-engine not found, skipping..."
+    echo "  âš  codeflow-engine not found, skipping..."
   fi
   echo ""
 fi
@@ -195,12 +195,12 @@ if ! should_skip "website"; then
     npm run build
     
     if [[ $? -eq 0 ]]; then
-      echo "  ✓ Website built successfully"
+      echo "  âœ“ Website built successfully"
     else
-      echo "  ✗ Website build failed"
+      echo "  âœ— Website build failed"
     fi
   else
-    echo "  ⚠ codeflow-website not found, skipping..."
+    echo "  âš  codeflow-website not found, skipping..."
   fi
   echo ""
 fi
@@ -217,12 +217,12 @@ if ! should_skip "desktop"; then
     npm run build
     
     if [[ $? -eq 0 ]]; then
-      echo "  ✓ Desktop app built successfully"
+      echo "  âœ“ Desktop app built successfully"
     else
-      echo "  ✗ Desktop app build failed"
+      echo "  âœ— Desktop app build failed"
     fi
   else
-    echo "  ⚠ codeflow-desktop not found, skipping..."
+    echo "  âš  codeflow-desktop not found, skipping..."
   fi
   echo ""
 fi
@@ -239,12 +239,12 @@ if ! should_skip "vscode-extension"; then
     npm run compile
     
     if [[ $? -eq 0 ]]; then
-      echo "  ✓ Extension compiled successfully"
+      echo "  âœ“ Extension compiled successfully"
     else
-      echo "  ✗ Extension compilation failed"
+      echo "  âœ— Extension compilation failed"
     fi
   else
-    echo "  ⚠ codeflow-vscode-extension not found, skipping..."
+    echo "  âš  codeflow-vscode-extension not found, skipping..."
   fi
   echo ""
 fi

@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
 Deploys the entire CodeFlow stack to Azure.
 
@@ -125,17 +125,17 @@ if ($SkipComponents -notcontains "azure-setup") {
             $JsonFile = "az-env-$Environment-$Project.json"
         }
         if (-not (Test-Path $JsonFile)) {
-            # Try in parent directory (autopr) as fallback
-            $JsonFile = Join-Path (Split-Path (Split-Path $AzureSetupPath -Parent) -Parent) "autopr" "az-env-$Environment-$Project.json"
+            # Try in parent directory (codeflow) as fallback
+            $JsonFile = Join-Path (Split-Path (Split-Path $AzureSetupPath -Parent) -Parent) "codeflow" "az-env-$Environment-$Project.json"
         }
         
         if (Test-Path $JsonFile) {
-            Write-Host "  ✓ Azure infrastructure created" -ForegroundColor Green
-            Write-Host "  ✓ Environment summary: $JsonFile" -ForegroundColor Gray
+            Write-Host "  âœ“ Azure infrastructure created" -ForegroundColor Green
+            Write-Host "  âœ“ Environment summary: $JsonFile" -ForegroundColor Gray
             # Store path for use in next steps
             $script:AzureEnvJson = $JsonFile
         } else {
-            Write-Host "  ⚠ JSON file not found, but script may have succeeded" -ForegroundColor Yellow
+            Write-Host "  âš  JSON file not found, but script may have succeeded" -ForegroundColor Yellow
             Write-Host "  Check Azure Portal to verify resources were created" -ForegroundColor Gray
             Write-Host "  Continuing with next steps..." -ForegroundColor Gray
         }
@@ -145,15 +145,15 @@ if ($SkipComponents -notcontains "azure-setup") {
         Write-Host "  Verifying resource group: $ResourceGroup" -ForegroundColor Gray
         $rgExists = az group show --name $ResourceGroup --query "name" --output tsv 2>$null
         if ($rgExists) {
-            Write-Host "  ✓ Resource group exists, continuing..." -ForegroundColor Green
+            Write-Host "  âœ“ Resource group exists, continuing..." -ForegroundColor Green
         } else {
-            Write-Host "  ✗ Resource group not found, deployment may have failed" -ForegroundColor Red
+            Write-Host "  âœ— Resource group not found, deployment may have failed" -ForegroundColor Red
             throw "Azure infrastructure deployment failed - resource group not found"
         }
         
         Pop-Location
     } else {
-        Write-Host "  ⚠ codeflow-azure-setup not found, skipping..." -ForegroundColor Yellow
+        Write-Host "  âš  codeflow-azure-setup not found, skipping..." -ForegroundColor Yellow
     }
     Write-Host ""
 }
@@ -173,9 +173,9 @@ if ($SkipComponents -notcontains "infrastructure") {
         & ".\deploy-codeflow-engine.sh" $Environment $RegionShort $Location $Location "" "" $OrgCode $Project
         
         Pop-Location
-        Write-Host "  ✓ Core infrastructure deployed" -ForegroundColor Green
+        Write-Host "  âœ“ Core infrastructure deployed" -ForegroundColor Green
     } else {
-        Write-Host "  ⚠ codeflow-infrastructure not found, skipping..." -ForegroundColor Yellow
+        Write-Host "  âš  codeflow-infrastructure not found, skipping..." -ForegroundColor Yellow
     }
     Write-Host ""
 }
@@ -186,10 +186,10 @@ if ($SkipComponents -notcontains "engine") {
     $EnginePath = Join-Path $RepoRoot ".." "codeflow-engine"
     
     if (Test-Path $EnginePath) {
-        Write-Host "  ⚠ Engine deployment requires container image build" -ForegroundColor Yellow
-        Write-Host "  See: codeflow-engine/.github/workflows/deploy-autopr-engine.yml" -ForegroundColor Gray
+        Write-Host "  âš  Engine deployment requires container image build" -ForegroundColor Yellow
+        Write-Host "  See: codeflow-engine/.github/workflows/deploy-codeflow-engine.yml" -ForegroundColor Gray
     } else {
-        Write-Host "  ⚠ codeflow-engine not found, skipping..." -ForegroundColor Yellow
+        Write-Host "  âš  codeflow-engine not found, skipping..." -ForegroundColor Yellow
     }
     Write-Host ""
 }
@@ -206,14 +206,14 @@ if ($SkipComponents -notcontains "website") {
         npm run build
         
         if ($LASTEXITCODE -eq 0) {
-            Write-Host "  ✓ Website built successfully" -ForegroundColor Green
+            Write-Host "  âœ“ Website built successfully" -ForegroundColor Green
         } else {
-            Write-Host "  ✗ Website build failed" -ForegroundColor Red
+            Write-Host "  âœ— Website build failed" -ForegroundColor Red
         }
         
         Pop-Location
     } else {
-        Write-Host "  ⚠ codeflow-website not found, skipping..." -ForegroundColor Yellow
+        Write-Host "  âš  codeflow-website not found, skipping..." -ForegroundColor Yellow
     }
     Write-Host ""
 }
@@ -230,14 +230,14 @@ if ($SkipComponents -notcontains "desktop") {
         npm run build
         
         if ($LASTEXITCODE -eq 0) {
-            Write-Host "  ✓ Desktop app built successfully" -ForegroundColor Green
+            Write-Host "  âœ“ Desktop app built successfully" -ForegroundColor Green
         } else {
-            Write-Host "  ✗ Desktop app build failed" -ForegroundColor Red
+            Write-Host "  âœ— Desktop app build failed" -ForegroundColor Red
         }
         
         Pop-Location
     } else {
-        Write-Host "  ⚠ codeflow-desktop not found, skipping..." -ForegroundColor Yellow
+        Write-Host "  âš  codeflow-desktop not found, skipping..." -ForegroundColor Yellow
     }
     Write-Host ""
 }
@@ -254,14 +254,14 @@ if ($SkipComponents -notcontains "vscode-extension") {
         npm run compile
         
         if ($LASTEXITCODE -eq 0) {
-            Write-Host "  ✓ Extension compiled successfully" -ForegroundColor Green
+            Write-Host "  âœ“ Extension compiled successfully" -ForegroundColor Green
         } else {
-            Write-Host "  ✗ Extension compilation failed" -ForegroundColor Red
+            Write-Host "  âœ— Extension compilation failed" -ForegroundColor Red
         }
         
         Pop-Location
     } else {
-        Write-Host "  ⚠ codeflow-vscode-extension not found, skipping..." -ForegroundColor Yellow
+        Write-Host "  âš  codeflow-vscode-extension not found, skipping..." -ForegroundColor Yellow
     }
     Write-Host ""
 }
