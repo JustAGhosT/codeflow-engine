@@ -1,0 +1,32 @@
+name: Setup Node.js
+
+description: Reusable workflow for setting up Node.js
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: false
+        type: string
+        default: '20'
+      cache:
+        required: false
+        type: string
+        default: 'npm'
+
+jobs:
+  setup:
+    name: Setup Node.js Environment
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js ${{ inputs.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: ${{ inputs.cache }}
+      
+      - name: Install dependencies
+        run: npm ci
+
