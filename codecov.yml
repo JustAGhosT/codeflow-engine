@@ -1,6 +1,11 @@
 ﻿# Codecov Configuration
 # Documentation: https://docs.codecov.com/docs/codecovyml-reference
 
+codecov:
+  require_ci_to_pass: yes
+  notify:
+    wait_for_ci: yes
+
 coverage:
   # Coverage analysis settings
   status:
@@ -9,12 +14,12 @@ coverage:
       default:
         # Target: 'auto' means Codecov automatically determines the target
         # based on the recent coverage history of the project
-        target: auto
+        target: 80%
         # Allow coverage to drop by this much before failing
         threshold: 1%
         # Only consider files matching these patterns
         paths:
-          - "codeflow/**"
+          - "codeflow_engine/**"
         # Ignore missing coverage from these paths
         if_no_uploads: error
     # Status for changes in the PR (patch coverage)
@@ -22,7 +27,7 @@ coverage:
       default:
         # Target: 'auto' means Codecov automatically determines the target
         # based on the recent coverage history of the project
-        target: auto
+        target: 70%
         threshold: 1%
         if_no_uploads: success
 
@@ -53,7 +58,7 @@ comment:
 flags:
   unittests:
     paths:
-      - "codeflow/**"
+      - "codeflow_engine/**"
     carryforward: true
 
 # GitHub-specific configuration

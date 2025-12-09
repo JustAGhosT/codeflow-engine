@@ -36,8 +36,29 @@ jobs:
     - name: Install package
       run: poetry install --no-dev
     
-    - name: Run tests
-      run: poetry run pytest
+    - name: Run tests with coverage
+      run: |
+        poetry run pytest --cov=codeflow_engine --cov-report=xml --cov-report=term --cov-report=html
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+        token: ${{ secrets.CODECOV_TOKEN }}
+    
+    - name: Check coverage threshold
+      run: |
+        poetry run coverage report --fail-under=70 || echo "Coverage below 70% - this is a warning, not a failure"
+    
+    - name: Upload coverage HTML report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: coverage-report-${{ matrix.python-version }}
+        path: htmlcov/
     
     - name: Run linting
       run: |
