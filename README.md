@@ -38,6 +38,8 @@ The CodeFlow Orchestration repository serves as the central hub for:
 - [Cost Optimization](./docs/COST_OPTIMIZATION.md) - Azure cost analysis and optimization strategies
 - [Cost Optimization Implementation](./docs/COST_OPTIMIZATION_IMPLEMENTATION.md) - Cost optimization opportunities and implementation plan
 - [Process Automation](./docs/PROCESS_AUTOMATION.md) - Development and deployment process automation
+- [Metrics & Alerting Setup](./docs/METRICS_ALERTING_SETUP.md) - Azure metrics and alerting configuration
+- [Package Publishing Quick Start](./docs/PACKAGE_PUBLISHING_QUICKSTART.md) - Quick-start guide for publishing packages
 
 ### Scripts
 
