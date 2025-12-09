@@ -1,182 +1,180 @@
-﻿# CodeFlow Engine Documentation
+﻿# CodeFlow Engine - Documentation Index
 
-## ðŸ“š **Documentation Index**
-
-Welcome to the CodeFlow Engine documentation. This repository contains a comprehensive automated code
-review and quality management system with AI-powered analysis capabilities.
-
-### ðŸŽ¯ **Quick Access**
-
-- **[Naming Recommendations](../NAMING_RECOMMENDATIONS.md)** - Quick reference guide for program naming and branding
-- **[Program Name Suggestions](PROGRAM_NAME_SUGGESTIONS.md)** - Comprehensive naming analysis with 15+ options
-
-## ðŸ—ï¸ **Architecture & Design**
-
-### **Core Components**
-
-- [Enhanced System Architecture](architecture/codeflow_ENHANCED_SYSTEM.md) - Comprehensive system
-  design
-- [Package Architecture](architecture/packages.md) - Package structure and organization
-- [Template Catalog](architecture/template_catalog.md) - Template system architecture
-- [Legacy Architecture](architecture/ARCHITECTURE_LEGACY.md) - Original architecture documentation
-
-### **Architecture Decision Records (ADRs)**
-
-- [ADR Directory](adr/) - All architecture decision records
-- [Hybrid C#/Python Architecture](adr/0001-hybrid-csharp-python-architecture.md)
-- [gRPC Communication](adr/0002-grpc-communication.md)
-- [Plugin System Architecture](adr/0003-plugin-system-architecture.md)
-- [API Versioning Strategy](adr/0004-api-versioning-strategy.md)
-- [Configuration Management](adr/0005-configuration-management.md)
-- [Plugin System Design](adr/0006-plugin-system-design.md)
-- [Authentication & Authorization](adr/0007-authn-authz.md)
-- [Event-Driven Architecture](adr/0008-event-driven-architecture.md)
-- [Error Handling Strategy](adr/0009-error-handling-strategy.md)
-- [Monitoring & Observability](adr/0010-monitoring-observability.md)
-- [Data Persistence Strategy](adr/0011-data-persistence-strategy.md)
-- [Deployment Strategy](adr/0012-deployment-strategy.md)
-- [Security Strategy](adr/0013-security-strategy.md)
-- [Caching Strategy](adr/0014-caching-strategy.md)
-
-## ðŸš€ **Getting Started**
-
-### **Quick Start**
-
-- [Migration Guide](getting-started/MIGRATION_GUIDE.md) - Migration from previous versions
-- [Error Handler Guide](getting-started/ERROR_HANDLER_GUIDE.md) - Error handling and debugging
-
-### **Development Setup**
-
-- [Python 3.13 Upgrade](development/PYTHON_313_UPGRADE.md) - Python upgrade guide
-- [Windows Development](development/WINDOWS_DEVELOPMENT.md) - Windows development setup
-- [Code Quality](development/CODE_QUALITY.md) - Code quality standards and tools
-- [AI Linting Fixer](development/ai_linting_fixer.md) - AI-powered linting and fixing
-
-## ðŸ“– **User Guides**
-
-### **Quality Engine**
-
-- [AI Linting Fixer](development/ai_linting_fixer.md) - AI-powered code analysis
-- [Code Quality](development/CODE_QUALITY.md) - Code quality standards and tools
-- [Platform Detection](development/platform_detection.md) - Platform identification system
-
-### **Development Tools**
-
-- [Modular Refactoring](development/MODULAR_REFACTORING_SUMMARY.md) - Refactoring documentation
-- [AutoWeave Integration](development/codeflow_autoweave_integration.md) - Integration guide
-- [Configuration Management](development/CONFIGURATION_EXTRACTION.md) - Configuration system
-
-## ðŸ”§ **API Reference**
-
-### **Core API**
-
-- [API Directory](api/) - API documentation index
-- [Quality Engine API](api/quality-engine.md) - Quality analysis endpoints
-- [Platform Detection API](api/platform-detection.md) - Platform detection endpoints
-- [Security API](api/security.md) - Authentication and authorization endpoints
-
-### **Integration APIs**
-
-- [GitHub Integration](api/github.md) - GitHub integration endpoints
-- [Linear Integration](api/linear.md) - Linear integration endpoints
-- [Custom Integrations](api/custom-integrations.md) - Building custom integrations
-
-## ðŸš€ **Deployment**
-
-### **Deployment Options**
-
-- [Deployment Directory](deployment/) - Deployment guides and configurations
-
-### **Configuration**
-
-- [Configuration Management](development/CONFIGURATION_EXTRACTION.md) - Configuration system
-
-## ðŸ“‹ **Planning & Roadmap**
-
-### **Current Plans**
-
-- [Repository Structure Plan](plans/REPOSITORY_STRUCTURE_PLAN.md) - Repository organization
-  improvements
-- [Enterprise Modernization Plan](plans/ENTERPRISE_MODERNIZATION_PLAN.md) - Enterprise system
-  modernization
-- [Modularization Plan](plans/modularization_plan.md) - Code modularization strategy
-- [Template Packaging Plan](plans/template-packaging-plan.md) - Template system packaging
-- [Product Roadmap](plans/ROADMAP.md) - Product development roadmap
-- [Phase 1 Quality Pipeline](plans/plan-phase1-quality-pipeline.md) - Quality engine implementation
-- [Phase 2 Security Framework](plans/plan-phase2-security-framework.md) - Security framework
-  implementation
-- [Main Plan](plans/plan.md) - Overall project plan
-- [Legacy Plan](plans/PLAN_LEGACY.md) - Original project plan
-
-## ðŸ“Š **Analysis & Research**
-
-### **Ecosystem Analysis**
-
-- [AI Bots Ecosystem Analysis](analysis/AI_BOTS_ECOSYSTEM_ANALYSIS.md) - Comprehensive AI bots
-  ecosystem study
-- [AI Bots Ecosystem Directory](ai-bots-ecosystem/) - Detailed ecosystem documentation
-
-## ðŸ› ï¸ **Development**
-
-### **Development Guides**
-
-- [Python 3.13 Upgrade](development/PYTHON_313_UPGRADE.md) - Python upgrade guide
-- [Windows Development](development/WINDOWS_DEVELOPMENT.md) - Windows development setup
-- [Code Quality](development/CODE_QUALITY.md) - Code quality standards and tools
-- [AI Linting Fixer](development/ai_linting_fixer.md) - AI-powered linting and fixing
-- [Modular Refactoring Summary](development/MODULAR_REFACTORING_SUMMARY.md) - Refactoring
-  documentation
-- [CodeFlow AutoWeave Integration](development/codeflow_autoweave_integration.md) - Integration guide
-- [Configuration Extraction](development/CONFIGURATION_EXTRACTION.md) - Configuration management
-- [Platform Detection](development/platform_detection.md) - Platform detection implementation
-
-### **Architecture**
-
-- [Enhanced System Architecture](architecture/codeflow_ENHANCED_SYSTEM.md) - Comprehensive system
-  design
-- [Package Architecture](architecture/packages.md) - Package structure and organization
-- [Template Catalog](architecture/template_catalog.md) - Template system architecture
-
-### **Tools & Utilities**
-
-- [AI Linting Fixer](development/ai_linting_fixer.md) - AI-powered code analysis
-- [Code Quality](development/CODE_QUALITY.md) - Code quality standards and tools
-- [Platform Detection](development/platform_detection.md) - Platform identification system
-
-## ðŸ“Š **Templates & Examples**
-
-### **Template System**
-
-- [Template Overview](../templates/README.md) - Template system documentation
-- [Platform Templates](../templates/platforms/) - Platform-specific templates
-- [Use Case Templates](../templates/use-cases/) - Use case templates
-- [Deployment Templates](../templates/deployment/) - Deployment templates
-
-### **Examples**
-
-- [Example Projects](../examples/) - Example implementations
-- [Integration Examples](../examples/integrations/) - Integration examples
-- [Custom Tool Examples](../examples/custom-tools/) - Custom tool implementations
-
-## ðŸ¤ **Community & Support**
-
-### **Getting Help**
-
-- [Error Handler Guide](getting-started/ERROR_HANDLER_GUIDE.md) - Error handling and debugging
-- [Windows Development](development/WINDOWS_DEVELOPMENT.md) - Windows development setup
-- [Migration Guide](getting-started/MIGRATION_GUIDE.md) - Migration from previous versions
-
-### **Contributing**
-
-- [Development Directory](development/) - Development guides and tools
-- [Code Quality](development/CODE_QUALITY.md) - Code quality standards
-- [AI Linting Fixer](development/ai_linting_fixer.md) - AI-powered code analysis
+Welcome to the CodeFlow Engine documentation! This index helps you find the documentation you need.
 
 ---
 
-## ðŸ“ **Documentation Maintenance**
+## Quick Links
 
-This documentation is maintained as part of the CodeFlow Engine project. For questions, suggestions,
-or contributions to the documentation, please see the [Development Directory](development/).
+### 🚀 Getting Started
+- [Quick Start Guide](./deployment/QUICK_START.md) - Get running in 5 minutes
+- [Full Deployment Guide](./deployment/DEPLOYMENT_GUIDE.md) - Comprehensive deployment instructions
+- [Environment Variables Reference](./deployment/ENVIRONMENT_VARIABLES.md) - All configuration options
 
-**Last Updated**: January 2025 **Version**: 1.1.0
+### 📚 Deployment Guides
+
+#### Local Development
+- [Quick Start (Docker)](./deployment/QUICK_START.md) - 5-minute Docker setup
+
+#### Cloud Deployment
+- [Azure Deployment](./deployment/AZURE_DEPLOYMENT.md) - Azure Container Apps
+- [Kubernetes Deployment](./deployment/KUBERNETES_DEPLOYMENT.md) - AKS, GKE, EKS
+
+#### Full Stack
+- [Full Stack Deployment](../../codeflow-orchestration/docs/FULL_STACK_DEPLOYMENT.md) - Complete system deployment
+
+### 🏗️ Architecture
+
+- [System Architecture](./architecture/ARCHITECTURE.md) - Complete system design
+  - High-level architecture
+  - Component interactions
+  - Data flows
+  - Deployment architecture
+  - Technology stack
+
+### 🔌 API Reference
+
+- [API Documentation](./api/API.md) - Complete API reference
+  - REST API endpoints
+  - WebSocket API
+  - Authentication
+  - Rate limiting
+  - Error codes
+  - Request/response examples
+
+### 🧪 Testing
+
+- [Testing Strategy](./testing/TESTING_STRATEGY.md) - Testing philosophy and structure
+- [Coverage Guide](./testing/COVERAGE_GUIDE.md) - Measuring and improving coverage
+- [Coverage Improvement Plan](./testing/COVERAGE_IMPROVEMENT_PLAN.md) - Plan to reach 80%+ coverage
+- [Integration Testing](./testing/INTEGRATION_TESTING.md) - Integration test guide
+- [E2E Testing](./testing/E2E_TESTING.md) - End-to-end test guide
+
+---
+
+## Documentation by Role
+
+### For Developers
+
+**Getting Started:**
+1. [Quick Start Guide](./deployment/QUICK_START.md)
+2. [Environment Variables](./deployment/ENVIRONMENT_VARIABLES.md)
+3. [Architecture Overview](./architecture/ARCHITECTURE.md)
+
+**Development:**
+- [Testing Strategy](./testing/TESTING_STRATEGY.md)
+- [Coverage Guide](./testing/COVERAGE_GUIDE.md)
+- [API Documentation](./api/API.md)
+
+### For DevOps Engineers
+
+**Deployment:**
+1. [Full Deployment Guide](./deployment/DEPLOYMENT_GUIDE.md)
+2. [Azure Deployment](./deployment/AZURE_DEPLOYMENT.md)
+3. [Kubernetes Deployment](./deployment/KUBERNETES_DEPLOYMENT.md)
+4. [Full Stack Deployment](../../codeflow-orchestration/docs/FULL_STACK_DEPLOYMENT.md)
+
+**Configuration:**
+- [Environment Variables](./deployment/ENVIRONMENT_VARIABLES.md)
+
+### For Contributors
+
+**Getting Started:**
+1. [CONTRIBUTING.md](../../CONTRIBUTING.md) - Contribution guidelines
+2. [Testing Strategy](./testing/TESTING_STRATEGY.md)
+3. [Coverage Improvement Plan](./testing/COVERAGE_IMPROVEMENT_PLAN.md)
+
+**Writing Tests:**
+- [Testing Strategy](./testing/TESTING_STRATEGY.md)
+- [Integration Testing](./testing/INTEGRATION_TESTING.md)
+- [E2E Testing](./testing/E2E_TESTING.md)
+
+### For API Consumers
+
+**API Reference:**
+1. [API Documentation](./api/API.md) - Complete API reference
+2. [OpenAPI/Swagger](../docs) - Available at `/docs` endpoint
+
+**Integration:**
+- [Architecture](./architecture/ARCHITECTURE.md) - System design
+- [Full Stack Deployment](../../codeflow-orchestration/docs/FULL_STACK_DEPLOYMENT.md)
+
+---
+
+## Documentation Structure
+
+```
+docs/
+├── README.md                    # This file
+├── deployment/                  # Deployment guides
+│   ├── QUICK_START.md
+│   ├── DEPLOYMENT_GUIDE.md
+│   ├── AZURE_DEPLOYMENT.md
+│   ├── KUBERNETES_DEPLOYMENT.md
+│   └── ENVIRONMENT_VARIABLES.md
+├── architecture/                # Architecture documentation
+│   └── ARCHITECTURE.md
+├── api/                         # API documentation
+│   └── API.md
+└── testing/                     # Testing documentation
+    ├── TESTING_STRATEGY.md
+    ├── COVERAGE_GUIDE.md
+    ├── COVERAGE_IMPROVEMENT_PLAN.md
+    ├── INTEGRATION_TESTING.md
+    └── E2E_TESTING.md
+```
+
+---
+
+## Common Tasks
+
+### I want to...
+
+**...deploy CodeFlow Engine:**
+→ Start with [Quick Start](./deployment/QUICK_START.md) or [Full Deployment Guide](./deployment/DEPLOYMENT_GUIDE.md)
+
+**...configure environment variables:**
+→ See [Environment Variables Reference](./deployment/ENVIRONMENT_VARIABLES.md)
+
+**...understand the architecture:**
+→ Read [Architecture Documentation](./architecture/ARCHITECTURE.md)
+
+**...use the API:**
+→ See [API Documentation](./api/API.md)
+
+**...write tests:**
+→ Start with [Testing Strategy](./testing/TESTING_STRATEGY.md)
+
+**...improve test coverage:**
+→ Follow [Coverage Improvement Plan](./testing/COVERAGE_IMPROVEMENT_PLAN.md)
+
+**...deploy to Azure:**
+→ See [Azure Deployment Guide](./deployment/AZURE_DEPLOYMENT.md)
+
+**...deploy to Kubernetes:**
+→ See [Kubernetes Deployment Guide](./deployment/KUBERNETES_DEPLOYMENT.md)
+
+**...set up local development:**
+→ Use [Quick Start](./deployment/QUICK_START.md) with Docker Compose
+
+---
+
+## Additional Resources
+
+- **Main README:** [../../README.md](../../README.md)
+- **Contributing:** [../../CONTRIBUTING.md](../../CONTRIBUTING.md)
+- **Full Stack Guide:** [../../codeflow-orchestration/docs/FULL_STACK_DEPLOYMENT.md](../../codeflow-orchestration/docs/FULL_STACK_DEPLOYMENT.md)
+- **GitHub Issues:** [codeflow-engine/issues](https://github.com/JustAGhosT/codeflow-engine/issues)
+
+---
+
+## Support
+
+For questions or help:
+- GitHub Issues: [codeflow-engine/issues](https://github.com/JustAGhosT/codeflow-engine/issues)
+- Documentation: This index and linked guides
+- API Docs: Available at `/docs` endpoint when server is running
+
+---
+
+**Last Updated:** 2025-01-XX
