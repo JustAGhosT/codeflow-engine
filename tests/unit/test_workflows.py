@@ -1,103 +1,104 @@
 """Unit tests for workflow components."""
 
 import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch, MagicMock, AsyncMock
 
 from codeflow_engine.workflows.engine import WorkflowEngine
-from codeflow_engine.models.events import WorkflowEvent
+from codeflow_engine.config import CodeFlowConfig
 
 
 class TestWorkflowEngine:
     """Test cases for WorkflowEngine."""
 
-    def test_workflow_engine_init(self):
+    @pytest.fixture
+    def config(self):
+        """Create a mock config."""
+        config = Mock(spec=CodeFlowConfig)
+        config.workflow_timeout = 300
+        config.workflow_retry_attempts = 3
+        config.workflow_retry_delay = 5
+        return config
+
+    @pytest.fixture
+    def engine(self, config):
+        """Create a workflow engine instance."""
+        return WorkflowEngine(config)
+
+    def test_workflow_engine_init(self, engine):
         """Test workflow engine initialization."""
-        engine = WorkflowEngine()
         assert engine is not None
         assert hasattr(engine, "workflows")
+        assert hasattr(engine, "running_workflows")
+        assert hasattr(engine, "workflow_history")
+        assert engine._is_running is False
 
-    def test_register_workflow(self):
+    @pytest.mark.asyncio
+    async def test_start_engine(self, engine):
+        """Test starting the workflow engine."""
+        await engine.start()
+        assert engine._is_running is True
+
+    @pytest.mark.asyncio
+    async def test_stop_engine(self, engine):
+        """Test stopping the workflow engine."""
+        await engine.start()
+        await engine.stop()
+        assert engine._is_running is False
+
+    def test_register_workflow(self, engine):
         """Test workflow registration."""
-        engine = WorkflowEngine()
+        from codeflow_engine.workflows.base import Workflow
         
-        def test_workflow(event):
-            return {"status": "success"}
+        mock_workflow = Mock(spec=Workflow)
+        mock_workflow.name = "test_workflow"
         
-        engine.register_workflow("test_workflow", test_workflow)
+        engine.register_workflow(mock_workflow)
         assert "test_workflow" in engine.workflows
+        assert engine.workflows["test_workflow"] == mock_workflow
 
-    def test_execute_workflow_success(self):
-        """Test successful workflow execution."""
-        engine = WorkflowEngine()
+    def test_unregister_workflow(self, engine):
+        """Test unregistering a workflow."""
+        from codeflow_engine.workflows.base import Workflow
         
-        def test_workflow(event):
-            return {"status": "success", "result": "completed"}
+        mock_workflow = Mock(spec=Workflow)
+        mock_workflow.name = "test_workflow"
         
-        engine.register_workflow("test_workflow", test_workflow)
+        engine.register_workflow(mock_workflow)
+        assert "test_workflow" in engine.workflows
         
-        event = WorkflowEvent(
-            type="test",
-            payload={"data": "test"}
-        )
-        
-        result = engine.execute_workflow("test_workflow", event)
-        assert result["status"] == "success"
-        assert result["result"] == "completed"
+        engine.unregister_workflow("test_workflow")
+        assert "test_workflow" not in engine.workflows
 
-    def test_execute_workflow_not_found(self):
-        """Test workflow execution with non-existent workflow."""
-        engine = WorkflowEngine()
+    @pytest.mark.asyncio
+    async def test_get_status(self, engine):
+        """Test getting engine status."""
+        status = await engine.get_status()
         
-        event = WorkflowEvent(
-            type="test",
-            payload={"data": "test"}
-        )
-        
-        with pytest.raises(ValueError, match="Workflow not found"):
-            engine.execute_workflow("non_existent", event)
+        assert "running" in status
+        assert "registered_workflows" in status
+        assert "running_workflows" in status
+        assert "total_executions" in status
+        assert "workflows" in status
+        assert "metrics" in status
 
-    def test_execute_workflow_with_error(self):
-        """Test workflow execution with error handling."""
-        engine = WorkflowEngine()
+    @pytest.mark.asyncio
+    async def test_get_metrics(self, engine):
+        """Test getting engine metrics."""
+        metrics = await engine.get_metrics()
         
-        def failing_workflow(event):
-            raise ValueError("Workflow error")
-        
-        engine.register_workflow("failing_workflow", failing_workflow)
-        
-        event = WorkflowEvent(
-            type="test",
-            payload={"data": "test"}
-        )
-        
-        with pytest.raises(ValueError, match="Workflow error"):
-            engine.execute_workflow("failing_workflow", event)
+        assert "total_executions" in metrics
+        assert "successful_executions" in metrics
+        assert "failed_executions" in metrics
+        assert "timeout_executions" in metrics
+        assert "success_rate_percent" in metrics
 
-    def test_workflow_event_creation(self):
-        """Test workflow event creation."""
-        event = WorkflowEvent(
-            type="test_event",
-            payload={"key": "value"}
-        )
-        
-        assert event.type == "test_event"
-        assert event.payload == {"key": "value"}
+    def test_get_workflow_history(self, engine):
+        """Test getting workflow history."""
+        history = engine.get_workflow_history()
+        assert isinstance(history, list)
 
-    def test_list_workflows(self):
-        """Test listing registered workflows."""
-        engine = WorkflowEngine()
-        
-        def workflow1(event):
-            return {}
-        
-        def workflow2(event):
-            return {}
-        
-        engine.register_workflow("workflow1", workflow1)
-        engine.register_workflow("workflow2", workflow2)
-        
-        workflows = engine.list_workflows()
-        assert "workflow1" in workflows
-        assert "workflow2" in workflows
-        assert len(workflows) == 2
+    def test_get_running_workflows(self, engine):
+        """Test getting running workflows."""
+        running = engine.get_running_workflows()
+        assert isinstance(running, list)
 
