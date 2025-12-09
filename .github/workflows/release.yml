@@ -1,0 +1,117 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Extracted version: $VERSION"
+
+      - name: Validate version format
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          if [[ ! $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?(\+[a-zA-Z0-9.-]+)?$ ]]; then
+            echo "❌ Invalid version format: $VERSION"
+            echo "Expected format: MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]"
+            exit 1
+          fi
+          echo "✅ Version format is valid: $VERSION"
+
+      - name: Verify version matches pyproject.toml
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          PYPROJECT_VERSION=$(python -c "import tomli; f=open('pyproject.toml','rb'); d=tomli.load(f); print(d['project']['version'])")
+          
+          if [ "$VERSION" != "$PYPROJECT_VERSION" ]; then
+            echo "❌ Version mismatch:"
+            echo "   Tag version: $VERSION"
+            echo "   pyproject.toml version: $PYPROJECT_VERSION"
+            exit 1
+          fi
+          echo "✅ Version matches pyproject.toml: $VERSION"
+
+      - name: Install dependencies
+        run: |
+          pip install build twine
+
+      - name: Build package
+        run: |
+          python -m build
+
+      - name: Check package
+        run: |
+          python -m twine check dist/*
+
+      - name: Extract changelog
+        id: changelog
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          if [ -f CHANGELOG.md ]; then
+            # Extract changelog section for this version
+            awk "/^## \[$VERSION\]/,/^## \[/" CHANGELOG.md | head -n -1 > release_notes.md
+            if [ -s release_notes.md ]; then
+              echo "changelog<<EOF" >> $GITHUB_OUTPUT
+              cat release_notes.md >> $GITHUB_OUTPUT
+              echo "EOF" >> $GITHUB_OUTPUT
+            else
+              echo "changelog=No changelog entry found for version $VERSION" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "changelog=No CHANGELOG.md found" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release v${{ steps.version.outputs.version }}
+          body: |
+            ## Release v${{ steps.version.outputs.version }}
+            
+            **Release Date:** $(date +'%Y-%m-%d')
+            
+            ${{ steps.changelog.outputs.changelog }}
+            
+            ## Installation
+            
+            ```bash
+            pip install codeflow-engine==${{ steps.version.outputs.version }}
+            ```
+            
+            ## Full Changelog
+            
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for full details.
+          files: |
+            dist/*
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.version, '-') }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts
+          path: dist/*
+          retention-days: 90
+
