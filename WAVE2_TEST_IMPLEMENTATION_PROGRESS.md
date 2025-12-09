@@ -20,16 +20,17 @@ Test implementation for Wave 2 has begun, with the foundation in place and initi
 - ✅ Coverage measurement scripts
 - ✅ Quality gates (Codecov integration)
 
-### Test Implementation: ⏳ 10% Complete
+### Test Implementation: ⏳ 20% Complete
 - ✅ Configuration settings tests (15+ tests)
 - ✅ Health checker tests (20+ tests)
-- ⏳ API endpoint tests (in progress)
+- ✅ Server endpoint tests (15+ tests)
+- ⏳ Dashboard API tests (in progress)
 - ⏳ Core engine tests (pending)
 - ⏳ Action tests (pending)
 
-**Current Coverage:** ~30% (baseline)  
+**Current Coverage:** ~32% (estimated)  
 **Target Coverage:** 50% (Phase 1)  
-**Progress:** 10% of test implementation complete
+**Progress:** 20% of test implementation complete
 
 ---
 
@@ -74,6 +75,22 @@ Test implementation for Wave 2 has begun, with the foundation in place and initi
 - ✅ System resources health check (healthy/high usage)
 - ✅ Workflow engine health check
 - ✅ Overall health determination (all scenarios)
+
+### 3. Server Endpoint Tests ✅
+
+**File:** `tests/unit/test_server.py`  
+**Tests:** 15+ test cases  
+**Coverage:** Server initialization, API endpoints, middleware
+
+**Test Categories:**
+- ✅ Server creation tests
+- ✅ Health checker singleton pattern
+- ✅ Root endpoint
+- ✅ API root endpoint
+- ✅ Health endpoint (basic and detailed)
+- ✅ Health endpoint error handling
+- ✅ OpenAPI docs endpoint
+- ✅ CORS middleware tests
 
 ---
 
@@ -137,11 +154,12 @@ Test implementation for Wave 2 has begun, with the foundation in place and initi
 ### Files Created
 - `tests/unit/test_config_settings.py` - 15+ tests
 - `tests/unit/test_health_checker.py` - 20+ tests
+- `tests/unit/test_server.py` - 15+ tests
 - `docs/testing/TEST_IMPLEMENTATION_PLAN.md` - Implementation plan
 
 ### Total Tests Added
-- **35+ unit tests** created
-- **2 test suites** complete
+- **50+ unit tests** created
+- **3 test suites** complete
 - **2 test suites** in progress
 
 ### Coverage Progress
