@@ -138,34 +138,34 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
 
 ##### Local Development Setup
 
-- [ ] **Create `setup-dev-environment.ps1` script**
+- [x] **Create `setup-dev-environment.ps1` script**
 
-  - [ ] Check prerequisites
-  - [ ] Clone all repos
-  - [ ] Install dependencies
-  - [ ] Configure environment
-  - [ ] Start local services
-  - [ ] Run health checks
+  - [x] Check prerequisites - Implemented
+  - [x] Clone all repos - Implemented
+  - [x] Install dependencies - Implemented
+  - [x] Configure environment - Basic setup done
+  - [x] Start local services - Docker Compose instructions added
+  - [x] Run health checks - Instructions in scripts
 
-- [ ] **Create `setup-dev-environment.sh` script**
+- [x] **Create `setup-dev-environment.sh` script**
 
-  - [ ] Same as PowerShell version
-  - [ ] Linux/macOS compatibility
+  - [x] Same as PowerShell version - Implemented
+  - [x] Linux/macOS compatibility - Bash script available
 
-- [ ] **Add Docker Compose for local stack**
+- [x] **Add Docker Compose for local stack**
 
-  - [ ] PostgreSQL container
-  - [ ] Redis container
-  - [ ] codeflow-engine service
-  - [ ] Network configuration
-  - [ ] Volume mounts
-  - [ ] Environment variables
+  - [x] PostgreSQL container - Added to codeflow-engine/docker-compose.yml
+  - [x] Redis container - Added to codeflow-engine/docker-compose.yml
+  - [x] codeflow-engine service - Optional service added
+  - [x] Network configuration - Configured
+  - [x] Volume mounts - Configured
+  - [x] Environment variables - Documented
 
 - [ ] **Document local development workflow**
-  - [ ] Daily workflow
-  - [ ] Testing workflow
-  - [ ] Debugging workflow
-  - [ ] Contribution workflow
+  - [ ] Daily workflow - TODO (can be added incrementally)
+  - [ ] Testing workflow - TODO
+  - [ ] Debugging workflow - TODO
+  - [x] Contribution workflow - Covered in CONTRIBUTING.md
 
 ##### Contribution Guidelines
 
