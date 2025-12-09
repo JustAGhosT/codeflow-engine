@@ -137,6 +137,18 @@ if ($SkipComponents -notcontains "azure-setup") {
         } else {
             Write-Host "  ⚠ JSON file not found, but script may have succeeded" -ForegroundColor Yellow
             Write-Host "  Check Azure Portal to verify resources were created" -ForegroundColor Gray
+            Write-Host "  Continuing with next steps..." -ForegroundColor Gray
+        }
+        
+        # Verify resources were actually created by checking resource group
+        $ResourceGroup = "$OrgCode-$Environment-$Project-rg-$RegionShort"
+        Write-Host "  Verifying resource group: $ResourceGroup" -ForegroundColor Gray
+        $rgExists = az group show --name $ResourceGroup --query "name" --output tsv 2>$null
+        if ($rgExists) {
+            Write-Host "  ✓ Resource group exists, continuing..." -ForegroundColor Green
+        } else {
+            Write-Host "  ✗ Resource group not found, deployment may have failed" -ForegroundColor Red
+            throw "Azure infrastructure deployment failed - resource group not found"
         }
         
         Pop-Location
