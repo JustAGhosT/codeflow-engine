@@ -1,0 +1,147 @@
+name: Validate Version
+
+on:
+  pull_request:
+    paths:
+      - 'pyproject.toml'
+      - 'package.json'
+      - '.github/workflows/validate-version.yml'
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'pyproject.toml'
+      - 'package.json'
+
+jobs:
+  validate-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate version format
+        run: |
+          python -c "
+          import re
+          import sys
+          
+          # Read pyproject.toml
+          with open('pyproject.toml', 'r') as f:
+              content = f.read()
+          
+          # Extract version
+          match = re.search(r'version\s*=\s*\"([^\"]+)\"', content)
+          if not match:
+              print('❌ Could not find version in pyproject.toml')
+              sys.exit(1)
+          
+          version = match.group(1)
+          print(f'Found version: {version}')
+          
+          # Validate format (MAJOR.MINOR.PATCH)
+          if not re.match(r'^\d+\.\d+\.\d+(-[a-zA-Z0-9.-]+)?(\+[a-zA-Z0-9.-]+)?$', version):
+              print(f'❌ Invalid version format: {version}')
+              print('Expected format: MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]')
+              sys.exit(1)
+          
+          print(f'✅ Version format is valid: {version}')
+          "
+
+      - name: Check version increment (on PR)
+        if: github.event_name == 'pull_request'
+        run: |
+          python -c "
+          import re
+          import subprocess
+          import sys
+          
+          # Get base version from main branch
+          result = subprocess.run(
+              ['git', 'show', 'origin/main:pyproject.toml'],
+              capture_output=True,
+              text=True,
+              check=False
+          )
+          
+          if result.returncode != 0:
+              print('⚠️  Could not compare with main branch (may be first commit)')
+              sys.exit(0)
+          
+          base_content = result.stdout
+          base_match = re.search(r'version\s*=\s*\"([^\"]+)\"', base_content)
+          
+          if not base_match:
+              print('⚠️  Could not find version in base branch')
+              sys.exit(0)
+          
+          base_version = base_match.group(1)
+          
+          # Get current version
+          with open('pyproject.toml', 'r') as f:
+              content = f.read()
+          
+          current_match = re.search(r'version\s*=\s*\"([^\"]+)\"', content)
+          if not current_match:
+              print('❌ Could not find version in current pyproject.toml')
+              sys.exit(1)
+          
+          current_version = current_match.group(1)
+          
+          print(f'Base version: {base_version}')
+          print(f'Current version: {current_version}')
+          
+          if base_version == current_version:
+              print('⚠️  Version has not been incremented')
+              print('Please bump the version before merging')
+              # Don't fail, just warn
+          else:
+              print(f'✅ Version incremented: {base_version} → {current_version}')
+          "
+
+      - name: Validate version consistency
+        run: |
+          python -c "
+          import re
+          import sys
+          
+          # Check if package.json exists and has version
+          try:
+              with open('package.json', 'r') as f:
+                  package_content = f.read()
+              
+              package_match = re.search(r'\"version\"\s*:\s*\"([^\"]+)\"', package_content)
+              if package_match:
+                  package_version = package_match.group(1)
+                  
+                  # Read pyproject.toml version
+                  with open('pyproject.toml', 'r') as f:
+                      pyproject_content = f.read()
+                  
+                  pyproject_match = re.search(r'version\s*=\s*\"([^\"]+)\"', pyproject_content)
+                  if pyproject_match:
+                      pyproject_version = pyproject_match.group(1)
+                      
+                      # Extract base version (without pre-release/build)
+                      base_package = re.match(r'^(\d+\.\d+\.\d+)', package_version)
+                      base_pyproject = re.match(r'^(\d+\.\d+\.\d+)', pyproject_version)
+                      
+                      if base_package and base_pyproject:
+                          if base_package.group(1) != base_pyproject.group(1):
+                              print(f'⚠️  Version mismatch:')
+                              print(f'   package.json: {package_version}')
+                              print(f'   pyproject.toml: {pyproject_version}')
+                              print('   Consider using sync-versions.ps1 to synchronize')
+          except FileNotFoundError:
+              # package.json not required
+              pass
+          "
+
