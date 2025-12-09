@@ -35,6 +35,7 @@ The CodeFlow Orchestration repository serves as the central hub for:
 - [Package Publishing Guide](./docs/PACKAGE_PUBLISHING_GUIDE.md) - Publishing shared utility packages
 - [Deployment Automation](./docs/DEPLOYMENT_AUTOMATION.md) - Enhanced deployment with rollback and health checks
 - [Performance Optimization](./docs/PERFORMANCE_OPTIMIZATION.md) - Performance analysis and optimization strategies
+- [Cost Optimization](./docs/COST_OPTIMIZATION.md) - Azure cost analysis and optimization strategies
 
 ### Scripts
 
