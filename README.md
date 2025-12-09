@@ -19,7 +19,8 @@ The CodeFlow Orchestration repository serves as the central hub for:
 
 ### Migration Documentation
 
-- [Migration Overview](./MIGRATION.md) - Complete migration status and progress (65% complete)
+- [Migration Overview](./MIGRATION.md) - Complete migration status and progress (72% complete)
+- [Migration Analysis](./MIGRATION_ANALYSIS.md) - Comprehensive analysis, mistakes, and improvements
 - [Migration Phases](./MIGRATION_PHASES.md) - Detailed phase descriptions and goals
 - [Wave 4 Execution Plan](./WAVE4_EXECUTION_PLAN.md) - Optimization & Enhancement (planned)
 
@@ -53,7 +54,7 @@ The CodeFlow Orchestration repository serves as the central hub for:
 
 ## Migration Progress
 
-### Overall: 65% Complete
+### Overall: 72% Complete
 
 #### ✅ Wave 1: Critical Foundation (95%)
 
@@ -61,19 +62,19 @@ The CodeFlow Orchestration repository serves as the central hub for:
 - Naming migration
 - CI/CD workflows
 
-#### ✅ Wave 2: Quality & Documentation (88%)
+#### ✅ Wave 2: Quality & Documentation (92%)
 
 - Comprehensive documentation
 - Testing infrastructure
 - Quality gates
 
-#### ✅ Wave 3: Operations & Infrastructure (75%)
+#### ✅ Wave 3: Operations & Infrastructure (90%)
 
 - Version management
 - Release automation
 - Monitoring strategy
 
-#### ⏳ Wave 4: Optimization & Enhancement (55%)
+#### ⏳ Wave 4: Optimization & Enhancement (65%)
 
 - Shared libraries
 - Performance optimization
