@@ -89,40 +89,40 @@ Wave 1 focuses on fixing critical issues and establishing the foundation for all
 **Priority:** HIGH
 
 #### 3.1 Core CI/CD Workflows
-- [ ] **codeflow-engine:**
-  - [ ] Build workflow (Poetry)
-  - [ ] Test workflow (pytest)
-  - [ ] Lint workflow (ruff, mypy)
-  - [ ] Security scan workflow
-- [ ] **codeflow-desktop:**
-  - [ ] Build workflow (npm + Tauri)
-  - [ ] Test workflow
-  - [ ] Lint workflow
-- [ ] **codeflow-vscode-extension:**
-  - [ ] Build workflow (npm)
-  - [ ] Test workflow
-  - [ ] Package workflow (.vsix)
-  - [ ] Release workflow
-- [ ] **codeflow-website:**
-  - [ ] Build workflow (Next.js)
-  - [ ] Test workflow
-  - [ ] Lint workflow
-  - [ ] Deploy workflow (Azure Static Web Apps)
-- [ ] **codeflow-infrastructure:**
-  - [ ] Bicep validation workflow
-  - [ ] Terraform validation workflow
-  - [ ] Deployment workflow (manual trigger)
-- [ ] **codeflow-azure-setup:**
-  - [ ] PowerShell validation workflow
-  - [ ] Script testing workflow
-- [ ] **codeflow-orchestration:**
-  - [ ] Validation workflow
-  - [ ] Deployment workflow
+- [x] **codeflow-engine:**
+  - [x] Build workflow (Poetry) - exists in ci.yml
+  - [x] Test workflow (pytest) - exists in ci.yml
+  - [x] Lint workflow (ruff, mypy) - created lint.yml
+  - [x] Security scan workflow - created security.yml
+- [x] **codeflow-desktop:**
+  - [x] Build workflow (npm + Tauri) - created ci.yml
+  - [x] Test workflow - created ci.yml
+  - [x] Lint workflow - created ci.yml
+- [x] **codeflow-vscode-extension:**
+  - [x] Build workflow (npm) - created ci.yml
+  - [x] Test workflow - created ci.yml
+  - [x] Package workflow (.vsix) - created ci.yml
+  - [x] Release workflow - exists in release.yml
+- [x] **codeflow-website:**
+  - [x] Build workflow (Next.js) - created ci.yml
+  - [x] Test workflow - created ci.yml
+  - [x] Lint workflow - created ci.yml
+  - [x] Deploy workflow (Azure Static Web Apps) - created ci.yml
+- [x] **codeflow-infrastructure:**
+  - [x] Bicep validation workflow - created validate-bicep.yml
+  - [x] Terraform validation workflow - created validate-terraform.yml
+  - [ ] Deployment workflow (manual trigger) - TODO
+- [x] **codeflow-azure-setup:**
+  - [x] PowerShell validation workflow - created validate-powershell.yml
+  - [ ] Script testing workflow - TODO
+- [x] **codeflow-orchestration:**
+  - [x] Validation workflow - created validate.yml
+  - [ ] Deployment workflow - TODO
 
 #### 3.2 Shared Workflow Templates
-- [ ] Create reusable workflow templates
-- [ ] Standardize workflow structure
-- [ ] Add common steps (checkout, setup, cache)
+- [x] Create reusable workflow templates - created setup-python.yml, setup-node.yml
+- [x] Standardize workflow structure - all workflows follow consistent patterns
+- [x] Add common steps (checkout, setup, cache) - implemented in templates
 
 #### 3.3 Basic Testing
 - [ ] Add unit tests where missing

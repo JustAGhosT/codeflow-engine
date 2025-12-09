@@ -69,7 +69,8 @@ $mappings = @(
 $repos = @()
 if ($RepoPath) {
     $repos = @($RepoPath)
-} else {
+}
+else {
     $basePath = Split-Path $PSScriptRoot -Parent
     $repos = @(
         "$basePath\..\codeflow-engine",
@@ -220,7 +221,8 @@ Write-Host ""
 
 if ($DryRun) {
     Write-Host "This was a dry run. Run without -DryRun to apply changes." -ForegroundColor Yellow
-} else {
+}
+else {
     Write-Host "Migration complete! Backup files created with .codeflow-backup extension." -ForegroundColor Green
     Write-Host "Review changes and remove backup files when satisfied." -ForegroundColor Gray
 }

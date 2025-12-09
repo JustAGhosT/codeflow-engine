@@ -1,0 +1,41 @@
+name: Validate
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  validate-scripts:
+    name: Validate Scripts
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Validate PowerShell scripts (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          Get-ChildItem -Recurse -Filter '*.ps1' | ForEach-Object {
+            Write-Host "Validating $($_.FullName)"
+            $null = [System.Management.Automation.PSParser]::Tokenize((Get-Content $_.FullName -Raw), [ref]$null)
+            if (-not $?) {
+              Write-Error "Syntax error in $($_.FullName)"
+              exit 1
+            }
+          }
+      
+      - name: Validate Shell scripts (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          find . -name "*.sh" -type f | while read file; do
+            echo "Validating $file"
+            shellcheck "$file" || true
+            bash -n "$file" || exit 1
+          done
+
