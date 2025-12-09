@@ -45,6 +45,11 @@ __all__ = [
     "validate_input",
     "validate_url",
     "is_valid_url",
+    # Email
+    "validate_email",
+    "is_valid_email",
+    "extract_email_domain",
+    "normalize_email",
     # Formatting - Date
     "format_datetime",
     "format_iso_datetime",
