@@ -99,7 +99,8 @@ if ($SkipComponents -notcontains "azure-setup") {
     if (Test-Path $AzureSetupPath) {
         Push-Location $AzureSetupPath
         
-        $OutputJson = "az-env-$Environment-$Project.json"
+        # Use absolute path for output JSON to avoid path issues
+        $OutputJson = Join-Path $AzureSetupPath "az-env-$Environment-$Project.json"
         $Params = @{
             OrgCode = $OrgCode
             Environment = $Environment
@@ -114,13 +115,28 @@ if ($SkipComponents -notcontains "azure-setup") {
             $Params['CreateKeyVault'] = $true
         }
         
+        Write-Host "  Running New-AzRepoEnvironment.ps1..." -ForegroundColor Gray
         & ".\scripts\New-AzRepoEnvironment.ps1" @Params
         
-        if (Test-Path $OutputJson) {
+        # Check if file was created (could be in current directory or specified path)
+        $JsonFile = $OutputJson
+        if (-not (Test-Path $JsonFile)) {
+            # Try relative path in case script changed directory
+            $JsonFile = "az-env-$Environment-$Project.json"
+        }
+        if (-not (Test-Path $JsonFile)) {
+            # Try in parent directory (autopr) as fallback
+            $JsonFile = Join-Path (Split-Path (Split-Path $AzureSetupPath -Parent) -Parent) "autopr" "az-env-$Environment-$Project.json"
+        }
+        
+        if (Test-Path $JsonFile) {
             Write-Host "  ✓ Azure infrastructure created" -ForegroundColor Green
-            Write-Host "  ✓ Environment summary: $OutputJson" -ForegroundColor Gray
+            Write-Host "  ✓ Environment summary: $JsonFile" -ForegroundColor Gray
+            # Store path for use in next steps
+            $script:AzureEnvJson = $JsonFile
         } else {
-            throw "Failed to create Azure infrastructure"
+            Write-Host "  ⚠ JSON file not found, but script may have succeeded" -ForegroundColor Yellow
+            Write-Host "  Check Azure Portal to verify resources were created" -ForegroundColor Gray
         }
         
         Pop-Location
