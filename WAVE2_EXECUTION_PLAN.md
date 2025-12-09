@@ -12,21 +12,25 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
 ## Wave 2 Phases
 
 ### Phase 4: Documentation & Developer Experience (Week 4)
+
 **Priority:** HIGH
 
 #### 4.1 Comprehensive Documentation
 
 ##### Deployment Guides
+
 - [x] **codeflow-engine deployment guide**
+
   - [x] Quick start (5 minutes) - QUICK_START.md
   - [x] Full deployment walkthrough - DEPLOYMENT_GUIDE.md (existing)
   - [x] Azure deployment steps - AZURE_DEPLOYMENT.md
-  - [ ] Kubernetes deployment - TODO
+  - [x] Kubernetes deployment - KUBERNETES_DEPLOYMENT.md
   - [x] Docker deployment - QUICK_START.md
-  - [ ] Environment variables reference - TODO
-  - [ ] Troubleshooting common issues - TODO
+  - [x] Environment variables reference - ENVIRONMENT_VARIABLES.md
+  - [ ] Troubleshooting common issues - TODO (can be added incrementally)
 
 - [x] **codeflow-desktop build guide**
+
   - [x] Prerequisites - DEPLOYMENT.md (existing)
   - [x] Build steps (Windows, macOS, Linux) - DEPLOYMENT.md
   - [x] Tauri configuration - DEPLOYMENT.md
@@ -34,6 +38,7 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [x] Distribution setup - DEPLOYMENT.md
 
 - [x] **codeflow-vscode-extension release guide**
+
   - [x] Development setup - RELEASE_GUIDE.md
   - [x] Build process - RELEASE_GUIDE.md
   - [x] Testing locally - RELEASE_GUIDE.md
@@ -41,6 +46,7 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [x] Version management - RELEASE_GUIDE.md
 
 - [x] **codeflow-website deployment guide**
+
   - [x] Next.js build process - DEPLOYMENT.md
   - [x] Azure Static Web Apps deployment - DEPLOYMENT.md
   - [x] Environment configuration - DEPLOYMENT.md
@@ -56,7 +62,9 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [x] Rollback procedures - FULL_STACK_DEPLOYMENT.md
 
 ##### Architecture Documentation
+
 - [ ] **System architecture diagrams**
+
   - [ ] High-level system diagram
   - [ ] Component relationships
   - [ ] Data flow diagram
@@ -64,6 +72,7 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [ ] Network topology
 
 - [ ] **Component interaction diagrams**
+
   - [ ] codeflow-engine internal architecture
   - [ ] Extension ↔ Engine communication
   - [ ] Desktop ↔ Engine communication
@@ -76,7 +85,9 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [ ] Database interactions
 
 ##### API Documentation
+
 - [ ] **codeflow-engine API docs**
+
   - [ ] REST API endpoints
   - [ ] WebSocket API
   - [ ] Authentication
@@ -86,6 +97,7 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [ ] OpenAPI/Swagger spec
 
 - [ ] **Extension API docs**
+
   - [ ] VS Code extension API
   - [ ] Command reference
   - [ ] Configuration options
@@ -99,7 +111,9 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [ ] Custom integrations
 
 ##### Troubleshooting Guides
+
 - [ ] **Common issues and solutions**
+
   - [ ] Installation problems
   - [ ] Configuration errors
   - [ ] Connection issues
@@ -107,6 +121,7 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [ ] Error code reference
 
 - [ ] **Debugging guides**
+
   - [ ] Local debugging setup
   - [ ] Remote debugging
   - [ ] Log analysis
@@ -122,7 +137,9 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
 #### 4.2 Developer Experience
 
 ##### Local Development Setup
+
 - [ ] **Create `setup-dev-environment.ps1` script**
+
   - [ ] Check prerequisites
   - [ ] Clone all repos
   - [ ] Install dependencies
@@ -131,10 +148,12 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [ ] Run health checks
 
 - [ ] **Create `setup-dev-environment.sh` script**
+
   - [ ] Same as PowerShell version
   - [ ] Linux/macOS compatibility
 
 - [ ] **Add Docker Compose for local stack**
+
   - [ ] PostgreSQL container
   - [ ] Redis container
   - [ ] codeflow-engine service
@@ -149,7 +168,9 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [ ] Contribution workflow
 
 ##### Contribution Guidelines
+
 - [ ] **Add CONTRIBUTING.md to each repo**
+
   - [ ] How to contribute
   - [ ] Code style guidelines
   - [ ] PR process
@@ -158,6 +179,7 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [ ] Review process
 
 - [ ] **Code style guidelines**
+
   - [ ] Python style (PEP 8, Black, Ruff)
   - [ ] TypeScript/JavaScript style (ESLint, Prettier)
   - [ ] PowerShell style (PSScriptAnalyzer)
@@ -165,6 +187,7 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [ ] Naming conventions
 
 - [ ] **PR process**
+
   - [ ] Branch naming
   - [ ] PR template
   - [ ] Review checklist
@@ -178,7 +201,9 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [ ] Performance benchmarks
 
 ##### Quick Start Guides
+
 - [ ] **5-minute quick start for each component**
+
   - [ ] codeflow-engine
   - [ ] codeflow-desktop
   - [ ] codeflow-vscode-extension
@@ -192,6 +217,7 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [ ] Multi-repo setup example
 
 **Success Criteria:**
+
 - All repos have comprehensive README
 - Developers can set up local environment in < 30 minutes
 - All deployment procedures documented
@@ -201,12 +227,15 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
 ---
 
 ### Phase 6: Testing & Quality (Week 5)
+
 **Priority:** HIGH
 
 #### 6.1 Unit Testing
 
 ##### Increase Test Coverage
+
 - [ ] **codeflow-engine**
+
   - [ ] Current coverage: ~X% (measure first)
   - [ ] Target: >80% for critical components
   - [ ] Add tests for:
@@ -219,6 +248,7 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
     - [ ] API endpoints
 
 - [ ] **codeflow-desktop**
+
   - [ ] Current coverage: ~X% (measure first)
   - [ ] Target: >70% for UI components
   - [ ] Add tests for:
@@ -228,6 +258,7 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
     - [ ] Tauri commands
 
 - [ ] **codeflow-vscode-extension**
+
   - [ ] Current coverage: ~X% (measure first)
   - [ ] Target: >70% for core functionality
   - [ ] Add tests for:
@@ -247,7 +278,9 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
     - [ ] Integration points
 
 ##### Test Utilities and Fixtures
+
 - [ ] **Create test utilities**
+
   - [ ] Mock GitHub API
   - [ ] Mock Linear API
   - [ ] Mock Slack API
@@ -255,6 +288,7 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [ ] Test configuration helpers
 
 - [ ] **Add test fixtures**
+
   - [ ] Sample PR data
   - [ ] Sample issue data
   - [ ] Sample workflow configs
@@ -269,19 +303,23 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
 #### 6.2 Integration Testing
 
 ##### Create Integration Test Suite
+
 - [ ] **Cross-repo integration tests**
+
   - [ ] Extension ↔ Engine
   - [ ] Desktop ↔ Engine
   - [ ] Website ↔ Engine
   - [ ] Full stack integration
 
 - [ ] **API integration tests**
+
   - [ ] REST API endpoints
   - [ ] WebSocket connections
   - [ ] Authentication flow
   - [ ] Error handling
 
 - [ ] **Database integration tests**
+
   - [ ] CRUD operations
   - [ ] Transactions
   - [ ] Migrations
@@ -296,19 +334,23 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
 #### 6.3 End-to-End Testing
 
 ##### Create E2E Test Suite
+
 - [ ] **Deployment validation tests**
+
   - [ ] Azure deployment
   - [ ] Kubernetes deployment
   - [ ] Docker deployment
   - [ ] Health checks
 
 - [ ] **Smoke tests**
+
   - [ ] Basic functionality
   - [ ] Critical paths
   - [ ] Error scenarios
   - [ ] Performance baseline
 
 - [ ] **Regression tests**
+
   - [ ] Known issues
   - [ ] Previous bugs
   - [ ] Breaking changes
@@ -322,7 +364,9 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
 #### 6.4 Quality Gates
 
 ##### Add Code Coverage Requirements
+
 - [ ] **Set coverage thresholds**
+
   - [ ] codeflow-engine: >80%
   - [ ] codeflow-desktop: >70%
   - [ ] codeflow-vscode-extension: >70%
@@ -336,13 +380,16 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [ ] Coverage trends
 
 ##### Add Quality Gates to CI/CD
+
 - [ ] **Enforce quality gates**
+
   - [ ] Coverage requirements
   - [ ] Linting requirements
   - [ ] Type checking requirements
   - [ ] Security scan requirements
 
 - [ ] **Add performance benchmarks**
+
   - [ ] API response times
   - [ ] Build times
   - [ ] Test execution times
@@ -355,6 +402,7 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
   - [ ] License compliance
 
 **Success Criteria:**
+
 - Test coverage >80% for critical code
 - All integration tests pass
 - E2E tests validate deployments
@@ -367,14 +415,16 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
 
 ### Day-by-Day Plan
 
-**Week 4: Documentation**
+#### **Week 4: Documentation**
+
 - **Day 1:** Phase 4.1.1 (Deployment guides - engine, desktop)
 - **Day 2:** Phase 4.1.1 (Deployment guides - extension, website, full stack)
 - **Day 3:** Phase 4.1.2 (Architecture documentation)
 - **Day 4:** Phase 4.1.3-4.1.4 (API docs, troubleshooting)
 - **Day 5:** Phase 4.2 (Developer experience - setup scripts, contribution guidelines)
 
-**Week 5: Testing**
+#### **Week 5: Testing**
+
 - **Day 1:** Phase 6.1 (Unit testing - measure coverage, add tests)
 - **Day 2:** Phase 6.1 (Unit testing - continue, add utilities)
 - **Day 3:** Phase 6.2 (Integration testing)
@@ -405,6 +455,7 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
 ## Success Metrics
 
 - **Documentation:**
+
   - All repos have comprehensive README
   - Setup time < 30 minutes
   - All deployment procedures documented
@@ -421,6 +472,7 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
 ## Deliverables
 
 ### Documentation
+
 - [ ] 7 comprehensive README files (one per repo)
 - [ ] 5 deployment guides
 - [ ] Architecture diagrams (5+ diagrams)
@@ -432,6 +484,7 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
 - [ ] Docker Compose configuration
 
 ### Testing
+
 - [ ] Test coverage reports (all repos)
 - [ ] Unit test suites (all repos)
 - [ ] Integration test suite
@@ -447,4 +500,3 @@ Wave 2 focuses on comprehensive documentation and testing to improve developer e
 1. **Review Wave 2** completion
 2. **Plan Wave 3** (Operations & Infrastructure)
 3. **Celebrate** documentation and testing completion! 🎉
-
