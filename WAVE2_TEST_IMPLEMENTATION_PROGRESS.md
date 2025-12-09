@@ -20,17 +20,18 @@ Test implementation for Wave 2 has begun, with the foundation in place and initi
 - ✅ Coverage measurement scripts
 - ✅ Quality gates (Codecov integration)
 
-### Test Implementation: ⏳ 20% Complete
+### Test Implementation: ⏳ 30% Complete
 - ✅ Configuration settings tests (15+ tests)
 - ✅ Health checker tests (20+ tests)
 - ✅ Server endpoint tests (15+ tests)
-- ⏳ Dashboard API tests (in progress)
-- ⏳ Core engine tests (pending)
+- ✅ Dashboard router tests (12+ tests)
+- ✅ Core engine tests (15+ tests)
 - ⏳ Action tests (pending)
+- ⏳ Integration tests expansion (pending)
 
-**Current Coverage:** ~32% (estimated)  
+**Current Coverage:** ~35% (estimated)  
 **Target Coverage:** 50% (Phase 1)  
-**Progress:** 20% of test implementation complete
+**Progress:** 30% of test implementation complete
 
 ---
 
@@ -91,6 +92,38 @@ Test implementation for Wave 2 has begun, with the foundation in place and initi
 - ✅ Health endpoint error handling
 - ✅ OpenAPI docs endpoint
 - ✅ CORS middleware tests
+
+### 4. Dashboard Router Tests ✅
+
+**File:** `tests/unit/test_dashboard_router.py`  
+**Tests:** 12+ test cases  
+**Coverage:** Dashboard API endpoints, authentication, rate limiting
+
+**Test Categories:**
+- ✅ Dashboard home endpoint
+- ✅ API status endpoint
+- ✅ API metrics endpoint
+- ✅ API history endpoint with pagination
+- ✅ Quality check endpoint
+- ✅ Rate limiting tests
+- ✅ Authentication tests
+- ✅ Input validation tests
+
+### 5. Core Engine Tests ✅
+
+**File:** `tests/unit/test_engine.py`  
+**Tests:** 15+ test cases  
+**Coverage:** Engine lifecycle, event processing, status
+
+**Test Categories:**
+- ✅ Engine initialization (default and custom config)
+- ✅ Engine start/stop lifecycle
+- ✅ Engine as async context manager
+- ✅ Event processing
+- ✅ Status and version retrieval
+- ✅ Action registry access
+- ✅ Integration registry access
+- ✅ Error handling
 
 ---
 
@@ -155,11 +188,13 @@ Test implementation for Wave 2 has begun, with the foundation in place and initi
 - `tests/unit/test_config_settings.py` - 15+ tests
 - `tests/unit/test_health_checker.py` - 20+ tests
 - `tests/unit/test_server.py` - 15+ tests
+- `tests/unit/test_dashboard_router.py` - 12+ tests
+- `tests/unit/test_engine.py` - 15+ tests
 - `docs/testing/TEST_IMPLEMENTATION_PLAN.md` - Implementation plan
 
 ### Total Tests Added
-- **50+ unit tests** created
-- **3 test suites** complete
+- **77+ unit tests** created
+- **5 test suites** complete
 - **2 test suites** in progress
 
 ### Coverage Progress
