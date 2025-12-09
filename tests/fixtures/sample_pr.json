@@ -1,0 +1,48 @@
+{
+  "repository": "test/repo",
+  "number": 123,
+  "title": "Test Pull Request",
+  "body": "This is a test pull request description.",
+  "state": "open",
+  "user": {
+    "login": "testuser",
+    "id": 12345
+  },
+  "head": {
+    "ref": "feature-branch",
+    "sha": "abc123def456",
+    "repo": {
+      "name": "repo",
+      "full_name": "test/repo"
+    }
+  },
+  "base": {
+    "ref": "main",
+    "sha": "def456ghi789",
+    "repo": {
+      "name": "repo",
+      "full_name": "test/repo"
+    }
+  },
+  "files": [
+    {
+      "filename": "src/main.py",
+      "status": "modified",
+      "additions": 10,
+      "deletions": 5,
+      "changes": 15
+    },
+    {
+      "filename": "src/utils.py",
+      "status": "added",
+      "additions": 20,
+      "deletions": 0,
+      "changes": 20
+    }
+  ],
+  "commits": 2,
+  "additions": 30,
+  "deletions": 5,
+  "changed_files": 2
+}
+

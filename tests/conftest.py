@@ -280,3 +280,89 @@ def linear_api_key() -> str:
     This fixture reads the LINEAR_API_KEY environment variable or uses a default test key.
     """
     return os.getenv("LINEAR_API_KEY", "test_api_key")
+
+
+# =============================================================================
+# Mock Client Fixtures
+# =============================================================================
+
+@pytest.fixture
+def mock_github_client():
+    """Provide a mock GitHub client for testing."""
+    from tests.utils import create_mock_github_client
+    return create_mock_github_client()
+
+
+@pytest.fixture
+def mock_linear_client():
+    """Provide a mock Linear client for testing."""
+    from tests.utils import create_mock_linear_client
+    return create_mock_linear_client()
+
+
+@pytest.fixture
+def mock_slack_client():
+    """Provide a mock Slack client for testing."""
+    from tests.utils import create_mock_slack_client
+    return create_mock_slack_client()
+
+
+@pytest.fixture
+def mock_llm_provider():
+    """Provide a mock LLM provider for testing."""
+    from tests.utils import create_mock_llm_provider
+    return create_mock_llm_provider()
+
+
+# =============================================================================
+# Test Data Fixtures
+# =============================================================================
+
+@pytest.fixture
+def sample_pr_data():
+    """Provide sample PR data for testing."""
+    from tests.utils import create_sample_pr_data
+    return create_sample_pr_data()
+
+
+@pytest.fixture
+def sample_issue_data():
+    """Provide sample issue data for testing."""
+    from tests.utils import create_sample_issue_data
+    return create_sample_issue_data()
+
+
+@pytest.fixture
+def sample_workflow_config():
+    """Provide sample workflow configuration for testing."""
+    from tests.utils import create_sample_workflow_config
+    return create_sample_workflow_config()
+
+
+# =============================================================================
+# Database Fixtures
+# =============================================================================
+
+@pytest.fixture
+def test_database_url() -> str:
+    """Provide test database URL."""
+    from tests.utils import create_test_database_url
+    return create_test_database_url()
+
+
+@pytest.fixture
+def test_redis_url() -> str:
+    """Provide test Redis URL."""
+    from tests.utils import create_test_redis_url
+    return create_test_redis_url()
+
+
+# =============================================================================
+# Configuration Fixtures
+# =============================================================================
+
+@pytest.fixture
+def test_config():
+    """Provide test configuration."""
+    from tests.utils import create_test_config
+    return create_test_config()

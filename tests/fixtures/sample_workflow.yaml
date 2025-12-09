@@ -1,0 +1,34 @@
+name: test_workflow
+description: Test workflow for automated PR analysis
+enabled: true
+
+triggers:
+  - event: pr.opened
+  - event: pr.synchronize
+  - event: issue_comment.created
+    conditions:
+      body: "/codeflow"
+
+actions:
+  - type: platform_detector
+    config:
+      enabled: true
+  
+  - type: quality_engine
+    config:
+      mode: fast
+      enabled: true
+  
+  - type: pr_review_analyzer
+    config:
+      enabled: true
+      create_comment: true
+  
+  - type: issue_creator
+    config:
+      enabled: true
+      threshold: 5
+      platforms:
+        - github
+        - linear
+
