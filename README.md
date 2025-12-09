@@ -7,6 +7,7 @@ This repository contains orchestration scripts, documentation, and planning for 
 ## Overview
 
 The CodeFlow Orchestration repository serves as the central hub for:
+
 - Migration planning and execution
 - Cross-repository coordination
 - Shared scripts and utilities
@@ -17,11 +18,13 @@ The CodeFlow Orchestration repository serves as the central hub for:
 ## Quick Links
 
 ### Migration Documentation
+
 - [Migration Overview](./MIGRATION.md) - Complete migration status and progress (65% complete)
 - [Migration Phases](./MIGRATION_PHASES.md) - Detailed phase descriptions and goals
 - [Wave 4 Execution Plan](./WAVE4_EXECUTION_PLAN.md) - Optimization & Enhancement (planned)
 
 ### Key Documentation
+
 - [Versioning Policy](./docs/VERSIONING_POLICY.md) - Semantic versioning strategy
 - [Release Process](./docs/RELEASE_PROCESS.md) - Release automation and process
 - [Dependency Management](./docs/DEPENDENCY_MANAGEMENT.md) - Dependency update process
@@ -29,6 +32,7 @@ The CodeFlow Orchestration repository serves as the central hub for:
 - [Full Stack Deployment](./docs/FULL_STACK_DEPLOYMENT.md) - Complete deployment guide
 
 ### Scripts
+
 - [Version Management](./scripts/) - Version check, bump, and sync scripts
 - [Migration Scripts](./scripts/) - AutoPR to CodeFlow migration
 - [Development Setup](./scripts/) - Local development setup scripts
@@ -40,21 +44,25 @@ The CodeFlow Orchestration repository serves as the central hub for:
 ### Overall: 65% Complete
 
 #### ✅ Wave 1: Critical Foundation (95%)
+
 - Security fixes
 - Naming migration
 - CI/CD workflows
 
 #### ✅ Wave 2: Quality & Documentation (88%)
+
 - Comprehensive documentation
 - Testing infrastructure
 - Quality gates
 
 #### ✅ Wave 3: Operations & Infrastructure (75%)
+
 - Version management
 - Release automation
 - Monitoring strategy
 
 #### ⏳ Wave 4: Optimization & Enhancement (0%)
+
 - Shared libraries
 - Performance optimization
 - Process automation
@@ -90,15 +98,18 @@ codeflow-orchestration/
 ### For New Contributors
 
 1. **Read the Documentation**
+
    - Start with [Migration Overview](./MIGRATION.md)
    - Review [Migration Phases](./MIGRATION_PHASES.md) for detailed information
 
 2. **Set Up Local Environment**
+
    ```bash
    pwsh scripts/dev-setup.ps1
    ```
 
 3. **Check Versions**
+
    ```bash
    pwsh scripts/check-versions.ps1
    ```
@@ -106,14 +117,16 @@ codeflow-orchestration/
 ### For Release Managers
 
 1. **Review Release Process**
+
    - [Release Process](./docs/RELEASE_PROCESS.md)
    - [Release Coordination](./docs/RELEASE_COORDINATION.md)
 
 2. **Use Version Scripts**
+
    ```bash
    # Bump version
    pwsh scripts/bump-version.ps1 -Type minor
-   
+
    # Sync versions
    pwsh scripts/sync-versions.ps1 -Version "1.2.0"
    ```
@@ -121,10 +134,12 @@ codeflow-orchestration/
 ### For Developers
 
 1. **Check Documentation**
+
    - Component-specific docs in respective repos
    - [Full Stack Deployment](./docs/FULL_STACK_DEPLOYMENT.md)
 
 2. **Use Development Scripts**
+
    ```bash
    # Set up development environment
    pwsh scripts/dev-setup.ps1
@@ -186,6 +201,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for contribution guidelines.
 ## Support
 
 For questions or issues:
+
 - GitHub Issues: [codeflow-orchestration/issues](https://github.com/JustAGhosT/codeflow-orchestration/issues)
 - Documentation: See [docs/](./docs/) directory
 
