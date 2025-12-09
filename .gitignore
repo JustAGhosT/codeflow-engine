@@ -28,3 +28,7 @@ Thumbs.db
 # TypeScript
 *.tsbuildinfo
 
+# Credentials and sensitive files
+.credentials-*.json
+deployment-output.json
+

@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "codeflow-vscode-extension",
   "displayName": "CodeFlow",
   "description": "AI-Powered Code Quality and Automation for VS Code",
@@ -29,343 +29,343 @@
   "contributes": {
     "commands": [
       {
-        "command": "autopr.qualityCheck",
+        "command": "codeflow.qualityCheck",
         "title": "CodeFlow: Run Quality Check",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.qualityCheckFile",
+        "command": "codeflow.qualityCheckFile",
         "title": "CodeFlow: Check Current File",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.qualityCheckWorkspace",
+        "command": "codeflow.qualityCheckWorkspace",
         "title": "CodeFlow: Check Workspace",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.fileSplit",
+        "command": "codeflow.fileSplit",
         "title": "CodeFlow: Split Large File",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.autoFix",
+        "command": "codeflow.autoFix",
         "title": "CodeFlow: Auto-Fix Issues",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.showDashboard",
+        "command": "codeflow.showDashboard",
         "title": "CodeFlow: Show Dashboard",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.configure",
+        "command": "codeflow.configure",
         "title": "CodeFlow: Configure",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.setVolume",
+        "command": "codeflow.setVolume",
         "title": "CodeFlow: Set Volume Level",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.toggleTool",
+        "command": "codeflow.toggleTool",
         "title": "CodeFlow: Toggle Tool",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.performanceCheck",
+        "command": "codeflow.performanceCheck",
         "title": "CodeFlow: Performance Analysis",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.dependencyScan",
+        "command": "codeflow.dependencyScan",
         "title": "CodeFlow: Dependency Scan",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.securityScan",
+        "command": "codeflow.securityScan",
         "title": "CodeFlow: Security Scan",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.complexityAnalysis",
+        "command": "codeflow.complexityAnalysis",
         "title": "CodeFlow: Complexity Analysis",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.documentationCheck",
+        "command": "codeflow.documentationCheck",
         "title": "CodeFlow: Documentation Check",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.learningMemory",
+        "command": "codeflow.learningMemory",
         "title": "CodeFlow: Learning Memory",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.clearCache",
+        "command": "codeflow.clearCache",
         "title": "CodeFlow: Clear Cache",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.exportResults",
+        "command": "codeflow.exportResults",
         "title": "CodeFlow: Export Results",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.importConfig",
+        "command": "codeflow.importConfig",
         "title": "CodeFlow: Import Configuration",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.refreshIssues",
+        "command": "codeflow.refreshIssues",
         "title": "CodeFlow: Refresh Issues",
         "category": "CodeFlow"
       },
       {
-        "command": "autopr.refreshMetrics",
+        "command": "codeflow.refreshMetrics",
         "title": "CodeFlow: Refresh Metrics",
         "category": "CodeFlow"
       },
-             {
-         "command": "autopr.refreshHistory",
-         "title": "CodeFlow: Refresh History",
-         "category": "CodeFlow"
-       },
-       {
-         "command": "autopr.showVersion",
-         "title": "CodeFlow: Show Version",
-         "category": "CodeFlow"
-       },
-       {
-         "command": "autopr.refreshAll",
-         "title": "CodeFlow: Refresh All Views",
-         "category": "CodeFlow"
-       },
-       {
-         "command": "autopr.showViews",
-         "title": "CodeFlow: Show Views",
-         "category": "CodeFlow"
-       },
-       {
-         "command": "autopr.quickFix",
-         "title": "CodeFlow: Quick Fix",
-         "category": "CodeFlow"
-       },
-       {
-         "command": "autopr.analyzeWorkspace",
-         "title": "CodeFlow: Analyze Workspace",
-         "category": "CodeFlow"
-       },
-       {
-         "command": "autopr.generateReport",
-         "title": "CodeFlow: Generate Report",
-         "category": "CodeFlow"
-       },
-       {
-         "command": "autopr.toggleAutoMode",
-         "title": "CodeFlow: Toggle Auto Mode",
-         "category": "CodeFlow"
-       },
-       {
-         "command": "autopr.showSettings",
-         "title": "CodeFlow: Settings",
-         "category": "CodeFlow"
-       },
-               {
-          "command": "autopr.showHelp",
-          "title": "CodeFlow: Help",
-          "category": "CodeFlow"
-        },
-        {
-          "command": "autopr.checkCompatibility",
-          "title": "CodeFlow: Check Compatibility",
-          "category": "CodeFlow"
-        },
-        {
-          "command": "autopr.showLogs",
-          "title": "CodeFlow: Show Logs",
-          "category": "CodeFlow"
-        }
+      {
+        "command": "codeflow.refreshHistory",
+        "title": "CodeFlow: Refresh History",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.showVersion",
+        "title": "CodeFlow: Show Version",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.refreshAll",
+        "title": "CodeFlow: Refresh All Views",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.showViews",
+        "title": "CodeFlow: Show Views",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.quickFix",
+        "title": "CodeFlow: Quick Fix",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.analyzeWorkspace",
+        "title": "CodeFlow: Analyze Workspace",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.generateReport",
+        "title": "CodeFlow: Generate Report",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.toggleAutoMode",
+        "title": "CodeFlow: Toggle Auto Mode",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.showSettings",
+        "title": "CodeFlow: Settings",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.showHelp",
+        "title": "CodeFlow: Help",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.checkCompatibility",
+        "title": "CodeFlow: Check Compatibility",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.showLogs",
+        "title": "CodeFlow: Show Logs",
+        "category": "CodeFlow"
+      }
     ],
     "menus": {
       "commandPalette": [
         {
-          "command": "autopr.qualityCheck",
+          "command": "codeflow.qualityCheck",
           "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript"
         },
         {
-          "command": "autopr.qualityCheckFile",
+          "command": "codeflow.qualityCheckFile",
           "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript"
         },
         {
-          "command": "autopr.qualityCheckWorkspace",
+          "command": "codeflow.qualityCheckWorkspace",
           "when": "workspaceFolderCount > 0"
         },
         {
-          "command": "autopr.fileSplit",
+          "command": "codeflow.fileSplit",
           "when": "resourceLangId == python"
         },
         {
-          "command": "autopr.autoFix",
+          "command": "codeflow.autoFix",
           "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript"
         },
         {
-          "command": "autopr.showDashboard"
+          "command": "codeflow.showDashboard"
         },
         {
-          "command": "autopr.configure"
+          "command": "codeflow.configure"
         },
         {
-          "command": "autopr.setVolume"
+          "command": "codeflow.setVolume"
         },
         {
-          "command": "autopr.toggleTool"
+          "command": "codeflow.toggleTool"
         },
         {
-          "command": "autopr.performanceCheck"
+          "command": "codeflow.performanceCheck"
         },
         {
-          "command": "autopr.dependencyScan"
+          "command": "codeflow.dependencyScan"
         },
         {
-          "command": "autopr.securityScan"
+          "command": "codeflow.securityScan"
         },
         {
-          "command": "autopr.complexityAnalysis"
+          "command": "codeflow.complexityAnalysis"
         },
         {
-          "command": "autopr.documentationCheck"
+          "command": "codeflow.documentationCheck"
         },
         {
-          "command": "autopr.learningMemory"
+          "command": "codeflow.learningMemory"
         },
         {
-          "command": "autopr.clearCache"
+          "command": "codeflow.clearCache"
         },
         {
-          "command": "autopr.exportResults"
+          "command": "codeflow.exportResults"
         },
         {
-          "command": "autopr.importConfig"
+          "command": "codeflow.importConfig"
         },
         {
-          "command": "autopr.refreshIssues"
+          "command": "codeflow.refreshIssues"
         },
         {
-          "command": "autopr.refreshMetrics"
+          "command": "codeflow.refreshMetrics"
         },
-                 {
-           "command": "autopr.refreshHistory"
-         },
-         {
-           "command": "autopr.showVersion"
-         },
-         {
-           "command": "autopr.refreshAll"
-         },
-         {
-           "command": "autopr.showViews"
-         },
-         {
-           "command": "autopr.quickFix"
-         },
-         {
-           "command": "autopr.analyzeWorkspace"
-         },
-         {
-           "command": "autopr.generateReport"
-         },
-         {
-           "command": "autopr.toggleAutoMode"
-         },
-         {
-           "command": "autopr.showSettings"
-         },
-                   {
-            "command": "autopr.showHelp"
-          },
-          {
-            "command": "autopr.checkCompatibility"
-          },
-          {
-            "command": "autopr.showLogs"
-          }
+        {
+          "command": "codeflow.refreshHistory"
+        },
+        {
+          "command": "codeflow.showVersion"
+        },
+        {
+          "command": "codeflow.refreshAll"
+        },
+        {
+          "command": "codeflow.showViews"
+        },
+        {
+          "command": "codeflow.quickFix"
+        },
+        {
+          "command": "codeflow.analyzeWorkspace"
+        },
+        {
+          "command": "codeflow.generateReport"
+        },
+        {
+          "command": "codeflow.toggleAutoMode"
+        },
+        {
+          "command": "codeflow.showSettings"
+        },
+        {
+          "command": "codeflow.showHelp"
+        },
+        {
+          "command": "codeflow.checkCompatibility"
+        },
+        {
+          "command": "codeflow.showLogs"
+        }
       ],
       "editor/context": [
         {
-          "command": "autopr.qualityCheckFile",
+          "command": "codeflow.qualityCheckFile",
           "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript",
           "group": "navigation"
         },
         {
-          "command": "autopr.autoFix",
+          "command": "codeflow.autoFix",
           "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript",
           "group": "navigation"
         },
         {
-          "command": "autopr.complexityAnalysis",
+          "command": "codeflow.complexityAnalysis",
           "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript",
           "group": "navigation"
         },
-                 {
-           "command": "autopr.documentationCheck",
-           "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript",
-           "group": "navigation"
-         },
-         {
-           "command": "autopr.quickFix",
-           "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript",
-           "group": "navigation"
-         },
-         {
-           "command": "autopr.analyzeWorkspace",
-           "when": "workspaceFolderCount > 0",
-           "group": "navigation"
-         }
+        {
+          "command": "codeflow.documentationCheck",
+          "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript",
+          "group": "navigation"
+        },
+        {
+          "command": "codeflow.quickFix",
+          "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript",
+          "group": "navigation"
+        },
+        {
+          "command": "codeflow.analyzeWorkspace",
+          "when": "workspaceFolderCount > 0",
+          "group": "navigation"
+        }
       ],
       "view/title": [
         {
-          "command": "autopr.refreshIssues",
-          "when": "view == autoprIssues",
+          "command": "codeflow.refreshIssues",
+          "when": "view == codeflowIssues",
           "group": "navigation"
         },
         {
-          "command": "autopr.refreshMetrics",
-          "when": "view == autoprMetrics",
+          "command": "codeflow.refreshMetrics",
+          "when": "view == codeflowMetrics",
           "group": "navigation"
         },
         {
-          "command": "autopr.refreshHistory",
-          "when": "view == autoprHistory",
+          "command": "codeflow.refreshHistory",
+          "when": "view == codeflowHistory",
           "group": "navigation"
-                 }
-       ],
-       "statusBar": [
-         {
-           "command": "autopr.quickFix",
+        }
+      ],
+      "statusBar": [
+        {
+          "command": "codeflow.quickFix",
           "text": "$(lightbulb) CodeFlow",
           "tooltip": "CodeFlow: Quick Fix",
-           "alignment": "left"
-         },
-         {
-           "command": "autopr.showViews",
+          "alignment": "left"
+        },
+        {
+          "command": "codeflow.showViews",
           "text": "$(graph) Metrics",
           "tooltip": "CodeFlow: Show Metrics",
-           "alignment": "right"
-         }
-       ]
-     },
+          "alignment": "right"
+        }
+      ]
+    },
     "configuration": {
       "title": "CodeFlow",
       "properties": {
-        "autopr.enabled": {
+        "codeflow.enabled": {
           "type": "boolean",
           "default": true,
           "description": "Enable CodeFlow extension"
         },
-        "autopr.qualityMode": {
+        "codeflow.qualityMode": {
           "type": "string",
           "enum": [
             "ultra-fast",
@@ -377,70 +377,75 @@
           "default": "fast",
           "description": "Default quality analysis mode"
         },
-        "autopr.autoFixEnabled": {
+        "codeflow.autoFixEnabled": {
           "type": "boolean",
           "default": false,
           "description": "Enable automatic fixing of issues"
         },
-        "autopr.showNotifications": {
+        "codeflow.showNotifications": {
           "type": "boolean",
           "default": true,
-          "description": "Show notifications for AutoPR operations"
+          "description": "Show notifications for CodeFlow operations"
         },
-        "autopr.pythonPath": {
+        "codeflow.pythonPath": {
           "type": "string",
           "default": "python",
           "description": "Path to Python executable"
         },
-        "autopr.maxFileSize": {
+        "codeflow.maxFileSize": {
           "type": "number",
           "default": 10000,
           "description": "Maximum file size (in lines) for analysis"
         },
-        "autopr.volume": {
+        "codeflow.volume": {
           "type": "number",
           "default": 500,
           "minimum": 0,
           "maximum": 1000,
           "description": "Volume level (0-1000) that automatically configures quality settings"
         },
-        "autopr.maxFixes": {
+        "codeflow.maxFixes": {
           "type": "number",
           "default": 50,
           "description": "Maximum number of fixes to apply automatically"
         },
-        "autopr.maxIssues": {
+        "codeflow.maxIssues": {
           "type": "number",
           "default": 100,
           "description": "Maximum issues to report before stopping"
         },
-        "autopr.enableAIAgents": {
+        "codeflow.enableAIAgents": {
           "type": "boolean",
           "default": true,
           "description": "Enable AI agents for enhanced analysis"
         },
-        "autopr.aiProvider": {
+        "codeflow.aiProvider": {
           "type": "string",
           "default": "openai",
-          "enum": ["openai", "azure_openai", "anthropic", "local"],
+          "enum": [
+            "openai",
+            "azure_openai",
+            "anthropic",
+            "local"
+          ],
           "description": "AI provider for enhanced analysis"
         },
-        "autopr.aiModel": {
+        "codeflow.aiModel": {
           "type": "string",
           "default": "gpt-4",
           "description": "AI model to use for analysis"
         },
-        "autopr.verbose": {
+        "codeflow.verbose": {
           "type": "boolean",
           "default": false,
           "description": "Enable verbose logging"
         },
-        "autopr.configPath": {
+        "codeflow.configPath": {
           "type": "string",
           "default": "pyproject.toml",
           "description": "Path to configuration file"
         },
-        "autopr.fileSplitter": {
+        "codeflow.fileSplitter": {
           "type": "object",
           "default": {
             "maxLinesPerFile": 500,
@@ -454,7 +459,7 @@
           },
           "description": "File splitter configuration"
         },
-        "autopr.performanceOptimization": {
+        "codeflow.performanceOptimization": {
           "type": "object",
           "default": {
             "enableCaching": true,
@@ -466,90 +471,134 @@
           },
           "description": "Performance optimization settings"
         },
-                 "autopr.tools": {
-           "type": "object",
-           "default": {
-             "python": { "enabled": true },
-             "javascript": { "enabled": true },
-             "typescript": { "enabled": true },
-             "ruff": { "enabled": true },
-             "mypy": { "enabled": true },
-             "bandit": { "enabled": true },
-             "interrogate": { "enabled": true },
-             "radon": { "enabled": true },
-             "pytest": { "enabled": true },
-             "codeql": { "enabled": true },
-             "sonarqube": { "enabled": true },
-             "ai_feedback": { "enabled": true },
-             "eslint": { "enabled": true },
-             "dependency_scanner": { "enabled": true },
-             "performance_analyzer": { "enabled": true }
-           },
-           "description": "Individual tool configuration"
-         },
-        "autopr.autoFix": {
+        "codeflow.tools": {
+          "type": "object",
+          "default": {
+            "python": {
+              "enabled": true
+            },
+            "javascript": {
+              "enabled": true
+            },
+            "typescript": {
+              "enabled": true
+            },
+            "ruff": {
+              "enabled": true
+            },
+            "mypy": {
+              "enabled": true
+            },
+            "bandit": {
+              "enabled": true
+            },
+            "interrogate": {
+              "enabled": true
+            },
+            "radon": {
+              "enabled": true
+            },
+            "pytest": {
+              "enabled": true
+            },
+            "codeql": {
+              "enabled": true
+            },
+            "sonarqube": {
+              "enabled": true
+            },
+            "ai_feedback": {
+              "enabled": true
+            },
+            "eslint": {
+              "enabled": true
+            },
+            "dependency_scanner": {
+              "enabled": true
+            },
+            "performance_analyzer": {
+              "enabled": true
+            }
+          },
+          "description": "Individual tool configuration"
+        },
+        "codeflow.autoFix": {
           "type": "object",
           "default": {
             "enabled": false,
-            "fixTypes": ["high_priority", "medium_priority"],
+            "fixTypes": [
+              "high_priority",
+              "medium_priority"
+            ],
             "dryRun": false,
             "maxFixes": 50,
             "confidenceThreshold": 0.8
           },
           "description": "Auto-fix configuration"
         },
-                 "autopr.dashboard": {
-           "type": "object",
-           "default": {
-             "port": 8080,
-             "host": "localhost",
-             "autoStart": false,
-             "theme": "dark"
-           },
-           "description": "Dashboard configuration"
-         },
-         "autopr.autoMode": {
-           "type": "boolean",
-           "default": false,
-           "description": "Enable automatic analysis and fixes on file save"
-         },
-         "autopr.quickFixEnabled": {
-           "type": "boolean",
-           "default": true,
-           "description": "Enable quick fix suggestions"
-         },
-         "autopr.reportFormat": {
-           "type": "string",
-           "enum": ["json", "html", "markdown", "pdf"],
-           "default": "html",
-           "description": "Format for generated reports"
-         },
-         "autopr.notificationLevel": {
-           "type": "string",
-           "enum": ["none", "errors", "warnings", "info", "all"],
-           "default": "warnings",
-           "description": "Level of notifications to show"
-         },
-         "autopr.initialized": {
-           "type": "boolean",
-           "default": false,
-           "description": "Whether AutoPR has been initialized for this workspace"
-         }
+        "codeflow.dashboard": {
+          "type": "object",
+          "default": {
+            "port": 8080,
+            "host": "localhost",
+            "autoStart": false,
+            "theme": "dark"
+          },
+          "description": "Dashboard configuration"
+        },
+        "codeflow.autoMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable automatic analysis and fixes on file save"
+        },
+        "codeflow.quickFixEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable quick fix suggestions"
+        },
+        "codeflow.reportFormat": {
+          "type": "string",
+          "enum": [
+            "json",
+            "html",
+            "markdown",
+            "pdf"
+          ],
+          "default": "html",
+          "description": "Format for generated reports"
+        },
+        "codeflow.notificationLevel": {
+          "type": "string",
+          "enum": [
+            "none",
+            "errors",
+            "warnings",
+            "info",
+            "all"
+          ],
+          "default": "warnings",
+          "description": "Level of notifications to show"
+        },
+        "codeflow.initialized": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether CodeFlow has been initialized for this workspace"
+        }
       }
     },
     "views": {
-      "autopr": [
+      "codeflow": [
         {
-          "id": "autoprIssues",
+          "id": "codeflowIssues",
           "name": "Issues",
-          "when": "autopr.hasIssues"
+          "when": "codeflow.hasIssues"
         },
         {
-          "id": "autoprMetrics",
+          "id": "codeflowMetrics",
           "name": "Metrics"
         },
         {
-          "id": "autoprHistory",
+          "id": "codeflowHistory",
           "name": "History"
         }
       ]
@@ -557,9 +606,9 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "autopr",
+          "id": "codeflow",
           "title": "CodeFlow",
-          "icon": "resources/autopr-icon.svg"
+          "icon": "resources/codeflow-icon.svg"
         }
       ]
     }

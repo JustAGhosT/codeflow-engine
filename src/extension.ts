@@ -1,21 +1,21 @@
-import * as vscode from 'vscode';
+﻿import * as vscode from 'vscode';
 import { CommandService } from './services/commandService';
 import { UIService } from './services/uiService';
 import { DataService } from './services/dataService';
 import { 
-    AutoPRIssuesProvider, 
-    AutoPRMetricsProvider, 
-    AutoPRHistoryProvider 
+    CodeFlowIssuesProvider, 
+    CodeFlowMetricsProvider, 
+    CodeFlowHistoryProvider 
 } from './providers/treeProviders';
 
 export function activate(context: vscode.ExtensionContext) {
     const packageJson = require('../package.json');
     
     // Initialize logging
-    const logChannel = vscode.window.createOutputChannel('AutoPR Logs');
-    logChannel.appendLine(`[${new Date().toISOString()}] AutoPR extension v${packageJson.version} is now active!`);
+    const logChannel = vscode.window.createOutputChannel('CodeFlow Logs');
+    logChannel.appendLine(`[${new Date().toISOString()}] CodeFlow extension v${packageJson.version} is now active!`);
     
-    console.log(`AutoPR extension v${packageJson.version} is now active!`);
+    console.log(`CodeFlow extension v${packageJson.version} is now active!`);
     
     // Set global extension context for data service
     (global as any).extensionContext = context;
@@ -25,26 +25,26 @@ export function activate(context: vscode.ExtensionContext) {
     const uiService = new UIService();
     const dataService = DataService.getInstance();
     
-    // Check if AutoPR has been initialized for this workspace
-    const config = vscode.workspace.getConfiguration('autopr');
+    // Check if CodeFlow has been initialized for this workspace
+    const config = vscode.workspace.getConfiguration('codeflow');
     const isInitialized = config.get('initialized', false);
     
     if (!isInitialized) {
         // First time setup - show initialization options
-        const initializeAction = 'Initialize AutoPR';
+        const initializeAction = 'Initialize CodeFlow';
         const analyzeAction = 'Analyze Now (Skip Setup)';
         const dismissAction = 'Dismiss';
         
         vscode.window.showInformationMessage(
-            `AutoPR v${packageJson.version} - First time setup for this workspace:`,
+            `CodeFlow v${packageJson.version} - First time setup for this workspace:`,
             initializeAction,
             analyzeAction,
             dismissAction
         ).then(selection => {
             if (selection === initializeAction) {
-                // Initialize AutoPR with workspace setup
-                logChannel.appendLine(`[${new Date().toISOString()}] User selected: Initialize AutoPR`);
-                initializeAutoPR(context, commandService, uiService, dataService);
+                // Initialize CodeFlow with workspace setup
+                logChannel.appendLine(`[${new Date().toISOString()}] User selected: Initialize CodeFlow`);
+                initializeCodeFlow(context, commandService, uiService, dataService);
             } else if (selection === analyzeAction) {
                 // Run immediate analysis without full setup
                 logChannel.appendLine(`[${new Date().toISOString()}] User selected: Analyze Now (Skip Setup)`);
@@ -60,7 +60,7 @@ export function activate(context: vscode.ExtensionContext) {
         const dismissAction = 'Dismiss';
         
         vscode.window.showInformationMessage(
-            `AutoPR v${packageJson.version} is ready!`,
+            `CodeFlow v${packageJson.version} is ready!`,
             analyzeAction,
             settingsAction,
             dismissAction
@@ -70,43 +70,43 @@ export function activate(context: vscode.ExtensionContext) {
                 runInitialAnalysis(commandService, issuesProvider, metricsProvider, historyProvider);
             } else if (selection === settingsAction) {
                 logChannel.appendLine(`[${new Date().toISOString()}] User selected: Settings`);
-                vscode.commands.executeCommand('autopr.showSettings');
+                vscode.commands.executeCommand('codeflow.showSettings');
             } else {
                 logChannel.appendLine(`[${new Date().toISOString()}] User dismissed notification`);
             }
         });
     }
     
-    // Try to show the AutoPR views automatically with editor-specific timing
+    // Try to show the CodeFlow views automatically with editor-specific timing
     const appName = vscode.env.appName || '';
     const delay = appName.toLowerCase().includes('cursor') ? 1500 : 1000; // Cursor might need more time
     
     setTimeout(() => {
-        vscode.commands.executeCommand('workbench.view.extension.autopr').then(() => {
-            console.log('AutoPR: Views shown successfully');
+        vscode.commands.executeCommand('workbench.view.extension.codeflow').then(() => {
+            console.log('CodeFlow: Views shown successfully');
         }, (error: any) => {
-            console.log('AutoPR: Could not show views automatically:', error.message);
+            console.log('CodeFlow: Could not show views automatically:', error.message);
         });
     }, delay);
 
     // Register diagnostic collection
-    const diagnosticCollection = vscode.languages.createDiagnosticCollection('autopr');
+    const diagnosticCollection = vscode.languages.createDiagnosticCollection('codeflow');
     context.subscriptions.push(diagnosticCollection);
 
     // Register tree data providers and create tree views
-    const issuesProvider = new AutoPRIssuesProvider();
-    const metricsProvider = new AutoPRMetricsProvider();
-    const historyProvider = new AutoPRHistoryProvider();
+    const issuesProvider = new CodeFlowIssuesProvider();
+    const metricsProvider = new CodeFlowMetricsProvider();
+    const historyProvider = new CodeFlowHistoryProvider();
 
     // Register tree data providers first
-    vscode.window.registerTreeDataProvider('autoprIssues', issuesProvider);
-    vscode.window.registerTreeDataProvider('autoprMetrics', metricsProvider);
-    vscode.window.registerTreeDataProvider('autoprHistory', historyProvider);
+    vscode.window.registerTreeDataProvider('codeflowIssues', issuesProvider);
+    vscode.window.registerTreeDataProvider('codeflowMetrics', metricsProvider);
+    vscode.window.registerTreeDataProvider('codeflowHistory', historyProvider);
 
     // Create tree views
-    const issuesView = vscode.window.createTreeView('autoprIssues', { treeDataProvider: issuesProvider });
-    const metricsView = vscode.window.createTreeView('autoprMetrics', { treeDataProvider: metricsProvider });
-    const historyView = vscode.window.createTreeView('autoprHistory', { treeDataProvider: historyProvider });
+    const issuesView = vscode.window.createTreeView('codeflowIssues', { treeDataProvider: issuesProvider });
+    const metricsView = vscode.window.createTreeView('codeflowMetrics', { treeDataProvider: metricsProvider });
+    const historyView = vscode.window.createTreeView('codeflowHistory', { treeDataProvider: historyProvider });
 
     context.subscriptions.push(issuesView, metricsView, historyView);
 
@@ -120,21 +120,21 @@ export function activate(context: vscode.ExtensionContext) {
     // Register commands
     const commands = [
         // Quality Check Commands
-        vscode.commands.registerCommand('autopr.qualityCheck', () => {
+        vscode.commands.registerCommand('codeflow.qualityCheck', () => {
             commandService.runQualityCheck().then(() => {
                 issuesProvider.refresh();
                 metricsProvider.refresh();
             });
         }),
 
-        vscode.commands.registerCommand('autopr.qualityCheckFile', () => {
+        vscode.commands.registerCommand('codeflow.qualityCheckFile', () => {
             commandService.runQualityCheckFile().then(() => {
                 issuesProvider.refresh();
                 metricsProvider.refresh();
             });
         }),
 
-        vscode.commands.registerCommand('autopr.qualityCheckWorkspace', () => {
+        vscode.commands.registerCommand('codeflow.qualityCheckWorkspace', () => {
             commandService.runQualityCheckWorkspace().then(() => {
                 issuesProvider.refresh();
                 metricsProvider.refresh();
@@ -142,7 +142,7 @@ export function activate(context: vscode.ExtensionContext) {
         }),
 
         // File Splitter Commands
-        vscode.commands.registerCommand('autopr.fileSplit', () => {
+        vscode.commands.registerCommand('codeflow.fileSplit', () => {
             commandService.runFileSplit().then(() => {
                 issuesProvider.refresh();
                 metricsProvider.refresh();
@@ -150,7 +150,7 @@ export function activate(context: vscode.ExtensionContext) {
         }),
 
         // Auto-Fix Commands
-        vscode.commands.registerCommand('autopr.autoFix', () => {
+        vscode.commands.registerCommand('codeflow.autoFix', () => {
             commandService.runAutoFix().then(() => {
                 issuesProvider.refresh();
                 metricsProvider.refresh();
@@ -158,35 +158,35 @@ export function activate(context: vscode.ExtensionContext) {
         }),
 
         // Specialized Analysis Commands
-        vscode.commands.registerCommand('autopr.performanceCheck', () => {
+        vscode.commands.registerCommand('codeflow.performanceCheck', () => {
             commandService.runPerformanceCheck().then(() => {
                 issuesProvider.refresh();
                 metricsProvider.refresh();
             });
         }),
 
-        vscode.commands.registerCommand('autopr.dependencyScan', () => {
+        vscode.commands.registerCommand('codeflow.dependencyScan', () => {
             commandService.runDependencyScan().then(() => {
                 issuesProvider.refresh();
                 metricsProvider.refresh();
             });
         }),
 
-        vscode.commands.registerCommand('autopr.securityScan', () => {
+        vscode.commands.registerCommand('codeflow.securityScan', () => {
             commandService.runSecurityScan().then(() => {
                 issuesProvider.refresh();
                 metricsProvider.refresh();
             });
         }),
 
-        vscode.commands.registerCommand('autopr.complexityAnalysis', () => {
+        vscode.commands.registerCommand('codeflow.complexityAnalysis', () => {
             commandService.runComplexityAnalysis().then(() => {
                 issuesProvider.refresh();
                 metricsProvider.refresh();
             });
         }),
 
-        vscode.commands.registerCommand('autopr.documentationCheck', () => {
+        vscode.commands.registerCommand('codeflow.documentationCheck', () => {
             commandService.runDocumentationCheck().then(() => {
                 issuesProvider.refresh();
                 metricsProvider.refresh();
@@ -194,115 +194,115 @@ export function activate(context: vscode.ExtensionContext) {
         }),
 
         // Configuration Commands
-        vscode.commands.registerCommand('autopr.setVolume', () => {
+        vscode.commands.registerCommand('codeflow.setVolume', () => {
             uiService.showVolumeSettings();
         }),
 
-        vscode.commands.registerCommand('autopr.toggleTool', () => {
+        vscode.commands.registerCommand('codeflow.toggleTool', () => {
             uiService.showToolToggle();
         }),
 
-        vscode.commands.registerCommand('autopr.configure', () => {
+        vscode.commands.registerCommand('codeflow.configure', () => {
             uiService.showConfiguration();
         }),
 
         // Utility Commands
-        vscode.commands.registerCommand('autopr.clearCache', () => {
+        vscode.commands.registerCommand('codeflow.clearCache', () => {
             commandService.clearCache();
         }),
 
-        vscode.commands.registerCommand('autopr.exportResults', () => {
+        vscode.commands.registerCommand('codeflow.exportResults', () => {
             uiService.exportResults();
         }),
 
-        vscode.commands.registerCommand('autopr.importConfig', () => {
+        vscode.commands.registerCommand('codeflow.importConfig', () => {
             uiService.importConfiguration();
         }),
 
         // UI Commands
-        vscode.commands.registerCommand('autopr.showDashboard', () => {
+        vscode.commands.registerCommand('codeflow.showDashboard', () => {
             uiService.showDashboard();
         }),
 
-        vscode.commands.registerCommand('autopr.learningMemory', () => {
+        vscode.commands.registerCommand('codeflow.learningMemory', () => {
             uiService.showLearningMemory();
         }),
 
         // Refresh commands for tree views
-        vscode.commands.registerCommand('autopr.refreshIssues', () => {
+        vscode.commands.registerCommand('codeflow.refreshIssues', () => {
             issuesProvider.refresh();
         }),
 
-        vscode.commands.registerCommand('autopr.refreshMetrics', () => {
+        vscode.commands.registerCommand('codeflow.refreshMetrics', () => {
             metricsProvider.refresh();
         }),
 
-        vscode.commands.registerCommand('autopr.refreshHistory', () => {
+        vscode.commands.registerCommand('codeflow.refreshHistory', () => {
             historyProvider.refresh();
         }),
 
-        vscode.commands.registerCommand('autopr.showVersion', () => {
+        vscode.commands.registerCommand('codeflow.showVersion', () => {
             const packageJson = require('../package.json');
-            vscode.window.showInformationMessage(`AutoPR Extension Version: ${packageJson.version}`);
+            vscode.window.showInformationMessage(`CodeFlow Extension Version: ${packageJson.version}`);
         }),
 
-        vscode.commands.registerCommand('autopr.refreshAll', () => {
+        vscode.commands.registerCommand('codeflow.refreshAll', () => {
             issuesProvider.refresh();
             metricsProvider.refresh();
             historyProvider.refresh();
-            vscode.window.showInformationMessage('All AutoPR views refreshed!');
+            vscode.window.showInformationMessage('All CodeFlow views refreshed!');
         }),
 
-        vscode.commands.registerCommand('autopr.showViews', () => {
-            // Force show the AutoPR view container
-            vscode.commands.executeCommand('workbench.view.extension.autopr');
-            vscode.window.showInformationMessage('AutoPR views should now be visible!');
+        vscode.commands.registerCommand('codeflow.showViews', () => {
+            // Force show the CodeFlow view container
+            vscode.commands.executeCommand('workbench.view.extension.codeflow');
+            vscode.window.showInformationMessage('CodeFlow views should now be visible!');
         }),
 
-        vscode.commands.registerCommand('autopr.quickFix', () => {
+        vscode.commands.registerCommand('codeflow.quickFix', () => {
             commandService.runQuickFix().then(() => {
                 issuesProvider.refresh();
                 metricsProvider.refresh();
-                vscode.window.showInformationMessage('AutoPR: Quick fixes applied!');
+                vscode.window.showInformationMessage('CodeFlow: Quick fixes applied!');
             });
         }),
 
-        vscode.commands.registerCommand('autopr.analyzeWorkspace', () => {
+        vscode.commands.registerCommand('codeflow.analyzeWorkspace', () => {
             commandService.runWorkspaceAnalysis().then(() => {
                 issuesProvider.refresh();
                 metricsProvider.refresh();
                 historyProvider.refresh();
-                vscode.window.showInformationMessage('AutoPR: Workspace analysis complete!');
+                vscode.window.showInformationMessage('CodeFlow: Workspace analysis complete!');
             });
         }),
 
-        vscode.commands.registerCommand('autopr.generateReport', () => {
+        vscode.commands.registerCommand('codeflow.generateReport', () => {
             uiService.generateReport().then(() => {
-                vscode.window.showInformationMessage('AutoPR: Report generated successfully!');
+                vscode.window.showInformationMessage('CodeFlow: Report generated successfully!');
             });
         }),
 
-        vscode.commands.registerCommand('autopr.toggleAutoMode', () => {
-            const config = vscode.workspace.getConfiguration('autopr');
+        vscode.commands.registerCommand('codeflow.toggleAutoMode', () => {
+            const config = vscode.workspace.getConfiguration('codeflow');
             const currentMode = config.get('autoMode', false);
             config.update('autoMode', !currentMode, vscode.ConfigurationTarget.Global);
-            vscode.window.showInformationMessage(`AutoPR: Auto mode ${!currentMode ? 'enabled' : 'disabled'}!`);
+            vscode.window.showInformationMessage(`CodeFlow: Auto mode ${!currentMode ? 'enabled' : 'disabled'}!`);
         }),
 
-        vscode.commands.registerCommand('autopr.showSettings', () => {
-            vscode.commands.executeCommand('workbench.action.openSettings', 'autopr');
+        vscode.commands.registerCommand('codeflow.showSettings', () => {
+            vscode.commands.executeCommand('workbench.action.openSettings', 'codeflow');
         }),
 
-        vscode.commands.registerCommand('autopr.showHelp', () => {
-            vscode.window.showInformationMessage('AutoPR Help: Visit https://github.com/autopr/autopr-engine for documentation');
+        vscode.commands.registerCommand('codeflow.showHelp', () => {
+            vscode.window.showInformationMessage('CodeFlow Help: Visit https://github.com/JustAGhosT/codeflow-engine for documentation');
         }),
 
-        vscode.commands.registerCommand('autopr.checkCompatibility', () => {
+        vscode.commands.registerCommand('codeflow.checkCompatibility', () => {
             checkEditorCompatibility();
         }),
 
-        vscode.commands.registerCommand('autopr.showLogs', () => {
-            vscode.window.createOutputChannel('AutoPR Logs').show();
+        vscode.commands.registerCommand('codeflow.showLogs', () => {
+            vscode.window.createOutputChannel('CodeFlow Logs').show();
         })
     ];
 
@@ -312,25 +312,25 @@ export function activate(context: vscode.ExtensionContext) {
     // Initialize with sample data for demonstration
     initializeSampleData(dataService);
 
-    console.log('AutoPR extension activated with modular architecture');
-    logChannel.appendLine(`[${new Date().toISOString()}] AutoPR extension activated with modular architecture`);
+    console.log('CodeFlow extension activated with modular architecture');
+    logChannel.appendLine(`[${new Date().toISOString()}] CodeFlow extension activated with modular architecture`);
     
     // Log editor compatibility
     logEditorCompatibility(logChannel);
 }
 
-async function initializeAutoPR(
+async function initializeCodeFlow(
     context: vscode.ExtensionContext,
     commandService: CommandService,
     uiService: UIService,
     dataService: DataService
 ): Promise<void> {
-    const outputChannel = vscode.window.createOutputChannel('AutoPR Initialization');
+    const outputChannel = vscode.window.createOutputChannel('CodeFlow Initialization');
     outputChannel.show();
     
-    outputChannel.appendLine('AutoPR Initialization');
+    outputChannel.appendLine('CodeFlow Initialization');
     outputChannel.appendLine('='.repeat(50));
-    outputChannel.appendLine('Setting up AutoPR for your workspace...');
+    outputChannel.appendLine('Setting up CodeFlow for your workspace...');
     
     try {
         // Check workspace structure
@@ -358,14 +358,14 @@ async function initializeAutoPR(
         const configureAction = 'Configure Settings';
         
         vscode.window.showInformationMessage(
-            'AutoPR initialized successfully! Your workspace is ready for analysis.',
+            'CodeFlow initialized successfully! Your workspace is ready for analysis.',
             analyzeAction,
             configureAction
         ).then(selection => {
             if (selection === analyzeAction) {
-                vscode.commands.executeCommand('autopr.analyzeWorkspace');
+                vscode.commands.executeCommand('codeflow.analyzeWorkspace');
             } else if (selection === configureAction) {
-                vscode.commands.executeCommand('autopr.showSettings');
+                vscode.commands.executeCommand('codeflow.showSettings');
             }
         });
         
@@ -373,20 +373,20 @@ async function initializeAutoPR(
         
     } catch (error) {
         outputChannel.appendLine(`Error during initialization: ${error}`);
-        vscode.window.showErrorMessage(`AutoPR initialization failed: ${error}`);
+        vscode.window.showErrorMessage(`CodeFlow initialization failed: ${error}`);
     }
 }
 
 async function runInitialAnalysis(
     commandService: CommandService,
-    issuesProvider: AutoPRIssuesProvider,
-    metricsProvider: AutoPRMetricsProvider,
-    historyProvider: AutoPRHistoryProvider
+    issuesProvider: CodeFlowIssuesProvider,
+    metricsProvider: CodeFlowMetricsProvider,
+    historyProvider: CodeFlowHistoryProvider
 ): Promise<void> {
-    const outputChannel = vscode.window.createOutputChannel('AutoPR Analysis');
+    const outputChannel = vscode.window.createOutputChannel('CodeFlow Analysis');
     outputChannel.show();
     
-    outputChannel.appendLine('AutoPR Initial Analysis');
+    outputChannel.appendLine('CodeFlow Initial Analysis');
     outputChannel.appendLine('='.repeat(50));
     outputChannel.appendLine('Starting workspace analysis...');
     
@@ -411,9 +411,9 @@ async function runInitialAnalysis(
             configureAction
         ).then(selection => {
             if (selection === viewResultsAction) {
-                vscode.commands.executeCommand('workbench.view.extension.autopr');
+                vscode.commands.executeCommand('workbench.view.extension.codeflow');
             } else if (selection === configureAction) {
-                vscode.commands.executeCommand('autopr.showSettings');
+                vscode.commands.executeCommand('codeflow.showSettings');
             }
         });
         
@@ -444,7 +444,7 @@ async function detectProjectType(workspacePath: string): Promise<string> {
 }
 
 async function setupInitialConfiguration(projectType: string): Promise<void> {
-    const config = vscode.workspace.getConfiguration('autopr');
+    const config = vscode.workspace.getConfiguration('codeflow');
     
     // Set project-specific defaults
     if (projectType.includes('Python')) {
@@ -470,28 +470,28 @@ function logEditorCompatibility(logChannel?: vscode.OutputChannel): void {
     const appName = vscode.env.appName || 'Unknown';
     const appVersion = vscode.version || 'Unknown';
     
-    const logMessage = `AutoPR running on: ${appName} v${appVersion}`;
+    const logMessage = `CodeFlow running on: ${appName} v${appVersion}`;
     console.log(logMessage);
     logChannel?.appendLine(`[${new Date().toISOString()}] ${logMessage}`);
     
     // Check for specific editors and log compatibility
     let editorInfo = '';
     if (appName.toLowerCase().includes('cursor')) {
-        editorInfo = 'AutoPR: Cursor editor detected - full compatibility';
+        editorInfo = 'CodeFlow: Cursor editor detected - full compatibility';
     } else if (appName.toLowerCase().includes('windsurf')) {
-        editorInfo = 'AutoPR: Windsurf editor detected - full compatibility';
+        editorInfo = 'CodeFlow: Windsurf editor detected - full compatibility';
     } else if (appName.toLowerCase().includes('vscode')) {
-        editorInfo = 'AutoPR: VS Code editor detected - full compatibility';
+        editorInfo = 'CodeFlow: VS Code editor detected - full compatibility';
     } else {
-        editorInfo = 'AutoPR: Unknown editor - testing compatibility';
+        editorInfo = 'CodeFlow: Unknown editor - testing compatibility';
     }
     
     console.log(editorInfo);
     logChannel?.appendLine(`[${new Date().toISOString()}] ${editorInfo}`);
     
     // Log available features
-    console.log('AutoPR: Available features:');
-    logChannel?.appendLine(`[${new Date().toISOString()}] AutoPR: Available features:`);
+    console.log('CodeFlow: Available features:');
+    logChannel?.appendLine(`[${new Date().toISOString()}] CodeFlow: Available features:`);
     
     const features = [
         { name: 'Tree views', test: () => !!vscode.window.createTreeView },
@@ -513,10 +513,10 @@ function checkEditorCompatibility(): void {
     const appName = vscode.env.appName || 'Unknown';
     const appVersion = vscode.version || 'Unknown';
     
-    const outputChannel = vscode.window.createOutputChannel('AutoPR Compatibility');
+    const outputChannel = vscode.window.createOutputChannel('CodeFlow Compatibility');
     outputChannel.show();
     
-    outputChannel.appendLine('AutoPR Editor Compatibility Check');
+    outputChannel.appendLine('CodeFlow Editor Compatibility Check');
     outputChannel.appendLine('='.repeat(50));
     outputChannel.appendLine(`Editor: ${appName}`);
     outputChannel.appendLine(`Version: ${appVersion}`);
@@ -536,7 +536,7 @@ function checkEditorCompatibility(): void {
     outputChannel.appendLine('Feature Compatibility:');
     features.forEach(feature => {
         const available = feature.test();
-        const status = available ? '✓ Available' : '✗ Not Available';
+        const status = available ? 'âœ“ Available' : 'âœ— Not Available';
         outputChannel.appendLine(`- ${feature.name}: ${status}`);
     });
     
@@ -545,16 +545,16 @@ function checkEditorCompatibility(): void {
     // Editor-specific information
     if (appName.toLowerCase().includes('cursor')) {
         outputChannel.appendLine('Cursor Editor Detected:');
-        outputChannel.appendLine('- Full compatibility with AutoPR features');
+        outputChannel.appendLine('- Full compatibility with CodeFlow features');
         outputChannel.appendLine('- AI-enhanced code analysis supported');
         outputChannel.appendLine('- All tree views and commands available');
     } else if (appName.toLowerCase().includes('windsurf')) {
         outputChannel.appendLine('Windsurf Editor Detected:');
-        outputChannel.appendLine('- Full compatibility with AutoPR features');
+        outputChannel.appendLine('- Full compatibility with CodeFlow features');
         outputChannel.appendLine('- All tree views and commands available');
     } else if (appName.toLowerCase().includes('vscode')) {
         outputChannel.appendLine('VS Code Editor Detected:');
-        outputChannel.appendLine('- Full compatibility with AutoPR features');
+        outputChannel.appendLine('- Full compatibility with CodeFlow features');
         outputChannel.appendLine('- All features supported');
     } else {
         outputChannel.appendLine('Unknown Editor:');
@@ -563,9 +563,9 @@ function checkEditorCompatibility(): void {
     }
     
     outputChannel.appendLine('');
-    outputChannel.appendLine('AutoPR is ready to use!');
+    outputChannel.appendLine('CodeFlow is ready to use!');
     
-    vscode.window.showInformationMessage(`AutoPR compatibility check completed. Check the output channel for details.`);
+    vscode.window.showInformationMessage(`CodeFlow compatibility check completed. Check the output channel for details.`);
 }
 
 function initializeSampleData(dataService: DataService): void {
@@ -666,5 +666,5 @@ function initializeSampleData(dataService: DataService): void {
 }
 
 export function deactivate() {
-    console.log('AutoPR extension is now deactivated!');
+    console.log('CodeFlow extension is now deactivated!');
 }

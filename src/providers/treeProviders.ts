@@ -1,13 +1,13 @@
 import * as vscode from 'vscode';
-import { AutoPRIssue, AutoPRMetrics, PerformanceHistory } from '../types';
+import { CodeFlowIssue, CodeFlowMetrics, PerformanceHistory } from '../types';
 import { DataService } from '../services/dataService';
 
 // Tree Items
-export class AutoPRIssueItem extends vscode.TreeItem {
+export class CodeFlowIssueItem extends vscode.TreeItem {
     constructor(
         public readonly label: string,
         public readonly collapsibleState: vscode.TreeItemCollapsibleState,
-        public readonly issue?: AutoPRIssue
+        public readonly issue?: CodeFlowIssue
     ) {
         super(label, collapsibleState);
         
@@ -31,7 +31,7 @@ export class AutoPRIssueItem extends vscode.TreeItem {
     }
 }
 
-export class AutoPRMetricsItem extends vscode.TreeItem {
+export class CodeFlowMetricsItem extends vscode.TreeItem {
     constructor(
         public readonly label: string,
         public readonly collapsibleState: vscode.TreeItemCollapsibleState,
@@ -46,7 +46,7 @@ export class AutoPRMetricsItem extends vscode.TreeItem {
     }
 }
 
-export class AutoPRHistoryItem extends vscode.TreeItem {
+export class CodeFlowHistoryItem extends vscode.TreeItem {
     constructor(
         public readonly label: string,
         public readonly collapsibleState: vscode.TreeItemCollapsibleState,
@@ -63,9 +63,9 @@ export class AutoPRHistoryItem extends vscode.TreeItem {
 }
 
 // Tree Data Providers
-export class AutoPRIssuesProvider implements vscode.TreeDataProvider<AutoPRIssueItem> {
-    private _onDidChangeTreeData: vscode.EventEmitter<AutoPRIssueItem | undefined | null | void> = new vscode.EventEmitter<AutoPRIssueItem | undefined | null | void>();
-    readonly onDidChangeTreeData: vscode.Event<AutoPRIssueItem | undefined | null | void> = this._onDidChangeTreeData.event;
+export class CodeFlowIssuesProvider implements vscode.TreeDataProvider<CodeFlowIssueItem> {
+    private _onDidChangeTreeData: vscode.EventEmitter<CodeFlowIssueItem | undefined | null | void> = new vscode.EventEmitter<CodeFlowIssueItem | undefined | null | void>();
+    readonly onDidChangeTreeData: vscode.Event<CodeFlowIssueItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
     private dataService: DataService;
 
@@ -73,11 +73,11 @@ export class AutoPRIssuesProvider implements vscode.TreeDataProvider<AutoPRIssue
         this.dataService = DataService.getInstance();
     }
 
-    getTreeItem(element: AutoPRIssueItem): vscode.TreeItem {
+    getTreeItem(element: CodeFlowIssueItem): vscode.TreeItem {
         return element;
     }
 
-    getChildren(element?: AutoPRIssueItem): Promise<AutoPRIssueItem[]> {
+    getChildren(element?: CodeFlowIssueItem): Promise<CodeFlowIssueItem[]> {
         if (element) {
             // Return child issues for grouped items
             return this.getChildIssues(element);
@@ -87,30 +87,30 @@ export class AutoPRIssuesProvider implements vscode.TreeDataProvider<AutoPRIssue
         }
     }
 
-    private async getRootIssues(): Promise<AutoPRIssueItem[]> {
+    private async getRootIssues(): Promise<CodeFlowIssueItem[]> {
         const issues = this.dataService.getIssues();
         const counts = this.dataService.getIssueCounts();
         const toolCounts = this.dataService.getToolIssueCounts();
 
-        const items: AutoPRIssueItem[] = [];
+        const items: CodeFlowIssueItem[] = [];
 
         // Add summary items
         if (counts.errors > 0) {
-            items.push(new AutoPRIssueItem(
+            items.push(new CodeFlowIssueItem(
                 `❌ ${counts.errors} Errors`,
                 vscode.TreeItemCollapsibleState.Collapsed
             ));
         }
 
         if (counts.warnings > 0) {
-            items.push(new AutoPRIssueItem(
+            items.push(new CodeFlowIssueItem(
                 `⚠️ ${counts.warnings} Warnings`,
                 vscode.TreeItemCollapsibleState.Collapsed
             ));
         }
 
         if (counts.info > 0) {
-            items.push(new AutoPRIssueItem(
+            items.push(new CodeFlowIssueItem(
                 `ℹ️ ${counts.info} Info`,
                 vscode.TreeItemCollapsibleState.Collapsed
             ));
@@ -119,7 +119,7 @@ export class AutoPRIssuesProvider implements vscode.TreeDataProvider<AutoPRIssue
         // Add tool-specific groups
         Object.entries(toolCounts).forEach(([tool, count]) => {
             if (count > 0) {
-                items.push(new AutoPRIssueItem(
+                items.push(new CodeFlowIssueItem(
                     `🔧 ${tool}: ${count} issues`,
                     vscode.TreeItemCollapsibleState.Collapsed
                 ));
@@ -127,7 +127,7 @@ export class AutoPRIssuesProvider implements vscode.TreeDataProvider<AutoPRIssue
         });
 
         if (items.length === 0) {
-            items.push(new AutoPRIssueItem(
+            items.push(new CodeFlowIssueItem(
                 '✅ No issues found',
                 vscode.TreeItemCollapsibleState.None
             ));
@@ -136,13 +136,13 @@ export class AutoPRIssuesProvider implements vscode.TreeDataProvider<AutoPRIssue
         return items;
     }
 
-    private async getChildIssues(element: AutoPRIssueItem): Promise<AutoPRIssueItem[]> {
+    private async getChildIssues(element: CodeFlowIssueItem): Promise<CodeFlowIssueItem[]> {
         const issues = this.dataService.getIssues();
         const label = element.label;
 
         if (label.includes('Errors')) {
             return this.dataService.getIssuesBySeverity('error').map(issue => 
-                new AutoPRIssueItem(
+                new CodeFlowIssueItem(
                     `${issue.file}:${issue.line} - ${issue.message}`,
                     vscode.TreeItemCollapsibleState.None,
                     issue
@@ -150,7 +150,7 @@ export class AutoPRIssuesProvider implements vscode.TreeDataProvider<AutoPRIssue
             );
         } else if (label.includes('Warnings')) {
             return this.dataService.getIssuesBySeverity('warning').map(issue => 
-                new AutoPRIssueItem(
+                new CodeFlowIssueItem(
                     `${issue.file}:${issue.line} - ${issue.message}`,
                     vscode.TreeItemCollapsibleState.None,
                     issue
@@ -158,7 +158,7 @@ export class AutoPRIssuesProvider implements vscode.TreeDataProvider<AutoPRIssue
             );
         } else if (label.includes('Info')) {
             return this.dataService.getIssuesBySeverity('info').map(issue => 
-                new AutoPRIssueItem(
+                new CodeFlowIssueItem(
                     `${issue.file}:${issue.line} - ${issue.message}`,
                     vscode.TreeItemCollapsibleState.None,
                     issue
@@ -168,7 +168,7 @@ export class AutoPRIssuesProvider implements vscode.TreeDataProvider<AutoPRIssue
             // Tool-specific issues
             const tool = label.split(':')[0].replace('🔧 ', '');
             return this.dataService.getIssuesByTool(tool).map(issue => 
-                new AutoPRIssueItem(
+                new CodeFlowIssueItem(
                     `${issue.file}:${issue.line} - ${issue.message}`,
                     vscode.TreeItemCollapsibleState.None,
                     issue
@@ -184,9 +184,9 @@ export class AutoPRIssuesProvider implements vscode.TreeDataProvider<AutoPRIssue
     }
 }
 
-export class AutoPRMetricsProvider implements vscode.TreeDataProvider<AutoPRMetricsItem> {
-    private _onDidChangeTreeData: vscode.EventEmitter<AutoPRMetricsItem | undefined | null | void> = new vscode.EventEmitter<AutoPRMetricsItem | undefined | null | void>();
-    readonly onDidChangeTreeData: vscode.Event<AutoPRMetricsItem | undefined | null | void> = this._onDidChangeTreeData.event;
+export class CodeFlowMetricsProvider implements vscode.TreeDataProvider<CodeFlowMetricsItem> {
+    private _onDidChangeTreeData: vscode.EventEmitter<CodeFlowMetricsItem | undefined | null | void> = new vscode.EventEmitter<CodeFlowMetricsItem | undefined | null | void>();
+    readonly onDidChangeTreeData: vscode.Event<CodeFlowMetricsItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
     private dataService: DataService;
 
@@ -194,28 +194,28 @@ export class AutoPRMetricsProvider implements vscode.TreeDataProvider<AutoPRMetr
         this.dataService = DataService.getInstance();
     }
 
-    getTreeItem(element: AutoPRMetricsItem): vscode.TreeItem {
+    getTreeItem(element: CodeFlowMetricsItem): vscode.TreeItem {
         return element;
     }
 
-    getChildren(element?: AutoPRMetricsItem): Promise<AutoPRMetricsItem[]> {
+    getChildren(element?: CodeFlowMetricsItem): Promise<CodeFlowMetricsItem[]> {
         const metrics = this.dataService.getMetrics();
         const performanceHistory = this.dataService.getPerformanceHistory();
 
         if (!metrics) {
             return Promise.resolve([
-                new AutoPRMetricsItem('No metrics available', vscode.TreeItemCollapsibleState.None)
+                new CodeFlowMetricsItem('No metrics available', vscode.TreeItemCollapsibleState.None)
             ]);
         }
 
-        const items: AutoPRMetricsItem[] = [
-            new AutoPRMetricsItem('Code Quality Score', vscode.TreeItemCollapsibleState.None, metrics.code_quality_score, '/100'),
-            new AutoPRMetricsItem('Issues Fixed', vscode.TreeItemCollapsibleState.None, metrics.issues_fixed),
-            new AutoPRMetricsItem('Files Analyzed', vscode.TreeItemCollapsibleState.None, metrics.files_analyzed),
-            new AutoPRMetricsItem('Average Performance', vscode.TreeItemCollapsibleState.None, metrics.performance_avg, 'ms'),
-            new AutoPRMetricsItem('Complexity Score', vscode.TreeItemCollapsibleState.None, metrics.complexity_score, '/10'),
-            new AutoPRMetricsItem('Documentation Coverage', vscode.TreeItemCollapsibleState.None, metrics.documentation_coverage, '%'),
-            new AutoPRMetricsItem('Security Score', vscode.TreeItemCollapsibleState.None, metrics.security_score, '/100')
+        const items: CodeFlowMetricsItem[] = [
+            new CodeFlowMetricsItem('Code Quality Score', vscode.TreeItemCollapsibleState.None, metrics.code_quality_score, '/100'),
+            new CodeFlowMetricsItem('Issues Fixed', vscode.TreeItemCollapsibleState.None, metrics.issues_fixed),
+            new CodeFlowMetricsItem('Files Analyzed', vscode.TreeItemCollapsibleState.None, metrics.files_analyzed),
+            new CodeFlowMetricsItem('Average Performance', vscode.TreeItemCollapsibleState.None, metrics.performance_avg, 'ms'),
+            new CodeFlowMetricsItem('Complexity Score', vscode.TreeItemCollapsibleState.None, metrics.complexity_score, '/10'),
+            new CodeFlowMetricsItem('Documentation Coverage', vscode.TreeItemCollapsibleState.None, metrics.documentation_coverage, '%'),
+            new CodeFlowMetricsItem('Security Score', vscode.TreeItemCollapsibleState.None, metrics.security_score, '/100')
         ];
 
         // Add performance averages for different operations
@@ -223,7 +223,7 @@ export class AutoPRMetricsProvider implements vscode.TreeDataProvider<AutoPRMetr
         operations.forEach(operation => {
             const avg = this.dataService.getAveragePerformance(operation);
             if (avg > 0) {
-                items.push(new AutoPRMetricsItem(
+                items.push(new CodeFlowMetricsItem(
                     `${operation.replace('_', ' ').toUpperCase()} Avg`,
                     vscode.TreeItemCollapsibleState.None,
                     Math.round(avg),
@@ -240,9 +240,9 @@ export class AutoPRMetricsProvider implements vscode.TreeDataProvider<AutoPRMetr
     }
 }
 
-export class AutoPRHistoryProvider implements vscode.TreeDataProvider<AutoPRHistoryItem> {
-    private _onDidChangeTreeData: vscode.EventEmitter<AutoPRHistoryItem | undefined | null | void> = new vscode.EventEmitter<AutoPRHistoryItem | undefined | null | void>();
-    readonly onDidChangeTreeData: vscode.Event<AutoPRHistoryItem | undefined | null | void> = this._onDidChangeTreeData.event;
+export class CodeFlowHistoryProvider implements vscode.TreeDataProvider<CodeFlowHistoryItem> {
+    private _onDidChangeTreeData: vscode.EventEmitter<CodeFlowHistoryItem | undefined | null | void> = new vscode.EventEmitter<CodeFlowHistoryItem | undefined | null | void>();
+    readonly onDidChangeTreeData: vscode.Event<CodeFlowHistoryItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
     private dataService: DataService;
 
@@ -250,21 +250,21 @@ export class AutoPRHistoryProvider implements vscode.TreeDataProvider<AutoPRHist
         this.dataService = DataService.getInstance();
     }
 
-    getTreeItem(element: AutoPRHistoryItem): vscode.TreeItem {
+    getTreeItem(element: CodeFlowHistoryItem): vscode.TreeItem {
         return element;
     }
 
-    getChildren(element?: AutoPRHistoryItem): Promise<AutoPRHistoryItem[]> {
+    getChildren(element?: CodeFlowHistoryItem): Promise<CodeFlowHistoryItem[]> {
         const recentActivity = this.dataService.getRecentActivity(20);
         const learningMemory = this.dataService.getLearningMemory();
 
         if (recentActivity.length === 0) {
             return Promise.resolve([
-                new AutoPRHistoryItem('No recent activity', vscode.TreeItemCollapsibleState.None)
+                new CodeFlowHistoryItem('No recent activity', vscode.TreeItemCollapsibleState.None)
             ]);
         }
 
-        const items: AutoPRHistoryItem[] = [];
+        const items: CodeFlowHistoryItem[] = [];
 
         // Add recent activity
         recentActivity.forEach(record => {
@@ -272,7 +272,7 @@ export class AutoPRHistoryProvider implements vscode.TreeDataProvider<AutoPRHist
             const time = new Date(record.timestamp).toLocaleTimeString();
             const label = `${date} ${time}: ${record.operation.replace('_', ' ')}`;
             
-            items.push(new AutoPRHistoryItem(
+            items.push(new CodeFlowHistoryItem(
                 label,
                 vscode.TreeItemCollapsibleState.None,
                 record
@@ -285,7 +285,7 @@ export class AutoPRHistoryProvider implements vscode.TreeDataProvider<AutoPRHist
             const successRate = Math.round(pattern.success_rate * 100);
             const label = `${date}: ${pattern.type.replace('_', ' ')} (${successRate}% success)`;
             
-            items.push(new AutoPRHistoryItem(
+            items.push(new CodeFlowHistoryItem(
                 label,
                 vscode.TreeItemCollapsibleState.None
             ));

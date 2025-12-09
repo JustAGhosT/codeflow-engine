@@ -1,4 +1,4 @@
-export interface AutoPRIssue {
+export interface CodeFlowIssue {
     file: string;
     line: number;
     column: number;
@@ -10,17 +10,17 @@ export interface AutoPRIssue {
     confidence?: number;
 }
 
-export interface AutoPRResult {
+export interface CodeFlowResult {
     success: boolean;
     total_issues: number;
-    issues_by_tool: Record<string, AutoPRIssue[]>;
+    issues_by_tool: Record<string, CodeFlowIssue[]>;
     processing_time: number;
     components?: any[];
-    metrics?: AutoPRMetrics;
+    metrics?: CodeFlowMetrics;
     errors?: string[];
 }
 
-export interface AutoPRMetrics {
+export interface CodeFlowMetrics {
     code_quality_score: number;
     issues_fixed: number;
     files_analyzed: number;
@@ -30,7 +30,7 @@ export interface AutoPRMetrics {
     security_score: number;
 }
 
-export interface AutoPRConfig {
+export interface CodeFlowConfig {
     enabled: boolean;
     qualityMode: string;
     autoFixEnabled: boolean;

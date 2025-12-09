@@ -1,4 +1,4 @@
-import * as vscode from 'vscode';
+﻿import * as vscode from 'vscode';
 import { DataService } from './dataService';
 
 export class UIService {
@@ -9,16 +9,16 @@ export class UIService {
     }
 
     public showDashboard(): void {
-        const config = vscode.workspace.getConfiguration('autopr');
+        const config = vscode.workspace.getConfiguration('CodeFlow');
         const port = config.get<number>('dashboard.port', 8080);
         const host = config.get<string>('dashboard.host', 'localhost');
 
-        vscode.window.showInformationMessage(`AutoPR Dashboard would start on http://${host}:${port}`);
+        vscode.window.showInformationMessage(`CodeFlow Dashboard would start on http://${host}:${port}`);
         
         // Show dashboard information in output channel
-        const outputChannel = vscode.window.createOutputChannel('AutoPR Dashboard');
+        const outputChannel = vscode.window.createOutputChannel('CodeFlow Dashboard');
         outputChannel.show();
-        outputChannel.appendLine('AutoPR Dashboard');
+        outputChannel.appendLine('CodeFlow Dashboard');
         outputChannel.appendLine('='.repeat(50));
         outputChannel.appendLine(`URL: http://${host}:${port}`);
         outputChannel.appendLine(`Status: Ready to start`);
@@ -46,10 +46,10 @@ export class UIService {
 
     public showLearningMemory(): void {
         const learningMemory = this.dataService.getLearningMemory();
-        const outputChannel = vscode.window.createOutputChannel('AutoPR Learning Memory');
+        const outputChannel = vscode.window.createOutputChannel('CodeFlow Learning Memory');
         outputChannel.show();
         
-        outputChannel.appendLine('AutoPR Learning Memory System');
+        outputChannel.appendLine('CodeFlow Learning Memory System');
         outputChannel.appendLine('='.repeat(50));
         outputChannel.appendLine('Pattern Recognition: Active');
         outputChannel.appendLine('Success Rate Tracking: Enabled');
@@ -81,10 +81,10 @@ export class UIService {
     }
 
     public async exportResults(): Promise<void> {
-        const outputChannel = vscode.window.createOutputChannel('AutoPR Export');
+        const outputChannel = vscode.window.createOutputChannel('CodeFlow Export');
         outputChannel.show();
         
-        outputChannel.appendLine('AutoPR Results Export');
+        outputChannel.appendLine('CodeFlow Results Export');
         outputChannel.appendLine('='.repeat(50));
         outputChannel.appendLine('Export formats available:');
         outputChannel.appendLine('- JSON: Complete results with metadata');
@@ -104,10 +104,10 @@ export class UIService {
         outputChannel.appendLine(`- Metrics Available: ${metrics ? 'Yes' : 'No'}`);
         outputChannel.appendLine('');
         
-        outputChannel.appendLine('Use the AutoPR CLI for detailed export options:');
-        outputChannel.appendLine('autopr export --format json --output results.json');
-        outputChannel.appendLine('autopr export --format csv --output results.csv');
-        outputChannel.appendLine('autopr export --format html --output report.html');
+        outputChannel.appendLine('Use the CodeFlow CLI for detailed export options:');
+        outputChannel.appendLine('CodeFlow export --format json --output results.json');
+        outputChannel.appendLine('CodeFlow export --format csv --output results.csv');
+        outputChannel.appendLine('CodeFlow export --format html --output report.html');
     }
 
     public async importConfiguration(): Promise<void> {
@@ -126,9 +126,9 @@ export class UIService {
             
             vscode.window.showInformationMessage(`Configuration import from ${fileName} would be implemented here`);
             
-            const outputChannel = vscode.window.createOutputChannel('AutoPR Import');
+            const outputChannel = vscode.window.createOutputChannel('CodeFlow Import');
             outputChannel.show();
-            outputChannel.appendLine('AutoPR Configuration Import');
+            outputChannel.appendLine('CodeFlow Configuration Import');
             outputChannel.appendLine('='.repeat(50));
             outputChannel.appendLine(`File: ${fileName}`);
             outputChannel.appendLine(`Path: ${filePath}`);
@@ -145,11 +145,11 @@ export class UIService {
     }
 
     public showConfiguration(): void {
-        vscode.commands.executeCommand('workbench.action.openSettings', 'autopr');
+        vscode.commands.executeCommand('workbench.action.openSettings', 'CodeFlow');
     }
 
     public async showVolumeSettings(): Promise<void> {
-        const config = vscode.workspace.getConfiguration('autopr');
+        const config = vscode.workspace.getConfiguration('CodeFlow');
         const currentVolume = config.get<number>('volume', 500);
         
         const volume = await vscode.window.showInputBox({
@@ -172,7 +172,7 @@ export class UIService {
     }
 
     private showVolumeImpact(volume: number): void {
-        const outputChannel = vscode.window.createOutputChannel('AutoPR Volume Impact');
+        const outputChannel = vscode.window.createOutputChannel('CodeFlow Volume Impact');
         outputChannel.show();
         
         outputChannel.appendLine('Volume Level Impact Analysis');
@@ -216,7 +216,7 @@ export class UIService {
     }
 
     public async showToolToggle(): Promise<void> {
-        const config = vscode.workspace.getConfiguration('autopr');
+        const config = vscode.workspace.getConfiguration('CodeFlow');
         const tools = config.get<any>('tools', {});
         
         const toolNames = Object.keys(tools);
@@ -238,10 +238,10 @@ export class UIService {
     }
 
     private showToolInfo(toolName: string, enabled: boolean): void {
-        const outputChannel = vscode.window.createOutputChannel('AutoPR Tool Info');
+        const outputChannel = vscode.window.createOutputChannel('CodeFlow Tool Info');
         outputChannel.show();
         
-        outputChannel.appendLine(`AutoPR Tool: ${toolName}`);
+        outputChannel.appendLine(`CodeFlow Tool: ${toolName}`);
         outputChannel.appendLine('='.repeat(50));
         outputChannel.appendLine(`Status: ${enabled ? 'Enabled' : 'Disabled'}`);
         outputChannel.appendLine('');
@@ -268,13 +268,13 @@ export class UIService {
     }
 
     public async generateReport(): Promise<void> {
-        const config = vscode.workspace.getConfiguration('autopr');
+        const config = vscode.workspace.getConfiguration('CodeFlow');
         const format = config.get<string>('reportFormat', 'html');
         
-        const outputChannel = vscode.window.createOutputChannel('AutoPR Report Generator');
+        const outputChannel = vscode.window.createOutputChannel('CodeFlow Report Generator');
         outputChannel.show();
         
-        outputChannel.appendLine('AutoPR Report Generation');
+        outputChannel.appendLine('CodeFlow Report Generation');
         outputChannel.appendLine('='.repeat(50));
         outputChannel.appendLine(`Format: ${format.toUpperCase()}`);
         outputChannel.appendLine('Generating comprehensive report...');
@@ -296,9 +296,9 @@ export class UIService {
             
             outputChannel.appendLine('');
             outputChannel.appendLine('Report generated successfully!');
-            outputChannel.appendLine('Location: ./autopr-report.' + format);
+            outputChannel.appendLine('Location: ./codeflow-report.' + format);
             
-            vscode.window.showInformationMessage(`AutoPR report generated in ${format.toUpperCase()} format!`);
+            vscode.window.showInformationMessage(`CodeFlow report generated in ${format.toUpperCase()} format!`);
         } catch (error) {
             outputChannel.appendLine(`Error generating report: ${error}`);
             vscode.window.showErrorMessage('Failed to generate report');

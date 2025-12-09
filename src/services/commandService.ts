@@ -1,7 +1,7 @@
-import * as vscode from 'vscode';
+﻿import * as vscode from 'vscode';
 import { spawn } from 'child_process';
 import * as path from 'path';
-import { AutoPRResult, AutoPRMetrics, PerformanceHistory } from '../types';
+import { CodeFlowResult, CodeFlowMetrics, PerformanceHistory } from '../types';
 import { DataService } from './dataService';
 
 export class CommandService {
@@ -13,7 +13,7 @@ export class CommandService {
 
     // Quality Check Commands
     public async runQualityCheck(): Promise<void> {
-        const config = vscode.workspace.getConfiguration('autopr');
+        const config = vscode.workspace.getConfiguration('codeflow');
         const mode = config.get<string>('qualityMode', 'fast');
         
         try {
@@ -26,7 +26,7 @@ export class CommandService {
             const filePath = editor.document.fileName;
             const startTime = Date.now();
             
-            const result = await this.executeAutoPRCommand(['check', '--mode', mode, '--files', filePath]);
+            const result = await this.executeCodeFlowCommand(['check', '--mode', mode, '--files', filePath]);
             
             if (result.success) {
                 this.processQualityResults(result, 'quality_check', startTime);
@@ -47,12 +47,12 @@ export class CommandService {
         }
 
         const filePath = editor.document.fileName;
-        const config = vscode.workspace.getConfiguration('autopr');
+        const config = vscode.workspace.getConfiguration('codeflow');
         const mode = config.get<string>('qualityMode', 'fast');
 
         try {
             const startTime = Date.now();
-            const result = await this.executeAutoPRCommand(['check', '--mode', mode, '--files', filePath]);
+            const result = await this.executeCodeFlowCommand(['check', '--mode', mode, '--files', filePath]);
             
             if (result.success) {
                 this.processQualityResults(result, 'file_quality_check', startTime);
@@ -72,12 +72,12 @@ export class CommandService {
             return;
         }
 
-        const config = vscode.workspace.getConfiguration('autopr');
+        const config = vscode.workspace.getConfiguration('codeflow');
         const mode = config.get<string>('qualityMode', 'fast');
 
         try {
             const startTime = Date.now();
-            const result = await this.executeAutoPRCommand(['check', '--mode', mode, '--directory', workspaceFolders[0].uri.fsPath]);
+            const result = await this.executeCodeFlowCommand(['check', '--mode', mode, '--directory', workspaceFolders[0].uri.fsPath]);
             
             if (result.success) {
                 this.processQualityResults(result, 'workspace_quality_check', startTime);
@@ -99,7 +99,7 @@ export class CommandService {
         }
 
         const filePath = editor.document.fileName;
-        const config = vscode.workspace.getConfiguration('autopr');
+        const config = vscode.workspace.getConfiguration('codeflow');
         const splitConfig = config.get<any>('fileSplitter', {});
         
         const maxLines = await vscode.window.showInputBox({
@@ -115,7 +115,7 @@ export class CommandService {
 
         try {
             const startTime = Date.now();
-            const result = await this.executeAutoPRCommand(['split', filePath, '--max-lines', maxLines, '--dry-run']);
+            const result = await this.executeCodeFlowCommand(['split', filePath, '--max-lines', maxLines, '--dry-run']);
             
             if (result.success) {
                 this.processQualityResults(result, 'file_split_analysis', startTime);
@@ -133,7 +133,7 @@ export class CommandService {
 
                     if (outputDir) {
                         const splitStartTime = Date.now();
-                        const splitResult = await this.executeAutoPRCommand(['split', filePath, '--max-lines', maxLines, '--output-dir', outputDir]);
+                        const splitResult = await this.executeCodeFlowCommand(['split', filePath, '--max-lines', maxLines, '--output-dir', outputDir]);
                         if (splitResult.success) {
                             this.processQualityResults(splitResult, 'file_split_execution', splitStartTime);
                             vscode.window.showInformationMessage('File split completed successfully!');
@@ -157,12 +157,12 @@ export class CommandService {
         }
 
         const filePath = editor.document.fileName;
-        const config = vscode.workspace.getConfiguration('autopr');
+        const config = vscode.workspace.getConfiguration('codeflow');
         const mode = config.get<string>('qualityMode', 'fast');
 
         try {
             const startTime = Date.now();
-            const result = await this.executeAutoPRCommand(['check', '--mode', mode, '--files', filePath, '--auto-fix']);
+            const result = await this.executeCodeFlowCommand(['check', '--mode', mode, '--files', filePath, '--auto-fix']);
             
             if (result.success) {
                 this.processQualityResults(result, 'auto_fix', startTime);
@@ -180,7 +180,7 @@ export class CommandService {
     public async runPerformanceCheck(): Promise<void> {
         try {
             const startTime = Date.now();
-            const result = await this.executeAutoPRCommand(['check', '--mode', 'comprehensive', '--tools', 'performance_analyzer']);
+            const result = await this.executeCodeFlowCommand(['check', '--mode', 'comprehensive', '--tools', 'performance_analyzer']);
             if (result.success) {
                 this.processQualityResults(result, 'performance_analysis', startTime);
                 vscode.window.showInformationMessage('Performance analysis completed');
@@ -196,7 +196,7 @@ export class CommandService {
     public async runDependencyScan(): Promise<void> {
         try {
             const startTime = Date.now();
-            const result = await this.executeAutoPRCommand(['check', '--mode', 'comprehensive', '--tools', 'dependency_scanner']);
+            const result = await this.executeCodeFlowCommand(['check', '--mode', 'comprehensive', '--tools', 'dependency_scanner']);
             if (result.success) {
                 this.processQualityResults(result, 'dependency_scan', startTime);
                 vscode.window.showInformationMessage('Dependency scan completed');
@@ -212,7 +212,7 @@ export class CommandService {
     public async runSecurityScan(): Promise<void> {
         try {
             const startTime = Date.now();
-            const result = await this.executeAutoPRCommand(['check', '--mode', 'comprehensive', '--tools', 'bandit,codeql']);
+            const result = await this.executeCodeFlowCommand(['check', '--mode', 'comprehensive', '--tools', 'bandit,codeql']);
             if (result.success) {
                 this.processQualityResults(result, 'security_scan', startTime);
                 vscode.window.showInformationMessage('Security scan completed');
@@ -228,7 +228,7 @@ export class CommandService {
     public async runComplexityAnalysis(): Promise<void> {
         try {
             const startTime = Date.now();
-            const result = await this.executeAutoPRCommand(['check', '--mode', 'comprehensive', '--tools', 'radon']);
+            const result = await this.executeCodeFlowCommand(['check', '--mode', 'comprehensive', '--tools', 'radon']);
             if (result.success) {
                 this.processQualityResults(result, 'complexity_analysis', startTime);
                 vscode.window.showInformationMessage('Complexity analysis completed');
@@ -244,7 +244,7 @@ export class CommandService {
     public async runDocumentationCheck(): Promise<void> {
         try {
             const startTime = Date.now();
-            const result = await this.executeAutoPRCommand(['check', '--mode', 'comprehensive', '--tools', 'interrogate']);
+            const result = await this.executeCodeFlowCommand(['check', '--mode', 'comprehensive', '--tools', 'interrogate']);
             if (result.success) {
                 this.processQualityResults(result, 'documentation_check', startTime);
                 vscode.window.showInformationMessage('Documentation check completed');
@@ -260,7 +260,7 @@ export class CommandService {
     // Utility Commands
     public async clearCache(): Promise<void> {
         try {
-            await this.executeAutoPRCommand(['cache', '--clear']);
+            await this.executeCodeFlowCommand(['cache', '--clear']);
             this.dataService.clearCache();
             vscode.window.showInformationMessage('Cache cleared successfully');
         } catch (error) {
@@ -270,7 +270,7 @@ export class CommandService {
 
     // Configuration Commands
     public async setVolumeLevel(): Promise<void> {
-        const config = vscode.workspace.getConfiguration('autopr');
+        const config = vscode.workspace.getConfiguration('codeflow');
         const currentVolume = config.get<number>('volume', 500);
         
         const volume = await vscode.window.showInputBox({
@@ -290,7 +290,7 @@ export class CommandService {
     }
 
     public async toggleTool(): Promise<void> {
-        const config = vscode.workspace.getConfiguration('autopr');
+        const config = vscode.workspace.getConfiguration('codeflow');
         const tools = config.get<any>('tools', {});
         
         const toolNames = Object.keys(tools);
@@ -307,12 +307,12 @@ export class CommandService {
     }
 
     // Private helper methods
-    private async executeAutoPRCommand(args: string[]): Promise<AutoPRResult> {
+    private async executeCodeFlowCommand(args: string[]): Promise<CodeFlowResult> {
         return new Promise((resolve, reject) => {
-            const config = vscode.workspace.getConfiguration('autopr');
+            const config = vscode.workspace.getConfiguration('codeflow');
             const pythonPath = config.get<string>('pythonPath', 'python');
             
-            const process = spawn(pythonPath, ['-m', 'autopr.cli.main', ...args], {
+            const process = spawn(pythonPath, ['-m', 'codeflow.cli.main', ...args], {
                 cwd: vscode.workspace.workspaceFolders?.[0]?.uri.fsPath
             });
 
@@ -333,20 +333,20 @@ export class CommandService {
                         const result = JSON.parse(stdout);
                         resolve(result);
                     } catch (error) {
-                        reject(new Error('Failed to parse AutoPR output'));
+                        reject(new Error('Failed to parse CodeFlow output'));
                     }
                 } else {
-                    reject(new Error(`AutoPR command failed: ${stderr}`));
+                    reject(new Error(`CodeFlow command failed: ${stderr}`));
                 }
             });
 
             process.on('error', (error) => {
-                reject(new Error(`Failed to execute AutoPR: ${error.message}`));
+                reject(new Error(`Failed to execute CodeFlow: ${error.message}`));
             });
         });
     }
 
-    private processQualityResults(result: AutoPRResult, operation: string, startTime: number): void {
+    private processQualityResults(result: CodeFlowResult, operation: string, startTime: number): void {
         const duration = Date.now() - startTime;
         
         // Update issues
@@ -378,8 +378,8 @@ export class CommandService {
         this.dataService.updatePatternSuccessRate(`${operation}-success`, result.success);
     }
 
-    private displayQualityResults(result: AutoPRResult): void {
-        const config = vscode.workspace.getConfiguration('autopr');
+    private displayQualityResults(result: CodeFlowResult): void {
+        const config = vscode.workspace.getConfiguration('codeflow');
         const showNotifications = config.get<boolean>('showNotifications', true);
 
         if (showNotifications) {
@@ -387,9 +387,9 @@ export class CommandService {
             vscode.window.showInformationMessage(message);
         }
 
-        const outputChannel = vscode.window.createOutputChannel('AutoPR');
+        const outputChannel = vscode.window.createOutputChannel('CodeFlow');
         outputChannel.show();
-        outputChannel.appendLine('AutoPR Quality Check Results');
+        outputChannel.appendLine('CodeFlow Quality Check Results');
         outputChannel.appendLine('='.repeat(50));
         outputChannel.appendLine(`Total Issues: ${result.total_issues}`);
         outputChannel.appendLine(`Processing Time: ${result.processing_time.toFixed(2)}s`);
@@ -419,7 +419,7 @@ export class CommandService {
             const filePath = editor.document.fileName;
             const startTime = Date.now();
             
-            const result = await this.executeAutoPRCommand(['fix', '--quick', '--files', filePath]);
+            const result = await this.executeCodeFlowCommand(['fix', '--quick', '--files', filePath]);
             
             if (result.success) {
                 this.processQualityResults(result, 'quick_fix', startTime);
@@ -441,7 +441,7 @@ export class CommandService {
 
         try {
             const startTime = Date.now();
-            const result = await this.executeAutoPRCommand(['analyze', '--workspace', workspaceFolders[0].uri.fsPath]);
+            const result = await this.executeCodeFlowCommand(['analyze', '--workspace', workspaceFolders[0].uri.fsPath]);
             
             if (result.success) {
                 this.processQualityResults(result, 'workspace_analysis', startTime);

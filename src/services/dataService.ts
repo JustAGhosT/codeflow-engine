@@ -1,10 +1,10 @@
-import * as vscode from 'vscode';
-import { AutoPRIssue, AutoPRResult, AutoPRMetrics, LearningMemoryData, PerformanceHistory } from '../types';
+﻿import * as vscode from 'vscode';
+import { CodeFlowIssue, CodeFlowResult, CodeFlowMetrics, LearningMemoryData, PerformanceHistory } from '../types';
 
 export class DataService {
     private static instance: DataService;
-    private issues: AutoPRIssue[] = [];
-    private metrics: AutoPRMetrics | null = null;
+    private issues: CodeFlowIssue[] = [];
+    private metrics: CodeFlowMetrics | null = null;
     private learningMemory: LearningMemoryData;
     private performanceHistory: PerformanceHistory[] = [];
     private cache: Map<string, any> = new Map();
@@ -70,20 +70,20 @@ export class DataService {
         // Load data from VS Code storage
         const context = this.getExtensionContext();
         if (context) {
-            this.issues = context.globalState.get('autopr.issues', []);
-            this.metrics = context.globalState.get('autopr.metrics', null);
-            this.learningMemory = context.globalState.get('autopr.learningMemory', this.learningMemory);
-            this.performanceHistory = context.globalState.get('autopr.performanceHistory', []);
+            this.issues = context.globalState.get('codeflow.issues', []);
+            this.metrics = context.globalState.get('codeflow.metrics', null);
+            this.learningMemory = context.globalState.get('codeflow.learningMemory', this.learningMemory);
+            this.performanceHistory = context.globalState.get('codeflow.performanceHistory', []);
         }
     }
 
     private saveStoredData(): void {
         const context = this.getExtensionContext();
         if (context) {
-            context.globalState.update('autopr.issues', this.issues);
-            context.globalState.update('autopr.metrics', this.metrics);
-            context.globalState.update('autopr.learningMemory', this.learningMemory);
-            context.globalState.update('autopr.performanceHistory', this.performanceHistory);
+            context.globalState.update('codeflow.issues', this.issues);
+            context.globalState.update('codeflow.metrics', this.metrics);
+            context.globalState.update('codeflow.learningMemory', this.learningMemory);
+            context.globalState.update('codeflow.performanceHistory', this.performanceHistory);
         }
     }
 
@@ -93,24 +93,24 @@ export class DataService {
     }
 
     // Issues management
-    public setIssues(issues: AutoPRIssue[]): void {
+    public setIssues(issues: CodeFlowIssue[]): void {
         this.issues = issues;
         this.saveStoredData();
     }
 
-    public getIssues(): AutoPRIssue[] {
+    public getIssues(): CodeFlowIssue[] {
         return this.issues;
     }
 
-    public getIssuesBySeverity(severity: 'error' | 'warning' | 'info'): AutoPRIssue[] {
+    public getIssuesBySeverity(severity: 'error' | 'warning' | 'info'): CodeFlowIssue[] {
         return this.issues.filter(issue => issue.severity === severity);
     }
 
-    public getIssuesByTool(tool: string): AutoPRIssue[] {
+    public getIssuesByTool(tool: string): CodeFlowIssue[] {
         return this.issues.filter(issue => issue.tool === tool);
     }
 
-    public addIssue(issue: AutoPRIssue): void {
+    public addIssue(issue: CodeFlowIssue): void {
         this.issues.push(issue);
         this.saveStoredData();
     }
@@ -121,20 +121,20 @@ export class DataService {
     }
 
     // Metrics management
-    public setMetrics(metrics: AutoPRMetrics): void {
+    public setMetrics(metrics: CodeFlowMetrics): void {
         this.metrics = metrics;
         this.saveStoredData();
     }
 
-    public getMetrics(): AutoPRMetrics | null {
+    public getMetrics(): CodeFlowMetrics | null {
         return this.metrics;
     }
 
-    public updateMetrics(partialMetrics: Partial<AutoPRMetrics>): void {
+    public updateMetrics(partialMetrics: Partial<CodeFlowMetrics>): void {
         if (this.metrics) {
             this.metrics = { ...this.metrics, ...partialMetrics };
         } else {
-            this.metrics = partialMetrics as AutoPRMetrics;
+            this.metrics = partialMetrics as CodeFlowMetrics;
         }
         this.saveStoredData();
     }

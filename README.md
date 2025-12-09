@@ -1,4 +1,4 @@
-# CodeFlow VS Code Extension
+﻿# CodeFlow VS Code Extension
 
 AI-Powered Code Quality and Automation for VS Code
 
@@ -26,7 +26,7 @@ AI-Powered Code Quality and Automation for VS Code
 
 1. Open VS Code
 2. Go to Extensions (Ctrl+Shift+X)
-3. Search for "CodeFlow" or "AutoPR"
+3. Search for "CodeFlow" or "CodeFlow"
 4. Click Install
 
 ### From Source
@@ -43,23 +43,23 @@ AI-Powered Code Quality and Automation for VS Code
 
 1. Open a Python, JavaScript, or TypeScript file
 2. Right-click in the editor or use Command Palette (Ctrl+Shift+P)
-3. Select "AutoPR: Check Current File"
-4. View results in the AutoPR output panel
+3. Select "CodeFlow: Check Current File"
+4. View results in the CodeFlow output panel
 
 ### Commands
 
 #### Quality Analysis
-- **AutoPR: Run Quality Check** - Quick quality check with default settings
-- **AutoPR: Check Current File** - Analyze the currently open file
-- **AutoPR: Check Workspace** - Analyze all files in the workspace
+- **CodeFlow: Run Quality Check** - Quick quality check with default settings
+- **CodeFlow: Check Current File** - Analyze the currently open file
+- **CodeFlow: Check Workspace** - Analyze all files in the workspace
 
 #### File Operations
-- **AutoPR: Split Large File** - Split large files into manageable components
-- **AutoPR: Auto-Fix Issues** - Automatically fix detected issues
+- **CodeFlow: Split Large File** - Split large files into manageable components
+- **CodeFlow: Auto-Fix Issues** - Automatically fix detected issues
 
 #### Configuration
-- **AutoPR: Show Dashboard** - Open the web-based dashboard
-- **AutoPR: Configure** - Open extension settings
+- **CodeFlow: Show Dashboard** - Open the web-based dashboard
+- **CodeFlow: Configure** - Open extension settings
 
 ## Configuration
 
@@ -67,12 +67,12 @@ AI-Powered Code Quality and Automation for VS Code
 
 | Setting                    | Description                    | Default  |
 | -------------------------- | ------------------------------ | -------- |
-| `autopr.enabled`           | Enable/disable the extension   | `true`   |
-| `autopr.qualityMode`       | Default quality analysis mode  | `fast`   |
-| `autopr.autoFixEnabled`    | Enable automatic fixing        | `false`  |
-| `autopr.showNotifications` | Show operation notifications   | `true`   |
-| `autopr.pythonPath`        | Path to Python executable      | `python` |
-| `autopr.maxFileSize`       | Maximum file size for analysis | `10000`  |
+| `codeflow.enabled`           | Enable/disable the extension   | `true`   |
+| `codeflow.qualityMode`       | Default quality analysis mode  | `fast`   |
+| `codeflow.autoFixEnabled`    | Enable automatic fixing        | `false`  |
+| `codeflow.showNotifications` | Show operation notifications   | `true`   |
+| `codeflow.pythonPath`        | Path to Python executable      | `python` |
+| `codeflow.maxFileSize`       | Maximum file size for analysis | `10000`  |
 
 ## Development
 
