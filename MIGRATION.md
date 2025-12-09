@@ -259,6 +259,7 @@ The CodeFlow migration has successfully transformed the project from a basic set
 
 - [docs/OPTIMIZATION_PLAN.md](./docs/OPTIMIZATION_PLAN.md) for detailed planning
 - [docs/DEPLOYMENT_AUTOMATION.md](./docs/DEPLOYMENT_AUTOMATION.md) for deployment automation guide
+- [docs/PERFORMANCE_OPTIMIZATION.md](./docs/PERFORMANCE_OPTIMIZATION.md) for performance optimization guide
 
 ---
 
