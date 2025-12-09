@@ -16,15 +16,9 @@ The CodeFlow Orchestration repository serves as the central hub for:
 
 ## Quick Links
 
-### Migration Status
-- [Migration Status](./MIGRATION_STATUS.md) - Overall migration progress (65% complete)
-- [Migration Roadmap](./MIGRATION_ROADMAP.md) - Detailed roadmap and next steps
-- [Migration Phases](./MIGRATION_PHASES.md) - Complete phase descriptions
-
-### Wave Status
-- [Wave 1 Review](./WAVE1_REVIEW.md) - Critical Foundation (95% complete)
-- [Wave 2 Final Status](./WAVE2_FINAL_STATUS.md) - Quality & Documentation (88% complete)
-- [Wave 3 Completion Summary](./WAVE3_COMPLETION_SUMMARY.md) - Operations & Infrastructure (75% complete)
+### Migration Documentation
+- [Migration Overview](./MIGRATION.md) - Complete migration status and progress (65% complete)
+- [Migration Phases](./MIGRATION_PHASES.md) - Detailed phase descriptions and goals
 - [Wave 4 Execution Plan](./WAVE4_EXECUTION_PLAN.md) - Optimization & Enhancement (planned)
 
 ### Key Documentation
@@ -83,10 +77,10 @@ codeflow-orchestration/
 │   ├── sync-versions.ps1
 │   ├── migrate-autopr-to-codeflow.ps1
 │   └── dev-setup.ps1
-├── MIGRATION_PHASES.md      # Complete migration plan
-├── MIGRATION_STATUS.md      # Current status
-├── MIGRATION_ROADMAP.md     # Detailed roadmap
-└── README.md                # This file
+├── MIGRATION.md              # Complete migration status and progress
+├── MIGRATION_PHASES.md       # Detailed phase descriptions
+├── WAVE4_EXECUTION_PLAN.md   # Wave 4 planning
+└── README.md                 # This file
 ```
 
 ---
@@ -96,9 +90,8 @@ codeflow-orchestration/
 ### For New Contributors
 
 1. **Read the Documentation**
-   - Start with [Migration Status](./MIGRATION_STATUS.md)
-   - Review [Migration Roadmap](./MIGRATION_ROADMAP.md)
-   - Check relevant wave status documents
+   - Start with [Migration Overview](./MIGRATION.md)
+   - Review [Migration Phases](./MIGRATION_PHASES.md) for detailed information
 
 2. **Set Up Local Environment**
    ```bash
