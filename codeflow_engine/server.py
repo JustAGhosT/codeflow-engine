@@ -88,12 +88,23 @@ def get_health_checker() -> HealthChecker:
     return _health_checker
 
 
-def create_app() -> FastAPI:
+def create_app(settings: CodeFlowSettings | None = None) -> FastAPI:
     """Create FastAPI application with GitHub App integration.
+
+    Args:
+        settings: Optional CodeFlowSettings instance. If not provided, loads from environment.
 
     Returns:
         Configured FastAPI application
     """
+    # Load settings if not provided
+    if settings is None:
+        settings = CodeFlowSettings()
+
+    # Set up structured logging
+    setup_logging(settings)
+    logger.info("Structured logging configured", extra={"log_format": "json"})
+
     app = FastAPI(
         title="CodeFlow Engine",
         description="AI-Powered GitHub PR Automation and Issue Management",
