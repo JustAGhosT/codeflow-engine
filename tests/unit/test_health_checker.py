@@ -28,20 +28,31 @@ class TestComponentHealth:
     def test_component_health_creation(self):
         """Test creating a ComponentHealth instance."""
         health = ComponentHealth(
+            name="test",
             status=HealthStatus.HEALTHY,
             message="All good",
+            response_time_ms=10.0,
             details={"key": "value"},
         )
+        assert health.name == "test"
         assert health.status == HealthStatus.HEALTHY
         assert health.message == "All good"
+        assert health.response_time_ms == 10.0
         assert health.details == {"key": "value"}
 
     def test_component_health_defaults(self):
         """Test ComponentHealth with default values."""
-        health = ComponentHealth(status=HealthStatus.HEALTHY)
+        health = ComponentHealth(
+            name="test",
+            status=HealthStatus.HEALTHY,
+            message="",
+            response_time_ms=0.0,
+        )
+        assert health.name == "test"
         assert health.status == HealthStatus.HEALTHY
         assert health.message == ""
-        assert health.details == {}
+        assert health.response_time_ms == 0.0
+        assert health.details is None
 
 
 class TestHealthChecker:
@@ -58,40 +69,45 @@ class TestHealthChecker:
     @pytest.mark.asyncio
     async def test_check_health_basic(self, health_checker):
         """Test basic health check."""
-        with patch.object(health_checker, "_check_database", return_value=ComponentHealth(HealthStatus.HEALTHY)):
-            with patch.object(health_checker, "_check_llm_providers", return_value=ComponentHealth(HealthStatus.HEALTHY)):
-                with patch.object(health_checker, "_check_integrations", return_value=ComponentHealth(HealthStatus.HEALTHY)):
-                    with patch.object(health_checker, "_check_system_resources", return_value=ComponentHealth(HealthStatus.HEALTHY)):
-                        with patch.object(health_checker, "_check_workflow_engine", return_value=ComponentHealth(HealthStatus.HEALTHY)):
-                            result = await health_checker.check_health()
-                            assert result["status"] == HealthStatus.HEALTHY
+        healthy_component = ComponentHealth("test", HealthStatus.HEALTHY, "", 0.0)
+        with patch.object(health_checker, "_check_database", return_value=healthy_component):
+            with patch.object(health_checker, "_check_llm_providers", return_value=healthy_component):
+                with patch.object(health_checker, "_check_integrations", return_value=healthy_component):
+                    with patch.object(health_checker, "_check_system_resources", return_value=healthy_component):
+                        with patch.object(health_checker, "_check_workflow_engine", return_value=healthy_component):
+                            result = await health_checker.check_all()
+                            assert result["status"] == HealthStatus.HEALTHY.value
                             assert "components" in result
 
     @pytest.mark.asyncio
     async def test_check_health_with_degraded_component(self, health_checker):
         """Test health check with degraded component."""
-        with patch.object(health_checker, "_check_database", return_value=ComponentHealth(HealthStatus.HEALTHY)):
-            with patch.object(health_checker, "_check_llm_providers", return_value=ComponentHealth(HealthStatus.DEGRADED, message="Some providers unavailable")):
-                with patch.object(health_checker, "_check_integrations", return_value=ComponentHealth(HealthStatus.HEALTHY)):
-                    with patch.object(health_checker, "_check_system_resources", return_value=ComponentHealth(HealthStatus.HEALTHY)):
-                        with patch.object(health_checker, "_check_workflow_engine", return_value=ComponentHealth(HealthStatus.HEALTHY)):
-                            result = await health_checker.check_health()
-                            assert result["status"] == HealthStatus.DEGRADED
+        healthy = ComponentHealth("database", HealthStatus.HEALTHY, "", 0.0)
+        degraded = ComponentHealth("llm_providers", HealthStatus.DEGRADED, "Some providers unavailable", 0.0)
+        with patch.object(health_checker, "_check_database", return_value=healthy):
+            with patch.object(health_checker, "_check_llm_providers", return_value=degraded):
+                with patch.object(health_checker, "_check_integrations", return_value=healthy):
+                    with patch.object(health_checker, "_check_system_resources", return_value=healthy):
+                        with patch.object(health_checker, "_check_workflow_engine", return_value=healthy):
+                            result = await health_checker.check_all()
+                            assert result["status"] == HealthStatus.DEGRADED.value
                             assert "components" in result
-                            assert result["components"]["llm_providers"]["status"] == HealthStatus.DEGRADED
+                            assert result["components"]["llm_providers"]["status"] == HealthStatus.DEGRADED.value
 
     @pytest.mark.asyncio
     async def test_check_health_with_unhealthy_component(self, health_checker):
         """Test health check with unhealthy component."""
-        with patch.object(health_checker, "_check_database", return_value=ComponentHealth(HealthStatus.UNHEALTHY, message="Database connection failed")):
-            with patch.object(health_checker, "_check_llm_providers", return_value=ComponentHealth(HealthStatus.HEALTHY)):
-                with patch.object(health_checker, "_check_integrations", return_value=ComponentHealth(HealthStatus.HEALTHY)):
-                    with patch.object(health_checker, "_check_system_resources", return_value=ComponentHealth(HealthStatus.HEALTHY)):
-                        with patch.object(health_checker, "_check_workflow_engine", return_value=ComponentHealth(HealthStatus.HEALTHY)):
-                            result = await health_checker.check_health()
-                            assert result["status"] == HealthStatus.UNHEALTHY
+        healthy = ComponentHealth("test", HealthStatus.HEALTHY, "", 0.0)
+        unhealthy = ComponentHealth("database", HealthStatus.UNHEALTHY, "Database connection failed", 0.0)
+        with patch.object(health_checker, "_check_database", return_value=unhealthy):
+            with patch.object(health_checker, "_check_llm_providers", return_value=healthy):
+                with patch.object(health_checker, "_check_integrations", return_value=healthy):
+                    with patch.object(health_checker, "_check_system_resources", return_value=healthy):
+                        with patch.object(health_checker, "_check_workflow_engine", return_value=healthy):
+                            result = await health_checker.check_all()
+                            assert result["status"] == HealthStatus.UNHEALTHY.value
                             assert "components" in result
-                            assert result["components"]["database"]["status"] == HealthStatus.UNHEALTHY
+                            assert result["components"]["database"]["status"] == HealthStatus.UNHEALTHY.value
 
     @pytest.mark.asyncio
     async def test_check_database_healthy(self, health_checker):
@@ -187,11 +203,11 @@ class TestHealthChecker:
     def test_determine_overall_health_all_healthy(self, health_checker):
         """Test overall health determination when all components are healthy."""
         components = {
-            "database": ComponentHealth(HealthStatus.HEALTHY),
-            "llm_providers": ComponentHealth(HealthStatus.HEALTHY),
-            "integrations": ComponentHealth(HealthStatus.HEALTHY),
-            "system_resources": ComponentHealth(HealthStatus.HEALTHY),
-            "workflow_engine": ComponentHealth(HealthStatus.HEALTHY),
+            "database": ComponentHealth("database", HealthStatus.HEALTHY, "", 0.0),
+            "llm_providers": ComponentHealth("llm_providers", HealthStatus.HEALTHY, "", 0.0),
+            "integrations": ComponentHealth("integrations", HealthStatus.HEALTHY, "", 0.0),
+            "system_resources": ComponentHealth("system_resources", HealthStatus.HEALTHY, "", 0.0),
+            "workflow_engine": ComponentHealth("workflow_engine", HealthStatus.HEALTHY, "", 0.0),
         }
         result = health_checker._determine_overall_health(components)
         assert result == HealthStatus.HEALTHY
@@ -199,11 +215,11 @@ class TestHealthChecker:
     def test_determine_overall_health_with_degraded(self, health_checker):
         """Test overall health determination with degraded components."""
         components = {
-            "database": ComponentHealth(HealthStatus.HEALTHY),
-            "llm_providers": ComponentHealth(HealthStatus.DEGRADED),
-            "integrations": ComponentHealth(HealthStatus.HEALTHY),
-            "system_resources": ComponentHealth(HealthStatus.HEALTHY),
-            "workflow_engine": ComponentHealth(HealthStatus.HEALTHY),
+            "database": ComponentHealth("database", HealthStatus.HEALTHY, "", 0.0),
+            "llm_providers": ComponentHealth("llm_providers", HealthStatus.DEGRADED, "", 0.0),
+            "integrations": ComponentHealth("integrations", HealthStatus.HEALTHY, "", 0.0),
+            "system_resources": ComponentHealth("system_resources", HealthStatus.HEALTHY, "", 0.0),
+            "workflow_engine": ComponentHealth("workflow_engine", HealthStatus.HEALTHY, "", 0.0),
         }
         result = health_checker._determine_overall_health(components)
         assert result == HealthStatus.DEGRADED
@@ -211,11 +227,11 @@ class TestHealthChecker:
     def test_determine_overall_health_with_unhealthy(self, health_checker):
         """Test overall health determination with unhealthy components."""
         components = {
-            "database": ComponentHealth(HealthStatus.UNHEALTHY),
-            "llm_providers": ComponentHealth(HealthStatus.HEALTHY),
-            "integrations": ComponentHealth(HealthStatus.HEALTHY),
-            "system_resources": ComponentHealth(HealthStatus.HEALTHY),
-            "workflow_engine": ComponentHealth(HealthStatus.HEALTHY),
+            "database": ComponentHealth("database", HealthStatus.UNHEALTHY, "", 0.0),
+            "llm_providers": ComponentHealth("llm_providers", HealthStatus.HEALTHY, "", 0.0),
+            "integrations": ComponentHealth("integrations", HealthStatus.HEALTHY, "", 0.0),
+            "system_resources": ComponentHealth("system_resources", HealthStatus.HEALTHY, "", 0.0),
+            "workflow_engine": ComponentHealth("workflow_engine", HealthStatus.HEALTHY, "", 0.0),
         }
         result = health_checker._determine_overall_health(components)
         assert result == HealthStatus.UNHEALTHY
@@ -223,11 +239,11 @@ class TestHealthChecker:
     def test_determine_overall_health_with_unknown(self, health_checker):
         """Test overall health determination with unknown status."""
         components = {
-            "database": ComponentHealth(HealthStatus.UNKNOWN),
-            "llm_providers": ComponentHealth(HealthStatus.HEALTHY),
-            "integrations": ComponentHealth(HealthStatus.HEALTHY),
-            "system_resources": ComponentHealth(HealthStatus.HEALTHY),
-            "workflow_engine": ComponentHealth(HealthStatus.HEALTHY),
+            "database": ComponentHealth("database", HealthStatus.UNKNOWN, "", 0.0),
+            "llm_providers": ComponentHealth("llm_providers", HealthStatus.HEALTHY, "", 0.0),
+            "integrations": ComponentHealth("integrations", HealthStatus.HEALTHY, "", 0.0),
+            "system_resources": ComponentHealth("system_resources", HealthStatus.HEALTHY, "", 0.0),
+            "workflow_engine": ComponentHealth("workflow_engine", HealthStatus.HEALTHY, "", 0.0),
         }
         result = health_checker._determine_overall_health(components)
         assert result in [HealthStatus.DEGRADED, HealthStatus.UNKNOWN]
