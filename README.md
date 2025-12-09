@@ -39,7 +39,9 @@ The CodeFlow Orchestration repository serves as the central hub for:
 - [Cost Optimization Implementation](./docs/COST_OPTIMIZATION_IMPLEMENTATION.md) - Cost optimization opportunities and implementation plan
 - [Process Automation](./docs/PROCESS_AUTOMATION.md) - Development and deployment process automation
 - [Metrics & Alerting Setup](./docs/METRICS_ALERTING_SETUP.md) - Azure metrics and alerting configuration
+- [Azure Dashboard Templates](./docs/AZURE_DASHBOARD_TEMPLATES.md) - Dashboard templates and KQL queries
 - [Package Publishing Quick Start](./docs/PACKAGE_PUBLISHING_QUICKSTART.md) - Quick-start guide for publishing packages
+- [Package Integration Guide](./docs/PACKAGE_INTEGRATION_GUIDE.md) - Guide for integrating utility packages
 
 ### Scripts
 
