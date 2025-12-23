@@ -191,7 +191,9 @@ class CoverageRunner:
         self.print_header("Coverage Measurement")
 
         print("Running tests with coverage...")
-        self.run_tests(generate_html=True, generate_xml=True)
+        tests_passed = self.run_tests(generate_html=True, generate_xml=True)
+        if not tests_passed:
+            print("Warning: Some tests failed. Coverage report may be incomplete.")
         print()
 
         self.print_header("Coverage Summary")
