@@ -54,7 +54,7 @@ class LLMConfig:
 
     provider: str
     api_key: str | None = None
-    model: str = "gpt-4"
+    model: str  # Required; provider-specific (e.g., gpt-4, claude-3-opus, mistral-large)
     temperature: float = 0.7
     max_tokens: int = 4096
 
