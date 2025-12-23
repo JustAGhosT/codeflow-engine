@@ -1,6 +1,9 @@
 # GitHub App Manifest for CodeFlow Engine
 # This manifest defines the GitHub App configuration for automatic setup
 # See: https://docs.github.com/en/apps/sharing-github-apps/registering-a-github-app-from-a-manifest
+#
+# NOTE: Before creating your GitHub App, replace 'your-app.azurewebsites.net' 
+# with your actual deployment URL in the webhook and callback URLs below.
 
 name: CodeFlow Engine Setup
 url: https://github.com/JustAGhosT/codeflow-engine
