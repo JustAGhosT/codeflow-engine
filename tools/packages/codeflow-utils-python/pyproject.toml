@@ -9,7 +9,7 @@ description = "Shared utility functions for CodeFlow Python applications"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.12"
-keywords = ["codeflow", "utils", "utilities", "resilience", "logging"]
+keywords = ["codeflow", "utils", "utilities", "resilience", "logging", "validation", "formatting", "retry", "rate-limiting"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
