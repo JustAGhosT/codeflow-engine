@@ -197,7 +197,7 @@ jobs:
           ENV_NAME="prod-codeflow-san-env"
           CUSTOM_DOMAIN="app.codeflow.io"
           
-          echo "ðŸ Checking for existing managed certificates for domain: $CUSTOM_DOMAIN"
+          echo "[*] Checking for existing managed certificates for domain: $CUSTOM_DOMAIN"
           
           # Check if environment exists
           if az containerapp env show -n $ENV_NAME -g $RESOURCE_GROUP &>/dev/null; then
@@ -217,7 +217,7 @@ jobs:
               echo "[!] Found duplicate managed certificate(s) for domain $CUSTOM_DOMAIN:"
               echo "$DUPLICATE_CERTS"
               echo ""
-              echo "ðŸ-]ï¸ Removing duplicate certificates to prevent deployment conflicts..."
+              echo "[*] Removing duplicate certificates to prevent deployment conflicts..."
               
               while IFS= read -r cert_name; do
                 if [ -n "$cert_name" ]; then
@@ -235,14 +235,14 @@ jobs:
               echo "[OK] No duplicate certificates found for $CUSTOM_DOMAIN"
             fi
           else
-            echo "â[i] Environment does not exist yet, skipping certificate cleanup"
+            echo "[i] Environment does not exist yet, skipping certificate cleanup"
           fi
           echo ""
 
       - name: Deploy Bicep Template
         run: |
-          echo "â[i] Note: SSL certificates are automatically managed by Azure. No certificate upload needed!"
-          echo "ðŸ[ See infrastructure/bicep/FAQ.md for certificate details"
+          echo "[i] Note: SSL certificates are automatically managed by Azure. No certificate upload needed!"
+          echo "[*] See infrastructure/bicep/FAQ.md for certificate details"
           echo ""
           az deployment group create \
             --name codeflow-engine \
@@ -280,12 +280,12 @@ jobs:
           echo "PostgreSQL FQDN: ${{ steps.outputs.outputs.postgres_fqdn }}"
           echo "Redis Host: ${{ steps.outputs.outputs.redis_host }}"
           echo ""
-          echo "ðŸ SSL Certificate: Automatically managed by Azure (no action needed)"
+          echo "[*] SSL Certificate: Automatically managed by Azure (no action needed)"
           echo ""
           echo "[!] Next steps:"
           echo "1. Add DNS CNAME record: ${{ steps.outputs.outputs.custom_domain }} -> Container App FQDN"
           echo "2. Wait for DNS propagation (typically 15-30 minutes)"
           echo "3. Azure will automatically provision and bind the SSL certificate (5-15 minutes)"
           echo ""
-          echo "ðŸ[ For troubleshooting, see: infrastructure/bicep/FAQ.md"
+          echo "[*] For troubleshooting, see: infrastructure/bicep/FAQ.md"
 
