@@ -61,16 +61,17 @@ class YAMLLinterCLI(BaseLinterCLI):
 
     def create_linter(self, args: argparse.Namespace) -> YAMLLinter:
         """Create a YAMLLinter instance with the given configuration."""
-        return YAMLLinter(
-            {
-                "max_line_length": args.max_line_length,
-                "indent_size": args.indent_size,
-                "enforce_document_start": args.enforce_document_start,
-                "enforce_document_end": args.enforce_document_end,
-                "check_empty_values": args.check_empty_values,
-                "check_truthy": args.check_truthy,
-            }
-        )
+        # Merge provided args with defaults to ensure all config keys are present
+        config = {
+            **YAMLLinter.DEFAULT_CONFIG,
+            "max_line_length": args.max_line_length,
+            "indent_size": args.indent_size,
+            "enforce_document_start": args.enforce_document_start,
+            "enforce_document_end": args.enforce_document_end,
+            "check_empty_values": args.check_empty_values,
+            "check_truthy": args.check_truthy,
+        }
+        return YAMLLinter(config)
 
 
 def main(args: list[str] | None = None) -> int:

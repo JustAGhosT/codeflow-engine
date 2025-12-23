@@ -149,6 +149,11 @@ class BaseLinterCLI(ABC):
         for path_str in paths:
             path = Path(path_str)
 
+            if not path.exists():
+                if verbose > 0:
+                    print(f"Warning: Path does not exist: {path}", file=sys.stderr)
+                continue
+
             if path.is_file():
                 if not self.file_extensions or path.suffix in self.file_extensions:
                     linter.check_file(path)

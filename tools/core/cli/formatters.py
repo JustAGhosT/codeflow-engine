@@ -25,6 +25,7 @@ def format_issue_text(
     file_path: Path,
     use_color: bool = True,
     verbose: int = 0,
+    omit_file: bool = False,
 ) -> str:
     """Format a single issue for text output.
 
@@ -33,6 +34,8 @@ def format_issue_text(
         file_path: The path to the file containing the issue
         use_color: Whether to use ANSI color codes
         verbose: Verbosity level (0=minimal, 1+=detailed)
+        omit_file: Whether to omit the file path from the output (useful when
+            file path is already displayed as a header)
 
     Returns:
         A formatted string representation of the issue
@@ -41,7 +44,10 @@ def format_issue_text(
     reset = RESET if use_color else ""
     severity_name = issue.severity.name.lower()
 
-    location = f"{file_path}:{issue.line}:{issue.column}"
+    if omit_file:
+        location = f"{issue.line}:{issue.column}"
+    else:
+        location = f"{file_path}:{issue.line}:{issue.column}"
 
     if verbose >= 1:
         # Detailed format with context
@@ -117,7 +123,7 @@ def format_report_text(
 
         lines.append(f"\n{file_path}:")
         for issue in sorted(issues, key=lambda x: (x.line, x.column)):
-            lines.append(f"  {format_issue_text(issue, file_path, use_color, verbose)}")
+            lines.append(f"  {format_issue_text(issue, file_path, use_color, verbose, omit_file=True)}")
 
     if total_issues > 0 or verbose > 0:
         lines.append(format_summary(total_issues, total_files))
