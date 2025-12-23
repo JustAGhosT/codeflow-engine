@@ -1,0 +1,57 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "codeflow-utils"
+version = "0.1.0"
+description = "Shared utility functions for CodeFlow Python applications"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+keywords = ["codeflow", "utils", "utilities", "resilience", "logging"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Typing :: Typed",
+]
+
+dependencies = []
+
+[project.optional-dependencies]
+logging = ["structlog>=24.0.0"]
+resilience = []
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "mypy>=1.11.0",
+    "ruff>=0.6.0",
+]
+
+[project.urls]
+Documentation = "https://github.com/JustAGhosT/codeflow-engine/tree/main/tools/packages/codeflow-utils-python"
+Source = "https://github.com/JustAGhosT/codeflow-engine"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/codeflow_utils"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "B", "UP"]
