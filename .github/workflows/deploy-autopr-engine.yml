@@ -1,4 +1,4 @@
-﻿name: Build and Deploy CodeFlow Engine
+name: Build and Deploy CodeFlow Engine
 
 on:
   push:
@@ -42,16 +42,16 @@ jobs:
         run: |
           echo "Validating GitHub App manifest..."
           python3 -c "import yaml; yaml.safe_load(open('.github/app-manifest.yml'))"
-          echo "âœ… app-manifest.yml is valid YAML"
+          echo "[OK] app-manifest.yml is valid YAML"
 
       - name: Validate .codeflow.yml config
         run: |
           if [ -f ".codeflow.yml" ]; then
             echo "Validating .codeflow.yml..."
             python3 -c "import yaml; yaml.safe_load(open('.codeflow.yml'))"
-            echo "âœ… .codeflow.yml is valid YAML"
+            echo "[OK] .codeflow.yml is valid YAML"
           else
-            echo "âš ï¸ .codeflow.yml not found (optional)"
+            echo "[!] .codeflow.yml not found (optional)"
           fi
 
       - name: Set up Docker Buildx
@@ -70,7 +70,7 @@ jobs:
             RUN_TESTS=false
 
       - name: Validate build
-        run: echo "âœ… Docker image built successfully for PR validation"
+        run: echo "[OK] Docker image built successfully for PR validation"
 
   build-and-push:
     name: Build and Push Container Image
@@ -197,7 +197,7 @@ jobs:
           ENV_NAME="prod-codeflow-san-env"
           CUSTOM_DOMAIN="app.codeflow.io"
           
-          echo "ðŸ” Checking for existing managed certificates for domain: $CUSTOM_DOMAIN"
+          echo "ðŸ Checking for existing managed certificates for domain: $CUSTOM_DOMAIN"
           
           # Check if environment exists
           if az containerapp env show -n $ENV_NAME -g $RESOURCE_GROUP &>/dev/null; then
@@ -214,10 +214,10 @@ jobs:
               '.[] | select(.properties.subjectName == $domain and .type == "Microsoft.App/managedEnvironments/managedCertificates") | .name')
             
             if [ -n "$DUPLICATE_CERTS" ]; then
-              echo "âš ï¸ Found duplicate managed certificate(s) for domain $CUSTOM_DOMAIN:"
+              echo "[!] Found duplicate managed certificate(s) for domain $CUSTOM_DOMAIN:"
               echo "$DUPLICATE_CERTS"
               echo ""
-              echo "ðŸ—‘ï¸ Removing duplicate certificates to prevent deployment conflicts..."
+              echo "ðŸ-]ï¸ Removing duplicate certificates to prevent deployment conflicts..."
               
               while IFS= read -r cert_name; do
                 if [ -n "$cert_name" ]; then
@@ -226,23 +226,23 @@ jobs:
                     --name $ENV_NAME \
                     --resource-group $RESOURCE_GROUP \
                     --certificate "$cert_name" \
-                    --yes || echo "âš ï¸ Failed to delete certificate $cert_name (may not exist or be in use)"
+                    --yes || echo "[!] Failed to delete certificate $cert_name (may not exist or be in use)"
                 fi
               done <<< "$DUPLICATE_CERTS"
               
-              echo "âœ… Cleanup completed"
+              echo "[OK] Cleanup completed"
             else
-              echo "âœ… No duplicate certificates found for $CUSTOM_DOMAIN"
+              echo "[OK] No duplicate certificates found for $CUSTOM_DOMAIN"
             fi
           else
-            echo "â„¹ï¸ Environment does not exist yet, skipping certificate cleanup"
+            echo "â[i] Environment does not exist yet, skipping certificate cleanup"
           fi
           echo ""
 
       - name: Deploy Bicep Template
         run: |
-          echo "â„¹ï¸ Note: SSL certificates are automatically managed by Azure. No certificate upload needed!"
-          echo "ðŸ“– See infrastructure/bicep/FAQ.md for certificate details"
+          echo "â[i] Note: SSL certificates are automatically managed by Azure. No certificate upload needed!"
+          echo "ðŸ[ See infrastructure/bicep/FAQ.md for certificate details"
           echo ""
           az deployment group create \
             --name codeflow-engine \
@@ -274,18 +274,18 @@ jobs:
 
       - name: Display deployment info
         run: |
-          echo "âœ… Deployment successful!"
+          echo "[OK] Deployment successful!"
           echo "Container App URL: ${{ steps.outputs.outputs.container_app_url }}"
           echo "Custom Domain: ${{ steps.outputs.outputs.custom_domain }}"
           echo "PostgreSQL FQDN: ${{ steps.outputs.outputs.postgres_fqdn }}"
           echo "Redis Host: ${{ steps.outputs.outputs.redis_host }}"
           echo ""
-          echo "ðŸ”’ SSL Certificate: Automatically managed by Azure (no action needed)"
+          echo "ðŸ SSL Certificate: Automatically managed by Azure (no action needed)"
           echo ""
-          echo "âš ï¸ Next steps:"
+          echo "[!] Next steps:"
           echo "1. Add DNS CNAME record: ${{ steps.outputs.outputs.custom_domain }} -> Container App FQDN"
           echo "2. Wait for DNS propagation (typically 15-30 minutes)"
           echo "3. Azure will automatically provision and bind the SSL certificate (5-15 minutes)"
           echo ""
-          echo "ðŸ“– For troubleshooting, see: infrastructure/bicep/FAQ.md"
+          echo "ðŸ[ For troubleshooting, see: infrastructure/bicep/FAQ.md"
 
