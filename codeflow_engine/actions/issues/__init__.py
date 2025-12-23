@@ -43,8 +43,15 @@ try:
 except ImportError:
     pass
 
+FindStaleIssuesOrPRs: type[Any] | None = None
+try:
+    from codeflow_engine.actions.issues.find_stale_issues_or_prs import FindStaleIssuesOrPRs
+except ImportError:
+    pass
+
 __all__ = [
     "CreateOrUpdateIssue",
+    "FindStaleIssuesOrPRs",
     "IssueCreator",
     "LabelPR",
     "LabelPRBySize",

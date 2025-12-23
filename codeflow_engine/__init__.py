@@ -34,9 +34,16 @@ from codeflow_engine.exceptions import (
 )
 from codeflow_engine.integrations.base import Integration
 from codeflow_engine.quality.metrics_collector import MetricsCollector
-from codeflow_engine.security.authorization.enterprise_manager import (
-    EnterpriseAuthorizationManager,
-)
+
+# Security - guarded import
+EnterpriseAuthorizationManager: type[Any] | None = None
+try:
+    from codeflow_engine.security.authorization.enterprise_manager import (
+        EnterpriseAuthorizationManager,
+    )
+except (ImportError, OSError):
+    pass
+
 from codeflow_engine.workflows.base import Workflow
 from codeflow_engine.workflows.engine import WorkflowEngine
 

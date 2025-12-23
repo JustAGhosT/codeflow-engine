@@ -4,9 +4,10 @@ Configuration Models
 This module contains data models for configuration objects used in the CodeFlow system.
 """
 
-from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Any
+
+from pydantic import BaseModel, Field, SecretStr, field_validator, model_validator
 
 
 class LogLevel(StrEnum):
@@ -28,59 +29,95 @@ class Environment(StrEnum):
     TESTING = "testing"
 
 
-@dataclass
-class DatabaseConfig:
-    """Database configuration model."""
+class DatabaseConfig(BaseModel):
+    """Database configuration model with validation."""
 
     url: str
-    pool_size: int = 5
-    max_overflow: int = 10
+    pool_size: int = Field(default=5, ge=0)
+    max_overflow: int = Field(default=10, ge=0)
     echo: bool = False
     ssl_required: bool = True
 
+    @field_validator("url")
+    @classmethod
+    def validate_url(cls, v: str) -> str:
+        """Validate database URL format."""
+        if not v:
+            raise ValueError("Database URL cannot be empty")
+        # Basic URL validation - must contain ://
+        if "://" not in v:
+            raise ValueError(
+                "Invalid database URL format. Expected format: dialect://user:password@host:port/database"
+            )
+        return v
 
-@dataclass
-class RedisConfig:
-    """Redis configuration model."""
+
+class RedisConfig(BaseModel):
+    """Redis configuration model with validation."""
 
     url: str
-    max_connections: int = 10
+    max_connections: int = Field(default=10, ge=0)
     ssl: bool = True
 
+    @field_validator("url")
+    @classmethod
+    def validate_url(cls, v: str) -> str:
+        """Validate Redis URL format."""
+        if not v:
+            raise ValueError("Redis URL cannot be empty")
+        # Basic URL validation - must contain ://
+        if "://" not in v:
+            raise ValueError(
+                "Invalid Redis URL format. Expected format: redis://host:port or rediss://host:port"
+            )
+        return v
 
-@dataclass
-class LLMConfig:
-    """LLM provider configuration model."""
+
+class LLMConfig(BaseModel):
+    """LLM provider configuration model with validation."""
 
     provider: str
-    api_key: str | None = None
+    api_key: SecretStr | None = None
     model: str  # Required; provider-specific (e.g., gpt-4, claude-3-opus, mistral-large)
-    temperature: float = 0.7
-    max_tokens: int = 4096
+    temperature: float = Field(default=0.7, ge=0.0, le=2.0)
+    max_tokens: int = Field(default=4096, gt=0)
+
+    @field_validator("temperature")
+    @classmethod
+    def validate_temperature(cls, v: float) -> float:
+        """Validate temperature is within sensible range."""
+        if not 0.0 <= v <= 2.0:
+            raise ValueError("Temperature must be between 0.0 and 2.0")
+        return v
 
 
-@dataclass
-class GitHubConfig:
-    """GitHub integration configuration model."""
+class GitHubConfig(BaseModel):
+    """GitHub integration configuration model with secrets protection."""
 
-    token: str | None = None
+    token: SecretStr | None = None
     app_id: str | None = None
-    private_key: str | None = None
-    webhook_secret: str | None = None
+    private_key: SecretStr | None = None
+    webhook_secret: SecretStr | None = None
 
 
-@dataclass
-class WorkflowConfig:
-    """Workflow execution configuration model."""
+class WorkflowConfig(BaseModel):
+    """Workflow execution configuration model with validation."""
 
-    max_concurrent: int = 10
-    timeout_seconds: int = 300
-    retry_attempts: int = 3
-    retry_delay_seconds: int = 5
+    max_concurrent: int = Field(default=10, gt=0)
+    timeout_seconds: int = Field(default=300, gt=0)
+    retry_attempts: int = Field(default=3, ge=0)
+    retry_delay_seconds: int = Field(default=5, gt=0)
+
+    @field_validator("max_concurrent", "timeout_seconds")
+    @classmethod
+    def validate_positive(cls, v: int) -> int:
+        """Validate that values are positive."""
+        if v <= 0:
+            raise ValueError("Value must be positive")
+        return v
 
 
-@dataclass
-class AppConfig:
+class AppConfig(BaseModel):
     """Main application configuration model."""
 
     environment: Environment = Environment.DEVELOPMENT
@@ -90,8 +127,8 @@ class AppConfig:
     redis: RedisConfig | None = None
     llm: LLMConfig | None = None
     github: GitHubConfig | None = None
-    workflow: WorkflowConfig = field(default_factory=WorkflowConfig)
-    custom_settings: dict[str, Any] = field(default_factory=dict)
+    workflow: WorkflowConfig = Field(default_factory=WorkflowConfig)
+    custom_settings: dict[str, Any] = Field(default_factory=dict)
 
 
 __all__ = [
