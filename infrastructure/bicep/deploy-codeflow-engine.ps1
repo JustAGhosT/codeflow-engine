@@ -1,0 +1,249 @@
+<#
+.SYNOPSIS
+Deploys CodeFlow Engine infrastructure to Azure.
+
+.DESCRIPTION
+Creates Container Apps Environment, Container App, PostgreSQL Database, and Redis Cache.
+
+.PARAMETER Environment
+Environment name (dev, test, uat, prod). Default: dev
+
+.PARAMETER RegionAbbr
+Azure region abbreviation (san, eus, wus, etc.). Default: san
+
+.PARAMETER Location
+Azure location for most resources. Default: southafricanorth
+
+.PARAMETER PostgresLocation
+Azure location for PostgreSQL (must support Flexible Server). Default: southafricanorth
+
+.PARAMETER ContainerImage
+Container image name. Default: placeholder image
+
+.PARAMETER CustomDomain
+Custom domain name for the container app. Default: empty (no custom domain)
+
+.PARAMETER OrgCode
+Organization code. Default: nl
+
+.PARAMETER Project
+Project name. Default: codeflow
+
+.EXAMPLE
+.\deploy-codeflow-engine.ps1 -Environment dev -RegionAbbr san -Location southafricanorth
+#>
+
+[CmdletBinding()]
+param(
+    [string]$Environment = "dev",
+    [string]$RegionAbbr = "san",
+    [string]$Location = "southafricanorth",
+    [string]$PostgresLocation = "southafricanorth",
+    [string]$ContainerImage = "",
+    [string]$CustomDomain = "",
+    [string]$OrgCode = "nl",
+    [string]$Project = "codeflow"
+)
+
+$ErrorActionPreference = 'Stop'
+
+# ============================================================================
+# SECTION 1: Initialization and Validation
+# ============================================================================
+$ResourceGroup = "$OrgCode-$Environment-$Project-rg-$RegionAbbr"
+
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "Deploying CodeFlow Engine Infrastructure" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Configuration:" -ForegroundColor Yellow
+Write-Host "  Environment: $Environment" -ForegroundColor White
+Write-Host "  Region: $RegionAbbr" -ForegroundColor White
+Write-Host "  Location: $Location" -ForegroundColor White
+Write-Host "  PostgreSQL Location: $PostgresLocation" -ForegroundColor White
+Write-Host "  Resource Group: $ResourceGroup" -ForegroundColor White
+Write-Host "  Custom Domain: $(if ([string]::IsNullOrEmpty($CustomDomain)) { 'None' } else { $CustomDomain })" -ForegroundColor White
+Write-Host ""
+
+# Validate Azure CLI is installed
+if (-not (Get-Command az -ErrorAction SilentlyContinue)) {
+    Write-Host "✗ Azure CLI is not installed or not in PATH" -ForegroundColor Red
+    Write-Host "  Install from: https://aka.ms/InstallAzureCLI" -ForegroundColor Yellow
+    exit 1
+}
+
+# Validate Bicep file exists
+$bicepFile = Join-Path $PSScriptRoot "codeflow-engine.bicep"
+if (-not (Test-Path $bicepFile)) {
+    Write-Host "✗ Bicep template not found: $bicepFile" -ForegroundColor Red
+    exit 1
+}
+
+# ============================================================================
+# SECTION 2: Resource Group Management
+# ============================================================================
+Write-Host "Checking resource group..." -ForegroundColor Yellow
+$rgExists = az group show --name $ResourceGroup --query "name" --output tsv 2>$null
+if (-not $rgExists) {
+    Write-Host "  Creating resource group..." -ForegroundColor Gray
+    az group create --name $ResourceGroup --location $Location --output none
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "✗ Failed to create resource group" -ForegroundColor Red
+        exit 1
+    }
+    Write-Host "  ✓ Resource group created" -ForegroundColor Green
+}
+else {
+    Write-Host "  ✓ Resource group already exists" -ForegroundColor Green
+}
+Write-Host ""
+
+# ============================================================================
+# SECTION 3: Container Image Configuration
+# ============================================================================
+if ([string]::IsNullOrEmpty($ContainerImage)) {
+    Write-Host "⚠️  WARNING: No container image specified. Using placeholder image for testing." -ForegroundColor Yellow
+    Write-Host "   Build and push the image first, then update the Container App." -ForegroundColor Gray
+    Write-Host "   See: bicep/BUILD_AND_PUSH_IMAGE.md" -ForegroundColor Gray
+    Write-Host ""
+    $ContainerImage = "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest"
+}
+
+# ============================================================================
+# SECTION 4: Credential Management
+# ============================================================================
+$PostgresLogin = "codeflow"
+
+# Generate passwords if not provided
+if ([string]::IsNullOrEmpty($env:POSTGRES_PASSWORD)) {
+    Write-Host "Generating PostgreSQL password..." -ForegroundColor Yellow
+    $env:POSTGRES_PASSWORD = -join ((48..57) + (65..90) + (97..122) | Get-Random -Count 32 | ForEach-Object { [char]$_ })
+}
+
+if ([string]::IsNullOrEmpty($env:REDIS_PASSWORD)) {
+    Write-Host "Generating Redis password..." -ForegroundColor Yellow
+    $env:REDIS_PASSWORD = -join ((48..57) + (65..90) + (97..122) | Get-Random -Count 32 | ForEach-Object { [char]$_ })
+}
+
+# Save credentials securely (temporary - should be moved to Azure Key Vault)
+$CredentialsFile = ".credentials-$ResourceGroup.json"
+
+# Remove existing file if it exists
+if (Test-Path $CredentialsFile) {
+    Remove-Item $CredentialsFile -Force -ErrorAction SilentlyContinue
+}
+
+$credentials = @{
+    resource_group    = $ResourceGroup
+    postgres_login    = $PostgresLogin
+    postgres_password = $env:POSTGRES_PASSWORD
+    redis_password    = $env:REDIS_PASSWORD
+    created_at        = (Get-Date -Format "o")
+} | ConvertTo-Json
+
+try {
+    $credentials | Out-File -FilePath $CredentialsFile -Encoding utf8 -NoNewline -Force
+    # Try to hide the file (may fail on some systems, that's OK)
+    try {
+        $file = Get-Item $CredentialsFile -Force
+        $file.Attributes = $file.Attributes -bor [System.IO.FileAttributes]::Hidden
+    }
+    catch {
+        # Ignore if we can't hide the file
+    }
+    Write-Host "⚠️  IMPORTANT: Credentials saved to $CredentialsFile" -ForegroundColor Yellow
+    Write-Host "   Store them in a secure secrets manager (Azure Key Vault, etc.)" -ForegroundColor Gray
+    Write-Host "   Then delete the file: Remove-Item $CredentialsFile" -ForegroundColor Gray
+    Write-Host "   DO NOT commit credentials files to version control!" -ForegroundColor Red
+}
+catch {
+    Write-Host "⚠️  WARNING: Could not save credentials file: $_" -ForegroundColor Yellow
+    Write-Host "   Credentials are:" -ForegroundColor Yellow
+    Write-Host "     PostgreSQL Password: $env:POSTGRES_PASSWORD" -ForegroundColor Gray
+    Write-Host "     Redis Password: $env:REDIS_PASSWORD" -ForegroundColor Gray
+    Write-Host "   Please save these securely!" -ForegroundColor Yellow
+}
+Write-Host ""
+
+# ============================================================================
+# SECTION 5: Infrastructure Deployment
+# ============================================================================
+Write-Host "Deploying infrastructure..." -ForegroundColor Green
+$deploymentName = "codeflow-engine-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+
+Write-Host "  Deployment name: $deploymentName" -ForegroundColor Gray
+Write-Host "  Template file: $bicepFile" -ForegroundColor Gray
+Write-Host ""
+
+az deployment group create `
+    --name $deploymentName `
+    --resource-group $ResourceGroup `
+    --template-file $bicepFile `
+    --parameters `
+    orgCode=$OrgCode `
+    project=$Project `
+    environment=$Environment `
+    regionAbbr=$RegionAbbr `
+    location=$Location `
+    postgresLocation=$PostgresLocation `
+    customDomain=$CustomDomain `
+    containerImage=$ContainerImage `
+    postgresLogin=$PostgresLogin `
+    postgresPassword=$env:POSTGRES_PASSWORD `
+    redisPassword=$env:REDIS_PASSWORD `
+    --output json | Out-File -FilePath "deployment-output.json" -Encoding utf8
+
+# ============================================================================
+# SECTION 6: Deployment Results and Next Steps
+# ============================================================================
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "✓ Deployment complete!" -ForegroundColor Green
+    Write-Host ""
+    
+    # Get Container App URL from deployment output
+    if (Test-Path "deployment-output.json") {
+        try {
+            $output = Get-Content "deployment-output.json" | ConvertFrom-Json
+            $containerAppUrl = $output.properties.outputs.containerAppUrl.value
+            
+            Write-Host "Deployment Summary:" -ForegroundColor Cyan
+            Write-Host "  Container App URL: $containerAppUrl" -ForegroundColor White
+            
+            if (![string]::IsNullOrEmpty($CustomDomain)) {
+                Write-Host "  Custom Domain: $CustomDomain" -ForegroundColor White
+                Write-Host ""
+                Write-Host "Next Steps:" -ForegroundColor Yellow
+                Write-Host "1. Add DNS CNAME record for $CustomDomain pointing to the Container App URL above" -ForegroundColor White
+                Write-Host "2. Wait for DNS propagation (typically 15-30 minutes)" -ForegroundColor White
+                Write-Host "3. Azure will automatically provision the SSL certificate" -ForegroundColor White
+            }
+            else {
+                Write-Host ""
+                Write-Host "Note: No custom domain configured. Container App is accessible via the URL above." -ForegroundColor Gray
+                Write-Host "To add a custom domain later, redeploy with -CustomDomain parameter." -ForegroundColor Gray
+            }
+        }
+        catch {
+            Write-Host "⚠️  Could not read deployment output: $_" -ForegroundColor Yellow
+            Write-Host "   Check deployment-output.json manually for deployment details." -ForegroundColor Gray
+        }
+    }
+    else {
+        Write-Host "⚠️  Deployment output file not found" -ForegroundColor Yellow
+    }
+    
+    Write-Host ""
+    Write-Host "✓ Deployment script completed successfully!" -ForegroundColor Green
+}
+else {
+    Write-Host "✗ Deployment failed!" -ForegroundColor Red
+    Write-Host "Check the error messages above for details." -ForegroundColor Yellow
+    Write-Host "Common issues:" -ForegroundColor Yellow
+    Write-Host "  - Invalid parameters or resource names" -ForegroundColor Gray
+    Write-Host "  - Insufficient permissions" -ForegroundColor Gray
+    Write-Host "  - Resource quota limits" -ForegroundColor Gray
+    Write-Host "  - Network connectivity issues" -ForegroundColor Gray
+    exit 1
+}
+
+

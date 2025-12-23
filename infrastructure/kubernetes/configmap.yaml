@@ -1,0 +1,7 @@
+﻿apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: codeflow-config
+data:
+  CODEFLOW_ENV: "production"
+  CODEFLOW_LOG_LEVEL: "INFO"
