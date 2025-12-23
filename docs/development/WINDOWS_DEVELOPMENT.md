@@ -55,7 +55,7 @@ If you want to keep Windows Store Python, you can create manual git hooks:
 ```bash
 #!/bin/sh
 echo "Running code quality checks..."
-python scripts/code_quality.py check
+python tools/scripts/code_quality.py check
 if [ $? -ne 0 ]; then
     echo "Code quality checks failed. Please fix issues before committing."
     exit 1

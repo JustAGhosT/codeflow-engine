@@ -38,7 +38,7 @@ poetry run pytest --cov=codeflow_engine --cov-report=html
 open htmlcov/index.html
 
 # Or use the measurement script
-./scripts/measure-coverage.sh
+./tools/coverage/measure-coverage.sh
 ```
 
 ### 3. Run by Category
@@ -140,10 +140,10 @@ def test_with_sample_data():
 
 ```bash
 # Check if coverage meets threshold
-./scripts/check-coverage.sh 70
+./tools/coverage/check-coverage.sh 70
 
 # Or PowerShell
-.\scripts\check-coverage.ps1 -CoverageThreshold 70
+.\tools\coverage\check-coverage.ps1 -CoverageThreshold 70
 ```
 
 ---

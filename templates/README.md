@@ -126,7 +126,7 @@ All templates can be customized by:
 
 ### Template Validation
 
-Templates are validated using `scripts/validate_templates.py` to ensure:
+Templates are validated using `tools/scripts/validate_templates.py` to ensure:
 
 - Proper syntax and structure
 - Required parameters are defined

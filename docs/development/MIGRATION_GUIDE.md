@@ -162,7 +162,7 @@ New validation scripts have been created to maintain repository health:
 ### 1. Import Validation
 
 ```bash
-python scripts/validate_imports.py
+python tools/scripts/validate_imports.py
 ```
 
 - Scans all Python files for broken imports
@@ -172,7 +172,7 @@ python scripts/validate_imports.py
 ### 2. Link Validation
 
 ```bash
-python scripts/validate_links.py
+python tools/scripts/validate_links.py
 ```
 
 - Validates all Markdown links in documentation
@@ -182,7 +182,7 @@ python scripts/validate_links.py
 ### 3. Configuration Validation
 
 ```bash
-python scripts/validate_configs.py
+python tools/scripts/validate_configs.py
 ```
 
 - Validates all configuration files (YAML, JSON, INI)
@@ -192,7 +192,7 @@ python scripts/validate_configs.py
 ### 4. Template Validation
 
 ```bash
-python scripts/validate_templates.py
+python tools/scripts/validate_templates.py
 ```
 
 - Validates all template files
@@ -202,7 +202,7 @@ python scripts/validate_templates.py
 ### 5. Build System Validation
 
 ```bash
-python scripts/validate_build_system.py
+python tools/scripts/validate_build_system.py
 ```
 
 - Validates pyproject.toml configuration
@@ -268,11 +268,11 @@ The pre-commit configuration has been updated to include:
 
 ```bash
 # Run all validation scripts
-python scripts/validate_imports.py
-python scripts/validate_links.py
-python scripts/validate_configs.py
-python scripts/validate_templates.py
-python scripts/validate_build_system.py
+python tools/scripts/validate_imports.py
+python tools/scripts/validate_links.py
+python tools/scripts/validate_configs.py
+python tools/scripts/validate_templates.py
+python tools/scripts/validate_build_system.py
 ```
 
 ### Expected Results
@@ -288,7 +288,7 @@ python scripts/validate_build_system.py
 1. **Import Errors After Reorganization:**
 
    ```bash
-   python scripts/validate_imports.py
+   python tools/scripts/validate_imports.py
    ```
 
    - Check the generated report for specific import issues
@@ -297,7 +297,7 @@ python scripts/validate_build_system.py
 2. **Broken Documentation Links:**
 
    ```bash
-   python scripts/validate_links.py
+   python tools/scripts/validate_links.py
    ```
 
    - Review the link validation report
@@ -306,7 +306,7 @@ python scripts/validate_build_system.py
 3. **Configuration Issues:**
 
    ```bash
-   python scripts/validate_configs.py
+   python tools/scripts/validate_configs.py
    ```
 
    - Check for configuration validation errors
@@ -329,9 +329,9 @@ Run validation scripts regularly to maintain repository health:
 
 ```bash
 # Weekly validation
-python scripts/validate_imports.py
-python scripts/validate_links.py
-python scripts/validate_configs.py
+python tools/scripts/validate_imports.py
+python tools/scripts/validate_links.py
+python tools/scripts/validate_configs.py
 ```
 
 ### Adding New Files
@@ -341,14 +341,14 @@ When adding new files, ensure they follow the established organization:
 - **Documentation**: Place in appropriate `docs/` subdirectory
 - **Templates**: Use existing template categories or create new ones
 - **Configuration**: Add to `configs/` with proper validation
-- **Scripts**: Add to `scripts/` with validation capabilities
+- **Scripts**: Add to `tools/scripts/` with validation capabilities
 
 ### Updating Dependencies
 
 When updating dependencies:
 
 1. Update `pyproject.toml` only
-2. Run `python scripts/validate_build_system.py`
+2. Run `python tools/scripts/validate_build_system.py`
 3. Test installation with new dependencies
 
 ## Conclusion

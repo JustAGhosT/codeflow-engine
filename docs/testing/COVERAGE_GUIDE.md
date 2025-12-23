@@ -57,13 +57,13 @@ open htmlcov/index.html
 
 **Bash:**
 ```bash
-./scripts/check-coverage.sh [threshold]
+./tools/coverage/check-coverage.sh [threshold]
 # Default threshold: 70%
 ```
 
 **PowerShell:**
 ```powershell
-.\scripts\check-coverage.ps1 -CoverageThreshold 70
+.\tools\coverage\check-coverage.ps1 -CoverageThreshold 70
 ```
 
 ### Coverage by Module
