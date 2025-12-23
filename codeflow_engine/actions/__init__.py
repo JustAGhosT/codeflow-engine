@@ -186,6 +186,13 @@ try:
 except ImportError:
     pass
 
+# Create llm alias for backward compatibility (codeflow_engine.actions.llm)
+llm = None
+try:
+    from codeflow_engine.actions.ai_actions import llm
+except ImportError:
+    pass
+
 # Platform
 PlatformDetector: type[Any] | None = None
 try:
@@ -223,6 +230,7 @@ __all__ = [
     "generation",
     "git",
     "issues",
+    "llm",  # Backward compatibility alias for ai_actions.llm
     "maintenance",
     "platform",
     "quality",

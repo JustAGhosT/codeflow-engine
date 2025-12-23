@@ -1,18 +1,32 @@
 """
 Anthropic Claude provider implementation.
+
+Uses BaseLLMProvider with Anthropic-specific message handling.
 """
 
 from typing import Any
 
-from codeflow_engine.actions.llm.base import BaseLLMProvider
-from codeflow_engine.actions.llm.types import LLMResponse
+from codeflow_engine.core.llm import BaseLLMProvider, LLMResponse, LLMProviderRegistry
+from codeflow_engine.core.llm.response import ResponseExtractor
 
 
 class AnthropicProvider(BaseLLMProvider):
-    """Anthropic Claude provider."""
+    """
+    Anthropic Claude provider.
+
+    Anthropic has a different API format than OpenAI, requiring custom
+    message conversion and response extraction.
+    """
+
+    DEFAULT_MODEL = "claude-3-sonnet-20240229"
 
     def __init__(self, config: dict[str, Any]) -> None:
         super().__init__(config)
+        self.client: Any = None
+        self._initialize_client()
+
+    def _initialize_client(self) -> None:
+        """Initialize the Anthropic client."""
         try:
             import anthropic
 
@@ -23,66 +37,69 @@ class AnthropicProvider(BaseLLMProvider):
         except ImportError:
             self.available = False
 
+    def _convert_messages(self, messages: list[dict[str, Any]]) -> tuple[str, list[dict[str, str]]]:
+        """
+        Convert messages to Anthropic format, extracting system prompt.
+
+        Args:
+            messages: List of message dicts with role and content
+
+        Returns:
+            Tuple of (system_prompt, converted_messages)
+        """
+        system_prompt = ""
+        converted_messages: list[dict[str, str]] = []
+
+        for msg in messages:
+            role = msg.get("role", "user")
+            content = msg.get("content", "")
+            if not content:
+                continue
+
+            if role == "system":
+                system_prompt += content + "\n"
+            else:
+                converted_messages.append({"role": role, "content": content})
+
+        return system_prompt.strip(), converted_messages
+
     def complete(self, request: dict[str, Any]) -> LLMResponse:
+        """Complete a chat conversation using Anthropic's API."""
+        if not self.client:
+            return LLMResponse.from_error(
+                "Anthropic client not initialized",
+                self.get_model(request, self.DEFAULT_MODEL),
+            )
+
         try:
             messages = request.get("messages", [])
-            model = (
-                request.get("model", self.default_model) or "claude-3-sonnet-20240229"
-            )
+            model = self.get_model(request, self.DEFAULT_MODEL)
             max_tokens = request.get("max_tokens", 1024)
             temperature = request.get("temperature", 0.7)
 
             # Convert messages to Anthropic format
-            system_prompt = ""
-            converted_messages: list[dict[str, str]] = []
+            system_prompt, converted_messages = self._convert_messages(messages)
 
-            for msg in messages:
-                role = msg.get("role", "user")
-                content = msg.get("content", "")
-                if not content:
-                    continue
+            if not converted_messages:
+                return LLMResponse.from_error("No valid messages provided", model)
 
-                if role == "system":
-                    system_prompt += content + "\n"
-                else:
-                    converted_messages.append({"role": role, "content": content})
+            # Build API call parameters
+            api_params: dict[str, Any] = {
+                "model": str(model),
+                "max_tokens": max_tokens,
+                "temperature": temperature,
+                "messages": converted_messages,
+            }
 
-            # Prepare system parameter - use NotGiven if empty
-            system_param = system_prompt.strip() or None
+            # Only include system if not empty
+            if system_prompt:
+                api_params["system"] = system_prompt
 
             # Call the API
-            if system_param:
-                response = self.client.messages.create(
-                    model=str(model),
-                    max_tokens=max_tokens,
-                    temperature=temperature,
-                    system=system_param,
-                    messages=converted_messages,  # type: ignore[arg-type]
-                )
-            else:
-                response = self.client.messages.create(
-                    model=str(model),
-                    max_tokens=max_tokens,
-                    temperature=temperature,
-                    messages=converted_messages,  # type: ignore[arg-type]
-                )
+            response = self.client.messages.create(**api_params)
 
-            # Extract content and finish reason
-            content = ""
-            if hasattr(response, "content") and response.content:
-                content = "\n".join(
-                    block.text for block in response.content if hasattr(block, "text")
-                )
-
-            finish_reason = getattr(response, "stop_reason", "stop")
-            usage = {
-                "prompt_tokens": getattr(response, "usage", {}).get("input_tokens", 0),
-                "completion_tokens": getattr(response, "usage", {}).get(
-                    "output_tokens", 0
-                ),
-                "total_tokens": getattr(response, "usage", {}).get("input_tokens", 0)
-                + getattr(response, "usage", {}).get("output_tokens", 0),
-            }
+            # Extract response using centralized utility
+            content, finish_reason, usage = ResponseExtractor.extract_anthropic_response(response)
 
             return LLMResponse(
                 content=content,
@@ -92,10 +109,15 @@ class AnthropicProvider(BaseLLMProvider):
             )
 
         except Exception as e:
-            return LLMResponse.from_error(
-                f"Error calling Anthropic API: {e!s}",
-                str(request.get("model") or "claude-3-sonnet-20240229"),
-            )
+            return self._create_error_response(e, request, self.DEFAULT_MODEL)
 
-    def is_available(self) -> bool:
-        return self.available and bool(self.api_key)
+
+# Register with the provider registry
+LLMProviderRegistry.register(
+    "anthropic",
+    AnthropicProvider,
+    default_config={
+        "api_key_env": "ANTHROPIC_API_KEY",
+        "default_model": "claude-3-sonnet-20240229",
+    },
+)

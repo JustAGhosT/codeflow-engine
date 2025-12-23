@@ -1,56 +1,90 @@
 """
 Mistral AI provider implementation.
+
+Uses BaseLLMProvider with Mistral-specific client handling.
 """
 
-from typing import Any, TYPE_CHECKING
+from typing import Any
 
-# Handle optional mistralai dependency
-ChatMessage: Any = None
-try:
-    from mistralai.models.chat_completion import ChatMessage
-except ImportError:
-    pass
-
-from codeflow_engine.actions.llm.base import BaseLLMProvider
-from codeflow_engine.actions.llm.types import LLMResponse
+from codeflow_engine.core.llm import BaseLLMProvider, LLMResponse, LLMProviderRegistry
+from codeflow_engine.core.llm.response import ResponseExtractor
 
 
 class MistralProvider(BaseLLMProvider):
-    """Mistral AI provider."""
+    """
+    Mistral AI provider.
+
+    Mistral has its own client library with a different API format.
+    """
+
+    DEFAULT_MODEL = "mistral-large-latest"
 
     def __init__(self, config: dict[str, Any]) -> None:
         super().__init__(config)
+        self.client: Any = None
+        self._chat_message_class: Any = None
+        self._initialize_client()
+
+    def _initialize_client(self) -> None:
+        """Initialize the Mistral client."""
         try:
             from mistralai.client import MistralClient
+            from mistralai.models.chat_completion import ChatMessage
 
             self.client = MistralClient(api_key=self.api_key)
+            self._chat_message_class = ChatMessage
             self.available = True
         except ImportError:
             self.available = False
 
+    def _convert_messages(self, messages: list[dict[str, Any]]) -> list[Any]:
+        """
+        Convert messages to Mistral ChatMessage format.
+
+        Args:
+            messages: List of message dicts with role and content
+
+        Returns:
+            List of ChatMessage objects
+        """
+        mistral_messages = []
+        for msg in messages:
+            role = str(msg.get("role", "user"))
+            content = str(msg.get("content", "")).strip()
+            if content and self._chat_message_class:
+                mistral_messages.append(
+                    self._chat_message_class(role=role, content=content)
+                )
+        return mistral_messages
+
     def complete(self, request: dict[str, Any]) -> LLMResponse:
+        """Complete a chat conversation using Mistral's API."""
+        if not self.client:
+            return LLMResponse.from_error(
+                "Mistral client not initialized",
+                self.get_model(request, self.DEFAULT_MODEL),
+            )
+
         try:
             messages = request.get("messages", [])
-            model = request.get("model", self.default_model) or "mistral-large-latest"
+            model = self.get_model(request, self.DEFAULT_MODEL)
             max_tokens = request.get("max_tokens", 1024)
             temperature = request.get("temperature", 0.7)
 
-            # Convert input messages to correct type
-            mistral_messages: list[ChatMessage] = []
-            for msg in messages:
-                role = str(msg.get("role", "user"))
-                content = str(msg.get("content", "")).strip()
-                if not content:
-                    continue
+            # Convert messages to Mistral format
+            mistral_messages = self._convert_messages(messages)
 
-                mistral_messages.append(ChatMessage(role=role, content=content))
+            if not mistral_messages:
+                return LLMResponse.from_error("No valid messages provided", model)
 
-            # Defensive: check if chat method exists
+            # Check if chat method exists
             chat_method = getattr(self.client, "chat", None)
             if not callable(chat_method):
-                msg = "MistralClient has no 'chat' method"
-                raise AttributeError(msg)
+                return LLMResponse.from_error(
+                    "MistralClient has no 'chat' method", model
+                )
 
+            # Call the API
             response = chat_method(
                 model=str(model),
                 messages=mistral_messages,
@@ -58,44 +92,26 @@ class MistralProvider(BaseLLMProvider):
                 max_tokens=max_tokens,
             )
 
-            # Defensive: ensure response has expected attributes
-            content = ""
-            finish_reason = "stop"
-            if (
-                hasattr(response, "choices")
-                and response.choices
-                and len(response.choices) > 0
-            ):
-                choice = response.choices[0]
-                if hasattr(choice, "message") and hasattr(choice.message, "content"):
-                    content = str(choice.message.content or "")
-                finish_reason = str(getattr(choice, "finish_reason", "stop") or "stop")
-
-            # Extract usage information
-            usage = None
-            if hasattr(response, "usage") and response.usage is not None:
-                if hasattr(response.usage, "dict"):
-                    usage = response.usage.dict()
-                else:
-                    usage = {
-                        "prompt_tokens": getattr(response.usage, "prompt_tokens", 0),
-                        "completion_tokens": getattr(
-                            response.usage, "completion_tokens", 0
-                        ),
-                        "total_tokens": getattr(response.usage, "total_tokens", 0),
-                    }
+            # Extract response using centralized utility
+            content, finish_reason, usage = ResponseExtractor.extract_openai_response(response)
 
             return LLMResponse(
-                content=content,
+                content=str(content),
                 model=str(model),
-                finish_reason=finish_reason,
+                finish_reason=str(finish_reason),
                 usage=usage,
             )
-        except Exception as e:
-            return LLMResponse.from_error(
-                f"Error calling Mistral API: {e!s}",
-                str(request.get("model") or "mistral-large-latest"),
-            )
 
-    def is_available(self) -> bool:
-        return self.available and bool(self.api_key)
+        except Exception as e:
+            return self._create_error_response(e, request, self.DEFAULT_MODEL)
+
+
+# Register with the provider registry
+LLMProviderRegistry.register(
+    "mistral",
+    MistralProvider,
+    default_config={
+        "api_key_env": "MISTRAL_API_KEY",
+        "default_model": "mistral-large-latest",
+    },
+)

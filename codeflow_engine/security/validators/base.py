@@ -1,150 +1,188 @@
+"""
+Enterprise Input Validator.
+
+This module provides the EnterpriseInputValidator class that composes
+multiple type validators using the new core validation framework.
+
+The implementation follows composition over inheritance, using the
+CompositeValidator pattern from codeflow_engine.core.validation.
+"""
+
 from typing import Any
 
-# mypy: disable-error-code=misc
 import structlog
 
-from codeflow_engine.security.validation_models import ValidationResult, ValidationSeverity
-from codeflow_engine.security.validators.array_validator import ArrayValidator
-from codeflow_engine.security.validators.file_validator import FileValidator
-from codeflow_engine.security.validators.number_validator import NumberValidator
-from codeflow_engine.security.validators.object_validator import ObjectValidator
-from codeflow_engine.security.validators.string_validator import StringValidator
+# Import from core validation framework
+from codeflow_engine.core.validation import (
+    CompositeValidator,
+    SecurityPatterns,
+    ValidationResult,
+    ValidationSeverity,
+)
+from codeflow_engine.core.validation.validators import (
+    ArrayTypeValidator,
+    FileTypeValidator,
+    NumberTypeValidator,
+    ObjectTypeValidator,
+    StringTypeValidator,
+)
 
 
 logger = structlog.get_logger(__name__)
 
 
-class EnterpriseInputValidator(
-    StringValidator, ArrayValidator, ObjectValidator, NumberValidator, FileValidator
-):
-    """Enterprise-grade input validation and sanitization."""
+class EnterpriseInputValidator:
+    """
+    Enterprise-grade input validation and sanitization.
 
-    # Security pattern overrides for enterprise rules are set per-instance in __init__
+    This class uses the CompositeValidator pattern from the core validation
+    framework, providing a unified interface while leveraging type-specific
+    validators.
 
-    def __init__(self):
-        self.max_string_length = 10000
-        self.max_array_length = 1000
-        self.allowed_file_extensions = {".txt", ".json", ".yaml", ".yml", ".md"}
+    The validator automatically:
+    - Validates key names for safety
+    - Detects and blocks security threats (SQL injection, XSS, etc.)
+    - Sanitizes input data
+    - Validates against optional Pydantic schemas
+    """
 
-        # Override base string validator patterns with stricter enterprise rules
-        self.SQL_INJECTION_PATTERNS = [
-            r"(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|UNION)\b)",
-            r"(--|#|/\*|\*/)",
-            r"(\b(OR|AND)\s+\d+\s*=\s*\d+)",
-            r"(\bUNION\s+SELECT\b)",
-        ]
+    def __init__(
+        self,
+        max_string_length: int = 10000,
+        max_array_length: int = 1000,
+        allowed_file_extensions: set[str] | None = None,
+    ) -> None:
+        """
+        Initialize the enterprise validator.
 
-        self.XSS_PATTERNS = [
-            r"<script[^>]*>.*?</script>",
-            r"javascript:",
-            r"on\w+\s*=",
-            r"<iframe[^>]*>.*?</iframe>",
-            r"<object[^>]*>.*?</object>",
-            r"<embed[^>]*>.*?</embed>",
-        ]
+        Args:
+            max_string_length: Maximum allowed string length
+            max_array_length: Maximum allowed array length
+            allowed_file_extensions: Set of allowed file extensions
+        """
+        self.max_string_length = max_string_length
+        self.max_array_length = max_array_length
+        self.allowed_file_extensions = allowed_file_extensions or {
+            ".txt", ".json", ".yaml", ".yml", ".md"
+        }
 
-        self.COMMAND_INJECTION_PATTERNS = [
-            r"[;&|`$(){}[\]\\]",
-            r"\b(rm|del|format|shutdown|reboot|halt)\b",
-            r"(>|>>|<|\|)",
-        ]
+        # Create custom security patterns with stricter enterprise rules
+        self._security_patterns = SecurityPatterns(
+            sql_injection=[
+                r"(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|UNION)\b)",
+                r"(--|#|/\*|\*/)",
+                r"(\b(OR|AND)\s+\d+\s*=\s*\d+)",
+                r"(\bUNION\s+SELECT\b)",
+            ],
+            xss=[
+                r"<script[^>]*>.*?</script>",
+                r"javascript:",
+                r"on\w+\s*=",
+                r"<iframe[^>]*>.*?</iframe>",
+                r"<object[^>]*>.*?</object>",
+                r"<embed[^>]*>.*?</embed>",
+            ],
+            command_injection=[
+                r"[;&|`$(){}[\]\\]",
+                r"\b(rm|del|format|shutdown|reboot|halt)\b",
+                r"(>|>>|<|\|)",
+            ],
+        )
+
+        # Initialize type validators
+        string_validator = StringTypeValidator(
+            max_length=max_string_length,
+            security_patterns=self._security_patterns,
+        )
+        number_validator = NumberTypeValidator(
+            security_patterns=self._security_patterns,
+        )
+        array_validator = ArrayTypeValidator(
+            max_length=max_array_length,
+            security_patterns=self._security_patterns,
+        )
+        object_validator = ObjectTypeValidator(
+            security_patterns=self._security_patterns,
+        )
+        file_validator = FileTypeValidator(
+            allowed_extensions=self.allowed_file_extensions,
+            security_patterns=self._security_patterns,
+        )
+
+        # Create composite validator with all type validators
+        self._composite = CompositeValidator(
+            security_patterns=self._security_patterns,
+            validators=[
+                string_validator,
+                number_validator,
+                array_validator,
+                object_validator,
+                file_validator,
+            ],
+        )
+
+        # Wire up recursive validation for nested structures
+        array_validator.set_element_validator(self._composite._validate_value)
+        object_validator.set_value_validator(self._composite._validate_value)
 
     def validate_input(
         self, data: dict[str, Any], schema: type | None = None
     ) -> ValidationResult:
-        """Comprehensive input validation."""
-        result = ValidationResult(is_valid=True)
-        sanitized_data = {}
+        """
+        Comprehensive input validation.
 
-        try:
-            for key, value in data.items():
-                # Validate key name
-                if not self._is_safe_key(key):
-                    result.errors.append(f"Invalid key name: {key}")
-                    result.severity = ValidationSeverity.HIGH
-                    result.is_valid = False
-                    continue
+        Args:
+            data: Dictionary of input data to validate
+            schema: Optional Pydantic model for schema validation
 
-                # Validate and sanitize value
-                validation_result = self._validate_value(key, value)
+        Returns:
+            ValidationResult with validation outcome and sanitized data
+        """
+        return self._composite.validate_input(data, schema)
 
-                if not validation_result.is_valid:
-                    result.errors.extend(validation_result.errors)
-                    result.warnings.extend(validation_result.warnings)
-                    result.is_valid = False
+    def validate_file_upload(
+        self, filename: str, content: bytes, max_size: int = 10 * 1024 * 1024
+    ) -> ValidationResult:
+        """
+        Validate file upload.
 
-                    # Update severity to highest found
-                    if validation_result.severity.value == "critical":
-                        result.severity = ValidationSeverity.CRITICAL
-                    elif (
-                        validation_result.severity.value == "high"
-                        and result.severity != ValidationSeverity.CRITICAL
-                    ):
-                        result.severity = ValidationSeverity.HIGH
-                    elif (
-                        validation_result.severity.value == "medium"
-                        and result.severity
-                        not in [
-                            ValidationSeverity.CRITICAL,
-                            ValidationSeverity.HIGH,
-                        ]
-                    ):
-                        result.severity = ValidationSeverity.MEDIUM
-                else:
-                    sanitized_data[key] = validation_result.sanitized_data
+        Args:
+            filename: The uploaded file name
+            content: The file content as bytes
+            max_size: Maximum allowed file size in bytes
 
-            # Apply schema validation if provided
-            if schema and result.is_valid:
-                try:
-                    # Use the schema with the dictionary unpacked
-                    validated_data = schema(**sanitized_data)
-                    if hasattr(validated_data, "dict"):
-                        result.sanitized_data = validated_data.dict()
-                    else:
-                        result.sanitized_data = sanitized_data
-                except Exception as e:
-                    result.errors.append(f"Schema validation failed: {e!s}")
-                    result.is_valid = False
-                    result.severity = ValidationSeverity.HIGH
-            else:
-                result.sanitized_data = sanitized_data
+        Returns:
+            ValidationResult with validation outcome
+        """
+        file_validator = FileTypeValidator(
+            allowed_extensions=self.allowed_file_extensions,
+            max_size=max_size,
+            security_patterns=self._security_patterns,
+        )
+        return file_validator.validate_file_upload(filename, content)
 
-            # Log validation results
-            if not result.is_valid:
-                logger.warning(
-                    "Input validation failed",
-                    errors=result.errors,
-                    severity=result.severity.value,
-                    data_keys=list(data.keys()),
-                )
-            else:
-                logger.debug("Input validation passed", data_keys=list(data.keys()))
+    # Backward compatibility methods for existing code
 
-            return result
-
-        except Exception:
-            logger.exception("Input validation error")
-            return ValidationResult(
-                is_valid=False,
-                errors=["Validation system error"],
-                severity=ValidationSeverity.CRITICAL,
-            )
+    def _is_safe_key(self, key: str) -> bool:
+        """Check if key name is safe. Delegates to composite validator."""
+        return self._composite._is_safe_key(key)
 
     def _validate_value(self, key: str, value: Any) -> ValidationResult:
-        """Validate individual value based on its type."""
-        result = ValidationResult(is_valid=True)
+        """Validate individual value. Delegates to composite validator."""
+        return self._composite._validate_value(key, value)
 
-        if isinstance(value, str):
-            result = self._validate_string(key, value)
-        elif isinstance(value, list | tuple):
-            result = self._validate_array(key, value)
-        elif isinstance(value, dict):
-            result = self._validate_object(key, value)
-        elif isinstance(value, int | float):
-            result = self._validate_number(key, value)
-        else:
-            result.sanitized_data = {
-                "value": value
-            }  # Wrap in dict to satisfy type constraints
+    # Legacy pattern access for tests/backward compatibility
+    @property
+    def SQL_INJECTION_PATTERNS(self) -> list[str]:
+        """Get SQL injection patterns for backward compatibility."""
+        return self._security_patterns.sql_injection
 
-        return result
+    @property
+    def XSS_PATTERNS(self) -> list[str]:
+        """Get XSS patterns for backward compatibility."""
+        return self._security_patterns.xss
+
+    @property
+    def COMMAND_INJECTION_PATTERNS(self) -> list[str]:
+        """Get command injection patterns for backward compatibility."""
+        return self._security_patterns.command_injection

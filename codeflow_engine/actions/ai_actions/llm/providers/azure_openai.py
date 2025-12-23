@@ -1,29 +1,34 @@
-﻿"""
+"""
 Azure OpenAI Provider for CodeFlow LLM system.
 
 Supports Azure OpenAI endpoints with custom configurations.
+Uses OpenAICompatibleProvider as base with Azure-specific initialization.
 """
 
 import logging
 import os
 from typing import Any
 
-from codeflow_engine.actions.llm.base import BaseLLMProvider
-from codeflow_engine.actions.llm.types import LLMResponse
-
+from codeflow_engine.core.llm import OpenAICompatibleProvider, LLMResponse, LLMProviderRegistry
 
 logger = logging.getLogger(__name__)
 
 
-class AzureOpenAIProvider(BaseLLMProvider):
-    """Azure OpenAI provider implementation."""
+class AzureOpenAIProvider(OpenAICompatibleProvider):
+    """
+    Azure OpenAI provider implementation.
+
+    Extends OpenAICompatibleProvider with Azure-specific configuration:
+    - Azure endpoint
+    - API version
+    - Deployment name
+    """
+
+    DEFAULT_MODEL = "gpt-35-turbo"
+    LIBRARY_NAME = "openai (Azure)"
 
     def __init__(self, config: dict[str, Any]) -> None:
-        super().__init__(config)
-        self.name = "azure_openai"
-        self.description = "Azure OpenAI API provider with custom endpoints"
-
-        # Azure-specific configuration
+        # Azure-specific configuration - set before super().__init__
         self.azure_endpoint = config.get("azure_endpoint") or os.getenv(
             "AZURE_OPENAI_ENDPOINT"
         )
@@ -33,95 +38,50 @@ class AzureOpenAIProvider(BaseLLMProvider):
         # Use Azure-specific API key environment variable
         azure_api_key = config.get("api_key") or os.getenv("AZURE_OPENAI_API_KEY")
         if azure_api_key:
-            self.api_key = azure_api_key
+            config["api_key"] = azure_api_key
 
-        self.default_model = self.deployment_name
-        self._client = None
+        # Use deployment name as default model
+        config["default_model"] = self.deployment_name
+
+        super().__init__(config)
+        self.name = "azure_openai"
+
+    def _initialize_client(self) -> None:
+        """Initialize the Azure OpenAI client."""
+        if not self.azure_endpoint:
+            logger.warning("Azure OpenAI endpoint not configured")
+            self.available = False
+            return
+
+        try:
+            from openai import AzureOpenAI
+
+            self.client = AzureOpenAI(
+                api_key=self.api_key,
+                api_version=self.api_version,
+                azure_endpoint=self.azure_endpoint,
+            )
+            self.available = True
+            logger.info(f"Initialized Azure OpenAI client with endpoint: {self.azure_endpoint}")
+        except ImportError:
+            logger.debug("openai package not installed")
+            self.available = False
+        except Exception as e:
+            logger.exception(f"Failed to initialize Azure OpenAI client: {e}")
+            self.available = False
 
     def is_available(self) -> bool:
         """Check if Azure OpenAI is properly configured."""
-        return bool(self.api_key and self.azure_endpoint)
+        return bool(self.api_key and self.azure_endpoint and self.client)
 
-    def _get_client(self):
-        """Get or create Azure OpenAI client."""
-        if self._client is None:
-            try:
-                from openai import AzureOpenAI
 
-                self._client = AzureOpenAI(
-                    api_key=self.api_key,
-                    api_version=self.api_version,
-                    azure_endpoint=self.azure_endpoint,
-                )
-                logger.info(
-                    f"Initialized Azure OpenAI client with endpoint: {self.azure_endpoint}"
-                )
-            except ImportError:
-                logger.exception(
-                    "openai package not installed. Install with: pip install openai"
-                )
-                return None
-            except Exception as e:
-                logger.exception(f"Failed to initialize Azure OpenAI client: {e}")
-                return None
-
-        return self._client
-
-    def complete(self, request: dict[str, Any]) -> LLMResponse:
-        """Complete a chat conversation using Azure OpenAI."""
-        client = self._get_client()
-        if not client:
-            return LLMResponse.from_error(
-                "Azure OpenAI client not available",
-                request.get("model", self.default_model),
-            )
-
-        try:
-            # Extract parameters
-            messages = request.get("messages", [])
-            model = request.get("model", self.deployment_name)
-            temperature = request.get("temperature", 0.7)
-            max_tokens = request.get("max_tokens", 1000)
-
-            # Validate messages format
-            if not messages:
-                return LLMResponse.from_error("No messages provided", model)
-
-            # Make the API call
-            response = client.chat.completions.create(
-                model=model,  # This is the deployment name in Azure
-                messages=messages,
-                temperature=temperature,
-                max_tokens=max_tokens,
-            )
-
-            # Extract response content
-            content = ""
-            finish_reason = "unknown"
-            usage = None
-
-            if response.choices:
-                choice = response.choices[0]
-                content = choice.message.content or ""
-                finish_reason = choice.finish_reason or "unknown"
-
-            if response.usage:
-                usage = {
-                    "prompt_tokens": response.usage.prompt_tokens,
-                    "completion_tokens": response.usage.completion_tokens,
-                    "total_tokens": response.usage.total_tokens,
-                }
-
-            return LLMResponse(
-                content=content,
-                model=model,
-                finish_reason=finish_reason,
-                usage=usage,
-            )
-
-        except Exception as e:
-            error_msg = f"Azure OpenAI API error: {e!s}"
-            logger.exception(error_msg)
-            return LLMResponse.from_error(
-                error_msg, request.get("model", self.default_model)
-            )
+# Register with the provider registry
+LLMProviderRegistry.register(
+    "azure_openai",
+    AzureOpenAIProvider,
+    default_config={
+        "api_key_env": "AZURE_OPENAI_API_KEY",
+        "default_model": "gpt-35-turbo",
+        "api_version": "2024-02-01",
+    },
+)

@@ -1,198 +1,118 @@
 """
 LLM Providers package - Individual provider implementations.
+
+All providers auto-register themselves with LLMProviderRegistry on import.
 """
 
 from typing import Any
 
-# Import base class for inline implementations
-from codeflow_engine.actions.llm.base import BaseLLMProvider
-from codeflow_engine.actions.llm.providers.anthropic import AnthropicProvider
-from codeflow_engine.actions.llm.providers.groq import GroqProvider
-from codeflow_engine.actions.llm.types import LLMResponse
+# Import core components
+from codeflow_engine.core.llm import (
+    BaseLLMProvider,
+    LLMProviderRegistry,
+    LLMResponse,
+    OpenAICompatibleProvider,
+)
 
+# Import providers (they auto-register on import)
+from codeflow_engine.actions.ai_actions.llm.providers.openai import OpenAIProvider
+from codeflow_engine.actions.ai_actions.llm.providers.anthropic import AnthropicProvider
+from codeflow_engine.actions.ai_actions.llm.providers.groq import GroqProvider
+from codeflow_engine.actions.ai_actions.llm.providers.azure_openai import AzureOpenAIProvider
 
-# Optional AI providers
+# Optional providers with graceful fallback
+MistralProvider = None
+MISTRAL_AVAILABLE = False
 try:
-    from codeflow_engine.actions.llm.providers.mistral import MistralProvider
-
+    from codeflow_engine.actions.ai_actions.llm.providers.mistral import MistralProvider
     MISTRAL_AVAILABLE = True
 except ImportError:
-    MistralProvider = None
-    MISTRAL_AVAILABLE = False
-from codeflow_engine.actions.llm.providers.openai import OpenAIProvider
+    pass
 
 
-class PerplexityProvider(BaseLLMProvider):
-    """Perplexity AI provider."""
+# OpenAI-compatible providers that only need a custom base URL
+class PerplexityProvider(OpenAICompatibleProvider):
+    """
+    Perplexity AI provider.
 
-    def __init__(self, config: dict[str, Any]) -> None:
-        super().__init__(config)
+    Uses OpenAI-compatible API with custom base URL.
+    """
+
+    DEFAULT_MODEL = "llama-3.1-sonar-large-128k-online"
+    LIBRARY_NAME = "perplexity"
+
+    def _initialize_client(self) -> None:
+        """Initialize the Perplexity client using OpenAI library."""
         try:
             import openai
 
             self.client = openai.OpenAI(
-                api_key=self.api_key, base_url="https://api.perplexity.ai"
+                api_key=self.api_key,
+                base_url="https://api.perplexity.ai",
             )
             self.available = True
         except ImportError:
             self.available = False
 
-    def complete(self, request: dict[str, Any]) -> LLMResponse:
-        try:
-            messages = request.get("messages", [])
-            model = (
-                request.get("model", self.default_model)
-                or "llama-3.1-sonar-large-128k-online"
-            )
-            max_tokens = request.get("max_tokens", 1024)
-            temperature = request.get("temperature", 0.7)
 
-            # Filter out empty messages
-            filtered_messages = [
-                {"role": m.get("role", "user"), "content": m.get("content", "")}
-                for m in messages
-                if m.get("content")
-            ]
+class TogetherAIProvider(OpenAICompatibleProvider):
+    """
+    Together AI provider for open source models.
 
-            # Call the API
-            response = self.client.chat.completions.create(
-                model=str(model),
-                messages=filtered_messages,  # type: ignore[arg-type]
-                max_tokens=max_tokens,
-                temperature=temperature,
-            )
+    Uses OpenAI-compatible API with custom base URL.
+    """
 
-            # Extract content and finish reason
-            content = ""
-            finish_reason = "stop"
-            if (
-                hasattr(response, "choices")
-                and response.choices
-                and len(response.choices) > 0
-            ):
-                choice = response.choices[0]
-                if hasattr(choice, "message") and hasattr(choice.message, "content"):
-                    content = choice.message.content or ""
-                finish_reason = getattr(choice, "finish_reason", "stop") or "stop"
+    DEFAULT_MODEL = "meta-llama/Llama-2-70b-chat-hf"
+    LIBRARY_NAME = "together"
 
-            # Extract usage information
-            usage = None
-            if hasattr(response, "usage") and response.usage:
-                usage = {
-                    "prompt_tokens": getattr(response.usage, "prompt_tokens", 0),
-                    "completion_tokens": getattr(
-                        response.usage, "completion_tokens", 0
-                    ),
-                    "total_tokens": getattr(response.usage, "total_tokens", 0),
-                }
-
-            return LLMResponse(
-                content=content,
-                model=str(model),
-                finish_reason=finish_reason,
-                usage=usage,
-            )
-
-        except Exception as e:
-            return LLMResponse.from_error(
-                f"Error calling Perplexity API: {e!s}",
-                str(request.get("model") or "llama-3.1-sonar-large-128k-online"),
-            )
-
-    def is_available(self) -> bool:
-        return self.available and bool(self.api_key)
-
-
-class TogetherAIProvider(BaseLLMProvider):
-    """Together AI provider for open source models."""
-
-    def __init__(self, config: dict[str, Any]) -> None:
-        super().__init__(config)
+    def _initialize_client(self) -> None:
+        """Initialize the Together AI client using OpenAI library."""
         try:
             import openai
 
             self.client = openai.OpenAI(
-                api_key=self.api_key, base_url="https://api.together.xyz/v1"
+                api_key=self.api_key,
+                base_url="https://api.together.xyz/v1",
             )
             self.available = True
         except ImportError:
             self.available = False
 
-    def complete(self, request: dict[str, Any]) -> LLMResponse:
-        try:
-            messages = request.get("messages", [])
-            model = (
-                request.get("model", self.default_model)
-                or "meta-llama/Llama-2-70b-chat-hf"
-            )
-            max_tokens = request.get("max_tokens", 1024)
-            temperature = request.get("temperature", 0.7)
 
-            # Filter out empty messages
-            filtered_messages = [
-                {"role": m.get("role", "user"), "content": m.get("content", "")}
-                for m in messages
-                if m.get("content")
-            ]
+# Register the inline providers
+LLMProviderRegistry.register(
+    "perplexity",
+    PerplexityProvider,
+    default_config={
+        "api_key_env": "PERPLEXITY_API_KEY",
+        "default_model": "llama-3.1-sonar-large-128k-online",
+    },
+)
 
-            # Call the API
-            response = self.client.chat.completions.create(
-                model=str(model),
-                messages=filtered_messages,  # type: ignore[arg-type]
-                max_tokens=max_tokens,
-                temperature=temperature,
-            )
-
-            # Extract content and finish reason
-            content = ""
-            finish_reason = "stop"
-            if (
-                hasattr(response, "choices")
-                and response.choices
-                and len(response.choices) > 0
-            ):
-                choice = response.choices[0]
-                if hasattr(choice, "message") and hasattr(choice.message, "content"):
-                    content = choice.message.content or ""
-                finish_reason = getattr(choice, "finish_reason", "stop") or "stop"
-
-            # Extract usage information
-            usage = None
-            if hasattr(response, "usage") and response.usage:
-                usage = {
-                    "prompt_tokens": getattr(response.usage, "prompt_tokens", 0),
-                    "completion_tokens": getattr(
-                        response.usage, "completion_tokens", 0
-                    ),
-                    "total_tokens": getattr(response.usage, "total_tokens", 0),
-                }
-
-            return LLMResponse(
-                content=content,
-                model=str(model),
-                finish_reason=finish_reason,
-                usage=usage,
-            )
-
-        except Exception as e:
-            return LLMResponse.from_error(
-                f"Error calling Together AI API: {e!s}",
-                str(request.get("model") or "meta-llama/Llama-2-70b-chat-hf"),
-            )
-
-    def is_available(self) -> bool:
-        return self.available and bool(self.api_key)
+LLMProviderRegistry.register(
+    "together",
+    TogetherAIProvider,
+    default_config={
+        "api_key_env": "TOGETHER_API_KEY",
+        "default_model": "meta-llama/Llama-2-70b-chat-hf",
+    },
+)
 
 
 # Export all providers
 __all__ = [
     "AnthropicProvider",
+    "AzureOpenAIProvider",
+    "BaseLLMProvider",
     "GroqProvider",
+    "LLMProviderRegistry",
+    "LLMResponse",
+    "OpenAICompatibleProvider",
     "OpenAIProvider",
     "PerplexityProvider",
     "TogetherAIProvider",
 ]
 
 # Add MistralProvider if available
-if MISTRAL_AVAILABLE:
+if MISTRAL_AVAILABLE and MistralProvider is not None:
     __all__.append("MistralProvider")
