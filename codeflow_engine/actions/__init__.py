@@ -1,225 +1,187 @@
-﻿"""
+"""
 CodeFlow Engine Actions.
 
-Core automation actions for GitHub PR processing
+Core automation actions for GitHub PR processing, organized by category:
+- analysis: Code analysis actions (PR review, comment analysis)
+- generation: Code/content generation (scaffolding, release notes)
+- git: Git operations (patches, branches, releases)
+- issues: Issue/PR management (labels, comments)
+- quality: Quality checks (security, performance, accessibility)
+- ai_actions: AI/LLM-powered features (AutoGen, memory systems)
+- platform: Platform detection and integration
+- scripts: Script/workflow execution
+- maintenance: Maintenance tasks
 """
-
-# mypy: disable-error-code=unused-ignore
-# mypy: ignore-errors
 
 from typing import Any
 
+from codeflow_engine.actions.registry import ActionRegistry
 
-# Import action classes with error handling for optional dependencies
-PlatformDetector: type[Any] | None = None
-try:
-    from codeflow_engine.actions.platform_detector_enhanced import (
-        PlatformDetector as _RealPlatformDetector,
-    )
+# Import category modules
+from codeflow_engine.actions import (
+    ai_actions,
+    analysis,
+    base,
+    generation,
+    git,
+    issues,
+    maintenance,
+    platform,
+    quality,
+    scripts,
+)
 
-    PlatformDetector = _RealPlatformDetector
-except ImportError:
-    pass
-
-PrototypeEnhancer: type[Any] | None = None
-try:
-    from codeflow_engine.actions.prototype_enhancer import (
-        PrototypeEnhancer as _RealPrototypeEnhancer,
-    )
-
-    PrototypeEnhancer = _RealPrototypeEnhancer
-except ImportError:
-    pass
-
-PlatformDetector: type[Any] | None = None
-try:
-    from codeflow_engine.actions.platform_detector import (
-        PlatformDetector as _RealPlatformDetector,
-    )
-
-    PlatformDetector = _RealPlatformDetector
-except ImportError:
-    pass
-
-AutoGenImplementation: type[Any] | None = None
-try:
-    from codeflow_engine.actions.autogen_implementation import (
-        AutoGenImplementation as _RealAutoGenImplementation,
-    )
-
-    AutoGenImplementation = _RealAutoGenImplementation
-except ImportError:
-    pass
-
-IssueCreator: type[Any] | None = None
-try:
-    from codeflow_engine.actions.issue_creator import IssueCreator as _RealIssueCreator
-
-    IssueCreator = _RealIssueCreator
-except ImportError:
-    pass
-
-LLMProviderManager: type[Any] | None = None
-try:
-    from codeflow_engine.actions.llm import LLMProviderManager as _RealLLMProviderManager
-
-    LLMProviderManager = _RealLLMProviderManager
-except ImportError:
-    pass
-
-AutoGenAgentSystem: type[Any] | None = None
-try:
-    from codeflow_engine.actions.autogen_multi_agent import (
-        AutoGenAgentSystem as _RealAutoGenAgentSystem,
-    )
-
-    AutoGenAgentSystem = _RealAutoGenAgentSystem
-except ImportError:
-    pass
-
-Mem0MemoryManager: type[Any] | None = None
-try:
-    from codeflow_engine.actions.mem0_memory_integration import (
-        Mem0MemoryManager as _RealMem0MemoryManager,
-    )
-
-    Mem0MemoryManager = _RealMem0MemoryManager
-except ImportError:
-    pass
-
-QualityGates: type[Any] | None = None
-try:
-    from codeflow_engine.actions.quality_gates import QualityGates as _RealQualityGates
-
-    QualityGates = _RealQualityGates
-except ImportError:
-    pass
-
-LearningMemorySystem: type[Any] | None = None
-try:
-    from codeflow_engine.actions.learning_memory_system import (
-        LearningMemorySystem as _RealLearningMemorySystem,
-    )
-
-    LearningMemorySystem = _RealLearningMemorySystem
-except ImportError:
-    pass
-
-MultiPlatformIntegrator: type[Any] | None = None
-try:
-    from codeflow_engine.actions.multi_platform_integrator import (
-        MultiPlatformIntegrator as _RealMultiPlatformIntegrator,
-    )
-
-    MultiPlatformIntegrator = _RealMultiPlatformIntegrator
-except ImportError:
-    pass
-
+# Re-export commonly used actions for backward compatibility
+# Analysis
 AICommentAnalyzer: type[Any] | None = None
 try:
-    from codeflow_engine.actions.ai_comment_analyzer import (
-        AICommentAnalyzer as _RealAICommentAnalyzer,
-    )
+    from codeflow_engine.actions.analysis import AICommentAnalyzer
+except ImportError:
+    pass
 
-    AICommentAnalyzer = _RealAICommentAnalyzer
+PRReviewAnalyzer: type[Any] | None = None
+try:
+    from codeflow_engine.actions.analysis import PRReviewAnalyzer
+except ImportError:
+    pass
+
+# Issues
+IssueCreator: type[Any] | None = None
+try:
+    from codeflow_engine.actions.issues import IssueCreator
 except ImportError:
     pass
 
 PRCommentHandler: type[Any] | None = None
 try:
-    from codeflow_engine.actions.handle_pr_comment import (
-        PRCommentHandler as _RealPRCommentHandler,
-    )
-
-    PRCommentHandler = _RealPRCommentHandler
-except ImportError:
-    pass
-
-# Utility actions
-LabelPR: type[Any] | None = None
-try:
-    from codeflow_engine.actions.label_pr import LabelPR as _RealLabelPR
-
-    LabelPR = _RealLabelPR
-except ImportError:
-    pass
-
-PostComment: type[Any] | None = None
-try:
-    from codeflow_engine.actions.post_comment import PostComment as _RealPostComment
-
-    PostComment = _RealPostComment
+    from codeflow_engine.actions.issues import PRCommentHandler
 except ImportError:
     pass
 
 CreateOrUpdateIssue: type[Any] | None = None
 try:
-    from codeflow_engine.actions.create_or_update_issue import (
-        CreateOrUpdateIssue as _RealCreateOrUpdateIssue,
-    )
-
-    CreateOrUpdateIssue = _RealCreateOrUpdateIssue
+    from codeflow_engine.actions.issues import CreateOrUpdateIssue
 except ImportError:
     pass
 
+PostComment: type[Any] | None = None
+try:
+    from codeflow_engine.actions.issues import PostComment
+except ImportError:
+    pass
+
+LabelPR: type[Any] | None = None
+try:
+    from codeflow_engine.actions.issues import LabelPR
+except ImportError:
+    pass
+
+# Git
 ApplyGitPatch: type[Any] | None = None
 try:
-    from codeflow_engine.actions.apply_git_patch import ApplyGitPatch as _RealApplyGitPatch
+    from codeflow_engine.actions.git import ApplyGitPatch
+except ImportError:
+    pass
 
-    ApplyGitPatch = _RealApplyGitPatch
+# Quality
+QualityGates: type[Any] | None = None
+try:
+    from codeflow_engine.actions.quality import QualityGates
 except ImportError:
     pass
 
 RunSecurityAudit: type[Any] | None = None
 try:
-    from codeflow_engine.actions.run_security_audit import (
-        RunSecurityAudit as _RealRunSecurityAudit,
-    )
-
-    RunSecurityAudit = _RealRunSecurityAudit
+    from codeflow_engine.actions.quality import RunSecurityAudit
 except ImportError:
     pass
 
 CheckPerformanceBudget: type[Any] | None = None
 try:
-    from codeflow_engine.actions.check_performance_budget import (
-        CheckPerformanceBudget as _RealCheckPerformanceBudget,
-    )
-
-    CheckPerformanceBudget = _RealCheckPerformanceBudget
+    from codeflow_engine.actions.quality import CheckPerformanceBudget
 except ImportError:
     pass
 
 VisualRegressionTest: type[Any] | None = None
 try:
-    from codeflow_engine.actions.visual_regression_test import (
-        VisualRegressionTest as _RealVisualRegressionTest,
-    )
-
-    VisualRegressionTest = _RealVisualRegressionTest
+    from codeflow_engine.actions.quality import VisualRegressionTest
 except ImportError:
     pass
 
+# AI Actions
+AutoGenImplementation: type[Any] | None = None
+try:
+    from codeflow_engine.actions.ai_actions import AutoGenImplementation
+except ImportError:
+    pass
+
+AutoGenAgentSystem: type[Any] | None = None
+try:
+    from codeflow_engine.actions.ai_actions import AutoGenAgentSystem
+except ImportError:
+    pass
+
+Mem0MemoryManager: type[Any] | None = None
+try:
+    from codeflow_engine.actions.ai_actions import Mem0MemoryManager
+except ImportError:
+    pass
+
+LearningMemorySystem: type[Any] | None = None
+try:
+    from codeflow_engine.actions.ai_actions import LearningMemorySystem
+except ImportError:
+    pass
+
+LLMProviderManager: type[Any] | None = None
+try:
+    from codeflow_engine.actions.ai_actions.llm import LLMProviderManager
+except ImportError:
+    pass
+
+# Platform
+PlatformDetector: type[Any] | None = None
+try:
+    from codeflow_engine.actions.platform import PlatformDetector
+except ImportError:
+    pass
+
+MultiPlatformIntegrator: type[Any] | None = None
+try:
+    from codeflow_engine.actions.platform import MultiPlatformIntegrator
+except ImportError:
+    pass
+
+PrototypeEnhancer: type[Any] | None = None
+try:
+    from codeflow_engine.actions.platform import PrototypeEnhancer
+except ImportError:
+    pass
+
+# Generation
 GenerateReleaseNotes: type[Any] | None = None
 try:
-    from codeflow_engine.actions.generate_release_notes import (
-        GenerateReleaseNotes as _RealGenerateReleaseNotes,
-    )
-
-    GenerateReleaseNotes = _RealGenerateReleaseNotes
+    from codeflow_engine.actions.generation import GenerateReleaseNotes
 except ImportError:
     pass
 
-AIImplementationRoadmap: type[Any] | None = None
-try:
-    from codeflow_engine.actions.ai_implementation_roadmap import AIImplementationRoadmap
-except ImportError:
-    AIImplementationRoadmap = None
-
-# All available actions
+# All available exports
 __all__ = [
+    # Registry
+    "ActionRegistry",
+    # Category modules
+    "ai_actions",
+    "analysis",
+    "base",
+    "generation",
+    "git",
+    "issues",
+    "maintenance",
+    "platform",
+    "quality",
+    "scripts",
+    # Backward compatible action exports
     "AICommentAnalyzer",
-    "AIImplementationRoadmap",
     "ApplyGitPatch",
     "AutoGenAgentSystem",
     "AutoGenImplementation",
@@ -228,14 +190,12 @@ __all__ = [
     "GenerateReleaseNotes",
     "IssueCreator",
     "LLMProviderManager",
-    # Utility actions
     "LabelPR",
     "LearningMemorySystem",
     "Mem0MemoryManager",
     "MultiPlatformIntegrator",
     "PRCommentHandler",
-    # Core AI-powered actions
-    "PlatformDetector",
+    "PRReviewAnalyzer",
     "PlatformDetector",
     "PostComment",
     "PrototypeEnhancer",
