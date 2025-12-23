@@ -2,6 +2,13 @@
 CodeFlow Engine - Automated Code Review and Quality Management System
 
 This package provides AI-powered code analysis, automated fixes, and quality assurance workflows.
+
+Main Components:
+- CodeFlowEngine: Main orchestrator for all automation activities
+- ActionRegistry: Registry for managing action plugins
+- WorkflowEngine: Workflow execution engine
+- LLMProviderManager: Multi-provider LLM abstraction
+- MetricsCollector: Quality metrics collection
 """
 
 import logging
@@ -9,29 +16,36 @@ import os
 from typing import Any, cast
 
 from codeflow_engine.actions.registry import ActionRegistry
-# from codeflow_engine.agents.agents import AgentManager  # Not implemented yet
 from codeflow_engine.ai.core.base import LLMProvider
 from codeflow_engine.ai.core.providers.manager import LLMProviderManager
 from codeflow_engine.config import CodeFlowConfig
 from codeflow_engine.engine import CodeFlowEngine
-from codeflow_engine.exceptions import (CodeFlowException, ConfigurationError,
-                               IntegrationError)
+from codeflow_engine.exceptions import (
+    ActionError,
+    AuthenticationError,
+    CodeFlowException,
+    CodeFlowPermissionError,
+    ConfigurationError,
+    IntegrationError,
+    LLMProviderError,
+    RateLimitError,
+    ValidationError,
+    WorkflowError,
+)
 from codeflow_engine.integrations.base import Integration
-# from codeflow_engine.integrations.bitbucket.bitbucket_integration import \
-#     BitbucketIntegration  # Not implemented yet
-# from codeflow_engine.integrations.github.github_integration import GitHubIntegration  # Not implemented yet
-# from codeflow_engine.integrations.gitlab.gitlab_integration import GitLabIntegration  # Not implemented yet
-# from codeflow_engine.integrations.jira.jira_integration import JiraIntegration  # Not implemented yet
-# from codeflow_engine.integrations.registry import IntegrationRegistry  # Not implemented yet
-# from codeflow_engine.integrations.slack.slack_integration import SlackIntegration  # Not implemented yet
 from codeflow_engine.quality.metrics_collector import MetricsCollector
-# from codeflow_engine.reporting.report_generator import ReportGenerator  # Not implemented yet
-from codeflow_engine.security.authorization.enterprise_manager import \
-    EnterpriseAuthorizationManager
+
+# Security - guarded import
+EnterpriseAuthorizationManager: type[Any] | None = None
+try:
+    from codeflow_engine.security.authorization.enterprise_manager import (
+        EnterpriseAuthorizationManager,
+    )
+except (ImportError, OSError):
+    pass
+
 from codeflow_engine.workflows.base import Workflow
 from codeflow_engine.workflows.engine import WorkflowEngine
-
-# from codeflow_engine.workflows.workflow_manager import WorkflowManager  # Not implemented yet
 
 # Import structlog with error handling
 STRUCTLOG_AVAILABLE: bool
@@ -48,20 +62,47 @@ __version__ = "1.0.1"
 
 # Public API exports
 __all__ = [
-    "ActionRegistry",
+    # Core engine
     "CodeFlowEngine",
-    "MetricsCollector",
-    "EnterpriseAuthorizationManager",
+    "CodeFlowConfig",
+    # Registries
+    "ActionRegistry",
+    # AI/LLM
     "LLMProvider",
     "LLMProviderManager",
+    # Integrations
+    "Integration",
+    # Workflows
+    "Workflow",
+    "WorkflowEngine",
+    # Quality
+    "MetricsCollector",
+    # Security
+    "EnterpriseAuthorizationManager",
+    # Exceptions
+    "ActionError",
+    "AuthenticationError",
+    "CodeFlowException",
+    "CodeFlowPermissionError",
+    "ConfigurationError",
+    "IntegrationError",
+    "LLMProviderError",
+    "RateLimitError",
+    "ValidationError",
+    "WorkflowError",
+    # Utilities
+    "configure_logging",
 ]
-
-# Setup logging defaults
 
 
 def configure_logging(level: str = "INFO", *, format_json: bool = False) -> None:
-    """Configure default logging for CodeFlow Engine."""
+    """
+    Configure default logging for CodeFlow Engine.
 
+    Args:
+        level: Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+        format_json: If True and structlog is available, use JSON logging
+    """
     if format_json and STRUCTLOG_AVAILABLE and structlog_module:
         # Structured JSON logging
         structlog_module.configure(
@@ -86,6 +127,7 @@ def configure_logging(level: str = "INFO", *, format_json: bool = False) -> None
         )
 
 
+# Configure logging on import
 log_level = os.getenv("CODEFLOW_LOG_LEVEL", "INFO")
 json_logging = os.getenv("CODEFLOW_JSON_LOGGING", "false").lower() == "true"
 configure_logging(level=log_level, format_json=json_logging)

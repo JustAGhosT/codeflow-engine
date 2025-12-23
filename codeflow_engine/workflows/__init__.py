@@ -1,6 +1,12 @@
 ﻿"""
 CodeFlow Engine Workflows
-Pre-built workflow definitions for common automation scenarios
+
+Pre-built workflow definitions for common automation scenarios.
+
+Modules:
+- base: Base workflow class and interfaces
+- engine: Workflow execution engine
+- validation: Workflow validation utilities
 """
 
 from pathlib import Path
@@ -8,6 +14,8 @@ from typing import Any
 
 import yaml
 
+from codeflow_engine.workflows.base import Workflow
+from codeflow_engine.workflows.engine import WorkflowEngine
 
 # Workflow registry
 WORKFLOW_REGISTRY: dict[str, Any] = {}
@@ -110,8 +118,14 @@ def get_workflow_info(workflow_name: str) -> dict[str, Any]:
 
 
 __all__ = [
+    # Classes
+    "Workflow",
+    "WorkflowEngine",
+    # Registry
     "CORE_WORKFLOWS",
     "WORKFLOW_CATEGORIES",
+    "WORKFLOW_REGISTRY",
+    # Functions
     "get_workflow_info",
     "get_workflows_by_category",
     "list_workflows",

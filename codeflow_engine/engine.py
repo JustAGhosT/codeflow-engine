@@ -4,51 +4,19 @@ CodeFlow Engine - Core Engine Implementation
 Main engine class that orchestrates CodeFlow operations.
 """
 
-import asyncio
 import logging
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from codeflow_engine.actions.registry import ActionRegistry
-# from codeflow_engine.agents.agents import AgentManager  # Not implemented yet
 from codeflow_engine.ai.core.providers.manager import LLMProviderManager
 from codeflow_engine.config import CodeFlowConfig
 from codeflow_engine.exceptions import CodeFlowException, ConfigurationError
 from codeflow_engine.health import HealthChecker
 from codeflow_engine.integrations.registry import IntegrationRegistry
-from codeflow_engine.quality.metrics_collector import MetricsCollector
 from codeflow_engine.utils.error_handlers import handle_operation_error
 from codeflow_engine.workflows.engine import WorkflowEngine
-# from codeflow_engine.workflows.workflow_manager import WorkflowManager  # Not implemented yet
 
 logger = logging.getLogger(__name__)
-
-
-def handle_operation_error(
-    operation_name: str,
-    exception: Exception,
-    error_class: type[CodeFlowException] = CodeFlowException,
-    *,
-    reraise: bool = True,
-) -> None:
-    """
-    Standardized error handling helper for engine operations.
-    
-    Args:
-        operation_name: Name of the operation that failed
-        exception: The exception that was raised
-        error_class: Exception class to raise (default: CodeFlowException)
-        log_level: Logging level to use ('exception', 'error', 'warning')
-        reraise: Whether to reraise the exception after logging
-        
-    Raises:
-        error_class: The specified exception class with formatted message
-    """
-    error_msg = f"{operation_name} failed: {exception}"
-    logger.exception(error_msg)
-    
-    if reraise:
-        raise error_class(error_msg) from exception
 
 
 class CodeFlowEngine:
