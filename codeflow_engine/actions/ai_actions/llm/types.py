@@ -1,12 +1,16 @@
 """
 Base types, enums, and data classes for LLM providers.
+
+This module maintains backwards compatibility while re-exporting LLMResponse from core.
 """
 
-from dataclasses import dataclass
 from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel
+
+# Re-export LLMResponse from core for backwards compatibility
+from codeflow_engine.core.llm.response import LLMResponse
 
 
 class MessageRole(StrEnum):
@@ -54,17 +58,10 @@ class LLMConfig(BaseModel):
     stop: list[str] | None = None
 
 
-@dataclass
-class LLMResponse:
-    """Response from an LLM provider."""
-
-    content: str
-    model: str
-    finish_reason: str
-    usage: dict[str, int] | None = None
-    error: str | None = None
-
-    @classmethod
-    def from_error(cls, error: str, model: str = "unknown") -> "LLMResponse":
-        """Create an error response."""
-        return cls(content="", model=model, finish_reason="error", error=error)
+__all__ = [
+    "LLMConfig",
+    "LLMProviderType",
+    "LLMResponse",
+    "Message",
+    "MessageRole",
+]

@@ -1,4 +1,4 @@
-﻿"""
+"""
 CODEFLOW LLM Package - Modular LLM provider system.
 
 This package provides a unified interface for multiple LLM providers including:
@@ -12,7 +12,7 @@ This package provides a unified interface for multiple LLM providers including:
 
 Usage::
 
-    from codeflow_engine.actions.llm import get_llm_provider_manager, complete_chat
+    from codeflow_engine.actions.ai_actions.llm import get_llm_provider_manager, complete_chat
 
     # Get a manager instance
     manager = get_llm_provider_manager()
@@ -28,30 +28,40 @@ Usage::
 import os
 from typing import Any
 
-# Export base classes
-from codeflow_engine.actions.llm.base import BaseLLMProvider
+# Export base classes from core
+from codeflow_engine.core.llm import (
+    BaseLLMProvider,
+    LLMProviderRegistry,
+    LLMResponse,
+    OpenAICompatibleProvider,
+)
 
 # Export manager
-from codeflow_engine.actions.llm.manager import ActionLLMProviderManager
+from codeflow_engine.actions.ai_actions.llm.manager import ActionLLMProviderManager
 
 # Export providers
-from codeflow_engine.actions.llm.providers import (
+from codeflow_engine.actions.ai_actions.llm.providers import (
     AnthropicProvider,
+    AzureOpenAIProvider,
     GroqProvider,
-    MistralProvider,
     OpenAIProvider,
     PerplexityProvider,
     TogetherAIProvider,
+    MISTRAL_AVAILABLE,
 )
 
 # Export types
-from codeflow_engine.actions.llm.types import (
+from codeflow_engine.actions.ai_actions.llm.types import (
     LLMConfig,
     LLMProviderType,
-    LLMResponse,
     Message,
     MessageRole,
 )
+
+# Conditionally import MistralProvider
+MistralProvider = None
+if MISTRAL_AVAILABLE:
+    from codeflow_engine.actions.ai_actions.llm.providers import MistralProvider
 
 
 # Global provider manager instance
@@ -63,7 +73,7 @@ def get_llm_provider_manager() -> ActionLLMProviderManager:
     Get or create the global LLM provider manager with configuration from environment variables.
 
     Returns:
-        LLMProviderManager: A configured instance of LLMProviderManager
+        ActionLLMProviderManager: A configured instance of LLMProviderManager
     """
     global _provider_manager
 
@@ -166,26 +176,35 @@ def complete_chat(
     return manager.complete(request)
 
 
+# Backward compatibility alias
+LLMProviderManager = ActionLLMProviderManager
+
+
 # Export all public components
 __all__ = [
-    "AnthropicProvider",
     # Base classes
     "BaseLLMProvider",
-    "GroqProvider",
-    "LLMConfig",
+    "OpenAICompatibleProvider",
     # Manager
     "ActionLLMProviderManager",
+    "LLMProviderManager",  # Backward compatibility
+    # Registry
+    "LLMProviderRegistry",
+    # Types
+    "LLMConfig",
     "LLMProviderType",
     "LLMResponse",
     "Message",
-    # Types
     "MessageRole",
-    "MistralProvider",
     # Providers
+    "AnthropicProvider",
+    "AzureOpenAIProvider",
+    "GroqProvider",
+    "MistralProvider",
     "OpenAIProvider",
     "PerplexityProvider",
     "TogetherAIProvider",
-    "complete_chat",
     # Factory functions
+    "complete_chat",
     "get_llm_provider_manager",
 ]

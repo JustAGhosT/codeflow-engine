@@ -1,23 +1,14 @@
-from enum import Enum
-from typing import Any
+"""
+Validation Models - Backwards compatibility module.
 
-from pydantic import BaseModel, Field
+This module re-exports from codeflow_engine.core.validation for backwards compatibility.
+New code should import directly from codeflow_engine.core.validation.
+"""
 
+# Re-export from core for backwards compatibility
+from codeflow_engine.core.validation.result import (
+    ValidationResult,
+    ValidationSeverity,
+)
 
-class ValidationSeverity(Enum):
-    """Severity levels for validation issues."""
-
-    LOW = "low"
-    MEDIUM = "medium"
-    HIGH = "high"
-    CRITICAL = "critical"
-
-
-class ValidationResult(BaseModel):
-    """Result of input validation."""
-
-    is_valid: bool
-    errors: list[str] = Field(default_factory=list)
-    warnings: list[str] = Field(default_factory=list)
-    sanitized_data: dict[str, Any] | None = None
-    severity: ValidationSeverity = ValidationSeverity.LOW
+__all__ = ["ValidationResult", "ValidationSeverity"]
