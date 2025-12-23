@@ -7,7 +7,7 @@ This module contains data models for configuration objects used in the CodeFlow 
 from enum import StrEnum
 from typing import Any
 
-from pydantic import BaseModel, Field, SecretStr, field_validator, model_validator
+from pydantic import BaseModel, Field, SecretStr, field_validator
 
 
 class LogLevel(StrEnum):
@@ -82,14 +82,6 @@ class LLMConfig(BaseModel):
     temperature: float = Field(default=0.7, ge=0.0, le=2.0)
     max_tokens: int = Field(default=4096, gt=0)
 
-    @field_validator("temperature")
-    @classmethod
-    def validate_temperature(cls, v: float) -> float:
-        """Validate temperature is within sensible range."""
-        if not 0.0 <= v <= 2.0:
-            raise ValueError("Temperature must be between 0.0 and 2.0")
-        return v
-
 
 class GitHubConfig(BaseModel):
     """GitHub integration configuration model with secrets protection."""
@@ -107,14 +99,6 @@ class WorkflowConfig(BaseModel):
     timeout_seconds: int = Field(default=300, gt=0)
     retry_attempts: int = Field(default=3, ge=0)
     retry_delay_seconds: int = Field(default=5, gt=0)
-
-    @field_validator("max_concurrent", "timeout_seconds")
-    @classmethod
-    def validate_positive(cls, v: int) -> int:
-        """Validate that values are positive."""
-        if v <= 0:
-            raise ValueError("Value must be positive")
-        return v
 
 
 class AppConfig(BaseModel):
