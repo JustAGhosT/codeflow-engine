@@ -24,12 +24,12 @@ Instead of relying on pre-commit hooks, use our provided scripts for code qualit
 
 ```cmd
 # Run all code quality checks before committing
-scripts\code_quality.bat check
+python -m codeflow_engine.actions.quality_engine --mode comprehensive
 
-# Or run individual tools
-scripts\code_quality.bat format
-scripts\code_quality.bat lint
-scripts\code_quality.bat test
+# Or run with different modes
+python -m codeflow_engine.actions.quality_engine --mode fast
+python -m codeflow_engine.actions.quality_engine --mode smart
+python -m codeflow_engine.actions.quality_engine --mode ai_enhanced
 ```
 
 #### Option 2: Install Standard Python 3.13.5 (Highly Recommended)
@@ -55,7 +55,7 @@ If you want to keep Windows Store Python, you can create manual git hooks:
 ```bash
 #!/bin/sh
 echo "Running code quality checks..."
-python tools/scripts/code_quality.py check
+python -m codeflow_engine.actions.quality_engine --mode fast
 if [ $? -ne 0 ]; then
     echo "Code quality checks failed. Please fix issues before committing."
     exit 1
@@ -79,8 +79,8 @@ python -m isort . --profile black
 python -m flake8 . --max-line-length 100
 python -m mypy . --config-file pyproject.toml
 
-# Or use our convenience script
-scripts\code_quality.bat check
+# Or use our convenience module
+python -m codeflow_engine.actions.quality_engine --mode comprehensive
 ```
 
 ### Commit Message Format
