@@ -17,19 +17,66 @@ from typing import Any
 
 from codeflow_engine.actions.registry import ActionRegistry
 
-# Import category modules
-from codeflow_engine.actions import (
-    ai_actions,
-    analysis,
-    base,
-    generation,
-    git,
-    issues,
-    maintenance,
-    platform,
-    quality,
-    scripts,
-)
+# Import category modules with error handling for optional dependencies
+ai_actions = None
+try:
+    from codeflow_engine.actions import ai_actions
+except (ImportError, OSError):
+    pass
+
+analysis = None
+try:
+    from codeflow_engine.actions import analysis
+except (ImportError, OSError):
+    pass
+
+base = None
+try:
+    from codeflow_engine.actions import base
+except (ImportError, OSError):
+    pass
+
+generation = None
+try:
+    from codeflow_engine.actions import generation
+except (ImportError, OSError):
+    pass
+
+git = None
+try:
+    from codeflow_engine.actions import git
+except (ImportError, OSError):
+    pass
+
+issues = None
+try:
+    from codeflow_engine.actions import issues
+except (ImportError, OSError):
+    pass
+
+maintenance = None
+try:
+    from codeflow_engine.actions import maintenance
+except (ImportError, OSError):
+    pass
+
+platform = None
+try:
+    from codeflow_engine.actions import platform
+except (ImportError, OSError):
+    pass
+
+quality = None
+try:
+    from codeflow_engine.actions import quality
+except (ImportError, OSError):
+    pass
+
+scripts = None
+try:
+    from codeflow_engine.actions import scripts
+except (ImportError, OSError):
+    pass
 
 # Re-export commonly used actions for backward compatibility
 # Analysis

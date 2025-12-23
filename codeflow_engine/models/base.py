@@ -6,7 +6,7 @@ This module contains base model classes and mixins for the CodeFlow system.
 
 from abc import ABC
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 
 
@@ -15,7 +15,7 @@ class BaseModel(ABC):
     """Base class for all CodeFlow models with common functionality."""
 
     id: str | None = None
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime | None = None
 
     def to_dict(self) -> dict[str, Any]:
@@ -33,14 +33,18 @@ class BaseModel(ABC):
 
 @dataclass
 class TimestampMixin:
-    """Mixin for models that need timestamp tracking."""
+    """Mixin for models that need timestamp tracking.
+    
+    Note: Defines created_at and updated_at fields (same as BaseModel).
+    Be cautious when using with BaseModel in multiple inheritance to avoid conflicts.
+    """
 
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime | None = None
 
     def touch(self) -> None:
         """Update the updated_at timestamp."""
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(timezone.utc)
 
 
 @dataclass

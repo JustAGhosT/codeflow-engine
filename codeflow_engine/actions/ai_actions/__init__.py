@@ -37,8 +37,18 @@ try:
 except ImportError:
     pass
 
-# Submodule exports
-from codeflow_engine.actions.ai_actions import autogen, llm
+# Submodule exports with guarded imports
+autogen = None
+try:
+    from codeflow_engine.actions.ai_actions import autogen
+except (ImportError, OSError):
+    pass
+
+llm = None
+try:
+    from codeflow_engine.actions.ai_actions import llm
+except (ImportError, OSError):
+    pass
 
 __all__ = [
     "AutoGenAgentSystem",
