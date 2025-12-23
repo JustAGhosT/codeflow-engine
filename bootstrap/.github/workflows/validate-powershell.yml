@@ -1,0 +1,31 @@
+name: Validate Bootstrap PowerShell
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'bootstrap/**/*.ps1'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'bootstrap/**/*.ps1'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validate Bootstrap PowerShell Scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install PSScriptAnalyzer
+        run: |
+          pwsh -Command "Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser"
+
+      - name: Lint PowerShell scripts
+        run: |
+          pwsh -Command "Get-ChildItem -Path 'bootstrap/scripts' -Filter '*.ps1' | ForEach-Object { Write-Host \"Linting $($_.FullName)\"; Invoke-ScriptAnalyzer -Path $_.FullName -Severity Error,Warning }"
+
+      - name: Validate PowerShell syntax
+        run: |
+          pwsh -Command "Get-ChildItem -Path 'bootstrap/scripts' -Filter '*.ps1' | ForEach-Object { Write-Host \"Validating $($_.FullName)\"; \$null = [System.Management.Automation.PSParser]::Tokenize((Get-Content \$_.FullName -Raw), [ref]\$null); if (\$?) { Write-Host \"✓ $($_.Name) syntax is valid\" } else { exit 1 } }"
