@@ -231,5 +231,10 @@ class BaseLinterCLI(ABC):
 
         except KeyboardInterrupt:
             return 130
-        except Exception:
+        except Exception as e:
+            if parsed_args.verbose > 0:
+                import traceback
+                traceback.print_exc()
+            else:
+                print(f"Error: {e}", file=sys.stderr)
             return 1
