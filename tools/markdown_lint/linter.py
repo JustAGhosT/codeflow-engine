@@ -5,11 +5,7 @@ import operator
 from pathlib import Path
 import re
 
-
-try:
-    from tools.markdown_lint.models import FileReport, IssueSeverity, LintIssue
-except ImportError:
-    from models import FileReport, IssueSeverity, LintIssue
+from tools.core.models import FileReport, IssueSeverity, LintIssue
 
 
 class MarkdownLinter:

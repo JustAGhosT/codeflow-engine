@@ -4,7 +4,7 @@ from pathlib import Path
 import re
 from typing import Any
 
-from tools.yaml_lint.models import FileReport, IssueSeverity, LintIssue
+from tools.core.models import FileReport, IssueSeverity, LintIssue
 
 
 # Constants for magic numbers
@@ -36,6 +36,41 @@ class YAMLLinter:
     def __init__(self, config: dict[str, Any] | None = None):
         self.config = config or self.DEFAULT_CONFIG.copy()
         self.reports = {}
+
+    def check_file(self, file_path: Path) -> FileReport:
+        """Check a single YAML file for issues.
+
+        This method is an alias for lint_file to maintain API compatibility
+        with the base linter CLI.
+        """
+        report = self.lint_file(file_path)
+        self.reports[file_path] = report
+        return report
+
+    def check_directory(
+        self, directory: Path, exclude: list[str] | None = None
+    ) -> dict[Path, FileReport]:
+        """Check all YAML files in a directory."""
+        directory = Path(directory).resolve()
+        exclude = exclude or []
+
+        # Find all YAML files
+        yaml_files = []
+        for pattern in ["**/*.yml", "**/*.yaml"]:
+            yaml_files.extend(directory.glob(pattern))
+
+        # Filter excluded files
+        excluded_dirs = {".git", "node_modules", "__pycache__", ".pytest_cache"}
+        for file_path in yaml_files:
+            # Skip files in excluded directories
+            if any(excluded in file_path.parts for excluded in excluded_dirs):
+                continue
+            # Skip files matching exclude patterns
+            if any(file_path.match(pattern) for pattern in exclude):
+                continue
+            self.check_file(file_path)
+
+        return self.reports
 
     def lint_file(self, file_path: Path) -> FileReport:
         """Lint a single YAML file."""
