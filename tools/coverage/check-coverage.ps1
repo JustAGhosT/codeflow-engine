@@ -8,5 +8,4 @@ param(
 $ErrorActionPreference = 'Stop'
 
 # Use the unified Python coverage utility
-python -m scripts.coverage.runner check --threshold $CoverageThreshold
-
+python -m tools.coverage.runner check --threshold $CoverageThreshold

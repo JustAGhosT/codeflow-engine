@@ -56,53 +56,53 @@ Pre-commit hooks are automatically installed and will run on every commit. The h
 
 ### Using the Python Script
 
-The `scripts/code_quality.py` script provides convenient commands:
+The `tools/scripts/code_quality.py` script provides convenient commands:
 
 ```bash
 # Format code
-python scripts/code_quality.py format
+python tools/scripts/code_quality.py format
 
 # Run linting tools
-python scripts/code_quality.py lint
+python tools/scripts/code_quality.py lint
 
 # Run tests
-python scripts/code_quality.py test
+python tools/scripts/code_quality.py test
 
 # Check dependencies for vulnerabilities
-python scripts/code_quality.py security
+python tools/scripts/code_quality.py security
 
 # Install pre-commit hooks
-python scripts/code_quality.py pre-commit install
+python tools/scripts/code_quality.py pre-commit install
 
 # Run pre-commit hooks manually
-python scripts/code_quality.py pre-commit run
+python tools/scripts/code_quality.py pre-commit run
 
 # Run all quality checks
-python scripts/code_quality.py check
+python tools/scripts/code_quality.py check
 ```
 
 ### Using the Windows Batch Script
 
-For Windows users, `scripts/code_quality.bat` provides the same functionality:
+For Windows users, `tools/scripts/code_quality.bat` provides the same functionality:
 
 ```cmd
 # Format code
-scripts\code_quality.bat format
+tools\scripts\code_quality.bat format
 
 # Run linting tools
-scripts\code_quality.bat lint
+tools\scripts\code_quality.bat lint
 
 # Run tests
-scripts\code_quality.bat test
+tools\scripts\code_quality.bat test
 
 # Check dependencies for vulnerabilities
-scripts\code_quality.bat security
+tools\scripts\code_quality.bat security
 
 # Install pre-commit hooks
-scripts\code_quality.bat install
+tools\scripts\code_quality.bat install
 
 # Run all quality checks
-scripts\code_quality.bat check
+tools\scripts\code_quality.bat check
 ```
 
 ### Direct Tool Usage
@@ -181,13 +181,13 @@ python -m pre_commit install
 python -m pre_commit run --all-files
 
 # Or use the comprehensive check
-python scripts/code_quality.py check
+python tools/scripts/code_quality.py check
 ```
 
 ## Development Workflow
 
 1. **Before committing**: Pre-commit hooks run automatically
-2. **Manual checks**: Use `scripts/code_quality.py check` for comprehensive validation
+2. **Manual checks**: Use `tools/scripts/code_quality.py check` for comprehensive validation
 3. **Fix issues**: Address any linting or formatting issues
 4. **Commit**: Use conventional commit messages (enforced by commitizen)
 

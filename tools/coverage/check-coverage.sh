@@ -7,5 +7,4 @@ set -e
 COVERAGE_THRESHOLD=${1:-70}
 
 # Use the unified Python coverage utility
-python -m scripts.coverage.runner check --threshold "$COVERAGE_THRESHOLD"
-
+python -m tools.coverage.runner check --threshold "$COVERAGE_THRESHOLD"

@@ -1,9 +1,7 @@
-#!/bin/bash
 # Measure current test coverage and generate detailed report
 # This script delegates to the unified Python coverage utility
 
-set -e
+$ErrorActionPreference = 'Stop'
 
 # Use the unified Python coverage utility
-python -m scripts.coverage.runner measure
-
+python -m tools.coverage.runner measure

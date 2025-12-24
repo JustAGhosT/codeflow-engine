@@ -359,7 +359,7 @@ poetry run pytest --cov=codeflow_engine --cov-report=html --cov-report=term
 poetry run coverage report --show-missing
 
 # Coverage check script
-./scripts/check-coverage.sh 70
+./tools/coverage/check-coverage.sh 70
 ```
 
 ### Coverage Analysis

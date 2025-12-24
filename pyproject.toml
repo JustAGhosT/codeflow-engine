@@ -349,11 +349,8 @@ line-ending = "auto"
 docstring-code-format = true
 
 [tool.ruff.lint.per-file-ignores]
-# Allow print statements in scripts
-"scripts/**/*.py" = ["T201"]
-
-# Allow all issues in volume control scripts
-"scripts/volume-control/volume_knob.py" = ["ALL"]
+# Allow print statements in coverage tools
+"tools/coverage/**/*.py" = ["T201"]
 
 # Allow various issues in test files
 "tests/**/*.py" = [
@@ -365,26 +362,6 @@ docstring-code-format = true
     "S110",  # try-except-pass
     "G004",  # f-strings in logging
     "DTZ005",  # datetime.now() without tz
-]
-
-# Allow specific issues in volume-control scripts
-"scripts/volume-control/**/*.py" = [
-    "T201",  # print statements
-    "PTH110", "PTH123", "PTH103", "PTH107", "PTH118",  # pathlib issues
-    "PLR0911", "PLR0912", "PLR2004",  # complexity issues
-    "TRY003", "TRY300", "TRY301", "TRY302",  # try-except issues
-    "EM101", "EM102",  # exception message issues
-    "F811", "F821", "F841",  # pyflakes issues
-    "ARG002",  # unused arguments
-    "SIM102", "SIM105", "SIM117",  # simplify issues
-    "S603", "S607", "S110", "S112",  # security issues
-    "N814", "N999",  # naming issues
-    "RUF012",  # mutable class attributes
-    "FBT001", "FBT002",  # boolean issues
-    "A002",  # argument shadowing
-    "B904",  # exception chaining
-    "G004",  # logging f-strings
-    "PGH003",  # pygrep-hooks
 ]
 
 # Allow specific issues in template discovery
