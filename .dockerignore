@@ -1,0 +1,61 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv
+venv/
+ENV/
+env/
+.eggs
+*.egg-info/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build artifacts
+build/
+dist/
+*.egg
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Tests (not needed in production image)
+tests/
+pytest.ini
+
+# Development files
+.pre-commit-config.yaml
+Makefile
+docker-compose*.yml
+
+# Templates (not needed in production)
+templates/
+
+# Tools (not needed in production)
+tools/
+
+# Node modules (if any)
+node_modules/
+
+# Misc
+.DS_Store
+*.log
+*.tmp
