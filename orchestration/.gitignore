@@ -1,0 +1,31 @@
+# Environment files
+*.env
+*.env.local
+*.env.*.local
+az-env-*.json
+deployment-output.json
+
+# Credentials
+.credentials-*.json
+*.pem
+*.key
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.bak
+*~
+

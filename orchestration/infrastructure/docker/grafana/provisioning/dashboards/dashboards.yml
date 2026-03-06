@@ -1,0 +1,15 @@
+﻿# CodeFlow Engine Grafana Dashboard Provisioning
+
+apiVersion: 1
+
+providers:
+  - name: 'CodeFlow Dashboards'
+    orgId: 1
+    folder: 'CodeFlow Engine'
+    folderUid: ''
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards

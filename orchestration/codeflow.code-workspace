@@ -1,0 +1,331 @@
+{
+  "folders": [
+    {
+      "name": "CodeFlow Engine",
+      "path": "../codeflow-engine"
+    },
+    {
+      "name": "CodeFlow Desktop",
+      "path": "../codeflow-desktop"
+    },
+    {
+      "name": "CodeFlow VS Code Extension",
+      "path": "../codeflow-vscode-extension"
+    },
+    {
+      "name": "CodeFlow Website",
+      "path": "../codeflow-website"
+    },
+    {
+      "name": "CodeFlow Infrastructure",
+      "path": "../codeflow-infrastructure"
+    },
+    {
+      "name": "CodeFlow Azure Setup",
+      "path": "../codeflow-azure-setup"
+    },
+    {
+      "name": "CodeFlow Orchestration",
+      "path": "../codeflow-orchestration"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/.git": true,
+      "**/node_modules": true,
+      "**/__pycache__": true,
+      "**/.pytest_cache": true,
+      "**/.venv": true,
+      "**/venv": true,
+      "**/dist": true,
+      "**/build": true,
+      "**/.next": true,
+      "**/out": true,
+      "**/.tauri": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/__pycache__": true,
+      "**/.pytest_cache": true,
+      "**/.venv": true,
+      "**/venv": true,
+      "**/dist": true,
+      "**/build": true,
+      "**/.next": true,
+      "**/out": true,
+      "**/.tauri": true,
+      "**/poetry.lock": true,
+      "**/package-lock.json": true,
+      "**/yarn.lock": true
+    },
+    "files.watcherExclude": {
+      "**/node_modules/**": true,
+      "**/.git/objects/**": true,
+      "**/.git/subtree-cache/**": true,
+      "**/__pycache__/**": true,
+      "**/.pytest_cache/**": true,
+      "**/.venv/**": true,
+      "**/venv/**": true,
+      "**/dist/**": true,
+      "**/build/**": true,
+      "**/.next/**": true,
+      "**/out/**": true,
+      "**/.tauri/**": true
+    },
+    "python.defaultInterpreterPath": "${workspaceFolder:CodeFlow Engine}/.venv/bin/python",
+    "python.analysis.extraPaths": ["${workspaceFolder:CodeFlow Engine}"],
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "[python]": {
+      "editor.defaultFormatter": "ms-python.black-formatter",
+      "editor.formatOnSave": true,
+      "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+      }
+    },
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true
+    },
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true
+    },
+    "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true
+    },
+    "[javascriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true
+    },
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[markdown]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[powershell]": {
+      "editor.defaultFormatter": "ms-vscode.PowerShell",
+      "editor.formatOnSave": true
+    },
+    "[bicep]": {
+      "editor.defaultFormatter": "ms-azuretools.vscode-bicep"
+    },
+    "files.associations": {
+      "*.bicep": "bicep",
+      "*.ps1": "powershell"
+    },
+    "cursorpyright.analysis.extraPaths": ["${workspaceFolder:CodeFlow Engine}"],
+    "cSpell.words": [
+      "abstractmethod",
+      "addopts",
+      "aiohttp",
+      "aioredis",
+      "asyncio",
+      "asyncpg",
+      "autodoc",
+      "autosummary",
+      "axolo",
+      "chromadb",
+      "cnpg",
+      "codeflow",
+      "codeflowacr",
+      "configmap",
+      "containerapp",
+      "crewai",
+      "datetimez",
+      "dateutil",
+      "direnv",
+      "docstrings",
+      "doctests",
+      "dotenv",
+      "fastapi",
+      "filterwarnings",
+      "groq",
+      "gunicorn",
+      "htmlcov",
+      "httpx",
+      "intersphinx",
+      "isort",
+      "langsmith",
+      "letsencrypt",
+      "maxfail",
+      "minversion",
+      "mistralai",
+      "mypy",
+      "norecursedirs",
+      "numpy",
+      "pathlib",
+      "psql",
+      "psutil",
+      "psycopg",
+      "pybreaker",
+      "pycache",
+      "pycodestyle",
+      "pydantic",
+      "pydocstyle",
+      "pyflakes",
+      "pygithub",
+      "pygrep",
+      "pypackages",
+      "pytest",
+      "pytype",
+      "pytz",
+      "pyupgrade",
+      "pyyaml",
+      "qdrant",
+      "rediss",
+      "reflog",
+      "repr",
+      "semgrep",
+      "setuptools",
+      "socketio",
+      "southafricanorth",
+      "spotahome",
+      "sqlalchemy",
+      "staticwebapp",
+      "structlog",
+      "Tauri",
+      "testpaths",
+      "tomli",
+      "tryceratops",
+      "uvicorn",
+      "venv",
+      "viewcode",
+      "yourusername"
+    ]
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-python.python",
+      "ms-python.black-formatter",
+      "ms-python.isort",
+      "charliermarsh.ruff",
+      "ms-python.mypy-type-checker",
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "ms-vscode.powershell",
+      "ms-azuretools.vscode-bicep",
+      "ms-azuretools.vscode-azureresourcegroups",
+      "github.vscode-pull-request-github",
+      "github.copilot",
+      "tauri-apps.tauri-vscode",
+      "rust-lang.rust-analyzer"
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Build All",
+        "dependsOn": [
+          "Build: Engine",
+          "Build: Desktop",
+          "Build: Extension",
+          "Build: Website"
+        ],
+        "problemMatcher": []
+      },
+      {
+        "label": "Build: Engine",
+        "type": "shell",
+        "command": "poetry build",
+        "options": {
+          "cwd": "${workspaceFolder:CodeFlow Engine}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Build: Desktop",
+        "type": "shell",
+        "command": "npm run build",
+        "options": {
+          "cwd": "${workspaceFolder:CodeFlow Desktop}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Build: Extension",
+        "type": "shell",
+        "command": "npm run compile",
+        "options": {
+          "cwd": "${workspaceFolder:CodeFlow VS Code Extension}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Build: Website",
+        "type": "shell",
+        "command": "npm run build",
+        "options": {
+          "cwd": "${workspaceFolder:CodeFlow Website}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Test: Engine",
+        "type": "shell",
+        "command": "poetry run pytest",
+        "options": {
+          "cwd": "${workspaceFolder:CodeFlow Engine}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Lint: All",
+        "dependsOn": [
+          "Lint: Engine",
+          "Lint: Desktop",
+          "Lint: Extension",
+          "Lint: Website"
+        ],
+        "problemMatcher": []
+      },
+      {
+        "label": "Lint: Engine",
+        "type": "shell",
+        "command": "poetry run ruff check . && poetry run mypy codeflow_engine",
+        "options": {
+          "cwd": "${workspaceFolder:CodeFlow Engine}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Lint: Desktop",
+        "type": "shell",
+        "command": "npm run lint",
+        "options": {
+          "cwd": "${workspaceFolder:CodeFlow Desktop}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Lint: Extension",
+        "type": "shell",
+        "command": "npm run lint",
+        "options": {
+          "cwd": "${workspaceFolder:CodeFlow VS Code Extension}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Lint: Website",
+        "type": "shell",
+        "command": "npm run lint",
+        "options": {
+          "cwd": "${workspaceFolder:CodeFlow Website}"
+        },
+        "problemMatcher": []
+      }
+    ]
+  }
+}
