@@ -51,7 +51,9 @@ def env_float(name: str, default: float = 0.0) -> float:
         return default
 
 
-def env_list(name: str, default: list[str] | None = None, separator: str = ",") -> list[str]:
+def env_list(
+    name: str, default: list[str] | None = None, separator: str = ","
+) -> list[str]:
     value = os.getenv(name, "")
     if not value:
         return default or []
@@ -75,7 +77,9 @@ class BaseConfig(ABC):
 
 @dataclass
 class ConfigLoader:
-    config_paths: list[str] = field(default_factory=lambda: ["pyproject.toml", "config.yaml"])
+    config_paths: list[str] = field(
+        default_factory=lambda: ["pyproject.toml", "config.yaml"]
+    )
 
     def load_toml(self, path: str, section: str | None = None) -> dict[str, Any]:
         if not Path(path).exists():
@@ -146,7 +150,9 @@ class ConfigLoader:
         logger.warning("unknown_config_format", path=path)
         return {}
 
-    def load_merged(self, paths: list[str] | None = None, section: str | None = None) -> dict[str, Any]:
+    def load_merged(
+        self, paths: list[str] | None = None, section: str | None = None
+    ) -> dict[str, Any]:
         paths = paths or self.config_paths
         merged: dict[str, Any] = {}
         for path in paths:
@@ -154,10 +160,16 @@ class ConfigLoader:
             merged = self._deep_merge(merged, config)
         return merged
 
-    def _deep_merge(self, base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
+    def _deep_merge(
+        self, base: dict[str, Any], override: dict[str, Any]
+    ) -> dict[str, Any]:
         result = dict(base)
         for key, value in override.items():
-            if key in result and isinstance(result[key], dict) and isinstance(value, dict):
+            if (
+                key in result
+                and isinstance(result[key], dict)
+                and isinstance(value, dict)
+            ):
                 result[key] = self._deep_merge(result[key], value)
             else:
                 result[key] = value

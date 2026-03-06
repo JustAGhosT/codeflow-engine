@@ -19,11 +19,17 @@ class LLMResponse:
 
 class ResponseExtractor:
     @staticmethod
-    def extract_openai_response(response: Any, default_model: str = "unknown") -> tuple[str, str, dict[str, int] | None]:
+    def extract_openai_response(
+        response: Any, default_model: str = "unknown"
+    ) -> tuple[str, str, dict[str, int] | None]:
         content = ""
         finish_reason = "stop"
         usage = None
-        if hasattr(response, "choices") and response.choices and len(response.choices) > 0:
+        if (
+            hasattr(response, "choices")
+            and response.choices
+            and len(response.choices) > 0
+        ):
             choice = response.choices[0]
             if hasattr(choice, "message") and hasattr(choice.message, "content"):
                 content = choice.message.content or ""
@@ -34,22 +40,44 @@ class ResponseExtractor:
             else:
                 usage = {
                     "prompt_tokens": getattr(response.usage, "prompt_tokens", 0),
-                    "completion_tokens": getattr(response.usage, "completion_tokens", 0),
+                    "completion_tokens": getattr(
+                        response.usage, "completion_tokens", 0
+                    ),
                     "total_tokens": getattr(response.usage, "total_tokens", 0),
                 }
         return content, finish_reason, usage
 
     @staticmethod
-    def extract_anthropic_response(response: Any) -> tuple[str, str, dict[str, int] | None]:
+    def extract_anthropic_response(
+        response: Any,
+    ) -> tuple[str, str, dict[str, int] | None]:
         content = ""
         if hasattr(response, "content") and response.content:
-            content = "\n".join(block.text for block in response.content if hasattr(block, "text"))
+            content = "\n".join(
+                block.text for block in response.content if hasattr(block, "text")
+            )
         finish_reason = getattr(response, "stop_reason", "stop")
         usage = None
         if hasattr(response, "usage"):
             response_usage = response.usage
-            input_tokens = getattr(response_usage, "input_tokens", 0) if hasattr(response_usage, "input_tokens") else response_usage.get("input_tokens", 0) if isinstance(response_usage, dict) else 0
-            output_tokens = getattr(response_usage, "output_tokens", 0) if hasattr(response_usage, "output_tokens") else response_usage.get("output_tokens", 0) if isinstance(response_usage, dict) else 0
+            input_tokens = (
+                getattr(response_usage, "input_tokens", 0)
+                if hasattr(response_usage, "input_tokens")
+                else (
+                    response_usage.get("input_tokens", 0)
+                    if isinstance(response_usage, dict)
+                    else 0
+                )
+            )
+            output_tokens = (
+                getattr(response_usage, "output_tokens", 0)
+                if hasattr(response_usage, "output_tokens")
+                else (
+                    response_usage.get("output_tokens", 0)
+                    if isinstance(response_usage, dict)
+                    else 0
+                )
+            )
             usage = {
                 "prompt_tokens": input_tokens,
                 "completion_tokens": output_tokens,

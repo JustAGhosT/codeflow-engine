@@ -15,7 +15,12 @@ class LLMProviderRegistry:
     _default_configs: dict[str, dict[str, Any]] = {}
 
     @classmethod
-    def register(cls, name: str, provider_class: type[BaseLLMProvider], default_config: dict[str, Any] | None = None) -> None:
+    def register(
+        cls,
+        name: str,
+        provider_class: type[BaseLLMProvider],
+        default_config: dict[str, Any] | None = None,
+    ) -> None:
         cls._providers[name.lower()] = provider_class
         if default_config:
             cls._default_configs[name.lower()] = default_config
@@ -31,7 +36,9 @@ class LLMProviderRegistry:
         return False
 
     @classmethod
-    def create(cls, name: str, config: dict[str, Any] | None = None) -> BaseLLMProvider | None:
+    def create(
+        cls, name: str, config: dict[str, Any] | None = None
+    ) -> BaseLLMProvider | None:
         name_lower = name.lower()
         provider_class = cls._providers.get(name_lower)
         if provider_class is None:

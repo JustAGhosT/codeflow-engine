@@ -85,9 +85,13 @@ class SessionMixin:
 
     @property
     def active_sessions(self) -> list[str]:
-        return [sid for sid, data in self._sessions.items() if data.get("is_active", False)]
+        return [
+            sid for sid, data in self._sessions.items() if data.get("is_active", False)
+        ]
 
-    def start_session(self, session_id: str, metadata: dict[str, Any] | None = None) -> None:
+    def start_session(
+        self, session_id: str, metadata: dict[str, Any] | None = None
+    ) -> None:
         self._sessions[session_id] = {
             "start_time": datetime.now(UTC),
             "is_active": True,
@@ -110,7 +114,9 @@ class SessionMixin:
             return self._sessions[sid].get("data", {})
         return {}
 
-    def set_session_data(self, key: str, value: Any, session_id: str | None = None) -> None:
+    def set_session_data(
+        self, key: str, value: Any, session_id: str | None = None
+    ) -> None:
         sid = session_id or self._current_session
         if sid and sid in self._sessions:
             self._sessions[sid].setdefault("data", {})[key] = value
@@ -134,13 +140,17 @@ class StatsMixin:
         return self._stats.copy()
 
     def record_event(self, event_type: str, data: dict[str, Any] | None = None) -> None:
-        self._stats_history.append({
-            "timestamp": datetime.now(UTC).isoformat(),
-            "event_type": event_type,
-            "data": data or {},
-        })
+        self._stats_history.append(
+            {
+                "timestamp": datetime.now(UTC).isoformat(),
+                "event_type": event_type,
+                "data": data or {},
+            }
+        )
 
-    def get_stats_history(self, event_type: str | None = None, limit: int | None = None) -> list[dict[str, Any]]:
+    def get_stats_history(
+        self, event_type: str | None = None, limit: int | None = None
+    ) -> list[dict[str, Any]]:
         history = self._stats_history
         if event_type:
             history = [e for e in history if e["event_type"] == event_type]

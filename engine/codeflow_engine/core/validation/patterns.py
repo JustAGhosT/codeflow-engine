@@ -7,48 +7,60 @@ from typing import Pattern
 
 @dataclass
 class SecurityPatterns:
-    sql_injection: list[str] = field(default_factory=lambda: [
-        r"(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE|UNION|SCRIPT)\b)",
-        r"(\b(OR|AND)\b\s+\d+\s*=\s*\d+)",
-        r"(\b(OR|AND)\b\s+['\"]\w+['\"]\s*=\s*['\"]\w+['\"])",
-        r"(--|\b(COMMENT|REM)\b)",
-        r"(\b(WAITFOR|DELAY)\b)",
-        r"(\b(BENCHMARK|SLEEP)\b)",
-        r"(\bUNION\s+SELECT\b)",
-    ])
-    xss: list[str] = field(default_factory=lambda: [
-        r"<script[^>]*>.*?</script>",
-        r"javascript:",
-        r"on\w+\s*=",
-        r"<iframe[^>]*>",
-        r"<object[^>]*>",
-        r"<embed[^>]*>",
-        r"<form[^>]*>",
-        r"<input[^>]*>",
-        r"<textarea[^>]*>",
-        r"<select[^>]*>",
-    ])
-    command_injection: list[str] = field(default_factory=lambda: [
-        r"[;&|`$(){}[\]]",
-        r"\b(cat|ls|pwd|whoami|id|uname|ps|top|kill|rm|cp|mv|chmod|chown)\b",
-        r"\b(netcat|nc|telnet|ssh|scp|wget|curl|ftp|sftp)\b",
-        r"\b(bash|sh|zsh|fish|powershell|cmd|command)\b",
-        r"(>|>>|<|\|)",
-    ])
-    path_traversal: list[str] = field(default_factory=lambda: [
-        r"\.\./",
-        r"\.\.\\",
-        r"%2e%2e/",
-        r"%2e%2e\\",
-    ])
-    _compiled_patterns: dict[str, list[Pattern[str]]] = field(default_factory=dict, init=False, repr=False)
+    sql_injection: list[str] = field(
+        default_factory=lambda: [
+            r"(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE|UNION|SCRIPT)\b)",
+            r"(\b(OR|AND)\b\s+\d+\s*=\s*\d+)",
+            r"(\b(OR|AND)\b\s+['\"]\w+['\"]\s*=\s*['\"]\w+['\"])",
+            r"(--|\b(COMMENT|REM)\b)",
+            r"(\b(WAITFOR|DELAY)\b)",
+            r"(\b(BENCHMARK|SLEEP)\b)",
+            r"(\bUNION\s+SELECT\b)",
+        ]
+    )
+    xss: list[str] = field(
+        default_factory=lambda: [
+            r"<script[^>]*>.*?</script>",
+            r"javascript:",
+            r"on\w+\s*=",
+            r"<iframe[^>]*>",
+            r"<object[^>]*>",
+            r"<embed[^>]*>",
+            r"<form[^>]*>",
+            r"<input[^>]*>",
+            r"<textarea[^>]*>",
+            r"<select[^>]*>",
+        ]
+    )
+    command_injection: list[str] = field(
+        default_factory=lambda: [
+            r"[;&|`$(){}[\]]",
+            r"\b(cat|ls|pwd|whoami|id|uname|ps|top|kill|rm|cp|mv|chmod|chown)\b",
+            r"\b(netcat|nc|telnet|ssh|scp|wget|curl|ftp|sftp)\b",
+            r"\b(bash|sh|zsh|fish|powershell|cmd|command)\b",
+            r"(>|>>|<|\|)",
+        ]
+    )
+    path_traversal: list[str] = field(
+        default_factory=lambda: [
+            r"\.\./",
+            r"\.\.\\",
+            r"%2e%2e/",
+            r"%2e%2e\\",
+        ]
+    )
+    _compiled_patterns: dict[str, list[Pattern[str]]] = field(
+        default_factory=dict, init=False, repr=False
+    )
 
     def __post_init__(self) -> None:
         self._compiled_patterns = {
             "sql_injection": [re.compile(p, re.IGNORECASE) for p in self.sql_injection],
             "xss": [re.compile(p, re.IGNORECASE) for p in self.xss],
             "command_injection": [re.compile(p) for p in self.command_injection],
-            "path_traversal": [re.compile(p, re.IGNORECASE) for p in self.path_traversal],
+            "path_traversal": [
+                re.compile(p, re.IGNORECASE) for p in self.path_traversal
+            ],
         }
 
     def _check_patterns(self, pattern_type: str, value: str) -> bool:

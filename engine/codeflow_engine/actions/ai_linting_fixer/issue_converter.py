@@ -19,21 +19,17 @@ def convert_detection_issue_to_model_issue(detection_issue: "LintingIssue") -> "
     from codeflow_engine.actions.ai_linting_fixer.models import \
         LintingIssue as ModelLintingIssue
 
-    # Build a candidate dict with superset keys
-    candidate = {
-        "file_path": detection_issue.file_path,
-        "line_number": getattr(detection_issue, "line_number", None),
-        "error_code": detection_issue.error_code,
-        "message": detection_issue.message,
-        "line_content": getattr(detection_issue, "line_content", ""),
-        # Prefer column_number; also support models that use "column"
-        "column_number": getattr(detection_issue, "column_number", None),
-        "column": getattr(detection_issue, "column_number", None),
-    }
-    # Filter by the target model's constructor fields
-    allowed = set(getattr(ModelLintingIssue, "__annotations__", {}).keys() or [])
-    payload = {k: v for k, v in candidate.items() if k in allowed and v is not None}
-    return ModelLintingIssue(**payload)
+    line_number = getattr(detection_issue, "line_number", 0)
+    column_number = getattr(detection_issue, "column_number", 0)
+    return ModelLintingIssue(
+        file_path=detection_issue.file_path,
+        line_number=line_number,
+        column_number=column_number,
+        error_code=detection_issue.error_code,
+        message=detection_issue.message,
+        line_content=getattr(detection_issue, "line_content", ""),
+        column=column_number,
+    )
 
 
 def convert_detection_issues_to_model_issues(

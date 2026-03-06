@@ -57,7 +57,7 @@ class SpecialistManager:
             scores[agent_type] = score
 
         # Select the specialist with the highest score
-        best_agent_type = max(scores, key=scores.get)
+        best_agent_type = max(scores, key=lambda agent_type: scores[agent_type])
         return self.specialists[best_agent_type]
 
     def get_specialist_by_type(self, agent_type: AgentType) -> BaseSpecialist:

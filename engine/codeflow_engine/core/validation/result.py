@@ -29,11 +29,15 @@ class ValidationResult(BaseModel):
     severity: ValidationSeverity = ValidationSeverity.LOW
 
     @classmethod
-    def success(cls, sanitized_data: dict[str, Any] | None = None) -> "ValidationResult":
+    def success(
+        cls, sanitized_data: dict[str, Any] | None = None
+    ) -> "ValidationResult":
         return cls(is_valid=True, sanitized_data=sanitized_data)
 
     @classmethod
-    def failure(cls, error: str, severity: ValidationSeverity = ValidationSeverity.MEDIUM) -> "ValidationResult":
+    def failure(
+        cls, error: str, severity: ValidationSeverity = ValidationSeverity.MEDIUM
+    ) -> "ValidationResult":
         return cls(is_valid=False, errors=[error], severity=severity)
 
     def add_error(self, error: str, severity: ValidationSeverity | None = None) -> None:
@@ -46,7 +50,9 @@ class ValidationResult(BaseModel):
         self.warnings.append(warning)
 
 
-def update_severity(current: ValidationSeverity, new: ValidationSeverity) -> ValidationSeverity:
+def update_severity(
+    current: ValidationSeverity, new: ValidationSeverity
+) -> ValidationSeverity:
     if SEVERITY_ORDER[new] > SEVERITY_ORDER[current]:
         return new
     return current

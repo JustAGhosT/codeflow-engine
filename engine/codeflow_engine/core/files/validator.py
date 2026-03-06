@@ -21,7 +21,13 @@ class ContentValidator:
     MAX_LINE_LENGTH = 1000
     WARN_LINE_LENGTH = 500
 
-    def __init__(self, max_line_length: int = MAX_LINE_LENGTH, warn_line_length: int = WARN_LINE_LENGTH, check_trailing_whitespace: bool = True, check_mixed_line_endings: bool = True) -> None:
+    def __init__(
+        self,
+        max_line_length: int = MAX_LINE_LENGTH,
+        warn_line_length: int = WARN_LINE_LENGTH,
+        check_trailing_whitespace: bool = True,
+        check_mixed_line_endings: bool = True,
+    ) -> None:
         self.max_line_length = max_line_length
         self.warn_line_length = warn_line_length
         self.check_trailing_whitespace = check_trailing_whitespace
@@ -52,7 +58,9 @@ class ContentValidator:
             result.issues.append("Content contains invalid UTF-8 characters")
             result.valid = False
 
-    def _check_line_lengths(self, lines: list[str], result: ContentValidationResult) -> None:
+    def _check_line_lengths(
+        self, lines: list[str], result: ContentValidationResult
+    ) -> None:
         long_lines = []
         very_long_lines = []
         for i, line in enumerate(lines, 1):
@@ -64,12 +72,18 @@ class ContentValidator:
         if very_long_lines:
             result.warnings.append(
                 f"Lines exceeding {self.max_line_length} chars: {very_long_lines[:5]}"
-                + (f" (+{len(very_long_lines) - 5} more)" if len(very_long_lines) > 5 else "")
+                + (
+                    f" (+{len(very_long_lines) - 5} more)"
+                    if len(very_long_lines) > 5
+                    else ""
+                )
             )
         if long_lines:
             result.metadata["long_lines"] = long_lines[:10]
 
-    def _check_line_endings(self, content: str, result: ContentValidationResult) -> None:
+    def _check_line_endings(
+        self, content: str, result: ContentValidationResult
+    ) -> None:
         has_crlf = "\r\n" in content
         content_without_crlf = content.replace("\r\n", "")
         has_lf = "\n" in content_without_crlf
@@ -87,7 +101,9 @@ class ContentValidator:
         else:
             result.metadata["line_ending"] = "mixed"
 
-    def _check_trailing_whitespace(self, lines: list[str], result: ContentValidationResult) -> None:
+    def _check_trailing_whitespace(
+        self, lines: list[str], result: ContentValidationResult
+    ) -> None:
         lines_with_trailing = []
         for i, line in enumerate(lines, 1):
             if line and line != line.rstrip():
@@ -98,7 +114,9 @@ class ContentValidator:
             if count > 10:
                 result.warnings.append(f"{count} lines have trailing whitespace")
 
-    def validate_for_write(self, content: str, strict: bool = False) -> tuple[bool, str]:
+    def validate_for_write(
+        self, content: str, strict: bool = False
+    ) -> tuple[bool, str]:
         result = self.validate(content)
         if not result.valid:
             return False, "; ".join(result.issues)

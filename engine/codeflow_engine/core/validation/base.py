@@ -3,7 +3,10 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from codeflow_engine.core.validation.patterns import DEFAULT_SECURITY_PATTERNS, SecurityPatterns
+from codeflow_engine.core.validation.patterns import (
+    DEFAULT_SECURITY_PATTERNS,
+    SecurityPatterns,
+)
 from codeflow_engine.core.validation.result import ValidationResult, ValidationSeverity
 
 

@@ -70,7 +70,9 @@ class WorkflowNode(BaseModel):
     type: NodeType
     label: str
     config: Dict[str, Any] = Field(default_factory=dict)
-    position: Dict[str, float] = Field(default_factory=lambda: {"x": 0, "y": 0})
+    position: Dict[str, float] = Field(
+        default_factory=lambda: {"x": 0.0, "y": 0.0}
+    )
     
     @validator('config')
     def validate_config(cls, v, values):

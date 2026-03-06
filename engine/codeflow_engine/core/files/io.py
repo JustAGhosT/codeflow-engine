@@ -28,7 +28,9 @@ class FileIO:
         return content if success else None
 
     @staticmethod
-    def write(file_path: str, content: str, encoding: str = "utf-8", create_dirs: bool = False) -> bool:
+    def write(
+        file_path: str, content: str, encoding: str = "utf-8", create_dirs: bool = False
+    ) -> bool:
         try:
             path = Path(file_path)
             if create_dirs:
@@ -71,8 +73,12 @@ class FileIO:
                 "exists": True,
                 "size_bytes": stat.st_size,
                 "size_mb": stat.st_size / (1024 * 1024),
-                "modified_time": datetime.fromtimestamp(stat.st_mtime, tz=UTC).isoformat(),
-                "created_time": datetime.fromtimestamp(stat.st_ctime, tz=UTC).isoformat(),
+                "modified_time": datetime.fromtimestamp(
+                    stat.st_mtime, tz=UTC
+                ).isoformat(),
+                "created_time": datetime.fromtimestamp(
+                    stat.st_ctime, tz=UTC
+                ).isoformat(),
                 "is_file": path.is_file(),
                 "is_directory": path.is_dir(),
                 "extension": path.suffix,
@@ -88,10 +94,17 @@ class FileIO:
     def copy(source_path: str, destination_path: str) -> bool:
         try:
             shutil.copy2(source_path, destination_path)
-            logger.debug("file_copied", source=source_path, destination=destination_path)
+            logger.debug(
+                "file_copied", source=source_path, destination=destination_path
+            )
             return True
         except Exception as e:
-            logger.error("file_copy_failed", source=source_path, destination=destination_path, error=str(e))
+            logger.error(
+                "file_copy_failed",
+                source=source_path,
+                destination=destination_path,
+                error=str(e),
+            )
             return False
 
     @staticmethod
@@ -101,7 +114,12 @@ class FileIO:
             logger.debug("file_moved", source=source_path, destination=destination_path)
             return True
         except Exception as e:
-            logger.error("file_move_failed", source=source_path, destination=destination_path, error=str(e))
+            logger.error(
+                "file_move_failed",
+                source=source_path,
+                destination=destination_path,
+                error=str(e),
+            )
             return False
 
     @staticmethod

@@ -6,8 +6,15 @@ from typing import Any
 import structlog
 
 from codeflow_engine.core.validation.base import BaseTypeValidator
-from codeflow_engine.core.validation.patterns import DEFAULT_SECURITY_PATTERNS, SecurityPatterns
-from codeflow_engine.core.validation.result import ValidationResult, ValidationSeverity, update_severity
+from codeflow_engine.core.validation.patterns import (
+    DEFAULT_SECURITY_PATTERNS,
+    SecurityPatterns,
+)
+from codeflow_engine.core.validation.result import (
+    ValidationResult,
+    ValidationSeverity,
+    update_severity,
+)
 
 logger = structlog.get_logger(__name__)
 
@@ -16,7 +23,11 @@ SAFE_KEY_PATTERN = re.compile(r"^[a-zA-Z0-9_\-\.]+$")
 
 
 class CompositeValidator:
-    def __init__(self, security_patterns: SecurityPatterns | None = None, validators: list[BaseTypeValidator] | None = None) -> None:
+    def __init__(
+        self,
+        security_patterns: SecurityPatterns | None = None,
+        validators: list[BaseTypeValidator] | None = None,
+    ) -> None:
         self.security_patterns = security_patterns or DEFAULT_SECURITY_PATTERNS
         self._validators: list[BaseTypeValidator] = validators or []
 
@@ -26,21 +37,29 @@ class CompositeValidator:
 
     def unregister(self, validator_type: type[BaseTypeValidator]) -> bool:
         original_count = len(self._validators)
-        self._validators = [v for v in self._validators if not isinstance(v, validator_type)]
+        self._validators = [
+            v for v in self._validators if not isinstance(v, validator_type)
+        ]
         return len(self._validators) < original_count
 
-    def validate_input(self, data: dict[str, Any], schema: type | None = None) -> ValidationResult:
+    def validate_input(
+        self, data: dict[str, Any], schema: type | None = None
+    ) -> ValidationResult:
         result = ValidationResult(is_valid=True)
         sanitized_data: dict[str, Any] = {}
         try:
             for key, value in data.items():
                 if not self._is_safe_key(key):
-                    result.add_error(f"Invalid key name: {key}", ValidationSeverity.HIGH)
+                    result.add_error(
+                        f"Invalid key name: {key}", ValidationSeverity.HIGH
+                    )
                     continue
                 value_result = self._validate_value(key, value)
                 self._merge_result(result, value_result)
                 if value_result.is_valid and value_result.sanitized_data is not None:
-                    sanitized_data[key] = self._unwrap_sanitized(value_result.sanitized_data)
+                    sanitized_data[key] = self._unwrap_sanitized(
+                        value_result.sanitized_data
+                    )
             if schema and result.is_valid:
                 result = self._apply_schema(schema, sanitized_data, result)
             else:
@@ -49,7 +68,9 @@ class CompositeValidator:
             return result
         except Exception:
             logger.exception("Input validation error")
-            return ValidationResult.failure("Validation system error", ValidationSeverity.CRITICAL)
+            return ValidationResult.failure(
+                "Validation system error", ValidationSeverity.CRITICAL
+            )
 
     def _validate_value(self, key: str, value: Any) -> ValidationResult:
         for validator in self._validators:
@@ -68,13 +89,22 @@ class CompositeValidator:
             target.severity = update_severity(target.severity, source.severity)
 
     def _unwrap_sanitized(self, sanitized_data: dict[str, Any]) -> Any:
-        if isinstance(sanitized_data, dict) and len(sanitized_data) == 1 and "value" in sanitized_data:
+        if (
+            isinstance(sanitized_data, dict)
+            and len(sanitized_data) == 1
+            and "value" in sanitized_data
+        ):
             return sanitized_data["value"]
         if isinstance(sanitized_data, dict) and "items" in sanitized_data:
             return sanitized_data["items"]
         return sanitized_data
 
-    def _apply_schema(self, schema: type, sanitized_data: dict[str, Any], current_result: ValidationResult) -> ValidationResult:
+    def _apply_schema(
+        self,
+        schema: type,
+        sanitized_data: dict[str, Any],
+        current_result: ValidationResult,
+    ) -> ValidationResult:
         try:
             validated = schema(**sanitized_data)
             if hasattr(validated, "dict"):
@@ -84,11 +114,20 @@ class CompositeValidator:
             else:
                 current_result.sanitized_data = sanitized_data
         except Exception as e:
-            current_result.add_error(f"Schema validation failed: {e!s}", ValidationSeverity.HIGH)
+            current_result.add_error(
+                f"Schema validation failed: {e!s}", ValidationSeverity.HIGH
+            )
         return current_result
 
-    def _log_validation_result(self, result: ValidationResult, data: dict[str, Any]) -> None:
+    def _log_validation_result(
+        self, result: ValidationResult, data: dict[str, Any]
+    ) -> None:
         if not result.is_valid:
-            logger.warning("Input validation failed", errors=result.errors, severity=result.severity.value, data_keys=list(data.keys()))
+            logger.warning(
+                "Input validation failed",
+                errors=result.errors,
+                severity=result.severity.value,
+                data_keys=list(data.keys()),
+            )
         else:
             logger.debug("Input validation passed", data_keys=list(data.keys()))

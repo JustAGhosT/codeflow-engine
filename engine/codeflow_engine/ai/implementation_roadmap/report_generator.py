@@ -14,6 +14,11 @@ from codeflow_engine.ai.implementation_roadmap.task_definitions import (
 from codeflow_engine.ai.implementation_roadmap.task_executor import TaskExecutor
 
 
+def _format_phase_duration(duration_days: int) -> str:
+    """Format phase duration for report payloads."""
+    return f"{duration_days} days"
+
+
 class ReportGenerator:
     """Generates comprehensive reports for implementation progress"""
 
@@ -274,9 +279,10 @@ th { background: #f8f9fa; font-weight: 600; }
         if not completed_executions:
             return 0.0
 
-        total_hours = (
-            sum(exec.duration for exec in completed_executions) / 3600
-        )  # Convert to hours
+        total_duration = sum(
+            execution.duration or 0.0 for execution in completed_executions
+        )
+        total_hours = total_duration / 3600  # Convert to hours
         return len(completed_executions) / max(
             total_hours, 0.1
         )  # Avoid division by zero
@@ -399,7 +405,7 @@ th { background: #f8f9fa; font-weight: 600; }
 
             analysis = {
                 "name": phase_name,
-                "description": phase.description if phase else "",
+                "description": phase.display_name if phase else "",
                 "status": progress["status"],
                 "progress_percentage": progress["progress_percentage"],
                 "total_tasks": progress["total_tasks"],
@@ -407,19 +413,24 @@ th { background: #f8f9fa; font-weight: 600; }
                 "failed_tasks": progress["failed_tasks"],
                 "success_rate": progress["success_rate"],
                 "duration": progress["duration"],
-                "estimated_time": phase.estimated_time if phase else "Unknown",
+                "estimated_time": (
+                    _format_phase_duration(phase.duration_days) if phase else "Unknown"
+                ),
             }
 
             if execution:
                 # Add task-level analysis
                 task_performance = []
+                total_task_duration = 0.0
                 for task_name, task_exec in execution.task_executions.items():
                     task = self.task_registry.get_task(task_name)
+                    task_duration = task_exec.duration or 0.0
+                    total_task_duration += task_duration
                     task_performance.append(
                         {
                             "name": task_name,
                             "status": task_exec.status,
-                            "duration": task_exec.duration,
+                            "duration": task_duration,
                             "complexity": task.complexity if task else "unknown",
                             "category": task.category if task else "unknown",
                         }
@@ -429,14 +440,12 @@ th { background: #f8f9fa; font-weight: 600; }
 
                 # Calculate phase-specific metrics
                 if task_performance:
-                    avg_duration = sum(
-                        t["duration"] or 0 for t in task_performance
-                    ) / len(task_performance)
+                    avg_duration = total_task_duration / len(task_performance)
                     analysis["average_task_duration"] = int(avg_duration)
 
                     complexity_breakdown: dict[str, int] = {}
-                    for task in task_performance:
-                        complexity = task["complexity"]
+                    for task_perf in task_performance:
+                        complexity = str(task_perf["complexity"])
                         complexity_breakdown[complexity] = (
                             complexity_breakdown.get(complexity, 0) + 1
                         )
@@ -464,7 +473,7 @@ th { background: #f8f9fa; font-weight: 600; }
                     "total": 0,
                     "success": 0,
                     "failed": 0,
-                    "avg_duration": 0,
+                    "avg_duration": 0.0,
                 }
 
             category_stats[category]["total"] += 1
@@ -643,7 +652,7 @@ th { background: #f8f9fa; font-weight: 600; }
         """Analyze distribution of tasks across categories"""
         distribution: dict[str, int] = {}
 
-        for task_name in self.task_registry.get_all_task_names():
+        for task_name in self.task_registry.get_all_tasks():
             task = self.task_registry.get_task(task_name)
             if task:
                 category = task.category
@@ -670,7 +679,7 @@ th { background: #f8f9fa; font-weight: 600; }
         bottlenecks = []
 
         # Tasks with many dependencies
-        for task_name in self.task_registry.get_all_task_names():
+        for task_name in self.task_registry.get_all_tasks():
             task = self.task_registry.get_task(task_name)
             if task and len(task.dependencies) > 2:
                 bottlenecks.append(

@@ -20,7 +20,7 @@ import json
 from collections import defaultdict
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, cast
 from uuid import uuid4
 
 import numpy as np
@@ -434,7 +434,9 @@ class AILearningSystem:
                     "total_occurrences": total
                 })
         
-        issue_scores.sort(key=lambda x: x["helpfulness"], reverse=True)
+        issue_scores.sort(
+            key=lambda x: cast(float, x["helpfulness"]), reverse=True
+        )
         return issue_scores[:limit]
     
     def _count_by_severity(self, issues: List[CodeIssue]) -> Dict[str, int]:

@@ -154,10 +154,11 @@ class DockerGenerator(BaseGenerator):
         self, language: str, framework: str, database: str, environment: str
     ) -> dict[str, Any]:
         """Get services configuration for docker-compose."""
-        services = {}
+        _ = framework
+        services: dict[str, Any] = {}
 
         # Main application service
-        services["app"] = {
+        app_service: dict[str, Any] = {
             "build": ".",
             "container_name": f"app-{environment}",
             "restart": "unless-stopped",
@@ -166,18 +167,19 @@ class DockerGenerator(BaseGenerator):
             "volumes": ["./:/app"] if environment == "dev" else None,
             "depends_on": [],
         }
+        services["app"] = app_service
 
         # Database service if specified
         if database:
             db_service = self._get_database_service(database, environment)
             if db_service:
                 services["db"] = db_service
-                services["app"]["depends_on"].append("db")
+                app_service["depends_on"].append("db")
 
         # Additional services based on language/framework
         if language == "typescript" and environment == "dev":
-            services["app"]["volumes"] = ["./:/app", "/app/node_modules"]
-            services["app"]["command"] = "npm run dev"
+            app_service["volumes"] = ["./:/app", "/app/node_modules"]
+            app_service["command"] = "npm run dev"
 
         return services
 
@@ -185,7 +187,7 @@ class DockerGenerator(BaseGenerator):
         self, database: str, environment: str
     ) -> dict[str, Any] | None:
         """Get database service configuration."""
-        db_configs = {
+        db_configs: dict[str, dict[str, Any]] = {
             "postgresql": {
                 "image": "postgres:13-alpine",
                 "container_name": "db",

@@ -35,7 +35,14 @@ class OpenAICompatibleProvider(BaseLLMProvider):
     def _prepare_messages(self, messages: list[dict[str, Any]]) -> list[dict[str, str]]:
         return ResponseExtractor.filter_messages(messages)
 
-    def _make_api_call(self, messages: list[dict[str, str]], model: str, temperature: float, max_tokens: int | None, **kwargs: Any) -> Any:
+    def _make_api_call(
+        self,
+        messages: list[dict[str, str]],
+        model: str,
+        temperature: float,
+        max_tokens: int | None,
+        **kwargs: Any,
+    ) -> Any:
         call_params: dict[str, Any] = {
             "model": str(model),
             "messages": messages,
@@ -49,7 +56,9 @@ class OpenAICompatibleProvider(BaseLLMProvider):
         return self.client.chat.completions.create(**call_params)
 
     def _extract_response(self, response: Any, model: str) -> LLMResponse:
-        content, finish_reason, usage = ResponseExtractor.extract_openai_response(response)
+        content, finish_reason, usage = ResponseExtractor.extract_openai_response(
+            response
+        )
         return LLMResponse(
             content=str(content),
             model=str(getattr(response, "model", model)),

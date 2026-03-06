@@ -323,6 +323,9 @@ echo "âœ… Commit message validation passed"
 
     def _test_hook(self, hook_name: str) -> bool:
         """Test a specific hook."""
+        if self.hooks_dir is None:
+            return False
+
         hook_path = self.hooks_dir / hook_name
 
         if not hook_path.exists():

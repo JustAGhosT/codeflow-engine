@@ -18,6 +18,11 @@ from implementation_roadmap.task_executor import TaskExecutor
 logger = logging.getLogger(__name__)
 
 
+def _format_phase_duration(duration_days: int) -> str:
+    """Format phase duration for report/display payloads."""
+    return f"{duration_days} days"
+
+
 class Phase1ExtensionImplementor:
     """
     Main orchestrator for Phase 1 extension implementation
@@ -186,7 +191,7 @@ class Phase1ExtensionImplementor:
                 return []
             task_names = phase_obj.tasks
         else:
-            task_names = self.task_registry.get_all_task_names()
+            task_names = list(self.task_registry.get_all_tasks())
 
         tasks = []
         for task_name in task_names:
@@ -198,7 +203,7 @@ class Phase1ExtensionImplementor:
                         "description": task.description,
                         "category": task.category,
                         "complexity": task.complexity,
-                        "estimated_time": task.estimated_time,
+                        "estimated_time": task.estimated_hours,
                         "dependencies": task.dependencies,
                         "packages_required": task.packages_required,
                     }
@@ -220,11 +225,11 @@ class Phase1ExtensionImplementor:
                 phases.append(
                     {
                         "name": phase_name,
-                        "description": phase.description,
+                        "description": phase.display_name,
                         "task_count": len(phase.tasks),
-                        "estimated_time": phase.estimated_time,
+                        "estimated_time": _format_phase_duration(phase.duration_days),
                         "success_criteria": phase.success_criteria,
-                        "dependencies": phase.dependencies,
+                        "dependencies": phase.depends_on,
                     }
                 )
 
@@ -252,7 +257,7 @@ class Phase1ExtensionImplementor:
             "description": task.description,
             "category": task.category,
             "complexity": task.complexity,
-            "estimated_time": task.estimated_time,
+            "estimated_time": task.estimated_hours,
             "dependencies": task.dependencies,
             "packages_required": task.packages_required,
             "files_created": task.files_created,
@@ -356,7 +361,7 @@ class Phase1ExtensionImplementor:
         Returns:
             Dictionary containing validation results
         """
-        validation_results = {
+        validation_results: dict[str, Any] = {
             "valid": True,
             "issues": [],
             "warnings": [],
@@ -416,14 +421,14 @@ class Phase1ExtensionImplementor:
         return {
             "export_timestamp": datetime.now().isoformat(),
             "task_registry": {
-                "total_tasks": len(self.task_registry.get_all_task_names()),
+                "total_tasks": len(self.task_registry.get_all_tasks()),
                 "tasks_by_category": self.report_generator._analyze_task_distribution(),
             },
             "phase_configuration": {
                 phase_name: {
                     "task_count": len(phase.tasks),
-                    "estimated_time": phase.estimated_time,
-                    "dependencies": phase.dependencies,
+                    "estimated_time": _format_phase_duration(phase.duration_days),
+                    "dependencies": phase.depends_on,
                 }
                 for phase_name in ["immediate", "medium", "strategic"]
                 for phase in [self.phases.get_phase(phase_name)]

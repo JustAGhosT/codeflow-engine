@@ -15,7 +15,12 @@ import sys
 
 import click
 
-from codeflow_engine.config.settings import CODEFLOWSettings, Environment, get_settings
+from codeflow_engine.config.settings import (
+    CodeFlowSettings,
+    Environment,
+    LLMProvider,
+    get_settings,
+)
 from codeflow_engine.config.validation import (
     check_environment_variables,
     generate_config_report,
@@ -45,7 +50,7 @@ def validate(config_file: str | None, format: str, verbose: bool):
     """Validate CODEFLOW configuration."""
     try:
         if config_file:
-            settings = CODEFLOWSettings.from_file(config_file)
+            settings = CodeFlowSettings.from_file(config_file)
             click.echo(f"Loading configuration from: {config_file}")
         else:
             settings = get_settings()
@@ -96,7 +101,7 @@ def report(config_file: str | None, output: str | None):
     """Generate comprehensive configuration report."""
     try:
         settings = (
-            CODEFLOWSettings.from_file(config_file) if config_file else get_settings()
+            CodeFlowSettings.from_file(config_file) if config_file else get_settings()
         )
 
         report_content = generate_config_report(settings)
@@ -303,7 +308,7 @@ def test(config_file: str | None, provider: str | None):
     """Test configuration by attempting connections."""
     try:
         settings = (
-            CODEFLOWSettings.from_file(config_file) if config_file else get_settings()
+            CodeFlowSettings.from_file(config_file) if config_file else get_settings()
         )
 
         click.echo("ðŸ§ª Testing Configuration Connections")
@@ -326,7 +331,7 @@ def test(config_file: str | None, provider: str | None):
         )
 
         for prov in providers_to_test:
-            config = settings.get_provider_config(prov)
+            config = settings.get_provider_config(LLMProvider(prov))
             if config.get("api_key"):
                 click.echo(f"  âœ… {prov.title()} API key configured")
                 # Here you would add actual API test calls
@@ -364,7 +369,7 @@ def show(config_file: str | None):
     """Show current configuration (with secrets masked)."""
     try:
         settings = (
-            CODEFLOWSettings.from_file(config_file) if config_file else get_settings()
+            CodeFlowSettings.from_file(config_file) if config_file else get_settings()
         )
 
         safe_config = settings.to_safe_dict()
