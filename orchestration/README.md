@@ -2,6 +2,9 @@
 
 This repository contains orchestration scripts, documentation, infrastructure-as-code, and planning for the CodeFlow project.
 
+> Canonical source: [orchestration](orchestration) in the CodeFlow monorepo.
+> Legacy split repo: [JustAGhosT/codeflow-orchestration](https://github.com/JustAGhosT/codeflow-orchestration)
+
 ---
 
 ## Overview

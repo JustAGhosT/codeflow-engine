@@ -4,7 +4,7 @@ This document tracks the migration of all CodeFlow-related repositories into a u
 
 ## Structure
 
-- repository root   # Python core engine (current canonical package location)
+- engine/           # Python core engine project
 - desktop/          # Electron/Tauri app
 - vscode-extension/ # VS Code extension
 - website/          # Docs/marketing
@@ -29,7 +29,7 @@ Pending:
 1. Normalize dependency management across Python and Node-based projects.
 2. Add path-aware CI and release automation.
 3. Consolidate duplicate docs, licenses, and contribution guidance.
-4. Decide whether the engine should stay at the repository root or move into a dedicated subdirectory in a follow-up migration.
+4. Complete archive and redirect steps for the former split repositories.
 
 ## Migration Steps
 

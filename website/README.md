@@ -2,6 +2,9 @@
 
 Marketing website for CodeFlow AI built with Next.js.
 
+> Canonical source: [website](website) in the CodeFlow monorepo.
+> Legacy split repo: https://github.com/JustAGhosT/codeflow-website
+
 ## Overview
 
 This is the marketing website for CodeFlow AI, providing information about the platform, features, and getting started guides.

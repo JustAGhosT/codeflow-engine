@@ -2,9 +2,15 @@ name: Security Scan
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ master, develop ]
+    paths:
+      - 'engine/**'
+      - '.github/workflows/security.yml'
   pull_request:
-    branches: [ main, develop ]
+    branches: [ master, develop ]
+    paths:
+      - 'engine/**'
+      - '.github/workflows/security.yml'
   schedule:
     - cron: '0 0 * * 1' # Weekly on Monday
 
@@ -12,6 +18,9 @@ jobs:
   bandit:
     name: Bandit Security Scan
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: engine
     steps:
       - uses: actions/checkout@v4
       
@@ -41,11 +50,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bandit-report
-          path: bandit-report.json
+          path: engine/bandit-report.json
 
   safety:
     name: Safety Dependency Check
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: engine
     steps:
       - uses: actions/checkout@v4
       
@@ -83,7 +95,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs'
-          scan-ref: '.'
+          scan-ref: './engine'
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'

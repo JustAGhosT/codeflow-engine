@@ -81,7 +81,7 @@ setup-action: ## Create GitHub Action workflow in current repo
 	@if [ -f templates/quick-start/codeflow-workflow.yml ]; then \
 		cp templates/quick-start/codeflow-workflow.yml .github/workflows/codeflow.yml; \
 		echo "$(GREEN)Copied from local templates$(NC)"; \
-	elif curl -sSL --fail https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/templates/quick-start/codeflow-workflow.yml -o .github/workflows/codeflow.yml; then \
+	elif curl -sSL --fail https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/master/engine/templates/quick-start/codeflow-workflow.yml -o .github/workflows/codeflow.yml; then \
 		echo "$(GREEN)Downloaded from GitHub$(NC)"; \
 	else \
 		echo "$(RED)Failed to set up GitHub Action$(NC)"; \
@@ -100,7 +100,7 @@ test: ## Run tests
 
 test-cov: ## Run tests with coverage
 	@echo "$(BLUE)Running tests with coverage...$(NC)"
-	pytest tests/ --cov=CodeFlow --cov-report=html --cov-report=term
+	pytest tests/ --cov=codeflow_engine --cov-report=html --cov-report=term
 
 test-fast: ## Run tests (fast mode, stop on first failure)
 	@echo "$(BLUE)Running tests (fast mode)...$(NC)"
@@ -108,32 +108,32 @@ test-fast: ## Run tests (fast mode, stop on first failure)
 
 lint: ## Run linting checks
 	@echo "$(BLUE)Running linters...$(NC)"
-	ruff check CodeFlow/
-	mypy CodeFlow/ --ignore-missing-imports
+	ruff check codeflow_engine/
+	mypy codeflow_engine/ --ignore-missing-imports
 
 lint-fix: ## Fix linting issues automatically
 	@echo "$(BLUE)Fixing linting issues...$(NC)"
-	ruff check CodeFlow/ --fix
-	black CodeFlow/
+	ruff check codeflow_engine/ --fix
+	black codeflow_engine/
 
 format: ## Format code with black and isort
 	@echo "$(BLUE)Formatting code...$(NC)"
-	black CodeFlow/ tests/
-	isort CodeFlow/ tests/
+	black codeflow_engine/ tests/
+	isort codeflow_engine/ tests/
 
 check: lint test ## Run all checks (lint + test)
 
 run: ## Run the CLI
 	@echo "$(BLUE)Running CodeFlow CLI...$(NC)"
-	$(PYTHON) -m codeflow.cli
+	$(PYTHON) -m codeflow_engine.cli.main
 
 server: ## Run the API server
 	@echo "$(BLUE)Starting API server...$(NC)"
-	$(PYTHON) -m codeflow.server --reload
+	$(PYTHON) -m codeflow_engine.server
 
 worker: ## Run the background worker
 	@echo "$(BLUE)Starting background worker...$(NC)"
-	$(PYTHON) -m codeflow.worker
+	$(PYTHON) -m codeflow_engine.worker
 
 #------------------------------------------------------------------------------
 # DOCKER
@@ -193,7 +193,7 @@ deps-update: ## Update dependencies
 
 docs: ## Build documentation
 	@echo "$(BLUE)Building documentation...$(NC)"
-	cd docs && make html
+	cd ../docs && make html
 
 #------------------------------------------------------------------------------
 # QUICK START

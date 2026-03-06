@@ -1,4 +1,4 @@
-﻿[build-system]
+[build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
@@ -39,11 +39,11 @@ classifiers = [
 dynamic = ["dependencies"]
 
 [project.urls]
-Homepage = "https://github.com/JustAGhosT/codeflow-engine"
-Documentation = "https://codeflow-engine.readthedocs.io"
+Homepage = "https://github.com/JustAGhosT/codeflow-engine/tree/master/engine"
+Documentation = "https://github.com/JustAGhosT/codeflow-engine/tree/master/docs"
 Repository = "https://github.com/JustAGhosT/codeflow-engine"
 "Bug Tracker" = "https://github.com/JustAGhosT/codeflow-engine/issues"
-Changelog = "https://github.com/JustAGhosT/codeflow-engine/blob/main/CHANGELOG.md"
+Changelog = "https://github.com/JustAGhosT/codeflow-engine/blob/master/engine/CHANGELOG.md"
 Discussions = "https://github.com/JustAGhosT/codeflow-engine/discussions"
 
 [project.scripts]
@@ -120,11 +120,11 @@ alembic = "^1.17.2"
 
 # Deprecated: Use [project.urls] instead (kept for backward compatibility)
 [tool.poetry.urls]
-Homepage = "https://github.com/JustAGhosT/codeflow-engine"
-Documentation = "https://codeflow-engine.readthedocs.io"
+Homepage = "https://github.com/JustAGhosT/codeflow-engine/tree/master/engine"
+Documentation = "https://github.com/JustAGhosT/codeflow-engine/tree/master/docs"
 Repository = "https://github.com/JustAGhosT/codeflow-engine"
 "Bug Tracker" = "https://github.com/JustAGhosT/codeflow-engine/issues"
-Changelog = "https://github.com/JustAGhosT/codeflow-engine/blob/main/CHANGELOG.md"
+Changelog = "https://github.com/JustAGhosT/codeflow-engine/blob/master/engine/CHANGELOG.md"
 Discussions = "https://github.com/JustAGhosT/codeflow-engine/discussions"
 
 # Deprecated: Use [project.scripts] instead (kept for backward compatibility)

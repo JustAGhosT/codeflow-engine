@@ -1,17 +1,16 @@
 # CodeFlow Monorepo
 
-This repository now serves as the consolidated home for the CodeFlow ecosystem. The original Python engine remains at the repository root, while the additional product repositories have been imported with full Git history into dedicated subdirectories.
+This repository now serves as the consolidated home for the CodeFlow ecosystem. The Python engine and the additional product repositories all live in dedicated subdirectories with preserved history.
 
 ## Monorepo Layout
 
-- `codeflow_engine/` - Core Python engine package
+- `engine/` - Core Python engine project
 - `desktop/` - Tauri + React desktop application
 - `website/` - Next.js marketing and documentation website
 - `orchestration/` - Shared infrastructure, bootstrap assets, and release orchestration
 - `vscode-extension/` - VS Code extension
 - `docs/` - Shared project documentation
-- `templates/` - Shared templates
-- `tests/` - Engine test suite
+- `tools/` - Shared tooling and helper scripts
 
 ## Migration Status
 
@@ -23,21 +22,25 @@ The first monorepo migration phase is complete:
 4. Imported `codeflow-vscode-extension`
 5. Added shared migration planning and CI scaffolding
 
-The next phase is standardizing tooling, dependency management, and release automation across all components.
+The next phase is standardizing tooling, dependency management, release automation, and archival of the legacy split repositories.
 
 ## Working with the Repository
 
 ### Engine
 
-The Python engine still builds from the repository root:
+The Python engine now builds from [engine](engine):
 
-- `pyproject.toml`
-- `setup.py`
-- `codeflow_engine/`
+- [engine/pyproject.toml](engine/pyproject.toml)
+- [engine/setup.py](engine/setup.py)
+- [engine/codeflow_engine](engine/codeflow_engine)
 
 ### Imported Applications
 
 Each imported application can still be developed independently from its subdirectory using its existing package manager and build scripts.
+
+## Legacy Repository Redirects
+
+Archive and redirect guidance for the old split repositories is in [docs/LEGACY_REPO_REDIRECTS.md](docs/LEGACY_REPO_REDIRECTS.md).
 
 ## Migration Documentation
 

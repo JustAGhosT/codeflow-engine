@@ -1,6 +1,6 @@
 ﻿# CodeFlow Engine - Windows Installation Script
-# Usage: irm https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/install.ps1 | iex
-# Or: .\install.ps1 [-Full] [-Dev] [-Minimal] [-Docker]
+# Usage: irm https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/master/engine/install.ps1 | iex
+# Or: .\engine\install.ps1 [-Full] [-Dev] [-Minimal] [-Docker]
 
 [CmdletBinding()]
 param(
@@ -130,7 +130,7 @@ function Install-CodeFlow {
             } else {
                 Write-Status "Cloning repository..."
                 git clone https://github.com/JustAGhosT/codeflow-engine.git
-                Set-Location codeflow-engine
+                Set-Location codeflow-engine\engine
                 pip install -e ".[dev]"
             }
         }
@@ -159,8 +159,8 @@ function Install-Docker {
 
         Write-Status "Downloading Docker Compose configuration..."
         try {
-            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/docker-compose.yml" -OutFile "docker-compose.yml"
-            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/.env.example" -OutFile ".env.example"
+            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/master/engine/docker-compose.yml" -OutFile "docker-compose.yml"
+            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/master/engine/configs/.env.example" -OutFile ".env.example"
         } catch {
             Write-Error "Failed to download configuration files"
             exit 1
@@ -192,7 +192,7 @@ function Install-GitHubAction {
     }
 
     try {
-        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/templates/quick-start/codeflow-workflow.yml" -OutFile $workflowFile
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/master/engine/templates/quick-start/codeflow-workflow.yml" -OutFile $workflowFile
         Write-Success "Created $workflowFile"
         Write-Warning "Remember to add OPENAI_API_KEY to your repository secrets!"
     } catch {

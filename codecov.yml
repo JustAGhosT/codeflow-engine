@@ -2,9 +2,9 @@
 # Documentation: https://docs.codecov.com/docs/codecovyml-reference
 
 codecov:
-  require_ci_to_pass: yes
+  require_ci_to_pass: true
   notify:
-    wait_for_ci: yes
+    wait_for_ci: true
 
 coverage:
   # Coverage analysis settings
@@ -19,7 +19,7 @@ coverage:
         threshold: 1%
         # Only consider files matching these patterns
         paths:
-          - "codeflow_engine/**"
+          - "engine/codeflow_engine/**"
         # Ignore missing coverage from these paths
         if_no_uploads: error
     # Status for changes in the PR (patch coverage)
@@ -33,13 +33,13 @@ coverage:
 
 # Ignore files that don't need coverage
 ignore:
-  - "tests/**"
+  - "engine/tests/**"
   - "docs/**"
   - "examples/**"
-  - "scripts/**"
+  - "engine/scripts/**"
   - "**/__pycache__/**"
-  - "**/migrations/**"
-  - "setup.py"
+  - "engine/**/migrations/**"
+  - "engine/setup.py"
 
 # Comment settings for PR comments
 comment:
@@ -58,7 +58,7 @@ comment:
 flags:
   unittests:
     paths:
-      - "codeflow_engine/**"
+      - "engine/codeflow_engine/**"
     carryforward: true
 
 # GitHub-specific configuration

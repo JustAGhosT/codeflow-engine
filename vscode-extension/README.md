@@ -2,6 +2,9 @@
 
 AI-Powered Code Quality and Automation for VS Code
 
+> Canonical source: [vscode-extension](vscode-extension) in the CodeFlow monorepo.
+> Legacy split repo: https://github.com/JustAGhosT/codeflow-vscode-extension
+
 ## Features
 
 ### Quality Analysis

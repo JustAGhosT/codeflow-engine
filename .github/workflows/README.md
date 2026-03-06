@@ -1,86 +1,37 @@
 ﻿# GitHub Workflows
 
-This directory contains the GitHub Actions workflows for CODEFLOW Engine.
+This directory contains the GitHub Actions workflows for the CodeFlow monorepo.
 
 ## Workflow Architecture
 
-CODEFLOW uses a **volume-aware, multi-stage workflow system** designed to provide fast feedback while
-maintaining comprehensive quality checks.
+The monorepo uses a combination of engine-specific workflows, path-aware component workflows, and release workflows.
 
 ### Workflow Overview
 
-| Workflow             | Purpose                           | Triggers          | Timeout  | Key Features                                          |
-| -------------------- | --------------------------------- | ----------------- | -------- | ----------------------------------------------------- |
-| **CI**               | Volume-aware comprehensive checks | Push, PR, Manual  | Variable | Volume-based execution, MyPy, full test suite         |
-| **Quality Feedback** | PR-specific quality feedback      | PR only           | 15 min   | Pre-commit hooks, detailed comments, security reports |
-| **PR-Checks**        | Ultra-fast PR validation          | PR only           | 10 min   | Draft PR handling, minimal checks                     |
-| **BG-Fix**           | Background auto-fixing            | Manual, Scheduled | 30 min   | Scheduled fixes, auto-fix queue                       |
+| Workflow | Purpose | Triggers |
+| --- | --- | --- |
+| `ci.yml` | Engine test and build validation | Push, PR, manual |
+| `lint.yml` | Engine lint and type checks | Push, PR |
+| `security.yml` | Engine dependency and filesystem security checks | Push, PR, schedule |
+| `monorepo-ci.yml` | Path-aware builds for engine, desktop, website, orchestration utils, and VS Code extension | Push, PR, manual |
+| `release.yml` | Engine package release | Tags, manual |
+| `release-desktop.yml` | Desktop release build | Tags, manual |
+| `release-website.yml` | Website release build | Tags, manual |
+| `release-vscode-extension.yml` | VS Code extension release packaging | Tags, manual |
+| `release-orchestration-utils.yml` | Shared utility package release build | Tags, manual |
 
 ## Workflow Details
 
-### CI Workflow (`ci.yml`)
+### Key conventions
 
-**Purpose:** Volume-aware comprehensive quality checks with conditional execution based on
-repository volume settings.
+- Engine workflows run from [engine](engine) via `working-directory`.
+- Component workflows use path filters so unrelated changes do not trigger full builds.
+- Release workflows use component-specific tag prefixes such as `engine-v1.2.3` and `desktop-v1.2.3`.
+- Infrastructure for the website and engine is sourced from [orchestration](orchestration).
 
-**Key Features:**
+### Archival follow-up
 
-- **Volume-based execution:** Different checks run based on volume level (0-1000)
-- **Conditional jobs:** Tests (volâ‰¥1), Lint (volâ‰¥200), Typecheck (volâ‰¥400), Security (volâ‰¥600)
-- **Manual dispatch:** Supports manual volume override
-- **Full test suite:** Complete pytest coverage with Codecov integration
-
-**Volume Thresholds:**
-
-- **0-199:** Tests only
-- **200-399:** Tests + Linting (relaxed rules)
-- **400-599:** Tests + Linting + Type checking
-- **600+:** All checks (including security)
-
-### Quality Feedback Workflow (`quality.yml`)
-
-**Purpose:** PR-specific quality feedback and detailed reporting.
-
-**Key Features:**
-
-- **Pre-commit hooks:** Runs all pre-commit validations
-- **Detailed PR comments:** Provides comprehensive feedback
-- **Security reports:** Bandit and Safety scanning with artifact uploads
-- **Fork-aware:** Only runs on non-fork PRs
-
-**Jobs:**
-
-- `quality-feedback`: Pre-commit hooks and PR comments
-- `security-feedback`: Security scanning and reporting
-
-### PR-Checks Workflow (`pr-checks.yml`)
-
-**Purpose:** Ultra-fast validation for PRs, especially draft PRs.
-
-**Key Features:**
-
-- **Fast execution:** 10-minute timeout for essential checks
-- **Draft PR support:** Special handling for draft PRs
-- **Changed files only:** Pre-commit runs only on modified files
-- **Minimal tests:** Reduced test scope for speed
-
-**Jobs:**
-
-- `essential-checks`: Fast pre-commit and minimal tests
-- `draft-validation`: Quick syntax check for draft PRs
-
-### Background Fixer Workflow (`bg-fix.yml`)
-
-**Purpose:** Automated background code fixing and maintenance.
-
-**Key Features:**
-
-- **Scheduled execution:** Daily runs at 3 AM UTC
-- **Manual dispatch:** Supports volume override
-- **Auto-fix queue:** Processes fixable issues in batches
-- **Volume-aware:** Respects volume settings for fix aggressiveness
-
-## Workflow Coordination
+Before archiving the legacy repositories, update their README files with the redirect snippets from [docs/LEGACY_REPO_REDIRECTS.md](docs/LEGACY_REPO_REDIRECTS.md).
 
 ### Execution Order
 

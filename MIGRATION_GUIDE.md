@@ -6,7 +6,7 @@ This guide provides step-by-step instructions for migrating CodeFlow repositorie
 
 - List all repositories to migrate.
 - Define the target directory for each repo in the monorepo.
-- Decide whether the primary Python engine remains at the repository root during the transition or is moved in a second phase.
+- Reserve `engine/` as the canonical home for the Python engine project.
 
 ## 2. Import Repositories
 
@@ -24,6 +24,7 @@ git subtree add --prefix=desktop codeflow-desktop master --squash
 
 ### Imported in this repository
 
+- `codeflow-engine` -> `engine/`
 - `codeflow-desktop` -> `desktop/`
 - `codeflow-website` -> `website/`
 - `codeflow-orchestration` -> `orchestration/`
@@ -35,6 +36,7 @@ git subtree add --prefix=desktop codeflow-desktop master --squash
 - Update import paths and dependencies as needed.
 - Reconcile duplicate root files such as `README.md`, `LICENSE`, `CONTRIBUTING.md`, and CI workflows.
 - Keep component-local documentation inside each imported directory until shared standards are finalized.
+- Move engine-specific build files under `engine/` and update workflows to use path-aware working directories.
 
 ## 4. Centralize CI/CD
 
@@ -51,6 +53,7 @@ git subtree add --prefix=desktop codeflow-desktop master --squash
 - Update `README.md` and docs to reflect new structure.
 - Document onboarding and contribution guidelines.
 - Explicitly document which parts of the repository still retain their pre-monorepo layout.
+- Add archive/redirect instructions for the old split repositories.
 
 ## 6. Deprecate Old Repositories
 

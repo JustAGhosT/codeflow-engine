@@ -8,6 +8,10 @@ from pathlib import Path
 from typing import Any
 
 
+PACKAGE_ROOT = Path(__file__).resolve().parents[2]
+ENGINE_ROOT = PACKAGE_ROOT.parent
+
+
 @dataclass
 class TemplateInfo:
     name: str
@@ -22,15 +26,18 @@ class TemplateManager:
     """Template management system"""
 
     def __init__(self, config_path: str = "configs/config.yaml"):
-        self.config = self._load_config(config_path)
+        resolved_config_path = Path(config_path)
+        if not resolved_config_path.is_absolute():
+            resolved_config_path = ENGINE_ROOT / resolved_config_path
+        self.config = self._load_config(resolved_config_path)
         self.templates_cache: dict[str, TemplateInfo] = {}
         self._load_templates()
 
-    def _load_config(self, config_path: str) -> dict[str, Any]:
+    def _load_config(self, config_path: Path) -> dict[str, Any]:
         """Load configuration from file"""
         try:
             import yaml
-            with open(config_path, 'r') as f:
+            with open(config_path, 'r', encoding='utf-8') as f:
                 return yaml.safe_load(f) or {}
         except Exception:
             return {"templates": {"confidence_threshold": 0.5}}
@@ -65,8 +72,8 @@ class TemplateManager:
 
     def _load_templates(self):
         """Load all template definitions"""
-        templates_dir = Path("templates")
-        config_dir = Path("configs")
+        templates_dir = ENGINE_ROOT / "templates"
+        config_dir = ENGINE_ROOT / "configs"
 
         # Load platform templates
         for platform_file in (templates_dir / "platforms").glob("**/*.yml"):

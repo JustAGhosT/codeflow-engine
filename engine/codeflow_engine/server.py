@@ -160,8 +160,9 @@ def create_app(settings: CodeFlowSettings | None = None) -> FastAPI:
     async def favicon():
         """Serve favicon - returns empty response to prevent slow 404 lookups."""
         # Check for favicon in common locations
+        repo_root = Path(__file__).resolve().parents[2].parent
         favicon_paths = [
-            Path(__file__).parent.parent / "website" / "app" / "favicon.ico",
+            repo_root / "website" / "app" / "favicon.ico",
             Path(__file__).parent / "static" / "favicon.ico",
         ]
         for favicon_path in favicon_paths:

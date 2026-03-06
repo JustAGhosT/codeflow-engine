@@ -3,7 +3,7 @@
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - "website/**"
       - ".github/workflows/deploy-website.yml"
@@ -109,7 +109,6 @@ jobs:
     name: Deploy Azure Infrastructure
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
-    environment: production
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -130,6 +129,6 @@ jobs:
         run: |
           az deployment group create \
             --resource-group "${{ env.ENVIRONMENT }}-rg-${{ env.REGION_ABBR }}-codeflow" \
-            --template-file infrastructure/bicep/website.bicep \
-            --parameters @infrastructure/bicep/website-parameters.json \
+            --template-file orchestration/infrastructure/bicep/website.bicep \
+            --parameters @orchestration/infrastructure/bicep/website-parameters.json \
             --parameters regionAbbr=${{ env.REGION_ABBR }}

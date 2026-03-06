@@ -1,14 +1,24 @@
 name: CI
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ main, develop ]
+    branches: [ master, develop ]
+    paths:
+      - 'engine/**'
+      - '.github/workflows/ci.yml'
   pull_request:
-    branches: [ main, develop ]
+    branches: [ master, develop ]
+    paths:
+      - 'engine/**'
+      - '.github/workflows/ci.yml'
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: engine
     strategy:
       matrix:
         python-version: ['3.12', '3.13']
@@ -43,7 +53,7 @@ jobs:
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       with:
-        file: ./coverage.xml
+        file: ./engine/coverage.xml
         flags: unittests
         name: codecov-umbrella
         fail_ci_if_error: false
@@ -58,7 +68,7 @@ jobs:
       if: always()
       with:
         name: coverage-report-${{ matrix.python-version }}
-        path: htmlcov/
+        path: engine/htmlcov/
     
     - name: Run linting
       run: |
@@ -68,6 +78,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     needs: test
+    defaults:
+      run:
+        working-directory: engine
     
     steps:
     - uses: actions/checkout@v4
@@ -94,6 +107,6 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: dist
-        path: dist/*
+        name: engine-dist
+        path: engine/dist/*
 

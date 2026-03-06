@@ -31,13 +31,13 @@ def read_requirements():
 
 setup(
     name="codeflow-engine",
-    version="1.0.0",
+    version="1.0.1",
     author="CodeFlow Team",
     author_email="team@codeflow.dev",
     description="AI-Powered Code Quality and Automation Engine",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
-    url="https://github.com/CodeFlow/codeflow-engine",
+    url="https://github.com/JustAGhosT/codeflow-engine/tree/master/engine",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -100,8 +100,8 @@ setup(
         "development-tools",
     ],
     project_urls={
-        "Bug Reports": "https://github.com/CodeFlow/codeflow-engine/issues",
-        "Source": "https://github.com/CodeFlow/codeflow-engine",
-        "Documentation": "https://codeflow.dev/docs",
+        "Bug Reports": "https://github.com/JustAGhosT/codeflow-engine/issues",
+        "Source": "https://github.com/JustAGhosT/codeflow-engine/tree/master/engine",
+        "Documentation": "https://github.com/JustAGhosT/codeflow-engine/tree/master/docs",
     },
 )

@@ -1,7 +1,7 @@
 ﻿#!/bin/bash
 # CodeFlow Engine - Simple Installation Script
-# Usage: curl -sSL https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/install.sh | bash
-# Or: ./install.sh [--full|--dev|--minimal]
+# Usage: curl -sSL https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/master/engine/install.sh | bash
+# Or: ./engine/install.sh [--full|--dev|--minimal]
 
 set -e
 
@@ -166,13 +166,13 @@ install_pip() {
                 print_status "Cloning repository..."
                 CLONE_DIR=$(mktemp -d)
                 if git clone https://github.com/JustAGhosT/codeflow-engine.git "${CLONE_DIR}/codeflow-engine"; then
-                    cd "${CLONE_DIR}/codeflow-engine"
+                    cd "${CLONE_DIR}/codeflow-engine/engine"
                     pip3 install -e ".[dev]" || {
                         print_error "Installation failed"
                         rm -rf "${CLONE_DIR}"
                         exit 1
                     }
-                    print_status "Repository cloned to: ${CLONE_DIR}/codeflow-engine"
+                    print_status "Repository cloned to: ${CLONE_DIR}/codeflow-engine/engine"
                 else
                     print_error "Failed to clone repository"
                     rm -rf "${CLONE_DIR}"
@@ -200,7 +200,7 @@ install_docker() {
         # Download docker-compose.yml with retry
         print_status "Downloading Docker Compose configuration..."
         for i in 1 2 3; do
-            if curl -sSL --fail https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/docker-compose.yml -o docker-compose.yml; then
+            if curl -sSL --fail https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/master/engine/docker-compose.yml -o docker-compose.yml; then
                 break
             fi
             if [ "$i" -eq 3 ]; then
@@ -212,7 +212,7 @@ install_docker() {
         done
 
         for i in 1 2 3; do
-            if curl -sSL --fail https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/main/.env.example -o .env.example; then
+            if curl -sSL --fail https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/master/engine/configs/.env.example -o .env.example; then
                 break
             fi
             if [ "$i" -eq 3 ]; then

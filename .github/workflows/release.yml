@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - 'engine-v*'
 
 jobs:
   release:
@@ -26,7 +26,7 @@ jobs:
       - name: Extract version from tag
         id: version
         run: |
-          VERSION=${GITHUB_REF#refs/tags/v}
+          VERSION=${GITHUB_REF#refs/tags/engine-v}
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Extracted version: $VERSION"
 
@@ -43,7 +43,7 @@ jobs:
       - name: Verify version matches pyproject.toml
         run: |
           VERSION="${{ steps.version.outputs.version }}"
-          PYPROJECT_VERSION=$(python -c "import tomli; f=open('pyproject.toml','rb'); d=tomli.load(f); print(d['project']['version'])")
+          PYPROJECT_VERSION=$(python -c "import tomllib; f=open('engine/pyproject.toml','rb'); d=tomllib.load(f); print(d['project']['version'])")
           
           if [ "$VERSION" != "$PYPROJECT_VERSION" ]; then
             echo "❌ Version mismatch:"
@@ -59,19 +59,20 @@ jobs:
 
       - name: Build package
         run: |
+          cd engine
           python -m build
 
       - name: Check package
         run: |
-          python -m twine check dist/*
+          python -m twine check engine/dist/*
 
       - name: Extract changelog
         id: changelog
         run: |
           VERSION="${{ steps.version.outputs.version }}"
-          if [ -f CHANGELOG.md ]; then
+          if [ -f engine/CHANGELOG.md ]; then
             # Extract changelog section for this version
-            awk "/^## \[$VERSION\]/,/^## \[/" CHANGELOG.md | head -n -1 > release_notes.md
+            awk "/^## \[$VERSION\]/,/^## \[/" engine/CHANGELOG.md | head -n -1 > release_notes.md
             if [ -s release_notes.md ]; then
               echo "changelog<<EOF" >> $GITHUB_OUTPUT
               cat release_notes.md >> $GITHUB_OUTPUT
@@ -102,16 +103,16 @@ jobs:
             
             ## Full Changelog
             
-            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for full details.
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/master/engine/CHANGELOG.md) for full details.
           files: |
-            dist/*
+            engine/dist/*
           draft: false
           prerelease: ${{ contains(steps.version.outputs.version, '-') }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: release-artifacts
-          path: dist/*
+          name: engine-release-artifacts
+          path: engine/dist/*
           retention-days: 90
 

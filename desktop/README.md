@@ -2,6 +2,9 @@
 
 A cross-platform desktop application for CodeFlow Engine built with Tauri, React, and TypeScript.
 
+> Canonical source: [desktop](desktop) in the CodeFlow monorepo.
+> Legacy split repo: [JustAGhosT/codeflow-desktop](https://github.com/JustAGhosT/codeflow-desktop)
+
 ## Overview
 
 CodeFlow Desktop provides a user-friendly interface for managing and monitoring CodeFlow workflows, configurations, and platform analytics. The application combines a modern React frontend with a lightweight Rust backend, leveraging Tauri for native desktop capabilities.
