@@ -1,0 +1,34 @@
+# .github/workflows/monorepo-ci.yml
+
+name: Monorepo CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component: [engine, desktop, vscode-extension, website, infrastructure]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        if: matrix.component == 'engine'
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Set up Node.js
+        if: matrix.component == 'desktop' || matrix.component == 'vscode-extension' || matrix.component == 'website'
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Build ${{ matrix.component }}
+        run: |
+          cd ${{ matrix.component }}
+          if [ -f package.json ]; then npm install && npm run build; fi
+          if [ -f setup.py ]; then pip install -e . && pytest; fi
+          if [ -f Dockerfile ]; then docker build .; fi
