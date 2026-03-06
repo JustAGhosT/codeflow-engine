@@ -26,12 +26,12 @@ Currently, all these components live in a single monorepo, which has both advant
 
 ```
 codeflow-engine/
-â”œâ”€â”€ codeflow_engine/        # Python core engine
-â”œâ”€â”€ codeflow-desktop/          # Electron desktop app
+â”œâ”€â”€ engine/                  # Python package workspace
+â”‚   â””â”€â”€ codeflow_engine/    # Canonical Python package
+â”œâ”€â”€ desktop/                # Electron desktop app
 â”œâ”€â”€ vscode-extension/        # VS Code extension
 â”œâ”€â”€ website/                 # Documentation/marketing site
 â”œâ”€â”€ templates/               # Workflow templates
-â”œâ”€â”€ infrastructure/          # K8s, Bicep, Terraform
 â”œâ”€â”€ docs/                    # Documentation
 â”œâ”€â”€ tools/                   # Development tools
 â””â”€â”€ tests/                   # Test suite
@@ -172,7 +172,7 @@ Split into many small, focused repositories.
 
 ### Phase 2: Core Engine Split (Weeks 3-4)
 
-1. Extract `codeflow_engine/` to new `codeflow-engine` repository
+1. Extract `engine/codeflow_engine/` to new `codeflow-engine` repository
 2. Keep git history intact (use `git filter-repo`)
 3. Set up independent CI/CD
 4. Publish to PyPI from new repo

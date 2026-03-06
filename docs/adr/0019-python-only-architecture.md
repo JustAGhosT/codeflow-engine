@@ -204,10 +204,10 @@ A thorough evaluation was conducted comparing multiple architectural approaches 
    - Redis caching reduces computation needs
 
 4. **Separation of Concerns via Python**: Python supports clean architecture through:
-   - **Domain Layer**: Core business logic in `codeflow_engine/engine/`
-   - **Application Layer**: Use cases in `codeflow_engine/actions/`
-   - **Infrastructure Layer**: Integrations in `codeflow_engine/integrations/`
-   - **Presentation Layer**: APIs in `codeflow_engine/server.py`
+   - **Domain Layer**: Core business logic in `engine/codeflow_engine/engine.py`
+   - **Application Layer**: Use cases in `engine/codeflow_engine/actions/`
+   - **Infrastructure Layer**: Integrations in `engine/codeflow_engine/integrations/`
+   - **Presentation Layer**: APIs in `engine/codeflow_engine/server.py`
    - **Plugin System**: Extensibility via `codeflow_engine.actions` namespace
    - **Type Safety**: Pydantic models enforce contracts
 
@@ -260,15 +260,15 @@ While using a single language, the architecture maintains clear separation of co
 ### Layered Architecture
 
 ```
-codeflow_engine/
-â”œâ”€â”€ engine/           # Domain Layer (core business logic)
+engine/codeflow_engine/
+â”œâ”€â”€ engine.py         # Domain Layer (core business logic)
 â”œâ”€â”€ actions/          # Application Layer (use cases, workflows)
 â”œâ”€â”€ integrations/     # Infrastructure Layer (external services)
-â”œâ”€â”€ ai/              # AI/ML Layer (LLM providers, agents)
-â”œâ”€â”€ database/        # Data Layer (models, repositories)
-â”œâ”€â”€ config/          # Configuration Layer (settings, validation)
-â”œâ”€â”€ security/        # Security Layer (auth, validation)
-â””â”€â”€ server.py        # Presentation Layer (API endpoints)
+â”œâ”€â”€ ai/               # AI/ML Layer (LLM providers, agents)
+â”œâ”€â”€ database/         # Data Layer (models, repositories)
+â”œâ”€â”€ config/           # Configuration Layer (settings, validation)
+â”œâ”€â”€ security/         # Security Layer (auth, validation)
+â””â”€â”€ server.py         # Presentation Layer (API endpoints)
 ```
 
 ### Domain-Driven Design Principles
@@ -370,7 +370,7 @@ If performance becomes a critical issue, migration options include:
 
 **Example Structure**:
 ```
-codeflow_engine/
+engine/codeflow_engine/
 â”œâ”€â”€ core/                    # Python code
 â”œâ”€â”€ extensions/
 â”‚   â””â”€â”€ fast_parser/        # Rust extension
@@ -429,7 +429,7 @@ Is performance actually a problem? (Profile first!)
 
 For context, here's how a Rust extension might work:
 
-**Python interface** (codeflow_engine/parsers/fast.py):
+**Python interface** (engine/codeflow_engine/parsers/fast.py):
 ```python
 from .extensions.fast_parser import parse_yaml_fast
 

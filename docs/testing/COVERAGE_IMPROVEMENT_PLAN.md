@@ -43,18 +43,18 @@ open htmlcov/index.html
 #### Priority Areas
 
 1. **Core Engine** (Target: 60%)
-   - `codeflow_engine/engine.py`
-   - `codeflow_engine/workflows/`
-   - `codeflow_engine/triggers/`
+   - `engine/codeflow_engine/engine.py`
+   - `engine/codeflow_engine/workflows/`
+   - `engine/codeflow_engine/triggers/`
 
 2. **API Endpoints** (Target: 70%)
-   - `codeflow_engine/server.py`
-   - `codeflow_engine/dashboard/router.py`
-   - `codeflow_engine/health/`
+   - `engine/codeflow_engine/server.py`
+   - `engine/codeflow_engine/dashboard/router.py`
+   - `engine/codeflow_engine/health/`
 
 3. **Configuration** (Target: 80%)
-   - `codeflow_engine/config/settings.py`
-   - `codeflow_engine/config/validation.py`
+   - `engine/codeflow_engine/config/settings.py`
+   - `engine/codeflow_engine/config/validation.py`
 
 ### Phase 2: Expansion (50% → 70%)
 
@@ -65,19 +65,19 @@ open htmlcov/index.html
 #### Priority Areas
 
 1. **Actions** (Target: 75%)
-   - `codeflow_engine/actions/platform_detector.py`
-   - `codeflow_engine/actions/issue_creator.py`
-   - `codeflow_engine/actions/pr_review_analyzer.py`
-   - `codeflow_engine/actions/quality_engine/`
+   - `engine/codeflow_engine/actions/platform_detector.py`
+   - `engine/codeflow_engine/actions/issue_creator.py`
+   - `engine/codeflow_engine/actions/pr_review_analyzer.py`
+   - `engine/codeflow_engine/actions/quality_engine/`
 
 2. **Integrations** (Target: 75%)
-   - `codeflow_engine/integrations/github_app/`
-   - `codeflow_engine/integrations/linear/`
-   - `codeflow_engine/clients/`
+   - `engine/codeflow_engine/integrations/github_app/`
+   - `engine/codeflow_engine/integrations/linear/`
+   - `engine/codeflow_engine/clients/`
 
 3. **AI System** (Target: 70%)
-   - `codeflow_engine/ai/core/`
-   - `codeflow_engine/ai/extensions/`
+   - `engine/codeflow_engine/ai/core/`
+   - `engine/codeflow_engine/ai/extensions/`
 
 ### Phase 3: Comprehensive (70% → 80%)
 
@@ -116,10 +116,10 @@ open htmlcov/index.html
 
 ```bash
 # Generate coverage report
-poetry run pytest --cov=codeflow_engine --cov-report=html --cov-report=term
+poetry run pytest --cov=engine/codeflow_engine --cov-report=html --cov-report=term
 
 # Identify gaps
-poetry run coverage report --show-missing | grep -E "codeflow_engine.*[0-9]+.*[0-9]+.*[0-9]+%"
+poetry run coverage report --show-missing | grep -E "engine/codeflow_engine.*[0-9]+.*[0-9]+.*[0-9]+%"
 ```
 
 ### Step 2: Prioritize Components
@@ -173,7 +173,7 @@ For each component:
 
 ## Test Coverage by Module
 
-### Core Engine (`codeflow_engine/engine.py`)
+### Core Engine (`engine/codeflow_engine/engine.py`)
 
 **Current:** ~30%  
 **Target:** 90%  
@@ -187,7 +187,7 @@ For each component:
 - [ ] Configuration loading
 - [ ] Trigger matching
 
-### API Endpoints (`codeflow_engine/server.py`, `dashboard/router.py`)
+### API Endpoints (`engine/codeflow_engine/server.py`, `engine/codeflow_engine/dashboard/router.py`)
 
 **Current:** ~30%  
 **Target:** 85%  
@@ -202,7 +202,7 @@ For each component:
 - [ ] Rate limiting
 - [ ] Error responses
 
-### Actions (`codeflow_engine/actions/`)
+### Actions (`engine/codeflow_engine/actions/`)
 
 **Current:** ~30%  
 **Target:** 80%  
@@ -216,7 +216,7 @@ For each component:
 - [ ] AI linting fixer
 - [ ] All action types
 
-### Integrations (`codeflow_engine/integrations/`)
+### Integrations (`engine/codeflow_engine/integrations/`)
 
 **Current:** ~30%  
 **Target:** 80%  
@@ -230,7 +230,7 @@ For each component:
 - [ ] Axolo integration
 - [ ] Error handling
 
-### Workflows (`codeflow_engine/workflows/`)
+### Workflows (`engine/codeflow_engine/workflows/`)
 
 **Current:** ~30%  
 **Target:** 75%  

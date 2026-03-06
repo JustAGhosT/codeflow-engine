@@ -1,4 +1,6 @@
-﻿# CodeFlow Desktop - Deployment Guide
+﻿<!-- markdownlint-disable MD022 MD024 MD031 MD032 MD036 MD040 -->
+
+# CodeFlow Desktop - Deployment Guide
 
 This guide covers building and deploying CodeFlow Desktop for production.
 
@@ -439,3 +441,5 @@ jobs:
 - [Windows Code Signing](https://learn.microsoft.com/en-us/windows/win32/seccrypto/cryptography-tools)
 - [macOS Notarization](https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution)
 - [GitHub Releases](https://docs.github.com/en/repositories/releasing-projects-on-github)
+
+<!-- markdownlint-enable MD022 MD024 MD031 MD032 MD036 MD040 -->

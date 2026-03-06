@@ -18,7 +18,7 @@ This document audits existing code across CodeFlow repositories to identify comm
 
 #### 1. Validation Utilities
 
-**Location:** `codeflow_engine/config/validation.py`
+**Location:** `engine/codeflow_engine/config/validation.py`
 - `ConfigurationValidator` class
 - `validate_configuration()` function
 - `check_environment_variables()` function
@@ -29,7 +29,7 @@ This document audits existing code across CodeFlow repositories to identify comm
 - Environment variable checking
 - Validation result formatting
 
-**Location:** `codeflow_engine/workflows/validation.py`
+**Location:** `engine/codeflow_engine/workflows/validation.py`
 - `validate_workflow_context()` function
 - `sanitize_workflow_parameters()` function
 
@@ -37,7 +37,7 @@ This document audits existing code across CodeFlow repositories to identify comm
 - Input sanitization utilities
 - Context validation patterns
 
-**Location:** `codeflow_engine/security/validators/`
+**Location:** `engine/codeflow_engine/security/validators/`
 - String validators
 - Number validators
 - Object validators
@@ -50,7 +50,7 @@ This document audits existing code across CodeFlow repositories to identify comm
 
 #### 2. Error Handling Utilities
 
-**Location:** `codeflow_engine/utils/error_handlers.py`
+**Location:** `engine/codeflow_engine/utils/error_handlers.py`
 - Error handling patterns
 - Exception formatting
 
@@ -60,7 +60,7 @@ This document audits existing code across CodeFlow repositories to identify comm
 
 #### 3. Resilience Utilities
 
-**Location:** `codeflow_engine/utils/resilience/circuit_breaker.py`
+**Location:** `engine/codeflow_engine/utils/resilience/circuit_breaker.py`
 - Circuit breaker pattern implementation
 
 **Potential Extraction:**
@@ -69,7 +69,7 @@ This document audits existing code across CodeFlow repositories to identify comm
 
 #### 4. Rate Limiting
 
-**Location:** `codeflow_engine/security/rate_limiting.py`
+**Location:** `engine/codeflow_engine/security/rate_limiting.py`
 - `RateLimiter` class
 - `rate_limit()` decorator
 - Rate limit middleware

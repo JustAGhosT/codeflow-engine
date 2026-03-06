@@ -22,13 +22,13 @@
 
 ### 1. Configuration & Settings
 
-- [x] `codeflow_engine/config/settings.py`
+- [x] `engine/codeflow_engine/config/settings.py`
   - [x] Environment variable loading
   - [x] Default values
   - [x] Validation
   - [x] Type conversion
 
-- [ ] `codeflow_engine/config/validation.py`
+- [ ] `engine/codeflow_engine/config/validation.py`
   - [ ] Configuration validation
   - [ ] Error handling
   - [ ] Schema validation
@@ -37,19 +37,19 @@
 
 ### 2. Health & API Endpoints
 
-- [x] `codeflow_engine/health/`
+- [x] `engine/codeflow_engine/health/`
   - [x] Health check endpoint
   - [x] Readiness check
   - [x] Liveness check
   - [x] Dependency checks
 
-- [x] `codeflow_engine/server.py`
+- [x] `engine/codeflow_engine/server.py`
   - [x] Server initialization
   - [x] Route registration
   - [x] Middleware
   - [x] Error handling
 
-- [ ] `codeflow_engine/dashboard/router.py`
+- [ ] `engine/codeflow_engine/dashboard/router.py`
   - [ ] Dashboard endpoints
   - [ ] API status
   - [ ] Metrics endpoint
@@ -59,13 +59,13 @@
 
 ### 3. Core Engine
 
-- [ ] `codeflow_engine/engine.py`
+- [ ] `engine/codeflow_engine/engine.py`
   - [ ] Engine initialization
   - [ ] Action execution
   - [ ] Workflow execution
   - [ ] Error handling
 
-- [ ] `codeflow_engine/workflows/`
+- [ ] `engine/codeflow_engine/workflows/`
   - [ ] Workflow parsing
   - [ ] Workflow execution
   - [ ] Workflow validation
@@ -75,12 +75,12 @@
 
 ### 4. Actions
 
-- [ ] `codeflow_engine/actions/platform_detector.py`
+- [ ] `engine/codeflow_engine/actions/platform_detector.py`
   - [ ] Platform detection
   - [ ] File analysis
   - [ ] Confidence scoring
 
-- [ ] `codeflow_engine/actions/issue_creator.py`
+- [ ] `engine/codeflow_engine/actions/issue_creator.py`
   - [ ] Issue creation
   - [ ] Issue formatting
   - [ ] Error handling
@@ -89,12 +89,12 @@
 
 ### 5. Integrations
 
-- [ ] `codeflow_engine/clients/github_client.py`
+- [ ] `engine/codeflow_engine/clients/github_client.py`
   - [ ] API calls
   - [ ] Error handling
   - [ ] Rate limiting
 
-- [ ] `codeflow_engine/clients/linear_client.py`
+- [ ] `engine/codeflow_engine/clients/linear_client.py`
   - [ ] API calls
   - [ ] Error handling
   - [ ] GraphQL queries

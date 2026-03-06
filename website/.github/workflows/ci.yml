@@ -74,9 +74,6 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     needs: [build, test, lint]
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy.outputs.static_web_app_url }}
     steps:
       - uses: actions/checkout@v4
       

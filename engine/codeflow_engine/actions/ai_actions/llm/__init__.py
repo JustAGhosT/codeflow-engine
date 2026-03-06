@@ -1,5 +1,6 @@
 """CODEFLOW LLM Package - compatibility wrapper under grouped actions."""
 
+from codeflow_engine.actions._module_aliases import register_module_aliases
 from codeflow_engine.actions.ai_actions.llm.manager import (
     ActionLLMProviderManager,
     LLMProviderManager,
@@ -25,6 +26,15 @@ from codeflow_engine.core.llm import (
     BaseLLMProvider,
     LLMProviderRegistry,
     OpenAICompatibleProvider,
+)
+
+register_module_aliases(
+    __name__,
+    {
+        "base": "codeflow_engine.actions.llm.base",
+        "manager": "codeflow_engine.actions.ai_actions.llm.manager",
+        "types": "codeflow_engine.actions.ai_actions.llm.types",
+    },
 )
 
 

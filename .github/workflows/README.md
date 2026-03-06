@@ -93,7 +93,7 @@ Add these badges to your README:
 
 **Codecov warnings ("Please install the 'codecov app svg image'"):**
 
-- Install the Codecov GitHub App: https://github.com/apps/codecov
+- Install the [Codecov GitHub App](https://github.com/apps/codecov)
 - Grant access to your repository in the app settings
 - Ensure `CODECOV_TOKEN` secret is set in repository settings
 - See `codecov.yml` in the repository root for configuration

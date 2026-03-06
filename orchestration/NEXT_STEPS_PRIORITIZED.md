@@ -57,7 +57,7 @@
 - [ ] Test logging output
 
 **Files to update:**
-- `codeflow-engine/codeflow_engine/utils/logging.py` (create if needed)
+- `codeflow-engine/engine/codeflow_engine/utils/logging.py` (create if needed)
 - Update configuration to use structured logging
 - Add logging examples to guide
 
