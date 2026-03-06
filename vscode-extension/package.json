@@ -1,0 +1,646 @@
+﻿{
+  "name": "codeflow-vscode-extension",
+  "displayName": "CodeFlow",
+  "description": "AI-Powered Code Quality and Automation for VS Code",
+  "version": "1.0.10",
+  "publisher": "codeflow",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JustAGhosT/codeflow-vscode-extension.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0",
+    "cursor": "^1.85.0",
+    "windsurf": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Programming Languages",
+    "Snippets",
+    "Testing"
+  ],
+  "activationEvents": [
+    "onLanguage:python",
+    "onLanguage:javascript",
+    "onLanguage:typescript"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "codeflow.qualityCheck",
+        "title": "CodeFlow: Run Quality Check",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.qualityCheckFile",
+        "title": "CodeFlow: Check Current File",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.qualityCheckWorkspace",
+        "title": "CodeFlow: Check Workspace",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.fileSplit",
+        "title": "CodeFlow: Split Large File",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.autoFix",
+        "title": "CodeFlow: Auto-Fix Issues",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.showDashboard",
+        "title": "CodeFlow: Show Dashboard",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.configure",
+        "title": "CodeFlow: Configure",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.setVolume",
+        "title": "CodeFlow: Set Volume Level",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.toggleTool",
+        "title": "CodeFlow: Toggle Tool",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.performanceCheck",
+        "title": "CodeFlow: Performance Analysis",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.dependencyScan",
+        "title": "CodeFlow: Dependency Scan",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.securityScan",
+        "title": "CodeFlow: Security Scan",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.complexityAnalysis",
+        "title": "CodeFlow: Complexity Analysis",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.documentationCheck",
+        "title": "CodeFlow: Documentation Check",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.learningMemory",
+        "title": "CodeFlow: Learning Memory",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.clearCache",
+        "title": "CodeFlow: Clear Cache",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.exportResults",
+        "title": "CodeFlow: Export Results",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.importConfig",
+        "title": "CodeFlow: Import Configuration",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.refreshIssues",
+        "title": "CodeFlow: Refresh Issues",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.refreshMetrics",
+        "title": "CodeFlow: Refresh Metrics",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.refreshHistory",
+        "title": "CodeFlow: Refresh History",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.showVersion",
+        "title": "CodeFlow: Show Version",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.refreshAll",
+        "title": "CodeFlow: Refresh All Views",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.showViews",
+        "title": "CodeFlow: Show Views",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.quickFix",
+        "title": "CodeFlow: Quick Fix",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.analyzeWorkspace",
+        "title": "CodeFlow: Analyze Workspace",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.generateReport",
+        "title": "CodeFlow: Generate Report",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.toggleAutoMode",
+        "title": "CodeFlow: Toggle Auto Mode",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.showSettings",
+        "title": "CodeFlow: Settings",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.showHelp",
+        "title": "CodeFlow: Help",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.checkCompatibility",
+        "title": "CodeFlow: Check Compatibility",
+        "category": "CodeFlow"
+      },
+      {
+        "command": "codeflow.showLogs",
+        "title": "CodeFlow: Show Logs",
+        "category": "CodeFlow"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "codeflow.qualityCheck",
+          "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript"
+        },
+        {
+          "command": "codeflow.qualityCheckFile",
+          "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript"
+        },
+        {
+          "command": "codeflow.qualityCheckWorkspace",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "codeflow.fileSplit",
+          "when": "resourceLangId == python"
+        },
+        {
+          "command": "codeflow.autoFix",
+          "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript"
+        },
+        {
+          "command": "codeflow.showDashboard"
+        },
+        {
+          "command": "codeflow.configure"
+        },
+        {
+          "command": "codeflow.setVolume"
+        },
+        {
+          "command": "codeflow.toggleTool"
+        },
+        {
+          "command": "codeflow.performanceCheck"
+        },
+        {
+          "command": "codeflow.dependencyScan"
+        },
+        {
+          "command": "codeflow.securityScan"
+        },
+        {
+          "command": "codeflow.complexityAnalysis"
+        },
+        {
+          "command": "codeflow.documentationCheck"
+        },
+        {
+          "command": "codeflow.learningMemory"
+        },
+        {
+          "command": "codeflow.clearCache"
+        },
+        {
+          "command": "codeflow.exportResults"
+        },
+        {
+          "command": "codeflow.importConfig"
+        },
+        {
+          "command": "codeflow.refreshIssues"
+        },
+        {
+          "command": "codeflow.refreshMetrics"
+        },
+        {
+          "command": "codeflow.refreshHistory"
+        },
+        {
+          "command": "codeflow.showVersion"
+        },
+        {
+          "command": "codeflow.refreshAll"
+        },
+        {
+          "command": "codeflow.showViews"
+        },
+        {
+          "command": "codeflow.quickFix"
+        },
+        {
+          "command": "codeflow.analyzeWorkspace"
+        },
+        {
+          "command": "codeflow.generateReport"
+        },
+        {
+          "command": "codeflow.toggleAutoMode"
+        },
+        {
+          "command": "codeflow.showSettings"
+        },
+        {
+          "command": "codeflow.showHelp"
+        },
+        {
+          "command": "codeflow.checkCompatibility"
+        },
+        {
+          "command": "codeflow.showLogs"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "codeflow.qualityCheckFile",
+          "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript",
+          "group": "navigation"
+        },
+        {
+          "command": "codeflow.autoFix",
+          "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript",
+          "group": "navigation"
+        },
+        {
+          "command": "codeflow.complexityAnalysis",
+          "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript",
+          "group": "navigation"
+        },
+        {
+          "command": "codeflow.documentationCheck",
+          "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript",
+          "group": "navigation"
+        },
+        {
+          "command": "codeflow.quickFix",
+          "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript",
+          "group": "navigation"
+        },
+        {
+          "command": "codeflow.analyzeWorkspace",
+          "when": "workspaceFolderCount > 0",
+          "group": "navigation"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "codeflow.refreshIssues",
+          "when": "view == codeflowIssues",
+          "group": "navigation"
+        },
+        {
+          "command": "codeflow.refreshMetrics",
+          "when": "view == codeflowMetrics",
+          "group": "navigation"
+        },
+        {
+          "command": "codeflow.refreshHistory",
+          "when": "view == codeflowHistory",
+          "group": "navigation"
+        }
+      ],
+      "statusBar": [
+        {
+          "command": "codeflow.quickFix",
+          "text": "$(lightbulb) CodeFlow",
+          "tooltip": "CodeFlow: Quick Fix",
+          "alignment": "left"
+        },
+        {
+          "command": "codeflow.showViews",
+          "text": "$(graph) Metrics",
+          "tooltip": "CodeFlow: Show Metrics",
+          "alignment": "right"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "CodeFlow",
+      "properties": {
+        "codeflow.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CodeFlow extension"
+        },
+        "codeflow.qualityMode": {
+          "type": "string",
+          "enum": [
+            "ultra-fast",
+            "fast",
+            "smart",
+            "comprehensive",
+            "ai-enhanced"
+          ],
+          "default": "fast",
+          "description": "Default quality analysis mode"
+        },
+        "codeflow.autoFixEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable automatic fixing of issues"
+        },
+        "codeflow.showNotifications": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show notifications for CodeFlow operations"
+        },
+        "codeflow.pythonPath": {
+          "type": "string",
+          "default": "python",
+          "description": "Path to Python executable"
+        },
+        "codeflow.maxFileSize": {
+          "type": "number",
+          "default": 10000,
+          "description": "Maximum file size (in lines) for analysis"
+        },
+        "codeflow.volume": {
+          "type": "number",
+          "default": 500,
+          "minimum": 0,
+          "maximum": 1000,
+          "description": "Volume level (0-1000) that automatically configures quality settings"
+        },
+        "codeflow.maxFixes": {
+          "type": "number",
+          "default": 50,
+          "description": "Maximum number of fixes to apply automatically"
+        },
+        "codeflow.maxIssues": {
+          "type": "number",
+          "default": 100,
+          "description": "Maximum issues to report before stopping"
+        },
+        "codeflow.enableAIAgents": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable AI agents for enhanced analysis"
+        },
+        "codeflow.aiProvider": {
+          "type": "string",
+          "default": "openai",
+          "enum": [
+            "openai",
+            "azure_openai",
+            "anthropic",
+            "local"
+          ],
+          "description": "AI provider for enhanced analysis"
+        },
+        "codeflow.aiModel": {
+          "type": "string",
+          "default": "gpt-4",
+          "description": "AI model to use for analysis"
+        },
+        "codeflow.verbose": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable verbose logging"
+        },
+        "codeflow.configPath": {
+          "type": "string",
+          "default": "pyproject.toml",
+          "description": "Path to configuration file"
+        },
+        "codeflow.fileSplitter": {
+          "type": "object",
+          "default": {
+            "maxLinesPerFile": 500,
+            "maxFunctionsPerFile": 10,
+            "maxClassesPerFile": 2,
+            "useAIAnalysis": true,
+            "confidenceThreshold": 0.7,
+            "createBackup": true,
+            "validateSyntax": true,
+            "enableLearning": true
+          },
+          "description": "File splitter configuration"
+        },
+        "codeflow.performanceOptimization": {
+          "type": "object",
+          "default": {
+            "enableCaching": true,
+            "enableParallelProcessing": true,
+            "enableMemoryOptimization": true,
+            "cacheTTL": 3600,
+            "maxParallelWorkers": 4,
+            "memoryLimitMB": 512
+          },
+          "description": "Performance optimization settings"
+        },
+        "codeflow.tools": {
+          "type": "object",
+          "default": {
+            "python": {
+              "enabled": true
+            },
+            "javascript": {
+              "enabled": true
+            },
+            "typescript": {
+              "enabled": true
+            },
+            "ruff": {
+              "enabled": true
+            },
+            "mypy": {
+              "enabled": true
+            },
+            "bandit": {
+              "enabled": true
+            },
+            "interrogate": {
+              "enabled": true
+            },
+            "radon": {
+              "enabled": true
+            },
+            "pytest": {
+              "enabled": true
+            },
+            "codeql": {
+              "enabled": true
+            },
+            "sonarqube": {
+              "enabled": true
+            },
+            "ai_feedback": {
+              "enabled": true
+            },
+            "eslint": {
+              "enabled": true
+            },
+            "dependency_scanner": {
+              "enabled": true
+            },
+            "performance_analyzer": {
+              "enabled": true
+            }
+          },
+          "description": "Individual tool configuration"
+        },
+        "codeflow.autoFix": {
+          "type": "object",
+          "default": {
+            "enabled": false,
+            "fixTypes": [
+              "high_priority",
+              "medium_priority"
+            ],
+            "dryRun": false,
+            "maxFixes": 50,
+            "confidenceThreshold": 0.8
+          },
+          "description": "Auto-fix configuration"
+        },
+        "codeflow.dashboard": {
+          "type": "object",
+          "default": {
+            "port": 8080,
+            "host": "localhost",
+            "autoStart": false,
+            "theme": "dark"
+          },
+          "description": "Dashboard configuration"
+        },
+        "codeflow.autoMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable automatic analysis and fixes on file save"
+        },
+        "codeflow.quickFixEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable quick fix suggestions"
+        },
+        "codeflow.reportFormat": {
+          "type": "string",
+          "enum": [
+            "json",
+            "html",
+            "markdown",
+            "pdf"
+          ],
+          "default": "html",
+          "description": "Format for generated reports"
+        },
+        "codeflow.notificationLevel": {
+          "type": "string",
+          "enum": [
+            "none",
+            "errors",
+            "warnings",
+            "info",
+            "all"
+          ],
+          "default": "warnings",
+          "description": "Level of notifications to show"
+        },
+        "codeflow.initialized": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether CodeFlow has been initialized for this workspace"
+        }
+      }
+    },
+    "views": {
+      "codeflow": [
+        {
+          "id": "codeflowIssues",
+          "name": "Issues",
+          "when": "codeflow.hasIssues"
+        },
+        {
+          "id": "codeflowMetrics",
+          "name": "Metrics"
+        },
+        {
+          "id": "codeflowHistory",
+          "name": "History"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "codeflow",
+          "title": "CodeFlow",
+          "icon": "resources/codeflow-icon.svg"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "@vscode/vsce package",
+    "publish": "@vscode/vsce publish",
+    "clean": "rimraf out",
+    "build": "npm run clean && npm run compile"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.0.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "@vscode/test-electron": "^2.5.2",
+    "@vscode/vsce": "^2.32.0",
+    "eslint": "^8.26.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.1.0",
+    "rimraf": "^5.0.0",
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "axios": "^1.4.0"
+  }
+}
