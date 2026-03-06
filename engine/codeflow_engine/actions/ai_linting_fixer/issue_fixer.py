@@ -5,17 +5,29 @@ This module handles the actual fixing of linting issues using AI agents.
 """
 
 import asyncio
+from collections.abc import Coroutine
 import inspect
 import logging
 import time
-from typing import Any
+from typing import Any, cast
 
 from codeflow_engine.actions.ai_linting_fixer.ai_agent_manager import AIAgentManager
 from codeflow_engine.actions.ai_linting_fixer.error_handler import (
-    ErrorHandler, create_error_context)
+    ErrorCategory,
+    ErrorHandler,
+    ErrorInfo,
+    ErrorRecoveryStrategy,
+    ErrorSeverity,
+    create_error_context,
+)
+from codeflow_engine.actions.ai_linting_fixer.detection import (
+    LintingIssue as DetectionLintingIssue,
+)
 from codeflow_engine.actions.ai_linting_fixer.file_manager import FileManager
-from codeflow_engine.actions.ai_linting_fixer.models import (LintingFixResult,
-                                                    LintingIssue)
+from codeflow_engine.actions.ai_linting_fixer.models import (
+    LintingFixResult,
+    LintingIssue,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -92,7 +104,8 @@ class IssueFixer:
 
                         # Compute remaining unfixed issues for this file
                         remaining_codes = [
-                            code for code in original_error_codes
+                            code
+                            for code in original_error_codes
                             if code not in fixed_error_codes
                         ]
                         remaining_issues.extend(remaining_codes)
@@ -113,16 +126,14 @@ class IssueFixer:
                         model=model,
                     )
 
-                    self.error_handler.log_error(
-                        e,
-                        file_context,
-                        {"file_path": file_path, "issue_count": len(file_issues)},
-                        display=True,
-                    )
+                    self._record_error(e, file_context)
 
                     # Attempt recovery
-                    error_info = self.error_handler.create_error_info(e, file_context)
-                    if self.error_handler.attempt_recovery(error_info):
+                    error_info = self._create_error_info(e, file_context)
+                    if (
+                        self.error_handler.handle_error(error_info)
+                        != ErrorRecoveryStrategy.ABORT
+                    ):
                         logger.info(f"Recovery attempted for {file_path}")
                         # Could implement retry logic here
                     else:
@@ -145,12 +156,7 @@ class IssueFixer:
 
         except Exception as e:
             # Handle general errors
-            self.error_handler.log_error(
-                e,
-                context,
-                {"issue_count": len(issues), "max_fixes": max_fixes},
-                display=True,
-            )
+            self._record_error(e, context)
 
             logger.exception(f"AI fixing failed: {e}")
             return LintingFixResult(
@@ -188,8 +194,9 @@ class IssueFixer:
                 raise FileNotFoundError(msg)
 
             # Validate syntax before processing
-            from codeflow_engine.actions.ai_linting_fixer.code_analyzer import \
-                CodeAnalyzer
+            from codeflow_engine.actions.ai_linting_fixer.code_analyzer import (
+                CodeAnalyzer,
+            )
 
             code_analyzer = CodeAnalyzer()
             syntax_valid_before = code_analyzer.validate_python_syntax(original_content)
@@ -231,17 +238,7 @@ class IssueFixer:
 
                 except Exception as e:
                     # Handle issue-specific errors
-                    self.error_handler.log_error(
-                        e,
-                        issue_context,
-                        {
-                            "file_path": file_path,
-                            "line_number": issue.line_number,
-                            "error_code": issue.error_code,
-                            "issue_message": issue.message,
-                        },
-                        display=True,
-                    )
+                    self._record_error(e, issue_context)
 
                     # Continue with next issue
                     continue
@@ -282,12 +279,7 @@ class IssueFixer:
 
         except Exception as e:
             # Handle general file processing errors
-            self.error_handler.log_error(
-                e,
-                context,
-                {"file_path": file_path, "issue_count": len(issues)},
-                display=True,
-            )
+            self._record_error(e, context)
 
             return {
                 "success": False,
@@ -299,47 +291,47 @@ class IssueFixer:
     def _safe_extract_response_content(self, response) -> str:
         """
         Safely extract and normalize response content from various response types.
-        
+
         Args:
             response: The response object from LLM (could be None, dict, string, etc.)
-            
+
         Returns:
             str: Normalized string content, or fallback message if extraction fails
         """
         if response is None:
             return "<no response>"
-        
+
         # Try to extract content from various response formats
         content = None
-        
+
         # Check if response has a content attribute
-        if hasattr(response, 'content'):
+        if hasattr(response, "content"):
             content = response.content
         # Check if response is a dict with content key
         elif isinstance(response, dict):
-            content = response.get('content')
+            content = response.get("content")
         # Check if response is already a string
         elif isinstance(response, str):
             content = response
         # Try to get content via get method
-        elif hasattr(response, 'get'):
-            content = response.get('content')
-        
+        elif hasattr(response, "get"):
+            content = response.get("content")
+
         # If we still don't have content, convert to string
         if content is None:
             content = str(response)
-        
+
         # Ensure content is a string and normalize it
         if not isinstance(content, str):
             content = str(content)
-        
+
         # Normalize whitespace and ensure UTF-8 encoding
         content = content.strip()
-        
+
         # Handle empty content
         if not content:
             return "<empty response>"
-        
+
         return content
 
     def fix_single_issue(
@@ -354,15 +346,19 @@ class IssueFixer:
         start_time = time.time()
 
         try:
+            detection_issue = self._to_detection_issue(issue)
+
             # Select appropriate agent
-            agent_type = self.ai_agent_manager.select_agent_for_issues([issue])
+            agent_type = self.ai_agent_manager.select_agent_for_issues(
+                [detection_issue]
+            )
 
             # Get prompts
             system_prompt = self.ai_agent_manager.get_specialized_system_prompt(
-                agent_type, [issue]
+                agent_type, [detection_issue]
             )
             user_prompt = self.ai_agent_manager.get_user_prompt(
-                file_path, content, [issue]
+                file_path, content, [detection_issue]
             )
 
             # Call AI - Honor provider override if a specific provider is requested
@@ -390,7 +386,7 @@ class IssueFixer:
 
             # Handle async/sync ambiguity - check if response is a coroutine
             if inspect.isawaitable(response):
-                response = asyncio.run(response)
+                response = asyncio.run(cast(Coroutine[Any, Any, Any], response))
 
             # Parse response - safely extract content first
             response_content = self._safe_extract_response_content(response)
@@ -463,7 +459,7 @@ class IssueFixer:
 
             # Calculate confidence
             confidence = self.ai_agent_manager.calculate_confidence_score(
-                parsed_response, [issue], content, fixed_content
+                parsed_response, [detection_issue], content, fixed_content
             )
 
             # Log confidence score to performance tracker
@@ -533,3 +529,46 @@ class IssueFixer:
         """Synchronous fallback for fixing issues."""
         logger.info("Using synchronous fallback for issue fixing")
         return self.fix_issues_with_ai(issues, max_fixes, provider, model)
+
+    def _to_detection_issue(self, issue: LintingIssue) -> DetectionLintingIssue:
+        """Convert model issue representation into the detection issue type."""
+        return DetectionLintingIssue(
+            file_path=issue.file_path,
+            line_number=issue.line_number,
+            column_number=issue.column_number,
+            error_code=issue.error_code,
+            message=issue.message,
+            line_content=issue.line_content,
+        )
+
+    def _create_error_info(self, error: Exception, context: Any) -> ErrorInfo:
+        """Build an `ErrorInfo` compatible with the current error handler API."""
+        category = ErrorCategory.UNKNOWN
+        severity = ErrorSeverity.MEDIUM
+
+        if isinstance(error, (FileNotFoundError, PermissionError)):
+            category = ErrorCategory.PERMISSION
+            severity = ErrorSeverity.HIGH
+        elif isinstance(error, (SyntaxError, IndentationError)):
+            category = ErrorCategory.SYNTAX
+            severity = ErrorSeverity.HIGH
+        elif isinstance(error, RuntimeError):
+            category = ErrorCategory.RUNTIME
+            severity = ErrorSeverity.CRITICAL
+        elif isinstance(error, (ValueError, TypeError, KeyError)):
+            category = ErrorCategory.CONFIGURATION
+
+        return ErrorInfo(
+            error_type=type(error).__name__,
+            message=str(error),
+            severity=severity,
+            category=category,
+            context=context,
+            file_path=getattr(context, "file_path", None),
+            line_number=getattr(context, "line_number", None),
+        )
+
+    def _record_error(self, error: Exception, context: Any) -> None:
+        """Record an error using the current simplified error handler."""
+        logger.exception("AI linting fixer error: %s", error)
+        self.error_handler.handle_error(self._create_error_info(error, context))

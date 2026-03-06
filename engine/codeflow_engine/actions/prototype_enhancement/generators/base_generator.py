@@ -10,7 +10,9 @@ import json
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, TypeVar
 
-from codeflow_engine.actions.prototype_enhancement.platform_configs import PlatformConfig
+from codeflow_engine.actions.prototype_enhancement.platform_configs import (
+    PlatformConfig,
+)
 
 
 if TYPE_CHECKING:

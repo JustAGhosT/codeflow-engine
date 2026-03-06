@@ -8,9 +8,12 @@ import hashlib
 import logging
 from typing import Any
 
-from codeflow_engine.actions.ai_linting_fixer.performance_optimizer import \
-    IntelligentCache
-from codeflow_engine.ai.core.providers.manager import LLMProviderManager
+from codeflow_engine.actions.ai_linting_fixer.performance_optimizer import (
+    IntelligentCache,
+)
+from codeflow_engine.actions.llm.manager import (
+    ActionLLMProviderManager as LLMProviderManager,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -33,14 +36,14 @@ class AISplitDecisionEngine:
     ) -> tuple[bool, float, str]:
         """Determine if a file should be split using AI analysis."""
         # Create stable, collision-resistant cache key using SHA-256
-        content_hash = hashlib.sha256(content.encode('utf-8')).hexdigest()
+        content_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()
         cache_key = f"split_decision:{file_path}:{content_hash}:{len(content)}"
 
         # Try cache first
         cached_result = self.cache_manager.get(cache_key)
         if cached_result:
             logger.debug("Cache hit for split decision: %s", file_path)
-            logger.info("Using cached decision: %s", cached_result['reason'])
+            logger.info("Using cached decision: %s", cached_result["reason"])
             return (
                 cached_result["should_split"],
                 cached_result["confidence"],
@@ -66,11 +69,7 @@ class AISplitDecisionEngine:
                 ],
                 "temperature": 0.1,
             }
-            response = await self.llm_manager.complete(
-                messages=request["messages"],
-                provider=request["provider"],
-                temperature=request["temperature"],
-            )
+            response = self.llm_manager.complete(request)
 
             if response and response.content:
                 logger.debug("AI response received: %s...", response.content[:100])
@@ -135,7 +134,7 @@ class AISplitDecisionEngine:
         total_lines = int(complexity.get("total_lines", 0))
         complexity_score = float(complexity.get("complexity_score", 0.0))
 
-        should_split = (total_lines > 150 or complexity_score > 7.0)
+        should_split = total_lines > 150 or complexity_score > 7.0
         fallback_reason = "Rule-based fallback: "
         if total_lines > 150:
             fallback_reason += f"Large file ({total_lines} lines)"

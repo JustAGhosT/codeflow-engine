@@ -10,8 +10,11 @@ import structlog
 from codeflow_engine.actions.base.action import Action
 from codeflow_engine.actions.quality_engine.config import load_config
 from codeflow_engine.actions.quality_engine.handler_registry import HandlerRegistry
-from codeflow_engine.actions.quality_engine.models import (QualityInputs, QualityMode,
-                                                  QualityOutputs)
+from codeflow_engine.actions.quality_engine.models import (
+    QualityInputs,
+    QualityMode,
+    QualityOutputs,
+)
 from codeflow_engine.actions.quality_engine.platform_detector import PlatformDetector
 from codeflow_engine.actions.quality_engine.tool_runner import run_tool
 from codeflow_engine.actions.quality_engine.tools.registry import ToolRegistry
@@ -166,9 +169,12 @@ class QualityEngine(Action):
             )
 
             # Import AI Linting Fixer
-            from codeflow_engine.actions.ai_linting_fixer import AILintingFixer
-            from codeflow_engine.actions.ai_linting_fixer.models import \
-                AILintingFixerInputs
+            from codeflow_engine.actions.ai_linting_fixer.ai_linting_fixer import (
+                AILintingFixer,
+            )
+            from codeflow_engine.actions.ai_linting_fixer.models import (
+                AILintingFixerInputs,
+            )
 
             # Prepare fixer inputs
             target_path = files_to_check[0] if files_to_check else "."
@@ -296,15 +302,22 @@ class QualityEngine(Action):
         if has_js_files and "eslint" in available_tools:
             # Check if ESLint is actually available before adding it
             try:
-                from codeflow_engine.actions.quality_engine.tools.eslint_tool import \
-                    ESLintTool
+                from codeflow_engine.actions.quality_engine.tools.eslint_tool import (
+                    ESLintTool,
+                )
+
                 eslint_tool = ESLintTool()
                 if eslint_tool.is_available():
                     selected_tools.append("eslint")
                 else:
-                    logger.warning("ESLint is not available - skipping JavaScript/TypeScript linting")
+                    logger.warning(
+                        "ESLint is not available - skipping JavaScript/TypeScript linting"
+                    )
             except Exception as e:
-                logger.warning("Failed to check ESLint availability: %s - skipping JavaScript/TypeScript linting", e)
+                logger.warning(
+                    "Failed to check ESLint availability: %s - skipping JavaScript/TypeScript linting",
+                    e,
+                )
 
         # Add security scanning for higher volumes
         if volume > 300 and "bandit" in available_tools:
@@ -491,8 +504,9 @@ class QualityEngine(Action):
         if inputs.mode == QualityMode.AI_ENHANCED and inputs.enable_ai_agents:
             # Lazy load the LLM manager if needed
             if not self.llm_manager:
-                from codeflow_engine.actions.quality_engine.ai import \
-                    initialize_llm_manager
+                from codeflow_engine.actions.quality_engine.ai import (
+                    initialize_llm_manager,
+                )
 
                 self.llm_manager = await initialize_llm_manager()
 
@@ -507,8 +521,9 @@ class QualityEngine(Action):
                 )
 
                 if ai_result:
-                    from codeflow_engine.actions.quality_engine.ai import \
-                        create_tool_result_from_ai_analysis
+                    from codeflow_engine.actions.quality_engine.ai import (
+                        create_tool_result_from_ai_analysis,
+                    )
 
                     results["ai_analysis"] = create_tool_result_from_ai_analysis(
                         ai_result
@@ -532,8 +547,9 @@ class QualityEngine(Action):
             ) = await self._run_auto_fix(inputs, files_to_check)
 
         # Build the comprehensive summary
-        from codeflow_engine.actions.quality_engine.summary import \
-            build_comprehensive_summary
+        from codeflow_engine.actions.quality_engine.summary import (
+            build_comprehensive_summary,
+        )
 
         summary = build_comprehensive_summary(results, ai_summary)
 
@@ -590,6 +606,21 @@ def create_engine(
 ) -> QualityEngine:
     """Create a quality engine with the given dependencies."""
     return QualityEngine(
+        config_path=config_path,
+        tool_registry=tool_registry,
+        handler_registry=handler_registry,
+        config=config,
+    )
+
+
+def create_quality_engine(
+    config_path: str = "pyproject.toml",
+    tool_registry: ToolRegistry | None = None,
+    handler_registry: HandlerRegistry | None = None,
+    config: Any | None = None,
+) -> QualityEngine:
+    """Backward-compatible alias for creating a quality engine."""
+    return create_engine(
         config_path=config_path,
         tool_registry=tool_registry,
         handler_registry=handler_registry,

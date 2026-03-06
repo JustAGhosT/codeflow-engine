@@ -6,13 +6,15 @@ integrating with the CodeFlow LLM provider system.
 """
 
 import json
+from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
 import structlog
 
-from codeflow_engine.actions.llm.manager import \
-    ActionLLMProviderManager as LLMProviderManager
+from codeflow_engine.actions.llm.manager import (
+    ActionLLMProviderManager as LLMProviderManager,
+)
 from codeflow_engine.actions.quality_engine.models import ToolResult
 from codeflow_engine.agents.models import CodeIssue
 
@@ -85,6 +87,29 @@ SECURITY_PROMPT = (
 )
 
 
+class AIMode(StrEnum):
+    """Backward-compatible AI analysis modes."""
+
+    COMPREHENSIVE = "comprehensive"
+    FOCUSED = "focused"
+    SECURITY = "security"
+    PERFORMANCE = "performance"
+
+    @classmethod
+    def is_valid(cls, value: str) -> bool:
+        return value in {mode.value for mode in cls}
+
+    @classmethod
+    def get_tools(cls, value: str) -> list[str]:
+        tool_map = {
+            cls.COMPREHENSIVE.value: ["code_quality", "security", "performance"],
+            cls.FOCUSED.value: ["code_quality"],
+            cls.SECURITY.value: ["security"],
+            cls.PERFORMANCE.value: ["performance"],
+        }
+        return tool_map.get(value, ["code_quality"])
+
+
 async def run_ai_analysis(
     files: list[str],
     llm_manager: LLMProviderManager,
@@ -138,31 +163,7 @@ async def run_ai_analysis(
             "response_format": {"type": "json_object"},
         }
 
-        # Use high-level complete API with structured input
-        try:
-            response = await llm_manager.complete(
-                messages=request["messages"],
-                provider=request["provider"],
-                model=request["model"],
-                temperature=request["temperature"],
-                response_format=request["response_format"]
-            )
-        except AttributeError:
-            # Fallback to sync call via executor if async method doesn't exist
-            import asyncio
-            from functools import partial
-            loop = asyncio.get_event_loop()
-            response = await loop.run_in_executor(
-                None,
-                partial(
-                    llm_manager.complete,
-                    messages=request["messages"],
-                    provider=request["provider"],
-                    model=request["model"],
-                    temperature=request["temperature"],
-                    response_format=request["response_format"]
-                )
-            )
+        response = llm_manager.complete(request)
 
         if not response or not response.content:
             logger.warning("No response received from LLM")
@@ -378,7 +379,9 @@ def _smart_truncate_content(content: str, max_length: int = 2000) -> str:
                         partial_line = ""
                         for word in words:
                             space_needed = 1 if partial_line else 0
-                            word_with_space = len(partial_line) + len(word) + space_needed
+                            word_with_space = (
+                                len(partial_line) + len(word) + space_needed
+                            )
                             if word_with_space <= remaining_budget:
                                 partial_line += (" " if partial_line else "") + word
                             else:
@@ -399,9 +402,7 @@ def _smart_truncate_content(content: str, max_length: int = 2000) -> str:
 
     # Add truncation indicator if content was actually truncated
     if len(content) > len(truncated_content):
-        truncated_content += (
-            f"\n\n... (content truncated, showing first {len(truncated_content)} characters)"
-        )
+        truncated_content += f"\n\n... (content truncated, showing first {len(truncated_content)} characters)"
 
     return truncated_content
 
@@ -492,7 +493,9 @@ async def analyze_code_architecture(
         Dict containing architectural analysis results
     """
     # Use specialized architecture analysis prompt
-    return await run_ai_analysis(files, llm_manager, provider_name, prompt=ARCHITECTURE_PROMPT)
+    return await run_ai_analysis(
+        files, llm_manager, provider_name, prompt=ARCHITECTURE_PROMPT
+    )
 
 
 async def analyze_security_issues(
@@ -510,4 +513,6 @@ async def analyze_security_issues(
         Dict containing security analysis results
     """
     # Use specialized security analysis prompt
-    return await run_ai_analysis(files, llm_manager, provider_name, prompt=SECURITY_PROMPT)
+    return await run_ai_analysis(
+        files, llm_manager, provider_name, prompt=SECURITY_PROMPT
+    )

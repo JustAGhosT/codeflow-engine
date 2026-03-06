@@ -21,7 +21,10 @@ from codeflow_engine.actions.prototype_enhancement.enhancement_strategies import
     EnhancementStrategyFactory,
 )
 from codeflow_engine.actions.prototype_enhancement.file_generators import FileGenerator
-from codeflow_engine.actions.prototype_enhancement.platform_configs import PlatformConfig, PlatformRegistry
+from codeflow_engine.actions.prototype_enhancement.platform_configs import (
+    PlatformConfig,
+    PlatformRegistry,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -166,7 +169,9 @@ class PrototypeEnhancer:
             checklist=production_checklist,
             next_steps=next_steps,
             enhancement_summary=self._create_enhancement_summary(enhancement_result),
-            platform_specific_notes=self._get_platform_notes(inputs.platform, "production_ready"),
+            platform_specific_notes=self._get_platform_notes(
+                inputs.platform, "production_ready"
+            ),
         )
 
     def _enhance_for_testing(
@@ -214,7 +219,9 @@ class PrototypeEnhancer:
             checklist=testing_checklist,
             next_steps=next_steps,
             enhancement_summary=self._create_enhancement_summary(enhancement_result),
-            platform_specific_notes=self._get_platform_notes(inputs.platform, "testing"),
+            platform_specific_notes=self._get_platform_notes(
+                inputs.platform, "testing"
+            ),
         )
 
     def _enhance_for_security(
@@ -264,7 +271,9 @@ class PrototypeEnhancer:
             checklist=security_checklist,
             next_steps=next_steps,
             enhancement_summary=self._create_enhancement_summary(enhancement_result),
-            platform_specific_notes=self._get_platform_notes(inputs.platform, "security"),
+            platform_specific_notes=self._get_platform_notes(
+                inputs.platform, "security"
+            ),
         )
 
     def _generate_package_json_updates(
@@ -305,8 +314,8 @@ class PrototypeEnhancer:
         packages_count = len(enhancement_result.get("packages_added", []))
         config_count = len(enhancement_result.get("configuration_updates", []))
 
-        platform = enhancement_result.get('platform', 'unknown')
-        enhancement_type = enhancement_result.get('enhancement_type', 'unknown')
+        platform = enhancement_result.get("platform", "unknown")
+        enhancement_type = enhancement_result.get("enhancement_type", "unknown")
         summary_parts = [
             f"Enhanced {platform} project for {enhancement_type}",
             f"Created {files_count} configuration files",

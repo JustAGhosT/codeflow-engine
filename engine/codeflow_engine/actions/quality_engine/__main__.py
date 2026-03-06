@@ -76,6 +76,7 @@ def main() -> None:
         verbose=args.verbose,
         ai_provider=args.ai_provider,
         ai_model=args.ai_model,
+        volume=500,
         # Auto-fix parameters
         auto_fix=args.auto_fix,
         fix_types=args.fix_types,

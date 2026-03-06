@@ -11,6 +11,7 @@ from typing import Any
 
 from codeflow_engine.ai.core.base import LLMMessage
 from codeflow_engine.ai.core.providers.manager import LLMProviderManager
+from codeflow_engine.config import CodeFlowConfig
 
 logger = logging.getLogger(__name__)
 
@@ -43,19 +44,7 @@ async def initialize_llm_manager() -> LLMProviderManager | None:
             "default_provider": "openai",
         }
 
-        # Create a simple config object with the required attributes
-        class SimpleConfig:
-            def __init__(self, config_dict):
-                self.openai_api_key = config_dict["providers"]["openai"]["api_key"]
-                self.anthropic_api_key = config_dict["providers"]["anthropic"][
-                    "api_key"
-                ]
-                self.default_llm_provider = config_dict.get(
-                    "default_provider", "openai"
-                )
-
-        config_obj = SimpleConfig(config)
-        llm_manager = LLMProviderManager(config_obj)
+        llm_manager = LLMProviderManager(CodeFlowConfig())
 
         # Guard optional initialize() call
         if hasattr(llm_manager, "initialize"):
@@ -66,9 +55,10 @@ async def initialize_llm_manager() -> LLMProviderManager | None:
             LLMMessage(role="system", content="You are a helpful assistant."),
             LLMMessage(role="user", content="Test message"),
         ]
-        test_response = await llm_manager.generate_completion(
-            messages=test_messages,
-            provider_name="openai",
+        test_response = await llm_manager.complete(
+            test_messages,
+            provider="openai",
+            model="gpt-4",
             temperature=0.1,
         )
 

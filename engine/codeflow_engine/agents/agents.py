@@ -11,8 +11,10 @@ from pydantic import BaseModel, field_validator
 
 from codeflow_engine.actions import platform_detection
 from codeflow_engine.actions.ai_linting_fixer import AILintingFixer as _AILintingFixer
-from codeflow_engine.actions.ai_linting_fixer.models import (AILintingFixerInputs,
-                                                    AILintingFixerOutputs)
+from codeflow_engine.actions.ai_linting_fixer.models import (
+    AILintingFixerInputs,
+    AILintingFixerOutputs,
+)
 from codeflow_engine.actions.quality_engine import QualityEngine
 from codeflow_engine.actions.quality_engine.models import QualityInputs, QualityMode
 from codeflow_engine.agents.models import CodeIssue, IssueSeverity
@@ -151,18 +153,17 @@ class LintingFixerWrapper:
     async def fix_file(self, file_path: str, _file_content: str) -> Any:
         """Fix linting issues in a single file."""
         inputs = AILintingFixerInputs(
-            target_path=file_path,
-            max_fixes=10,
-            create_backups=False,
-            dry_run=False
+            target_path=file_path, max_fixes=10, create_backups=False, dry_run=False
         )
         result: AILintingFixerOutputs = cast(Any, self._fixer).run(inputs)
 
         # Convert the result to the expected format
         class FixResult:
             def __init__(
-                self, success: bool, fixed_issues: list[CodeIssue],
-                error_message: str | None = None
+                self,
+                success: bool,
+                fixed_issues: list[CodeIssue],
+                error_message: str | None = None,
             ):
                 self.success = success
                 self.fixed_issues = fixed_issues
@@ -173,17 +174,19 @@ class LintingFixerWrapper:
         if result.success and result.issues_fixed > 0:
             # Create CodeIssue objects from the results
             for file_modified in result.files_modified:
-                fixed_issues.append(CodeIssue(
-                    file_path=file_modified,
-                    line_number=0,
-                    message="Fixed linting issues",
-                    severity=IssueSeverity.INFO
-                ))
+                fixed_issues.append(
+                    CodeIssue(
+                        file_path=file_modified,
+                        line_number=0,
+                        message="Fixed linting issues",
+                        severity=IssueSeverity.INFO,
+                    )
+                )
 
         return FixResult(
             success=result.success,
             fixed_issues=fixed_issues,
-            error_message=getattr(result, 'error_message', None)
+            error_message=getattr(result, "error_message", None),
         )
 
     async def analyze_file(self, file_path: str, _file_content: str) -> Any:
@@ -192,14 +195,17 @@ class LintingFixerWrapper:
             target_path=file_path,
             max_fixes=0,  # Don't fix, just analyze
             create_backups=False,
-            dry_run=True
+            dry_run=True,
         )
         result: AILintingFixerOutputs = cast(Any, self._fixer).run(inputs)
 
         # Convert the result to the expected format
         class AnalysisResult:
             def __init__(
-                self, success: bool, issues: list[CodeIssue], error_message: str | None = None
+                self,
+                success: bool,
+                issues: list[CodeIssue],
+                error_message: str | None = None,
             ):
                 self.success = success
                 self.issues = issues
@@ -209,17 +215,19 @@ class LintingFixerWrapper:
         issues = []
         if result.total_issues_detected > 0:
             # For now, create a generic issue since we don't have detailed issue info
-            issues.append(CodeIssue(
-                file_path=file_path,
-                line_number=0,
-                message=f"Found {result.total_issues_detected} linting issues",
-                severity=IssueSeverity.WARNING
-            ))
+            issues.append(
+                CodeIssue(
+                    file_path=file_path,
+                    line_number=0,
+                    message=f"Found {result.total_issues_detected} linting issues",
+                    severity=IssueSeverity.WARNING,
+                )
+            )
 
         return AnalysisResult(
             success=result.success,
             issues=issues,
-            error_message=getattr(result, 'error_message', None)
+            error_message=getattr(result, "error_message", None),
         )
 
 
@@ -255,7 +263,8 @@ class LintingAgent(BaseAgent):
                 {
                     k: v
                     for k, v in self.volume_config.config.items()
-                    if k.startswith("linting_") and k.replace("linting_", "") in valid_params
+                    if k.startswith("linting_")
+                    and k.replace("linting_", "") in valid_params
                 }
             )
 
@@ -358,9 +367,7 @@ class LintingAgent(BaseAgent):
                 )
             ]
         except Exception as e:
-            logging.exception(
-                "Unexpected error fixing code issues in %s", file_path
-            )
+            logging.exception("Unexpected error fixing code issues in %s", file_path)
             return [
                 CodeIssue(
                     file_path=file_path,
@@ -475,7 +482,7 @@ class QualityAgent(BaseAgent):
                 **self.volume_config.config,
             )
 
-            return await self._quality_engine.execute(inputs, {}, self.volume_config.config)
+            return await self._quality_engine.execute(inputs, {})
 
         except Exception:
             logging.exception("Error analyzing quality")

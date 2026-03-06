@@ -115,11 +115,14 @@ class LintingAgent(BaseAgent[LintingInputs, LintingOutputs]):
 
         # Initialize the AI linting fixer (constructor manages its own LLM manager)
         try:
+            self.linting_fixer: AILintingFixer | None
             self.linting_fixer = AILintingFixer()
         except Exception as e:
             # In test mode or when AI components are not available, set to None
             if os.getenv("CODEFLOW_TEST_MODE") == "true" or "pytest" in sys.modules:
-                logger.warning("AILintingFixer initialization failed in test mode: %s", e)
+                logger.warning(
+                    "AILintingFixer initialization failed in test mode: %s", e
+                )
                 self.linting_fixer = None
             else:
                 msg = (
@@ -165,12 +168,16 @@ class LintingAgent(BaseAgent[LintingInputs, LintingOutputs]):
                         logger.exception("%s", error_msg)
                     raise FileNotFoundError(error_msg) from e
                 except PermissionError as e:
-                    error_msg = f"Permission denied when reading file: {inputs.file_path}"
+                    error_msg = (
+                        f"Permission denied when reading file: {inputs.file_path}"
+                    )
                     if self.verbose:
                         logger.exception("%s", error_msg)
                     raise PermissionError(error_msg) from e
                 except UnicodeDecodeError as e:
-                    error_msg = f"Could not decode file {inputs.file_path} as UTF-8: {e!s}"
+                    error_msg = (
+                        f"Could not decode file {inputs.file_path} as UTF-8: {e!s}"
+                    )
                     if self.verbose:
                         logger.exception("%s", error_msg)
                     # Preserve the original exception details while adding context

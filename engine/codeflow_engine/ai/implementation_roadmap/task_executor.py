@@ -8,8 +8,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from codeflow_engine.ai.implementation_roadmap.task_definitions import (Task,
-                                                               TaskRegistry)
+from codeflow_engine.ai.implementation_roadmap.task_definitions import (
+    Task,
+    TaskRegistry,
+)
 
 
 @dataclass

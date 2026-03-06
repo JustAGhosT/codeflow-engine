@@ -161,7 +161,7 @@ class IssueProcessor:
                 }
 
             # Apply the fix using comprehensive workflow
-            result = await self.ai_fix_applier.apply_specialist_fix_with_comprehensive_workflow(
+            result = await self.ai_fix_applier.apply_specialist_fix_with_validation(
                 agent, file_path, content, [issue], self.session_id
             )
 

@@ -24,7 +24,9 @@ from codeflow_engine.actions.ai_linting_fixer.specialists.line_length_specialist
 from codeflow_engine.actions.ai_linting_fixer.specialists.logging_specialist import (
     LoggingSpecialist,
 )
-from codeflow_engine.actions.ai_linting_fixer.specialists.style_specialist import StyleSpecialist
+from codeflow_engine.actions.ai_linting_fixer.specialists.style_specialist import (
+    StyleSpecialist,
+)
 from codeflow_engine.actions.ai_linting_fixer.specialists.variable_specialist import (
     VariableSpecialist,
 )

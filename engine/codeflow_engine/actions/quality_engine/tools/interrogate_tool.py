@@ -87,7 +87,7 @@ class InterrogateTool(Tool):
         """
         Parses the output of Interrogate to check coverage and find issues.
         """
-        issues = []
+        issues: list[dict[str, Any]] = []
 
         # Check if coverage is below threshold
         coverage_match = re.search(r"TOTAL\s+\d+\s+\d+\s+\d+\s+(\d+\.?\d*)%", output)

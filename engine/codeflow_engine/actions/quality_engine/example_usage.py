@@ -5,7 +5,7 @@ Example usage of the Quality Engine with dependency injection.
 import asyncio
 
 from codeflow_engine.actions.quality_engine.engine import create_quality_engine
-from codeflow_engine.actions.quality_engine.handlers.lint_issue import LintIssue
+from codeflow_engine.actions.quality_engine.models import QualityInputs, QualityMode
 
 
 async def run_quality_analysis(files: list[str]) -> None:
@@ -18,50 +18,39 @@ async def run_quality_analysis(files: list[str]) -> None:
     # Create an engine instance with DI
     engine = create_quality_engine()
 
-    # Run MyPy tool
-    mypy_config = {"args": ["--strict"]}
-    await engine.run_and_handle(
-        tool_name="mypy", files=files, config=mypy_config, result_type=LintIssue
+    # Run a focused MyPy-oriented pass
+    mypy_result = await engine.run(
+        QualityInputs(
+            mode=QualityMode.FAST,
+            files=files,
+            volume=500,
+        )
     )
 
     # Run ESLint tool for JavaScript files
     js_files = [f for f in files if f.endswith((".js", ".jsx", ".ts", ".tsx"))]
     if js_files:
-        eslint_config = {
-            "extensions": [".js", ".jsx", ".ts", ".tsx"],
-            "config": ".eslintrc.js",
-            "fix": False,
-        }
-        await engine.run_and_handle(
-            tool_name="eslint",
-            files=js_files,
-            config=eslint_config,
-            result_type=LintIssue,
+        eslint_result = await engine.run(
+            QualityInputs(
+                mode=QualityMode.FAST,
+                files=js_files,
+                volume=500,
+            )
         )
+    else:
+        eslint_result = None
 
-    # Run all linting tools
-    linting_configs = {
-        "mypy": {"args": ["--strict"]},
-        "eslint": {"extensions": [".js", ".jsx", ".ts", ".tsx"]},
-        "ruff": {"select": ["E", "F", "B"]},
-    }
-
-    result_types = {
-        "mypy": LintIssue,
-        "eslint": LintIssue,
-        "ruff": LintIssue,
-    }
-
-    all_results = await engine.run_category(
-        category="linting",
-        files=files,
-        configs=linting_configs,
-        result_types=result_types,
+    # Run a broader linting pass
+    all_results = await engine.run(
+        QualityInputs(
+            mode=QualityMode.SMART,
+            files=files,
+            volume=500,
+        )
     )
 
     # Summarize results
-    for _tool_name, _results in all_results.items():
-        pass
+    _ = mypy_result, eslint_result, all_results
 
 
 if __name__ == "__main__":

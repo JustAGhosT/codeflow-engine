@@ -16,12 +16,14 @@ from codeflow_engine.actions.ai_linting_fixer.display import (
     OutputMode,
     get_display,
 )
+from codeflow_engine.actions.ai_linting_fixer.error_handler import ErrorRecoveryStrategy
 from codeflow_engine.actions.ai_linting_fixer.models import (
     AILintingFixerInputs,
     AILintingFixerOutputs,
     LintingIssue,
     create_empty_outputs,
 )
+from codeflow_engine.workflows.error_handler_workflow import handle_error_with_workflow
 from codeflow_engine.actions.llm.manager import (
     ActionLLMProviderManager as LLMProviderManager,
 )
@@ -232,11 +234,21 @@ class WorkflowOrchestrator:
 
         return final_results
 
-    def create_error_output(self, error_msg: str) -> AILintingFixerOutputs:
+    def create_error_output(
+        self,
+        error_msg: str,
+        *,
+        summary: str | None = None,
+        warnings: list[str] | None = None,
+        session_id: str | None = None,
+    ) -> AILintingFixerOutputs:
         """Create error output when something goes wrong."""
-        error_results = create_empty_outputs("error")
+        error_results = create_empty_outputs(session_id or "error")
         error_results.success = False
+        error_results.summary = summary or error_msg
         error_results.errors = [error_msg]
+        if warnings:
+            error_results.warnings = warnings
         return error_results
 
 
@@ -260,18 +272,23 @@ async def orchestrate_ai_linting_workflow(
 
     orchestrator = WorkflowOrchestrator(display_config)
     display = orchestrator.display
+    current_step = "initialize"
+    fixer: AILintingFixer | None = None
 
     try:
         # Create LLM manager
+        current_step = "create_llm_manager"
         llm_manager = orchestrator.create_llm_manager(inputs)
 
         # Initialize main fixer
+        current_step = "initialize_fixer"
         fixer = AILintingFixer(llm_manager=llm_manager)
 
         # Show session start information
         display.operation.show_session_start(inputs, fixer.session_id)
 
         # Show provider status
+        current_step = "provider_status"
         if llm_manager is not None:
             try:
                 available_providers = llm_manager.get_available_providers()
@@ -290,6 +307,7 @@ async def orchestrate_ai_linting_workflow(
             display.error.show_info("  - ANTHROPIC_API_KEY")
 
         # Step 1: Detect issues
+        current_step = "detect_issues"
         issues = orchestrator.detect_issues(inputs.target_path)
         fixer.stats["issues_detected"] = len(issues)
 
@@ -302,6 +320,7 @@ async def orchestrate_ai_linting_workflow(
             return results
 
         # Step 2: Convert and queue issues
+        current_step = "queue_issues"
         legacy_issues = orchestrator.convert_to_legacy_format(issues)
         queued_count = orchestrator.queue_issues(fixer, legacy_issues, inputs.quiet)
 
@@ -315,6 +334,7 @@ async def orchestrate_ai_linting_workflow(
             return results
 
         # Step 3: Process issues
+        current_step = "process_issues"
         process_results = await orchestrator.process_issues(
             fixer, legacy_issues, inputs
         )
@@ -324,20 +344,62 @@ async def orchestrate_ai_linting_workflow(
             display.operation.show_dry_run_notice()
 
         # Step 4: Generate final results
+        current_step = "generate_final_results"
         return orchestrator.generate_final_results(fixer, inputs)
 
     except Exception as e:
+        recovery_summary: str | None = None
+        warning_messages: list[str] = []
+
+        try:
+            error_workflow_result = await handle_error_with_workflow(
+                e,
+                context={
+                    "file_path": inputs.target_path,
+                    "function_name": "orchestrate_ai_linting_workflow",
+                    "workflow_step": current_step,
+                    "session_id": fixer.session_id if fixer else None,
+                    "additional_info": {
+                        "dry_run": inputs.dry_run,
+                        "quiet": inputs.quiet,
+                        "verbose_metrics": inputs.verbose_metrics,
+                        "provider": inputs.provider,
+                    },
+                },
+            )
+            strategy = (
+                ErrorRecoveryStrategy.FALLBACK
+                if error_workflow_result.recovery_successful
+                else ErrorRecoveryStrategy.ABORT
+            )
+            recovery_summary = error_workflow_result.summary
+            warning_messages.append(
+                f"Error boundary captured failure during '{current_step}' with strategy {strategy.value}"
+            )
+        except Exception as boundary_error:
+            logger.exception("Error boundary handling failed: %s", boundary_error)
+            warning_messages.append(
+                f"Error boundary failed while handling '{current_step}'"
+            )
+
         # Handle errors with display system
         error_msg = f"AI linting fixer failed: {e}"
         logger.exception(error_msg)
         display.error.show_error(error_msg)
+        if recovery_summary:
+            display.error.show_info(recovery_summary)
 
-        return orchestrator.create_error_output(error_msg)
+        return orchestrator.create_error_output(
+            error_msg,
+            summary=recovery_summary or error_msg,
+            warnings=warning_messages,
+            session_id=fixer.session_id if fixer else None,
+        )
 
     finally:
         # Clean up
         try:
-            if "fixer" in locals():
+            if fixer is not None:
                 fixer.close()
         except Exception as e:
             logger.debug("Cleanup error: %s", e)

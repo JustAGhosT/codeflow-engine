@@ -37,7 +37,7 @@ class PerformanceAnalyzerTool(Tool):
         """
         python_files = [f for f in files if f.endswith(".py")]
 
-        issues = []
+        issues: list[dict[str, Any]] = []
 
         # Python performance analysis with scalene if available
         if python_files:
@@ -54,7 +54,7 @@ class PerformanceAnalyzerTool(Tool):
         self, python_files: list[str]
     ) -> list[dict[str, Any]]:
         """Run Scalene performance analysis on Python files."""
-        issues = []
+        issues: list[dict[str, Any]] = []
 
         try:
             # Check if scalene is installed
@@ -82,7 +82,7 @@ class PerformanceAnalyzerTool(Tool):
 
     async def _analyze_file_with_scalene(self, py_file: str) -> list[dict[str, Any]]:
         """Analyze a single Python file with Scalene."""
-        issues = []
+        issues: list[dict[str, Any]] = []
 
         try:
             # Run simple scalene profiling
@@ -136,28 +136,30 @@ class PerformanceAnalyzerTool(Tool):
 
     async def _run_static_analysis(self, files: list[str]) -> list[dict[str, Any]]:
         """Run static performance analysis on files."""
-        issues = []
+        issues: list[dict[str, Any]] = []
 
         # Filter out directories and only process actual files
         actual_files = []
-        for f in files:
+        for file_path in files:
             # Skip directories and problematic paths
-            if f in [".", "..", "/", "\\"] or f.endswith((".", "/", "\\")):
+            if file_path in [".", "..", "/", "\\"] or file_path.endswith(
+                (".", "/", "\\")
+            ):
                 continue
             try:
                 # Check if it's actually a file
                 import os
 
-                if os.path.isfile(f):
-                    actual_files.append(f)
+                if os.path.isfile(file_path):
+                    actual_files.append(file_path)
             except (OSError, PermissionError):
                 # Skip files we can't access
                 continue
 
         for file in actual_files:
             try:
-                with open(file) as f:
-                    content = f.read()
+                with open(file, encoding="utf-8") as file_handle:
+                    content = file_handle.read()
 
                 # Check for python performance issues
                 if file.endswith(".py"):

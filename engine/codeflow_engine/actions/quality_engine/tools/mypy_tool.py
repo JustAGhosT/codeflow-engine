@@ -21,7 +21,9 @@ class MyPyTool(Tool[MyPyConfig, LintIssue]):
 
     def __init__(self) -> None:
         super().__init__()
-        self.default_timeout = 300.0  # Increase timeout to 5 minutes for large codebases
+        self.default_timeout = (
+            300.0  # Increase timeout to 5 minutes for large codebases
+        )
 
     @property
     def name(self) -> str:
@@ -56,19 +58,25 @@ class MyPyTool(Tool[MyPyConfig, LintIssue]):
         import tempfile
 
         with tempfile.TemporaryDirectory(prefix="mypy-cache-") as cache_dir:
-            if (hasattr(sys, 'real_prefix') or
-            (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix)):
+            if hasattr(sys, "real_prefix") or (
+                hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix
+            ):
                 # We're in a virtual environment, try python -m mypy
                 command = [
-                    sys.executable, "-m", "mypy",
-                    "--show-column-numbers", "--no-error-summary",
-                    f"--cache-dir={cache_dir}"
+                    sys.executable,
+                    "-m",
+                    "mypy",
+                    "--show-column-numbers",
+                    "--no-error-summary",
+                    f"--cache-dir={cache_dir}",
                 ]
             else:
                 # Fall back to system mypy
                 command = [
-                    "mypy", "--show-column-numbers", "--no-error-summary",
-                    f"--cache-dir={cache_dir}"
+                    "mypy",
+                    "--show-column-numbers",
+                    "--no-error-summary",
+                    f"--cache-dir={cache_dir}",
                 ]
 
             # Add any configured arguments
@@ -81,26 +89,31 @@ class MyPyTool(Tool[MyPyConfig, LintIssue]):
             try:
                 # Use subprocess.run on Windows to avoid asyncio subprocess issues
                 import platform
+
                 if platform.system() == "Windows":
                     result = subprocess.run(
                         command,
                         capture_output=True,
                         text=True,
-                        timeout=self.default_timeout
+                        timeout=self.default_timeout,
                     )
                     stdout = result.stdout
                     stderr = result.stderr
                     returncode = result.returncode
                 else:
                     process = await asyncio.create_subprocess_exec(
-                        *command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+                        *command,
+                        stdout=asyncio.subprocess.PIPE,
+                        stderr=asyncio.subprocess.PIPE,
                     )
-                    stdout, stderr = await asyncio.wait_for(
+                    stdout_bytes, stderr_bytes = await asyncio.wait_for(
                         process.communicate(), timeout=self.default_timeout
                     )
-                    stdout = stdout.decode() if stdout else ""
-                    stderr = stderr.decode() if stderr else ""
-                    returncode = process.returncode
+                    stdout = stdout_bytes.decode() if stdout_bytes else ""
+                    stderr = stderr_bytes.decode() if stderr_bytes else ""
+                    returncode = (
+                        process.returncode if process.returncode is not None else 1
+                    )
             except FileNotFoundError:
                 # MyPy executable not found, return structured error
                 return [

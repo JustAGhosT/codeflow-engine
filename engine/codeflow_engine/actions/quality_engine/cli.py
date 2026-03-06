@@ -84,6 +84,7 @@ def main(args: list[str] | None = None) -> int:
         ai_provider=parsed_args.ai_provider,
         ai_model=parsed_args.ai_model,
         enable_ai_agents=parsed_args.enable_ai,
+        volume=500,
     )
 
     # Run analysis

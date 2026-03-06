@@ -10,7 +10,9 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
 
-from codeflow_engine.actions.prototype_enhancement.generators.base_generator import BaseGenerator
+from codeflow_engine.actions.prototype_enhancement.generators.base_generator import (
+    BaseGenerator,
+)
 
 if TYPE_CHECKING:
     from codeflow_engine.actions.prototype_enhancement.generators.template_utils import (

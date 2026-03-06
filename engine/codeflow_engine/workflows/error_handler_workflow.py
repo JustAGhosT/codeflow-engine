@@ -6,7 +6,9 @@ This workflow integrates with the existing workflow system and provides comprehe
 error tracking, categorization, and recovery capabilities.
 """
 
+from dataclasses import asdict
 from datetime import datetime
+import json
 import logging
 from pathlib import Path
 from typing import Any
@@ -102,6 +104,7 @@ class ErrorHandlerWorkflow(Workflow):
         self.config = config or {}
         self.error_handler: ErrorHandler | None = None
         self.display_config: DisplayConfig | None = None
+        self.processed_errors: list[ErrorInfo] = []
 
         # Supported events
         self.supported_events = [
@@ -126,7 +129,7 @@ class ErrorHandlerWorkflow(Workflow):
             )
 
             # Initialize error handler
-            self.error_handler = ErrorHandler(self.display_config)
+            self.error_handler = ErrorHandler()
 
             # Register callbacks if enabled
             if self.config.get("enable_callbacks", True):
@@ -143,21 +146,6 @@ class ErrorHandlerWorkflow(Workflow):
         if not self.error_handler:
             return
 
-        def on_error_callback(error_info: ErrorInfo) -> None:
-            """Callback for when errors occur."""
-            logger.info(f"Error callback triggered: {error_info.error_type}")
-
-            # Emit workflow event
-            self.emit_event(
-                "error_occurred",
-                {
-                    "error_id": error_info.error_id,
-                    "error_type": error_info.error_type,
-                    "category": error_info.category.value,
-                    "severity": error_info.severity.value,
-                },
-            )
-
         def on_recovery_callback(
             error_info: ErrorInfo, strategy: ErrorRecoveryStrategy
         ) -> None:
@@ -165,19 +153,19 @@ class ErrorHandlerWorkflow(Workflow):
             logger.info(
                 f"Recovery callback: {strategy.value} for {error_info.error_type}"
             )
+            retry_count = self.error_handler.recovery_count if self.error_handler else 0
 
             # Emit workflow event
             self.emit_event(
                 "recovery_attempted",
                 {
-                    "error_id": error_info.error_id,
+                    "error_id": self._get_error_identifier(error_info),
                     "strategy": strategy.value,
-                    "retry_count": error_info.retry_count,
+                    "retry_count": retry_count,
                 },
             )
 
-        self.error_handler.register_error_callback(on_error_callback)
-        self.error_handler.register_recovery_callback(on_recovery_callback)
+        self.error_handler.add_recovery_callback(on_recovery_callback)
 
     async def execute(self, context: dict[str, Any]) -> dict[str, Any]:
         """
@@ -230,30 +218,30 @@ class ErrorHandlerWorkflow(Workflow):
 
         # Handle different input types
         if inputs.exception:
-            # Process exception
-            error_info = self.error_handler.log_error(
-                inputs.exception,
-                context,
-                inputs.additional_info,
-                display=inputs.enable_display,
-            )
+            error_info = self._build_error_info(inputs.exception, context)
         elif inputs.error_message:
             # Create synthetic exception for error message
             class SyntheticError(Exception):
                 pass
 
             synthetic_exception = SyntheticError(inputs.error_message)
-            error_info = self.error_handler.log_error(
-                synthetic_exception,
-                context,
-                inputs.additional_info,
-                display=inputs.enable_display,
-            )
+            error_info = self._build_error_info(synthetic_exception, context)
         else:
             # No error to process
             return ErrorHandlerWorkflowOutputs(
                 error_handled=False, success=True, summary="No error to process"
             )
+
+        self.processed_errors.append(error_info)
+        self.emit_event(
+            "error_occurred",
+            {
+                "error_id": self._get_error_identifier(error_info),
+                "error_type": error_info.error_type,
+                "category": error_info.category.value,
+                "severity": error_info.severity.value,
+            },
+        )
 
         # Attempt recovery if enabled
         recovery_attempted = False
@@ -261,10 +249,11 @@ class ErrorHandlerWorkflow(Workflow):
 
         if inputs.enable_recovery:
             recovery_attempted = True
-            recovery_successful = self.error_handler.attempt_recovery(error_info)
+            strategy = self.error_handler.handle_error(error_info)
+            recovery_successful = strategy != ErrorRecoveryStrategy.ABORT
 
         # Get error summary
-        summary = self.error_handler.get_error_summary()
+        summary = self._get_error_summary_data()
 
         return ErrorHandlerWorkflowOutputs(
             error_handled=True,
@@ -297,7 +286,7 @@ class ErrorHandlerWorkflow(Workflow):
             Path(export_path).parent.mkdir(parents=True, exist_ok=True)
 
             # Export errors
-            self.error_handler.export_errors(export_path)
+            self._export_errors_to_path(export_path)
 
             result.error_report_exported = True
             result.export_path = export_path
@@ -315,22 +304,100 @@ class ErrorHandlerWorkflow(Workflow):
         if not self.error_handler:
             return {"total_errors": 0, "error_counts_by_category": {}}
 
-        return self.error_handler.get_error_summary()
+        return self._get_error_summary_data()
 
     async def clear_errors(self) -> None:
         """Clear all logged errors."""
         if self.error_handler:
-            self.error_handler.clear_errors()
+            self.processed_errors.clear()
+            self.error_handler = ErrorHandler()
+            if self.config.get("enable_callbacks", True):
+                self._register_callbacks()
 
     async def export_errors(self, file_path: str) -> None:
         """Export errors to a file."""
         if self.error_handler:
-            self.error_handler.export_errors(file_path)
+            self._export_errors_to_path(file_path)
 
     def emit_event(self, event_type: str, data: dict[str, Any]) -> None:
         """Emit a workflow event."""
         # This would integrate with the existing workflow event system
         logger.debug(f"Error handler workflow event: {event_type} - {data}")
+
+    def _build_error_info(self, exception: Exception, context: Any) -> ErrorInfo:
+        """Create an `ErrorInfo` instance from an exception and context."""
+        return ErrorInfo(
+            error_type=exception.__class__.__name__,
+            message=str(exception),
+            severity=self._infer_severity(exception),
+            category=self._infer_category(exception),
+            context=context,
+            file_path=context.file_path,
+            line_number=context.line_number,
+        )
+
+    def _infer_severity(self, exception: Exception) -> Any:
+        """Infer severity from exception type."""
+        from codeflow_engine.actions.ai_linting_fixer.error_handler import ErrorSeverity
+
+        if isinstance(exception, (SyntaxError, IndentationError)):
+            return ErrorSeverity.HIGH
+        if isinstance(exception, (PermissionError, MemoryError, RuntimeError)):
+            return ErrorSeverity.CRITICAL
+        if isinstance(exception, (ValueError, TypeError, KeyError)):
+            return ErrorSeverity.MEDIUM
+        return ErrorSeverity.LOW
+
+    def _infer_category(self, exception: Exception) -> Any:
+        """Infer category from exception type."""
+        from codeflow_engine.actions.ai_linting_fixer.error_handler import ErrorCategory
+
+        if isinstance(exception, (SyntaxError, IndentationError)):
+            return ErrorCategory.SYNTAX
+        if isinstance(exception, (PermissionError, FileNotFoundError)):
+            return ErrorCategory.PERMISSION
+        if isinstance(exception, (ConnectionError, TimeoutError)):
+            return ErrorCategory.NETWORK
+        if isinstance(exception, (ValueError, TypeError, KeyError)):
+            return ErrorCategory.CONFIGURATION
+        if isinstance(exception, RuntimeError):
+            return ErrorCategory.RUNTIME
+        return ErrorCategory.UNKNOWN
+
+    def _get_error_identifier(self, error_info: ErrorInfo) -> str:
+        """Create a stable identifier for an error."""
+        index = (
+            self.processed_errors.index(error_info) + 1
+            if error_info in self.processed_errors
+            else len(self.processed_errors) + 1
+        )
+        return f"{error_info.error_type.lower()}-{index}"
+
+    def _get_error_summary_data(self) -> dict[str, Any]:
+        """Summarize processed errors."""
+        errors_by_category: dict[str, int] = {}
+        errors_by_severity: dict[str, int] = {}
+
+        for error in self.processed_errors:
+            category = error.category.value
+            severity = error.severity.value
+            errors_by_category[category] = errors_by_category.get(category, 0) + 1
+            errors_by_severity[severity] = errors_by_severity.get(severity, 0) + 1
+
+        return {
+            "total_errors": len(self.processed_errors),
+            "error_counts_by_category": errors_by_category,
+            "error_counts_by_severity": errors_by_severity,
+            "handler_stats": (
+                self.error_handler.get_error_stats() if self.error_handler else {}
+            ),
+        }
+
+    def _export_errors_to_path(self, file_path: str) -> None:
+        """Export tracked errors to JSON."""
+        export_payload = [asdict(error) for error in self.processed_errors]
+        with open(file_path, "w", encoding="utf-8") as export_file:
+            json.dump(export_payload, export_file, indent=2, default=str)
 
 
 # Convenience functions for easy integration

@@ -13,13 +13,19 @@ from typing import Any, Dict, List, Optional
 
 import click
 
-from codeflow_engine.actions.ai_linting_fixer.file_splitter import (FileSplitter,
-                                                           SplitConfig)
-from codeflow_engine.actions.ai_linting_fixer.performance_optimizer import \
-    PerformanceOptimizer
+from codeflow_engine.actions.ai_linting_fixer.file_splitter import (
+    FileSplitter,
+    SplitConfig,
+)
+from codeflow_engine.actions.ai_linting_fixer.performance_optimizer import (
+    ParallelProcessor,
+)
 from codeflow_engine.actions.ai_comment_analyzer import (
     AICommentAnalyzer,
     AICommentAnalysisInputs,
+)
+from codeflow_engine.actions.llm.manager import (
+    ActionLLMProviderManager as LLMProviderManager,
 )
 from codeflow_engine.actions.autogen_multi_agent import (
     autogen_multi_agent_action,
@@ -28,14 +34,15 @@ from codeflow_engine.actions.autogen_multi_agent import (
 from codeflow_engine.actions.quality_engine.engine import QualityEngine, QualityInputs
 from codeflow_engine.actions.quality_engine.models import QualityMode
 from codeflow_engine.actions.registry import ActionRegistry
+
 # from codeflow_engine.agents.agents import AgentManager  # Not implemented yet
-from codeflow_engine.ai.core.providers.manager import LLMProviderManager
 from codeflow_engine.config import CodeFlowConfig
 from codeflow_engine.engine import CodeFlowEngine
 from codeflow_engine.exceptions import CodeFlowException, ConfigurationError
 from codeflow_engine.quality.metrics_collector import MetricsCollector
 from codeflow_engine.database.config import get_db
 from codeflow_engine.database.models import IntegrationEvent
+
 # from codeflow_engine.workflows.workflow_manager import WorkflowManager  # Not implemented yet
 
 # Configure logging
@@ -69,15 +76,19 @@ async def _create_event(event_type: str, payload_str: str):
     """Create a new IntegrationEvent in the database"""
     try:
         import json
+
         payload = json.loads(payload_str)
-        async with get_db() as db:
+        db = next(get_db())
+        try:
             event = IntegrationEvent(
                 event_type=event_type,
                 payload=payload,
                 status="pending",
             )
             db.add(event)
-            await db.commit()
+            db.commit()
+        finally:
+            db.close()
         click.echo(f"Successfully created event {event.id}")
     except Exception as e:
         logger.exception(f"Failed to create event: {e}")
@@ -92,9 +103,13 @@ async def _create_event(event_type: str, payload_str: str):
     default="fast",
     help="Select the quality analysis mode. Each mode offers a different balance between speed and thoroughness.",
 )
-@click.option("--files", "-f", multiple=True, help="Specify one or more files to analyze.")
+@click.option(
+    "--files", "-f", multiple=True, help="Specify one or more files to analyze."
+)
 @click.option("--directory", "-d", help="Specify a directory to analyze recursively.")
-@click.option("--auto-fix", is_flag=True, help="Enable automatic fixing of detected issues.")
+@click.option(
+    "--auto-fix", is_flag=True, help="Enable automatic fixing of detected issues."
+)
 @click.option(
     "--dry-run", is_flag=True, help="Show potential fixes without applying them."
 )
@@ -146,7 +161,9 @@ def split(
 @click.option("--uninstall", is_flag=True, help="Remove git hooks")
 def hooks(config: str, install: bool, uninstall: bool):
     """Manage git hooks for CodeFlow (Coming Soon)"""
-    click.echo("The git hooks management feature is under development and will be available in a future release.")
+    click.echo(
+        "The git hooks management feature is under development and will be available in a future release."
+    )
 
 
 @cli.command()
@@ -155,7 +172,9 @@ def hooks(config: str, install: bool, uninstall: bool):
 @click.option("--open-browser", is_flag=True, help="Open browser automatically")
 def dashboard(port: int, host: str, open_browser: bool):
     """Start the CodeFlow dashboard (Coming Soon)"""
-    click.echo("The dashboard feature is under development and will be available in a future release.")
+    click.echo(
+        "The dashboard feature is under development and will be available in a future release."
+    )
 
 
 @cli.command()
@@ -163,7 +182,9 @@ def dashboard(port: int, host: str, open_browser: bool):
 @click.option("--fix", is_flag=True, help="Automatically fix configuration issues")
 def config(file: str, fix: bool):
     """Validate and manage CodeFlow configuration (Coming Soon)"""
-    click.echo("The config validation feature is under development and will be available in a future release.")
+    click.echo(
+        "The config validation feature is under development and will be available in a future release."
+    )
 
 
 @cli.command()
@@ -186,6 +207,7 @@ async def _run_comment_analysis(comment_body: str, file_path: str, pr_diff: str)
         )
         result = await analyzer.execute(inputs, {})
         import json
+
         click.echo(json.dumps(result.dict()))
     except Exception as e:
         logger.exception(f"Comment analysis failed: {e}")
@@ -222,6 +244,7 @@ async def _run_quality_check(
             auto_fix=auto_fix,
             dry_run=dry_run,
             enable_ai_agents=(mode == "ai-enhanced"),
+            volume=500,
         )
 
         # Run quality check
@@ -250,9 +273,9 @@ async def _run_file_split(
         # Initialize components
         llm_manager = LLMProviderManager({})
         metrics_collector = MetricsCollector()
-        performance_optimizer = PerformanceOptimizer()
+        parallel_processor = ParallelProcessor()
 
-        splitter = FileSplitter(llm_manager, metrics_collector, performance_optimizer)
+        splitter = FileSplitter(llm_manager, metrics_collector, parallel_processor)
 
         # Read file content
         with open(file_path, encoding="utf-8") as f:

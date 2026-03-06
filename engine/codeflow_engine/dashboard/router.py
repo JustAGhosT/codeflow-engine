@@ -32,32 +32,45 @@ logger = logging.getLogger(__name__)
 # Response Models (for OpenAPI documentation)
 # =============================================================================
 
+
 class QualityModeStats(BaseModel):
     """Statistics for a quality mode."""
+
     count: int = Field(description="Number of checks run in this mode")
     avg_time: float = Field(description="Average processing time in seconds")
 
 
 class StatusResponse(BaseModel):
     """Response model for dashboard status."""
+
     uptime_seconds: float = Field(description="Server uptime in seconds")
     uptime_formatted: str = Field(description="Human-readable uptime string")
     total_checks: int = Field(description="Total quality checks performed")
     total_issues: int = Field(description="Total issues found across all checks")
     success_rate: float = Field(description="Success rate (0.0 to 1.0)")
-    average_processing_time: float = Field(description="Average processing time in seconds")
-    quality_stats: dict[str, QualityModeStats] = Field(description="Stats per quality mode")
+    average_processing_time: float = Field(
+        description="Average processing time in seconds"
+    )
+    quality_stats: dict[str, QualityModeStats] = Field(
+        description="Stats per quality mode"
+    )
 
 
 class MetricsResponse(BaseModel):
     """Response model for metrics data."""
-    processing_times: list[dict[str, Any]] = Field(description="Processing time history")
+
+    processing_times: list[dict[str, Any]] = Field(
+        description="Processing time history"
+    )
     issue_counts: list[dict[str, Any]] = Field(description="Issue count history")
-    quality_mode_usage: dict[str, int] = Field(description="Usage count per quality mode")
+    quality_mode_usage: dict[str, int] = Field(
+        description="Usage count per quality mode"
+    )
 
 
 class ActivityRecord(BaseModel):
     """Single activity record."""
+
     timestamp: str = Field(description="ISO timestamp of the check")
     mode: str = Field(description="Quality mode used")
     files_checked: int = Field(description="Number of files checked")
@@ -68,27 +81,38 @@ class ActivityRecord(BaseModel):
 
 class QualityCheckRequest(BaseModel):
     """Request model for quality check endpoint."""
-    mode: str = Field(default="fast", description="Quality check mode (ultra-fast, fast, smart, comprehensive, ai_enhanced)")
-    files: list[str] = Field(default_factory=list, description="List of file paths to check")
+
+    mode: str = Field(
+        default="fast",
+        description="Quality check mode (ultra-fast, fast, smart, comprehensive, ai_enhanced)",
+    )
+    files: list[str] = Field(
+        default_factory=list, description="List of file paths to check"
+    )
     directory: str = Field(default="", description="Directory to scan for files")
 
-    model_config = {"json_schema_extra": {
-        "example": {
-            "mode": "fast",
-            "files": ["src/main.py", "src/utils.py"],
-            "directory": ""
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "mode": "fast",
+                "files": ["src/main.py", "src/utils.py"],
+                "directory": "",
+            }
         }
-    }}
+    }
 
 
 class QualityCheckResponse(BaseModel):
     """Response model for quality check results."""
+
     success: bool = Field(description="Whether the check completed successfully")
     total_issues_found: int = Field(description="Total number of issues found")
     processing_time: float = Field(description="Processing time in seconds")
     mode: str = Field(description="Quality mode that was used")
     files_checked: int = Field(description="Number of files checked")
-    issues_by_tool: dict[str, int] = Field(default_factory=dict, description="Issue counts per tool")
+    issues_by_tool: dict[str, int] = Field(
+        default_factory=dict, description="Issue counts per tool"
+    )
     simulated: bool = Field(default=False, description="Whether results are simulated")
     error: str | None = Field(default=None, description="Error message if failed")
     details: Any | None = Field(default=None, description="Detailed results")
@@ -96,15 +120,19 @@ class QualityCheckResponse(BaseModel):
 
 class ConfigRequest(BaseModel):
     """Request model for configuration endpoint."""
+
     quality_mode: str = Field(default="fast", description="Default quality mode")
     auto_fix: bool = Field(default=False, description="Enable auto-fix")
     max_file_size: int = Field(default=10000, description="Max file size in lines")
     notifications: bool = Field(default=True, description="Enable notifications")
-    refresh_interval: int = Field(default=30, description="Dashboard refresh interval in seconds")
+    refresh_interval: int = Field(
+        default=30, description="Dashboard refresh interval in seconds"
+    )
 
 
 class ConfigResponse(BaseModel):
     """Response model for configuration."""
+
     quality_mode: str
     auto_fix: bool
     notifications: bool
@@ -114,6 +142,7 @@ class ConfigResponse(BaseModel):
 
 class SuccessResponse(BaseModel):
     """Generic success response."""
+
     success: bool = Field(description="Operation success status")
 
 
@@ -135,19 +164,20 @@ class RateLimiter:
     def __init__(self, requests_per_minute: int = 10):
         self.requests_per_minute = requests_per_minute
         self._limiter = SecurityRateLimiter(
-            default_limit=requests_per_minute,
-            window_seconds=60
+            default_limit=requests_per_minute, window_seconds=60
         )
         self._last_info: dict[str, dict] = {}  # Store last info for get_retry_after
         self._max_cached_ips = 10000  # Prevent unbounded memory growth
 
     def is_allowed(self, client_ip: str) -> bool:
         """Check if request from client IP is allowed."""
-        allowed, info = self._limiter.is_allowed(client_ip, limit=self.requests_per_minute)
+        allowed, info = self._limiter.is_allowed(
+            client_ip, limit=self.requests_per_minute
+        )
         # Evict oldest entries if cache is too large
         if len(self._last_info) >= self._max_cached_ips:
             # Simple eviction: clear half the cache (dict maintains insertion order in Python 3.7+)
-            keys_to_remove = list(self._last_info.keys())[:len(self._last_info) // 2]
+            keys_to_remove = list(self._last_info.keys())[: len(self._last_info) // 2]
             for key in keys_to_remove:
                 del self._last_info[key]
         self._last_info[client_ip] = info
@@ -171,13 +201,16 @@ quality_check_limiter = RateLimiter(requests_per_minute=_rate_limit)
 # Authentication
 # =============================================================================
 
+
 def get_api_key() -> str | None:
     """Get configured API key from environment."""
     return os.getenv("CODEFLOW_API_KEY")
 
 
 async def verify_api_key(
-    x_api_key: str | None = Header(default=None, description="API key for authentication")
+    x_api_key: str | None = Header(
+        default=None, description="API key for authentication"
+    )
 ) -> str | None:
     """Verify API key if authentication is enabled.
 
@@ -264,7 +297,9 @@ class DashboardState:
 
     def _initialize_storage(self) -> None:
         """Initialize storage with default values if empty."""
-        self._storage.initialize_if_empty(self.KEY_START_TIME, datetime.now().isoformat())
+        self._storage.initialize_if_empty(
+            self.KEY_START_TIME, datetime.now().isoformat()
+        )
         self._storage.initialize_if_empty(self.KEY_TOTAL_CHECKS, 0)
         self._storage.initialize_if_empty(self.KEY_TOTAL_ISSUES, 0)
         self._storage.initialize_if_empty(self.KEY_TOTAL_SUCCESSFUL_CHECKS, 0)
@@ -393,7 +428,9 @@ class DashboardState:
             "quality_mode_usage": self._get_quality_mode_usage_data(),
         }
 
-    def _get_processing_times_data(self, recent: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    def _get_processing_times_data(
+        self, recent: list[dict[str, Any]]
+    ) -> list[dict[str, Any]]:
         """Get processing times data for charts from recent activity."""
         if recent:
             return [
@@ -405,7 +442,9 @@ class DashboardState:
             ]
         return []
 
-    def _get_issue_counts_data(self, recent: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    def _get_issue_counts_data(
+        self, recent: list[dict[str, Any]]
+    ) -> list[dict[str, Any]]:
         """Get issue counts data for charts from recent activity."""
         if recent:
             return [
@@ -419,10 +458,7 @@ class DashboardState:
 
     def _get_quality_mode_usage_data(self) -> dict[str, int]:
         """Get quality mode usage data."""
-        return {
-            mode: stats["count"]
-            for mode, stats in self.quality_stats.items()
-        }
+        return {mode: stats["count"] for mode, stats in self.quality_stats.items()}
 
     def update_with_result(self, result: dict[str, Any], mode: str):
         """Update dashboard data with quality check result."""
@@ -450,7 +486,9 @@ class DashboardState:
             new_time = result.get("processing_time", 0)
             old_avg = self.average_processing_time
             if new_total_checks > 1:
-                new_avg = (old_avg * (new_total_checks - 1) + new_time) / new_total_checks
+                new_avg = (
+                    old_avg * (new_total_checks - 1) + new_time
+                ) / new_total_checks
             else:
                 new_avg = new_time
             self._storage.set(self.KEY_AVG_PROCESSING_TIME, new_avg)
@@ -458,13 +496,19 @@ class DashboardState:
             # Update quality mode stats
             if mode in self.DEFAULT_QUALITY_STATS:
                 mode_key = f"{self.KEY_QUALITY_STATS}:{mode}"
-                current_stats = self._storage.get(mode_key, {"count": 0, "avg_time": 0.0})
+                current_stats = self._storage.get(
+                    mode_key, {"count": 0, "avg_time": 0.0}
+                )
                 new_count = current_stats["count"] + 1
                 if new_count > 1:
-                    new_mode_avg = (current_stats["avg_time"] * (new_count - 1) + new_time) / new_count
+                    new_mode_avg = (
+                        current_stats["avg_time"] * (new_count - 1) + new_time
+                    ) / new_count
                 else:
                     new_mode_avg = new_time
-                self._storage.set(mode_key, {"count": new_count, "avg_time": new_mode_avg})
+                self._storage.set(
+                    mode_key, {"count": new_count, "avg_time": new_mode_avg}
+                )
 
             # Add to recent activity
             activity = {
@@ -475,7 +519,9 @@ class DashboardState:
                 "processing_time": result.get("processing_time", 0),
                 "success": result.get("success", False),
             }
-            self._storage.append_to_list(self.KEY_RECENT_ACTIVITY, activity, max_length=50)
+            self._storage.append_to_list(
+                self.KEY_RECENT_ACTIVITY, activity, max_length=50
+            )
 
     def get_config(self) -> dict[str, Any]:
         """Get dashboard configuration from storage.
@@ -510,6 +556,7 @@ class DashboardState:
 # =============================================================================
 # Helpers
 # =============================================================================
+
 
 def _get_config_path() -> Path:
     """Get configuration file path, handling container environments."""
@@ -566,6 +613,7 @@ else:
 # Endpoints
 # =============================================================================
 
+
 @router.get(
     "/",
     response_class=HTMLResponse,
@@ -579,19 +627,18 @@ async def dashboard_home(request: Request):
         return HTMLResponse(
             content="<html><body><h1>Dashboard templates not found</h1>"
             "<p>Please ensure the templates directory exists.</p></body></html>",
-            status_code=503
+            status_code=503,
         )
 
     try:
         return templates.TemplateResponse(
-            "index.html",
-            {"request": request, "data": dashboard_state.get_status()}
+            "index.html", {"request": request, "data": dashboard_state.get_status()}
         )
     except Exception:
         logger.exception("Failed to render dashboard template")
         return HTMLResponse(
             content="<html><body><h1>Template Error</h1><p>Internal server error</p></body></html>",
-            status_code=500
+            status_code=500,
         )
 
 
@@ -624,14 +671,16 @@ async def api_metrics(_: str | None = Depends(verify_api_key)) -> MetricsRespons
     description="Returns recent quality check activity history with optional pagination.",
 )
 async def api_history(
-    limit: int = Query(default=50, ge=1, le=100, description="Maximum number of records to return"),
+    limit: int = Query(
+        default=50, ge=1, le=100, description="Maximum number of records to return"
+    ),
     offset: int = Query(default=0, ge=0, description="Number of records to skip"),
     _: str | None = Depends(verify_api_key),
 ) -> list[ActivityRecord]:
     """Get activity history with pagination support."""
     all_activity = dashboard_state.recent_activity
     # Apply pagination (newest first, so reverse the list)
-    paginated = all_activity[::-1][offset:offset + limit]
+    paginated = all_activity[::-1][offset : offset + limit]
     return [ActivityRecord(**record) for record in paginated]
 
 
@@ -675,7 +724,9 @@ async def api_quality_check(
         for file_path in files:
             is_valid, error = dashboard_state.validate_path(file_path)
             if not is_valid:
-                raise HTTPException(status_code=400, detail=f"Invalid file path: {error}")
+                raise HTTPException(
+                    status_code=400, detail=f"Invalid file path: {error}"
+                )
             valid_files.append(str(Path(file_path).resolve()))
         files = valid_files
 
@@ -699,7 +750,7 @@ async def api_quality_check(
         valid_modes = [m.value for m in QualityMode]
         raise HTTPException(
             status_code=400,
-            detail=f"Unknown quality mode: {mode}. Valid modes: {', '.join(valid_modes)}"
+            detail=f"Unknown quality mode: {mode}. Valid modes: {', '.join(valid_modes)}",
         )
 
     # Handle directory scanning
@@ -712,13 +763,11 @@ async def api_quality_check(
             resolved_dir = Path(directory).expanduser().resolve()
             if not resolved_dir.is_dir():
                 raise HTTPException(
-                    status_code=400,
-                    detail=f"Path is not a directory: {directory}"
+                    status_code=400, detail=f"Path is not a directory: {directory}"
                 )
         except OSError as e:
             raise HTTPException(
-                status_code=400,
-                detail=f"Invalid directory path: {directory} - {e}"
+                status_code=400, detail=f"Invalid directory path: {directory} - {e}"
             )
 
         # Scan directory for relevant files
@@ -736,7 +785,7 @@ async def api_quality_check(
         if not scanned_files:
             raise HTTPException(
                 status_code=400,
-                detail=f"No relevant files found in directory: {directory}"
+                detail=f"No relevant files found in directory: {directory}",
             )
 
         # Validate scanned files
@@ -748,8 +797,7 @@ async def api_quality_check(
 
         if not validated_files:
             raise HTTPException(
-                status_code=403,
-                detail="No accessible files found in directory"
+                status_code=403, detail="No accessible files found in directory"
             )
         files = validated_files
 
@@ -777,6 +825,7 @@ async def _run_quality_check(files: list[str], mode: str) -> dict[str, Any]:
             mode=QualityMode(mode),
             files=files,
             enable_ai_agents=(mode == "ai_enhanced"),
+            volume=500,
         )
 
         result = await asyncio.to_thread(engine.run, inputs)
@@ -784,12 +833,12 @@ async def _run_quality_check(files: list[str], mode: str) -> dict[str, Any]:
 
         return {
             "success": True,
-            "total_issues_found": getattr(result, 'total_issues', 0),
+            "total_issues_found": getattr(result, "total_issues", 0),
             "processing_time": processing_time,
             "mode": mode,
             "files_checked": len(files),
-            "issues_by_tool": getattr(result, 'issues_by_tool', {}),
-            "details": getattr(result, 'details', None),
+            "issues_by_tool": getattr(result, "issues_by_tool", {}),
+            "details": getattr(result, "details", None),
             "simulated": False,
         }
     except ImportError:
@@ -870,17 +919,22 @@ async def api_save_config(
 # Comment Filtering Endpoints
 # =============================================================================
 
+
 class CommentFilterSettingsRequest(BaseModel):
     """Request model for comment filter settings."""
+
     enabled: bool = Field(description="Enable comment filtering")
     auto_add_commenters: bool = Field(description="Automatically add new commenters")
     auto_reply_enabled: bool = Field(description="Enable auto-reply to new commenters")
     auto_reply_message: str = Field(description="Template for auto-reply message")
-    whitelist_mode: bool = Field(description="Use whitelist mode (True) or blacklist (False)")
+    whitelist_mode: bool = Field(
+        description="Use whitelist mode (True) or blacklist (False)"
+    )
 
 
 class CommentFilterSettingsResponse(BaseModel):
     """Response model for comment filter settings."""
+
     enabled: bool
     auto_add_commenters: bool
     auto_reply_enabled: bool
@@ -890,6 +944,7 @@ class CommentFilterSettingsResponse(BaseModel):
 
 class AllowedCommenterRequest(BaseModel):
     """Request model for adding an allowed commenter."""
+
     github_username: str = Field(description="GitHub username")
     github_user_id: int | None = Field(default=None, description="GitHub user ID")
     notes: str | None = Field(default=None, description="Optional notes")
@@ -897,6 +952,7 @@ class AllowedCommenterRequest(BaseModel):
 
 class AllowedCommenterResponse(BaseModel):
     """Response model for allowed commenter."""
+
     github_username: str
     github_user_id: int | None
     enabled: bool
@@ -918,13 +974,13 @@ async def api_get_comment_filter_settings(
     """Get comment filter settings."""
     from codeflow_engine.database.config import get_db
     from codeflow_engine.services.comment_filter import CommentFilterService
-    
+
     try:
         db = next(get_db())
         try:
             service = CommentFilterService(db)
             settings = await service.get_settings()
-            
+
             if settings is None:
                 # Return default settings
                 return CommentFilterSettingsResponse(
@@ -934,7 +990,7 @@ async def api_get_comment_filter_settings(
                     auto_reply_message="Thank you for your comment! User @{username} has been added to the allowed commenters list.",
                     whitelist_mode=True,
                 )
-            
+
             return CommentFilterSettingsResponse(
                 enabled=settings.enabled,
                 auto_add_commenters=settings.auto_add_commenters,
@@ -962,7 +1018,7 @@ async def api_update_comment_filter_settings(
     """Update comment filter settings."""
     from codeflow_engine.database.config import get_db
     from codeflow_engine.services.comment_filter import CommentFilterService
-    
+
     try:
         db = next(get_db())
         try:
@@ -989,7 +1045,9 @@ async def api_update_comment_filter_settings(
     description="Get list of allowed commenters with pagination.",
 )
 async def api_list_commenters(
-    enabled_only: bool = Query(default=True, description="Only show enabled commenters"),
+    enabled_only: bool = Query(
+        default=True, description="Only show enabled commenters"
+    ),
     limit: int = Query(default=100, ge=1, le=500, description="Maximum results"),
     offset: int = Query(default=0, ge=0, description="Results offset"),
     _: str | None = Depends(verify_api_key),
@@ -997,7 +1055,7 @@ async def api_list_commenters(
     """List allowed commenters."""
     from codeflow_engine.database.config import get_db
     from codeflow_engine.services.comment_filter import CommentFilterService
-    
+
     try:
         db = next(get_db())
         try:
@@ -1007,14 +1065,16 @@ async def api_list_commenters(
                 limit=limit,
                 offset=offset,
             )
-            
+
             return [
                 AllowedCommenterResponse(
                     github_username=c.github_username,
                     github_user_id=c.github_user_id,
                     enabled=c.enabled,
                     comment_count=c.comment_count,
-                    last_comment_at=c.last_comment_at.isoformat() if c.last_comment_at else None,
+                    last_comment_at=(
+                        c.last_comment_at.isoformat() if c.last_comment_at else None
+                    ),
                     created_at=c.created_at.isoformat(),
                     notes=c.notes,
                 )
@@ -1040,7 +1100,7 @@ async def api_add_commenter(
     """Add an allowed commenter."""
     from codeflow_engine.database.config import get_db
     from codeflow_engine.services.comment_filter import CommentFilterService
-    
+
     try:
         db = next(get_db())
         try:
@@ -1072,14 +1132,16 @@ async def api_remove_commenter(
     """Remove an allowed commenter."""
     from codeflow_engine.database.config import get_db
     from codeflow_engine.services.comment_filter import CommentFilterService
-    
+
     try:
         db = next(get_db())
         try:
             service = CommentFilterService(db)
             success = await service.remove_commenter(username)
             if not success:
-                raise HTTPException(status_code=404, detail=f"Commenter not found: {username}")
+                raise HTTPException(
+                    status_code=404, detail=f"Commenter not found: {username}"
+                )
             return SuccessResponse(success=True)
         finally:
             db.close()

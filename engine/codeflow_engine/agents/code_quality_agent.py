@@ -10,7 +10,7 @@ from json.decoder import JSONDecodeError
 from typing import Any
 
 from codeflow_engine.agents.base.agent import BaseAgent
-from codeflow_engine.ai.core.providers.manager import LLMProviderManager
+from codeflow_engine.actions.llm.manager import ActionLLMProviderManager
 
 
 @dataclass
@@ -94,7 +94,7 @@ class CodeQualityAgent(BaseAgent[CodeQualityInputs, CodeQualityOutputs]):
         # Initialize LLM provider if not done by BaseAgent
         if not hasattr(self, "llm_provider"):
             # Minimal default config; provider selection handled later
-            self.llm_provider = LLMProviderManager(
+            self.llm_provider = ActionLLMProviderManager(
                 {"default_provider": "azure_openai", "providers": {}}
             )
 
@@ -108,10 +108,8 @@ class CodeQualityAgent(BaseAgent[CodeQualityInputs, CodeQualityOutputs]):
             CodeQualityOutputs containing analysis results and suggestions
         """
         # Get volume-based configuration
-        volume_config = self.volume_config.config or {}
-
         # Prepare the prompt for the LLM
-        prompt = self._build_prompt(inputs, volume_config)
+        prompt = self._build_prompt(inputs)
 
         try:
             # Get response from the LLM (manager.complete is synchronous)

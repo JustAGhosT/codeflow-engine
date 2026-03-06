@@ -13,17 +13,23 @@ from typing import Any
 from codeflow_engine.actions.ai_linting_fixer.ai_agent_manager import AIAgentManager
 from codeflow_engine.actions.ai_linting_fixer.code_analyzer import CodeAnalyzer
 from codeflow_engine.actions.ai_linting_fixer.detection import IssueDetector
-from codeflow_engine.actions.ai_linting_fixer.display import (AILintingFixerDisplay,
-                                                     DisplayConfig)
+from codeflow_engine.actions.ai_linting_fixer.display import (
+    AILintingFixerDisplay,
+    DisplayConfig,
+)
 from codeflow_engine.actions.ai_linting_fixer.error_handler import ErrorHandler
 from codeflow_engine.actions.ai_linting_fixer.file_manager import FileManager
-from codeflow_engine.actions.ai_linting_fixer.issue_converter import \
-    convert_detection_issue_to_model_issue
+from codeflow_engine.actions.ai_linting_fixer.issue_converter import (
+    convert_detection_issue_to_model_issue,
+)
 from codeflow_engine.actions.ai_linting_fixer.issue_fixer import IssueFixer
-from codeflow_engine.actions.ai_linting_fixer.models import (AILintingFixerInputs,
-                                                    AILintingFixerOutputs)
-from codeflow_engine.actions.ai_linting_fixer.performance_tracker import \
-    PerformanceTracker
+from codeflow_engine.actions.ai_linting_fixer.models import (
+    AILintingFixerInputs,
+    AILintingFixerOutputs,
+)
+from codeflow_engine.actions.ai_linting_fixer.performance_tracker import (
+    PerformanceTracker,
+)
 from codeflow_engine.actions.llm.manager import ActionLLMProviderManager
 
 logger = logging.getLogger(__name__)
@@ -37,7 +43,9 @@ class AILintingFixer:
     def __init__(self, display_config: DisplayConfig | None = None):
         """Initialize the AI Linting Fixer with all components."""
         # Set logging levels to ERROR by default to prevent clutter
-        logging.getLogger("codeflow_engine.actions.ai_linting_fixer").setLevel(logging.ERROR)
+        logging.getLogger("codeflow_engine.actions.ai_linting_fixer").setLevel(
+            logging.ERROR
+        )
         logging.getLogger("codeflow_engine.actions.llm").setLevel(logging.ERROR)
         logging.getLogger("httpx").setLevel(logging.ERROR)
 
@@ -49,31 +57,36 @@ class AILintingFixer:
         self.error_handler = ErrorHandler()
 
         # Get Azure OpenAI configuration
-        azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT", "https://<your-azure-openai-endpoint>/")
+        azure_endpoint = os.getenv(
+            "AZURE_OPENAI_ENDPOINT", "https://<your-azure-openai-endpoint>/"
+        )
         azure_api_key = os.getenv("AZURE_OPENAI_API_KEY")
 
         # Soft validation: check if Azure OpenAI is properly configured
         azure_configured = (
-            azure_api_key and
-            azure_endpoint and
-            "<" not in azure_endpoint and
-            "your-azure-openai-endpoint" not in azure_endpoint
+            azure_api_key
+            and azure_endpoint
+            and "<" not in azure_endpoint
+            and "your-azure-openai-endpoint" not in azure_endpoint
         )
 
         # Build LLM configuration with fallback providers
-        llm_config = {
+        providers_config: dict[str, dict[str, str | None]] = {}
+        llm_config: dict[str, Any] = {
             "default_provider": None,  # Will be set based on available providers
             "fallback_order": [],  # Will be populated based on available providers
-            "providers": {},
+            "providers": providers_config,
         }
 
         # Add Azure OpenAI provider only if properly configured
         if azure_configured:
-            llm_config["providers"]["azure_openai"] = {
+            providers_config["azure_openai"] = {
                 "azure_endpoint": azure_endpoint,
                 "api_key": azure_api_key,
                 "api_version": os.getenv("AZURE_OPENAI_API_VERSION", "2024-02-01"),
-                "deployment_name": os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME", "gpt-35-turbo"),
+                "deployment_name": os.getenv(
+                    "AZURE_OPENAI_DEPLOYMENT_NAME", "gpt-35-turbo"
+                ),
             }
             logger.info("Azure OpenAI provider configured successfully")
         else:
@@ -83,32 +96,36 @@ class AILintingFixer:
                     "Azure OpenAI API key not configured. "
                     "Set AZURE_OPENAI_API_KEY environment variable to enable Azure OpenAI provider."
                 )
-            if (not azure_endpoint or "<" in azure_endpoint or
-                    "your-azure-openai-endpoint" in azure_endpoint):
+            if (
+                not azure_endpoint
+                or "<" in azure_endpoint
+                or "your-azure-openai-endpoint" in azure_endpoint
+            ):
                 logger.warning(
                     "Azure OpenAI endpoint not properly configured. "
                     "Set AZURE_OPENAI_ENDPOINT environment variable to enable "
-                    "Azure OpenAI provider. Current value: %s", azure_endpoint
+                    "Azure OpenAI provider. Current value: %s",
+                    azure_endpoint,
                 )
             logger.info("Azure OpenAI provider skipped due to missing configuration")
 
         # Add other providers for fallback
         openai_api_key = os.getenv("OPENAI_API_KEY")
         if openai_api_key:
-            llm_config["providers"]["openai"] = {
+            providers_config["openai"] = {
                 "api_key": openai_api_key,
             }
             logger.info("OpenAI provider configured")
 
         anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
         if anthropic_api_key:
-            llm_config["providers"]["anthropic"] = {
+            providers_config["anthropic"] = {
                 "api_key": anthropic_api_key,
             }
             logger.info("Anthropic provider configured")
 
         # Determine default provider and fallback order based on available providers
-        available_providers = list(llm_config["providers"].keys())
+        available_providers = list(providers_config.keys())
         if available_providers:
             # Set default provider to the first available one
             llm_config["default_provider"] = available_providers[0]
@@ -124,22 +141,24 @@ class AILintingFixer:
             logger.warning("  - ANTHROPIC_API_KEY")
 
         # Log final configuration
-        configured_providers = list(llm_config["providers"].keys())
+        configured_providers = list(providers_config.keys())
         logger.info(
             "LLM configuration: default_provider=%s, fallback_order=%s, "
             "configured_providers=%s",
-            llm_config['default_provider'], llm_config['fallback_order'],
-            configured_providers
+            llm_config["default_provider"],
+            llm_config["fallback_order"],
+            configured_providers,
         )
 
         # Initialize LLM manager with validation
+        self.llm_manager: ActionLLMProviderManager | None
         if llm_config["default_provider"] is not None:
             self.llm_manager = ActionLLMProviderManager(
                 llm_config, display=self.display
             )
             logger.info(
                 "LLM manager initialized successfully with provider: %s",
-                llm_config["default_provider"]
+                llm_config["default_provider"],
             )
         else:
             self.llm_manager = None
@@ -151,6 +170,7 @@ class AILintingFixer:
 
         # Initialize AI agent manager only if LLM manager is available
         if self.llm_manager is not None:
+            self.ai_agent_manager: AIAgentManager | None
             self.ai_agent_manager = AIAgentManager(
                 self.llm_manager, self.performance_tracker
             )
@@ -164,20 +184,20 @@ class AILintingFixer:
 
         # Initialize issue fixer only if AI agent manager is available
         if self.ai_agent_manager is not None:
+            self.issue_fixer: IssueFixer | None
             self.issue_fixer = IssueFixer(
                 self.ai_agent_manager, self.file_manager, self.error_handler
             )
             logger.info("Issue fixer initialized successfully")
         else:
             self.issue_fixer = None
-            logger.warning(
-                "Issue fixer not initialized - no AI capabilities available"
-            )
+            logger.warning("Issue fixer not initialized - no AI capabilities available")
 
         # Initialize database for logging interactions
         try:
-            from codeflow_engine.actions.ai_linting_fixer.database import \
-                AIInteractionDB
+            from codeflow_engine.actions.ai_linting_fixer.database import (
+                AIInteractionDB,
+            )
 
             self.database = AIInteractionDB()
             if self.issue_fixer is not None:
@@ -353,23 +373,31 @@ class AILintingFixer:
 
     def is_ai_available(self) -> bool:
         """Check if AI features are available (LLM provider configured)."""
-        return (self.llm_manager is not None and
-                self.ai_agent_manager is not None and
-                self.issue_fixer is not None)
+        return (
+            self.llm_manager is not None
+            and self.ai_agent_manager is not None
+            and self.issue_fixer is not None
+        )
 
     def get_ai_availability_message(self) -> str:
         """Get a user-friendly message about AI availability and configuration instructions."""
         if self.is_ai_available():
             return "AI features are available and ready to use."
 
-        message = ("AI features are not available. To enable AI-powered linting fixes, "
-                  "configure at least one LLM provider:\n\n")
+        message = (
+            "AI features are not available. To enable AI-powered linting fixes, "
+            "configure at least one LLM provider:\n\n"
+        )
         message += "1. OpenAI: Set OPENAI_API_KEY environment variable\n"
         message += "2. Anthropic: Set ANTHROPIC_API_KEY environment variable\n"
-        message += ("3. Azure OpenAI: Set AZURE_OPENAI_API_KEY and "
-                   "AZURE_OPENAI_ENDPOINT environment variables\n\n")
-        message += ("Without AI providers, only issue detection will be available "
-                   "(no automatic fixes).")
+        message += (
+            "3. Azure OpenAI: Set AZURE_OPENAI_API_KEY and "
+            "AZURE_OPENAI_ENDPOINT environment variables\n\n"
+        )
+        message += (
+            "Without AI providers, only issue detection will be available "
+            "(no automatic fixes)."
+        )
         return message
 
     def run(self, inputs: AILintingFixerInputs) -> AILintingFixerOutputs:
@@ -424,7 +452,7 @@ class AILintingFixer:
             self.display.operation.show_detection_results(
                 filtered_count=len(filtered_issues),
                 total_count=len(issues),
-                unique_files_count=unique_files_count
+                unique_files_count=unique_files_count,
             )
 
             if not filtered_issues:
@@ -492,7 +520,9 @@ class AILintingFixer:
 
             for i, issue in enumerate(issues_to_process, 1):
                 self.display.operation.show_processing_progress(
-                    i, len(issues_to_process), convert_detection_issue_to_model_issue(issue)
+                    i,
+                    len(issues_to_process),
+                    convert_detection_issue_to_model_issue(issue),
                 )
 
                 try:
@@ -567,7 +597,9 @@ class AILintingFixer:
             processing_duration = time.time() - start_time
 
             # Get performance metrics with defensive guard
-            get_perf = getattr(self.performance_tracker, "get_performance_summary", None)
+            get_perf = getattr(
+                self.performance_tracker, "get_performance_summary", None
+            )
             if callable(get_perf):
                 performance_summary = get_perf()
             else:

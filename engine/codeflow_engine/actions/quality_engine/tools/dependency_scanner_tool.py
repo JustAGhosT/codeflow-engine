@@ -26,7 +26,9 @@ class DependencyScannerTool(Tool):
         """Get the required command for this tool."""
         return "safety"
 
-    async def run(self, files: list[str], config: dict[str, Any]) -> dict[str, Any]:
+    async def run(
+        self, files: list[str], config: dict[str, Any]
+    ) -> list[dict[str, Any]]:
         """
         Run safety check on project dependencies.
         """
@@ -49,7 +51,7 @@ class DependencyScannerTool(Tool):
             except Exception:
                 req_files = []
 
-        issues = []
+        issues: list[dict[str, Any]] = []
         files_with_issues = []
         summary_lines = []
 

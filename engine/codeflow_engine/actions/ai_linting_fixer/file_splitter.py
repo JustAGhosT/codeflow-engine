@@ -7,17 +7,25 @@ Main orchestrator for file splitting operations.
 import logging
 import time
 
-from codeflow_engine.actions.ai_linting_fixer.analyzers.complexity_analyzer import \
-    FileComplexityAnalyzer
-from codeflow_engine.actions.ai_linting_fixer.engines.ai_split_decision_engine import \
-    AISplitDecisionEngine
-from codeflow_engine.actions.ai_linting_fixer.performance_optimizer import \
-    ParallelProcessor
+from codeflow_engine.actions.ai_linting_fixer.analyzers.complexity_analyzer import (
+    FileComplexityAnalyzer,
+)
+from codeflow_engine.actions.ai_linting_fixer.engines.ai_split_decision_engine import (
+    AISplitDecisionEngine,
+)
+from codeflow_engine.actions.ai_linting_fixer.performance_optimizer import (
+    ParallelProcessor,
+)
+from codeflow_engine.actions.llm.manager import (
+    ActionLLMProviderManager as LLMProviderManager,
+)
 from codeflow_engine.actions.ai_linting_fixer.split_models.split_models import (
-    SplitConfig, SplitResult)
-from codeflow_engine.actions.ai_linting_fixer.splitters.component_splitter import \
-    ComponentSplitter
-from codeflow_engine.ai.core.providers.manager import LLMProviderManager
+    SplitConfig,
+    SplitResult,
+)
+from codeflow_engine.actions.ai_linting_fixer.splitters.component_splitter import (
+    ComponentSplitter,
+)
 from codeflow_engine.quality.metrics_collector import MetricsCollector
 
 logger = logging.getLogger(__name__)
@@ -138,7 +146,9 @@ class FileSplitter:
                         "confidence": confidence,
                         "reason": reason,
                     },
-                    "split_strategy": self.component_splitter._choose_splitting_strategy(complexity),
+                    "split_strategy": self.component_splitter._choose_splitting_strategy(
+                        complexity
+                    ),
                     "cache_stats": cache_stats,
                     "cpu_usage": perf_metrics.get("cpu_usage", 0.0),
                     "memory_usage": perf_metrics.get("memory_usage_mb", 0.0),

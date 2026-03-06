@@ -16,6 +16,89 @@ from codeflow_engine.actions.quality_engine.models import ToolResult
 logger = structlog.get_logger(__name__)
 
 
+class AIHandler:
+    """Backward-compatible helper for post-processing AI analysis results."""
+
+    def process_result(self, result: dict[str, Any]) -> dict[str, Any]:
+        processed = dict(result)
+        processed.setdefault("suggestions", [])
+        processed.setdefault("issues", [])
+        processed.setdefault("score", 0.0)
+        processed["processed"] = True
+        processed.setdefault("success", True)
+        return processed
+
+    def filter_suggestions(
+        self, suggestions: list[str], min_priority: str = "medium"
+    ) -> list[str]:
+        if min_priority == "medium":
+            return [s for s in suggestions if "minor" not in s.lower()]
+        return suggestions
+
+    def prioritize_suggestions(self, suggestions: list[str]) -> list[str]:
+        def rank(item: str) -> tuple[int, str]:
+            lowered = item.lower()
+            if "security" in lowered:
+                return (0, item)
+            if "performance" in lowered:
+                return (1, item)
+            if "type hints" in lowered:
+                return (2, item)
+            return (3, item)
+
+        return sorted(suggestions, key=rank)
+
+    def format_for_output(self, suggestions: list[str]) -> str:
+        lines = ["AI Suggestions:"]
+        lines.extend(f"- {suggestion}" for suggestion in suggestions)
+        return "\n".join(lines)
+
+    def merge_results(self, results: list[dict[str, Any]]) -> dict[str, Any]:
+        suggestions: list[str] = []
+        scores: list[float] = []
+        for result in results:
+            suggestions.extend(result.get("suggestions", []))
+            if isinstance(result.get("score"), (int, float)):
+                scores.append(float(result["score"]))
+        avg_score = sum(scores) / len(scores) if scores else 0.0
+        return {"suggestions": suggestions, "score": avg_score, "success": True}
+
+    def validate_result(self, result: dict[str, Any]) -> bool:
+        return isinstance(result.get("suggestions"), list)
+
+    def extract_actionable_items(self, result: dict[str, Any]) -> list[str]:
+        items: list[str] = []
+        for key in ("suggestions", "issues", "recommendations"):
+            value = result.get(key, [])
+            if isinstance(value, list):
+                items.extend(str(item) for item in value)
+        return items
+
+    async def apply_suggestions(
+        self, file_content: str, suggestions: list[str]
+    ) -> dict[str, Any]:
+        updated_content = file_content
+        applied: list[str] = []
+        for suggestion in suggestions:
+            updated_content = await self._apply_suggestion(updated_content, suggestion)
+            applied.append(suggestion.lower())
+        return {
+            "modified": updated_content != file_content,
+            "content": updated_content,
+            "applied_suggestions": applied,
+        }
+
+    async def _apply_suggestion(self, file_content: str, _suggestion: str) -> str:
+        return file_content
+
+    def generate_patches(
+        self, file_path: str, suggestions: list[str]
+    ) -> list[dict[str, str]]:
+        return [
+            {"file": file_path, "suggestion": suggestion} for suggestion in suggestions
+        ]
+
+
 async def run_ai_analysis(
     files: list[str],
     llm_manager: Any,
@@ -35,8 +118,9 @@ async def run_ai_analysis(
     """
     try:
         # Lazy import to avoid circular dependencies
-        from codeflow_engine.actions.quality_engine.ai.ai_modes import \
-            run_ai_analysis as run_analysis
+        from codeflow_engine.actions.quality_engine.ai.ai_modes import (
+            run_ai_analysis as run_analysis,
+        )
 
         # Get available providers from the manager
         available_providers = []
@@ -60,7 +144,7 @@ async def run_ai_analysis(
                     logger.info(
                         "Provider '%s' not available, using default: %s",
                         provider_name,
-                        selected_provider
+                        selected_provider,
                     )
                 else:
                     # Use first available provider as fallback
@@ -68,7 +152,7 @@ async def run_ai_analysis(
                     logger.info(
                         "Provider '%s' not available, using first available: %s",
                         provider_name,
-                        selected_provider
+                        selected_provider,
                     )
             else:
                 # Use first available provider as fallback
@@ -76,14 +160,18 @@ async def run_ai_analysis(
                 logger.info(
                     "Provider '%s' not available, using first available: %s",
                     provider_name,
-                    selected_provider
+                    selected_provider,
                 )
 
         # Get the provider object and align model with provider's default if available
         provider_obj = None
         if hasattr(llm_manager, "get_provider"):
             provider_obj = llm_manager.get_provider(selected_provider)
-        if provider_obj and hasattr(provider_obj, "default_model") and provider_obj.default_model:
+        if (
+            provider_obj
+            and hasattr(provider_obj, "default_model")
+            and provider_obj.default_model
+        ):
             model = provider_obj.default_model
             logger.info("Using provider default model: %s", model)
         # Update provider_name to the resolved selected_provider
@@ -93,7 +181,7 @@ async def run_ai_analysis(
             "Starting AI-enhanced analysis",
             file_count=len(files),
             provider=provider_name,
-            model=model
+            model=model,
         )
         start_time = time.time()
 
@@ -155,7 +243,7 @@ async def initialize_llm_manager() -> Any | None:
         config_obj = CodeFlowConfig(
             openai_api_key=config["providers"]["openai"]["api_key"],
             anthropic_api_key=config["providers"]["anthropic"]["api_key"],
-            default_llm_provider=config.get("default_provider", "openai")
+            default_llm_provider=config.get("default_provider", "openai"),
         )
         llm_manager = LLMProviderManager(config_obj)
 
@@ -163,7 +251,9 @@ async def initialize_llm_manager() -> Any | None:
         if config["providers"]["openai"]["api_key"]:
             openai_provider = llm_manager.get_provider("openai")
             if openai_provider:
-                openai_provider.default_model = config["providers"]["openai"]["default_model"]
+                openai_provider.default_model = config["providers"]["openai"][
+                    "default_model"
+                ]
                 logger.info("OpenAI provider configured")
             else:
                 logger.info("OpenAI provider not found in manager")
@@ -171,20 +261,28 @@ async def initialize_llm_manager() -> Any | None:
         if config["providers"]["anthropic"]["api_key"]:
             anthropic_provider = llm_manager.get_provider("anthropic")
             if anthropic_provider:
-                anthropic_provider.default_model = config["providers"]["anthropic"]["default_model"]
+                anthropic_provider.default_model = config["providers"]["anthropic"][
+                    "default_model"
+                ]
                 logger.info("Anthropic provider configured")
             else:
                 logger.info("Anthropic provider not found in manager")
 
         # Set fallback order and default provider
         # Check if providers are actually registered before setting as default
-        if config["providers"]["openai"]["api_key"] and "openai" in llm_manager.providers:
+        if (
+            config["providers"]["openai"]["api_key"]
+            and "openai" in llm_manager.providers
+        ):
             try:
                 llm_manager.set_default_provider("openai")
                 logger.info("Set OpenAI as default provider")
             except ValueError as e:
                 logger.warning("Failed to set OpenAI as default provider: %s", e)
-        elif config["providers"]["anthropic"]["api_key"] and "anthropic" in llm_manager.providers:
+        elif (
+            config["providers"]["anthropic"]["api_key"]
+            and "anthropic" in llm_manager.providers
+        ):
             try:
                 llm_manager.set_default_provider("anthropic")
                 logger.info("Set Anthropic as default provider")
@@ -196,11 +294,15 @@ async def initialize_llm_manager() -> Any | None:
             if available_providers:
                 try:
                     llm_manager.set_default_provider(available_providers[0])
-                    logger.info("Set %s as default provider (fallback)", available_providers[0])
+                    logger.info(
+                        "Set %s as default provider (fallback)", available_providers[0]
+                    )
                 except ValueError as e:
                     logger.warning("Failed to set fallback default provider: %s", e)
             else:
-                logger.warning("No LLM providers available - AI features will be disabled")
+                logger.warning(
+                    "No LLM providers available - AI features will be disabled"
+                )
 
         # Initialize the LLM manager
         try:

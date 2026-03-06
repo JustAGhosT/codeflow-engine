@@ -13,6 +13,7 @@ from codeflow_engine.actions.quality_engine.tools import discover_tools
 
 # Import registry at the module level to avoid circular imports
 from codeflow_engine.actions.quality_engine.tools.registry import (
+    ToolRegistry,
     registry as tool_registry_instance,
 )
 
@@ -29,7 +30,7 @@ class ToolRegistryContainer(containers.DeclarativeContainer):
 
     # Discover and register all tools
     @staticmethod
-    def _register_discovered_tools() -> "tool_registry_instance":
+    def _register_discovered_tools() -> ToolRegistry:
         """Register all discovered tools with the registry."""
         discovered_tools = discover_tools()
         for tool_class in discovered_tools:
