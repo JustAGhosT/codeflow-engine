@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "codeflow-engine"
-version = "1.0.1"
+version = "0.2.0-alpha.1"
 description = "AI-Powered GitHub PR Automation and Issue Management"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -22,7 +22,7 @@ keywords = [
     "platform-detection", "multi-agent"
 ]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Intended Audience :: Information Technology",
     "Intended Audience :: System Administrators",
@@ -74,7 +74,7 @@ groq = "codeflow_engine.ai.providers.groq:GroqProvider"
 
 [tool.poetry]
 name = "codeflow-engine"
-version = "1.0.1"
+version = "0.2.0-alpha.1"
 description = "AI-Powered GitHub PR Automation and Issue Management"
 authors = ["VeritasVault Team <dev@veritasvault.net>"]
 maintainers = ["VeritasVault Team <dev@veritasvault.net>"]
@@ -193,7 +193,7 @@ aioredis = "^2.0.0"
 [tool.poetry.group.server.dependencies]
 fastapi = "^0.103.0"
 uvicorn = {extras = ["standard"], version = "^0.23.0"}
-gunicorn = "^21.2.0"
+gunicorn = "^22.0.0"
 
 [tool.poetry.group.resilience.dependencies]
 pybreaker = "^1.0.0"

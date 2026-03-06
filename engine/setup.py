@@ -31,16 +31,16 @@ def read_requirements():
 
 setup(
     name="codeflow-engine",
-    version="1.0.1",
+    version="0.2.0-alpha.1",
     author="CodeFlow Team",
     author_email="team@codeflow.dev",
-    description="AI-Powered Code Quality and Automation Engine",
+    description="AI-Powered GitHub PR Automation and Issue Management",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
     url="https://github.com/JustAGhosT/codeflow-engine/tree/master/engine",
     packages=find_packages(),
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
@@ -50,7 +50,7 @@ setup(
         "Topic :: Software Development :: Testing",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    python_requires=">=3.13",
+    python_requires=">=3.12",
     install_requires=read_requirements(),
     extras_require={
         "dev": [

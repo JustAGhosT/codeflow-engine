@@ -1,11 +1,12 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { HashRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Home, Settings, FileText, Moon, Sun, BarChart3 } from 'lucide-react';
-import Dashboard from './pages/Dashboard';
-import Configuration from './pages/Configuration';
-import Logs from './pages/Logs';
-import PlatformAnalytics from './pages/PlatformAnalytics';
 import './App.css';
+
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Configuration = lazy(() => import('./pages/Configuration'));
+const Logs = lazy(() => import('./pages/Logs'));
+const PlatformAnalytics = lazy(() => import('./pages/PlatformAnalytics'));
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component<
@@ -116,17 +117,25 @@ function AppContent() {
           <NavigationLink to="/logs" icon={FileText} label="Logs" />
         </nav>
         <div className="absolute bottom-4 left-4 right-4 text-sm text-gray-500 dark:text-gray-400 text-center">
-          <p>v1.0.0</p>
-          <p className="text-xs mt-1">Â© 2024 CodeFlow Engine</p>
+          <p>v0.2.0-alpha.1</p>
+          <p className="text-xs mt-1">© 2026 CodeFlow</p>
         </div>
       </aside>
       <main className="flex-1 p-6 overflow-y-auto" role="main">
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/analytics" element={<PlatformAnalytics />} />
-          <Route path="/configuration" element={<Configuration />} />
-          <Route path="/logs" element={<Logs />} />
-        </Routes>
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center h-full text-gray-600 dark:text-gray-300">
+              Loading CodeFlow Desktop…
+            </div>
+          }
+        >
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/analytics" element={<PlatformAnalytics />} />
+            <Route path="/configuration" element={<Configuration />} />
+            <Route path="/logs" element={<Logs />} />
+          </Routes>
+        </Suspense>
       </main>
     </div>
   );

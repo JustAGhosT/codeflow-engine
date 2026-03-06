@@ -2,11 +2,12 @@
   "name": "codeflow-vscode-extension",
   "displayName": "CodeFlow",
   "description": "AI-Powered Code Quality and Automation for VS Code",
-  "version": "1.0.10",
+  "version": "0.2.0-alpha.1",
   "publisher": "codeflow",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JustAGhosT/codeflow-vscode-extension.git"
+    "url": "https://github.com/JustAGhosT/codeflow-engine.git",
+    "directory": "vscode-extension"
   },
   "license": "MIT",
   "engines": {

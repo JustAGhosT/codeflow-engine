@@ -348,7 +348,7 @@ Create flatpak manifest and submit to Flathub
 
 - [ ] Monitor error reports
 - [ ] Update documentation
-- [ ] Tag release in Git: `git tag v1.0.0`
+- [ ] Tag release in Git: `git tag desktop-v0.2.0-alpha.1`
 - [ ] Push tags: `git push --tags`
 
 ## CI/CD Integration
@@ -361,7 +361,7 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v*'
+      - 'desktop-v*'
 
 jobs:
   build:

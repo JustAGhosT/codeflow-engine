@@ -11,7 +11,7 @@ This is the marketing website for CodeFlow AI, providing information about the p
 
 ## Technology Stack
 
-- **Framework**: [Next.js 16.x](https://nextjs.org/) with App Router
+- **Framework**: [Next.js 15.x](https://nextjs.org/) with App Router
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
 - **Styling**: [Tailwind CSS 4.x](https://tailwindcss.com/)
 - **Testing**: [Vitest](https://vitest.dev/) + [React Testing Library](https://testing-library.com/react)

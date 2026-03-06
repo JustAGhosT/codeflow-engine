@@ -334,7 +334,7 @@ codeflow-utils-python = "^0.1.0"
 | `scripts/check-versions.ps1` | orchestration | KEEP in `scripts/` |
 | `scripts/bump-version.ps1` | orchestration | KEEP in `scripts/` |
 | `scripts/sync-versions.ps1` | orchestration | KEEP in `scripts/` |
-| `scripts/migrate-autopr-to-codeflow.ps1` | orchestration | KEEP in `scripts/` |
+| `scripts/migrate-autopr-to-codeflow.ps1` | orchestration | KEEP in `scripts/` as a legacy compatibility migration utility |
 | `scripts/dev-setup.ps1` | orchestration | KEEP in `scripts/` |
 | `scripts/dev-setup.sh` | orchestration | KEEP in `scripts/` |
 
@@ -495,7 +495,7 @@ codeflow-orchestration/
 │   ├── check-versions.ps1
 │   ├── bump-version.ps1
 │   ├── sync-versions.ps1
-│   ├── migrate-autopr-to-codeflow.ps1
+│   ├── migrate-autopr-to-codeflow.ps1  # Legacy compatibility migration utility
 │   ├── dev-setup.ps1
 │   ├── dev-setup.sh
 │   └── setup-package-publishing.ps1

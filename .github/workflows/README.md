@@ -19,6 +19,7 @@ The monorepo uses a combination of engine-specific workflows, path-aware compone
 | `release-website.yml` | Website release build | Tags, manual |
 | `release-vscode-extension.yml` | VS Code extension release packaging | Tags, manual |
 | `release-orchestration-utils.yml` | Shared utility package release build | Tags, manual |
+| `deploy-autopr-engine.yml` | Engine container build and Azure deployment | Push to `master`, PR, manual |
 
 ## Workflow Details
 
@@ -26,8 +27,9 @@ The monorepo uses a combination of engine-specific workflows, path-aware compone
 
 - Engine workflows run from [engine](engine) via `working-directory`.
 - Component workflows use path filters so unrelated changes do not trigger full builds.
-- Release workflows use component-specific tag prefixes such as `engine-v1.2.3` and `desktop-v1.2.3`.
+- Release workflows use component-specific tag prefixes such as `engine-v0.2.0-alpha.1` and `desktop-v0.2.0-alpha.1`.
 - Infrastructure for the website and engine is sourced from [orchestration](orchestration).
+- The engine deployment workflow still uses the filename [deploy-autopr-engine.yml](.github/workflows/deploy-autopr-engine.yml) for backward compatibility, but it deploys the current CodeFlow Engine.
 
 ### Archival follow-up
 
@@ -40,7 +42,7 @@ Before archiving the legacy repositories, update their README files with the red
    - `Quality Feedback` runs (detailed feedback)
    - `CI` runs (comprehensive checks)
 
-2. **Push to Main/Develop:**
+2. **Push to master:**
    - `CI` runs with full volume settings
 
 3. **Manual/Scheduled:**

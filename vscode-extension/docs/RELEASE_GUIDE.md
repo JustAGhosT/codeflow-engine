@@ -205,9 +205,9 @@ echo "Version bumped to $VERSION"
 - [ ] Build package: `npm run package`
 - [ ] Test VSIX locally
 - [ ] Commit changes
-- [ ] Create git tag: `git tag v1.0.11`
-- [ ] Push tag: `git push origin v1.0.11`
-- [ ] Publish: `vsce publish`
+- [ ] Create git tag: `git tag vscode-extension-v0.2.0-alpha.1`
+- [ ] Push tag: `git push origin vscode-extension-v0.2.0-alpha.1`
+- [ ] Publish: `npm run publish`
 - [ ] Verify on marketplace
 - [ ] Update release notes on GitHub
 
@@ -217,7 +217,7 @@ echo "Version bumped to $VERSION"
 
 ### GitHub Actions Workflow
 
-The extension includes a release workflow (`.github/workflows/release.yml`) that:
+The extension includes a release workflow (`../../.github/workflows/release-vscode-extension.yml`) that:
 
 1. Triggers on version tag push
 2. Builds the extension
@@ -240,12 +240,12 @@ npm test
 
 # 3. Commit and tag
 git add .
-git commit -m "Release v1.0.11"
-git tag v1.0.11
-git push origin main --tags
+git commit -m "Release vscode-extension-v0.2.0-alpha.1"
+git tag vscode-extension-v0.2.0-alpha.1
+git push origin master --tags
 
 # 4. Publish
-vsce publish
+npm run publish
 ```
 
 ---

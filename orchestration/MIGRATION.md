@@ -62,9 +62,13 @@ The CodeFlow migration has successfully transformed the project from a basic set
 **Completed:**
 
 - ✅ All "AutoPR" references migrated to "CodeFlow"
-- ✅ Migration script created (`migrate-autopr-to-codeflow.ps1`)
+- ✅ Legacy compatibility migration script created (`migrate-autopr-to-codeflow.ps1`)
 - ✅ All 7 repositories updated
-- ✅ Verified zero remaining references
+- ✅ High-visibility product naming updated to CodeFlow
+
+**Current note:**
+
+- ℹ️ Some legacy file names may still contain `autopr` for compatibility or migration history, but active branding, product naming, and user-facing references should use `CodeFlow`
 
 ### Phase 3: Basic CI/CD Foundation - 95% ✅
 
@@ -82,7 +86,7 @@ The CodeFlow migration has successfully transformed the project from a basic set
 
 **Key Deliverables:**
 
-- Migration script (`migrate-autopr-to-codeflow.ps1`)
+- Legacy compatibility migration script (`migrate-autopr-to-codeflow.ps1`)
 - 15+ CI/CD workflows
 - Security improvements
 - Complete naming consistency
@@ -347,7 +351,7 @@ The CodeFlow migration has successfully transformed the project from a basic set
 ### Scripts & Automation
 
 - **3 version management scripts**
-- **Migration script** (AutoPR → CodeFlow)
+- **Legacy compatibility migration script** (AutoPR → CodeFlow)
 - **Development setup scripts** (PowerShell & Bash)
 - **Health check scripts**
 
@@ -376,7 +380,7 @@ For detailed information about each phase, see:
 ### Scripts
 
 - [Version Management](./scripts/) - Version check, bump, and sync scripts
-- [Migration Scripts](./scripts/) - AutoPR to CodeFlow migration
+- [Migration Scripts](./scripts/) - Legacy compatibility scripts for older AutoPR-era assets and naming
 - [Development Setup](./scripts/) - Local development setup scripts
 
 ---

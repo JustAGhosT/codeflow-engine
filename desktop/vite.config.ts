@@ -2,11 +2,13 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-// @ts-expect-error process is a nodejs global
-const host = process.env.TAURI_DEV_HOST;
+const env = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env ?? {};
+const host = env.TAURI_DEV_HOST;
+const isTauriDebug = !!env.TAURI_DEBUG;
+const buildMinify: false | "esbuild" = isTauriDebug ? false : "esbuild";
 
 // https://vite.dev/config/
-export default defineConfig(async () => ({
+export default defineConfig(() => ({
   plugins: [react(), tsconfigPaths()],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
@@ -36,11 +38,23 @@ export default defineConfig(async () => ({
   envPrefix: ["VITE_", "TAURI_"],
   build: {
     // Tauri supports es2021
-    target: process.env.TAURI_PLATFORM == "windows" ? "chrome105" : "safari13",
+    target: env.TAURI_PLATFORM == "windows" ? "chrome105" : "safari13",
     // don't minify for debug builds
-    minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
+    minify: buildMinify,
     // produce sourcemaps for debug builds
-    sourcemap: !!process.env.TAURI_DEBUG,
+    sourcemap: isTauriDebug,
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (id.includes("node_modules/@rjsf") || id.includes("node_modules/ajv") || id.includes("node_modules/js-yaml")) {
+            return "form-vendors";
+          }
+          if (id.includes("node_modules/react") || id.includes("node_modules/react-dom") || id.includes("node_modules/react-router-dom")) {
+            return "react-vendors";
+          }
+        },
+      },
+    },
   },
   base: "./",
 }));

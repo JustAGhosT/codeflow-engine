@@ -177,12 +177,14 @@ pwsh scripts/sync-versions.ps1 -Version "1.2.0"
 ### Migration
 
 ```bash
-# Migrate AutoPR to CodeFlow (dry run)
+# Review legacy AutoPR-to-CodeFlow compatibility updates (dry run)
 pwsh scripts/migrate-autopr-to-codeflow.ps1 -DryRun
 
-# Migrate AutoPR to CodeFlow (execute)
+# Apply legacy AutoPR-to-CodeFlow compatibility updates
 pwsh scripts/migrate-autopr-to-codeflow.ps1
 ```
+
+The script name is intentionally retained for legacy compatibility. It is used to sweep older AutoPR-era assets and normalize them to the current CodeFlow monorepo naming and configuration model.
 
 ### Development
 

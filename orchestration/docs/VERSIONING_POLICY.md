@@ -171,16 +171,16 @@ MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]
 
 ### Cross-Repo Versioning
 
-For coordinated releases:
-- All repos should use the same MAJOR.MINOR version
-- PATCH versions can differ per repo
-- Use version sync script to maintain consistency
+For coordinated monorepo prereleases:
+- Shipped products should share the same release version
+- Internal helper packages may follow independently or remain private
+- Use component-prefixed tags to identify which product is being released
 
 **Example:**
-- codeflow-engine: `1.2.0`
-- codeflow-desktop: `1.2.0`
-- codeflow-vscode-extension: `1.2.0`
-- codeflow-website: `1.2.0`
+- codeflow-engine: `0.2.0-alpha.1`
+- codeflow-desktop: `0.2.0-alpha.1`
+- codeflow-vscode-extension: `0.2.0-alpha.1`
+- codeflow-website: `0.2.0-alpha.1`
 
 ### Independent Versioning
 
@@ -214,23 +214,23 @@ Use version bump scripts:
 ### Tag Format
 
 ```
-vMAJOR.MINOR.PATCH
+<component>-vMAJOR.MINOR.PATCH[-PRERELEASE]
 ```
 
 **Examples:**
-- `v1.0.0`
-- `v1.0.1`
-- `v1.2.0`
-- `v2.0.0`
+- `engine-v0.2.0-alpha.1`
+- `desktop-v0.2.0-alpha.1`
+- `website-v0.2.0-alpha.1`
+- `vscode-extension-v0.2.0-alpha.1`
 
 ### Tag Creation
 
 ```bash
 # Create tag
-git tag -a v1.0.0 -m "Release version 1.0.0"
+git tag -a engine-v0.2.0-alpha.1 -m "Release engine 0.2.0-alpha.1"
 
 # Push tag
-git push origin v1.0.0
+git push origin engine-v0.2.0-alpha.1
 ```
 
 ---
