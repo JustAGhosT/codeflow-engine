@@ -333,12 +333,12 @@ This demonstrates that **separation of concerns** is achieved through software d
 
 ### What Changed from ADR-0001
 
-| Proposed (ADR-0001) | Actual Implementation | Rationale |
-|---------------------|----------------------|-----------|
-| C# + Python hybrid | Python-only | Simpler, faster development |
-| gRPC communication | Direct Python calls | No cross-language overhead |
-| .NET 6+ for core | FastAPI + Flask | Python web frameworks sufficient |
-| Separate C# service | Monolithic Python app | Easier deployment and debugging |
+| Proposed (ADR-0001) | Actual Implementation | Rationale                        |
+| ------------------- | --------------------- | -------------------------------- |
+| C# + Python hybrid  | Python-only           | Simpler, faster development      |
+| gRPC communication  | Direct Python calls   | No cross-language overhead       |
+| .NET 6+ for core    | FastAPI + Flask       | Python web frameworks sufficient |
+| Separate C# service | Monolithic Python app | Easier deployment and debugging  |
 
 ### Migration Path (If Needed)
 
