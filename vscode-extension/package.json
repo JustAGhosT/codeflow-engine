@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "codeflow-vscode-extension",
   "displayName": "CodeFlow",
   "description": "AI-Powered Code Quality and Automation for VS Code",
@@ -620,8 +620,8 @@
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
-    "package": "@vscode/vsce package",
-    "publish": "@vscode/vsce publish",
+    "package": "npx @vscode/vsce package",
+    "publish": "npx @vscode/vsce publish",
     "clean": "rimraf out",
     "build": "npm run clean && npm run compile"
   },
