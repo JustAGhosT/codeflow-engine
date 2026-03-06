@@ -6,18 +6,18 @@ name: Validate Templates
 on:
   push:
     paths:
-      - 'engine/templates/**/*.yml'
-      - 'engine/templates/**/*.yaml'
-      - 'engine/install.sh'
-      - 'engine/install.ps1'
-      - '.github/workflows/*.yml'
+      - "engine/templates/**/*.yml"
+      - "engine/templates/**/*.yaml"
+      - "engine/install.sh"
+      - "engine/install.ps1"
+      - ".github/workflows/*.yml"
   pull_request:
     paths:
-      - 'engine/templates/**/*.yml'
-      - 'engine/templates/**/*.yaml'
-      - 'engine/install.sh'
-      - 'engine/install.ps1'
-      - '.github/workflows/*.yml'
+      - "engine/templates/**/*.yml"
+      - "engine/templates/**/*.yaml"
+      - "engine/install.sh"
+      - "engine/install.ps1"
+      - ".github/workflows/*.yml"
 
 jobs:
   validate-yaml:
@@ -30,7 +30,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Install yamllint
         run: pip install yamllint

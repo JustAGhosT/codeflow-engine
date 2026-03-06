@@ -76,7 +76,7 @@ class QueuedIssue:
     class_name: str | None = None
     estimated_confidence: float = 0.7
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.created_at is None:
             self.created_at = datetime.now(UTC)
         if not self.id:
@@ -114,7 +114,7 @@ class ProcessingResult:
     worker_id: str | None = None
     processed_at: datetime | None = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.processed_at is None:
             self.processed_at = datetime.now(UTC)
 
@@ -161,6 +161,8 @@ class RedisQueueManager:
         self.results_queue = f"{queue_prefix}:results"
         self.failed_queue = f"{queue_prefix}:failed"
         self.worker_heartbeat = f"{queue_prefix}:workers:heartbeat"
+        self.issue_queue_key = self.pending_queue
+        self.processing_count_key = f"{queue_prefix}:processing_count"
 
         # Statistics
         self.processed_count = 0
@@ -196,38 +198,28 @@ class RedisQueueManager:
         """Add an issue to the pending queue."""
         try:
             self._validate_redis_client()
-            issue_data = {
-                "id": issue.id,
-                "file_path": str(issue.file_path),
-                "issue_type": issue.issue_type,
-                "message": issue.message,
-                "line": issue.line,
-                "column": issue.column,
-                "severity": issue.severity,
-                "timestamp": datetime.utcnow().isoformat(),
-            }
+            issue_data = issue.to_dict()
+            issue_data["timestamp"] = datetime.now(UTC).isoformat()
+            assert self.redis_client is not None
             self.redis_client.lpush(self.issue_queue_key, json.dumps(issue_data))
             return True
         except Exception as e:
             logger.exception(f"Failed to enqueue issue: {e}")
             return False
 
-    def dequeue_issue(self) -> QueuedIssue | None:
+    def dequeue_issue(self, timeout: int | None = None) -> QueuedIssue | None:
         """Remove and return the next issue from the queue."""
         try:
             self._validate_redis_client()
-            result = self.redis_client.rpop(self.issue_queue_key)
+            assert self.redis_client is not None
+            if timeout is not None:
+                popped = self.redis_client.brpop(self.issue_queue_key, timeout=timeout)
+                result = popped[1] if popped else None
+            else:
+                result = self.redis_client.rpop(self.issue_queue_key)
             if result:
                 data = json.loads(result)
-                return QueuedIssue(
-                    id=data["id"],
-                    file_path=Path(data["file_path"]),
-                    issue_type=data["issue_type"],
-                    message=data["message"],
-                    line=data["line"],
-                    column=data["column"],
-                    severity=data["severity"],
-                )
+                return QueuedIssue.from_dict(data)
             return None
         except Exception as e:
             logger.exception(f"Failed to dequeue issue: {e}")
@@ -237,6 +229,7 @@ class RedisQueueManager:
         """Get the current number of issues in the queue."""
         try:
             self._validate_redis_client()
+            assert self.redis_client is not None
             return self.redis_client.llen(self.issue_queue_key)
         except Exception as e:
             logger.exception(f"Failed to get queue length: {e}")
@@ -246,16 +239,18 @@ class RedisQueueManager:
         """Clear all issues from the queue."""
         try:
             self._validate_redis_client()
+            assert self.redis_client is not None
             self.redis_client.delete(self.issue_queue_key)
             return True
         except Exception as e:
             logger.exception(f"Failed to clear queue: {e}")
             return False
 
-    def get_queue_stats(self) -> dict:
+    def get_queue_stats(self) -> dict[str, Any]:
         """Get statistics about the queue."""
         try:
             self._validate_redis_client()
+            assert self.redis_client is not None
             length = self.redis_client.llen(self.issue_queue_key)
             return {
                 "queue_length": length,
@@ -274,21 +269,12 @@ class RedisQueueManager:
         """Peek at the top issues in the queue without removing them."""
         try:
             self._validate_redis_client()
+            assert self.redis_client is not None
             results = self.redis_client.lrange(self.issue_queue_key, 0, count - 1)
-            issues = []
+            issues: list[QueuedIssue] = []
             for result in results:
                 data = json.loads(result)
-                issues.append(
-                    QueuedIssue(
-                        id=data["id"],
-                        file_path=Path(data["file_path"]),
-                        issue_type=data["issue_type"],
-                        message=data["message"],
-                        line=data["line"],
-                        column=data["column"],
-                        severity=data["severity"],
-                    )
-                )
+                issues.append(QueuedIssue.from_dict(data))
             return issues
         except Exception as e:
             logger.exception(f"Failed to peek queue: {e}")
@@ -308,10 +294,11 @@ class RedisQueueManager:
             logger.exception(f"Failed to remove issue: {e}")
             return False
 
-    def get_processing_status(self) -> dict:
+    def get_processing_status(self) -> dict[str, Any]:
         """Get the current processing status."""
         try:
             self._validate_redis_client()
+            assert self.redis_client is not None
             queue_length = self.redis_client.llen(self.issue_queue_key)
             processing_count = self.redis_client.get(self.processing_count_key) or 0
 

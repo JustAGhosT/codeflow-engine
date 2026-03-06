@@ -107,7 +107,7 @@ class IssueQueueManager:
 
             try:
                 where_conditions = ["status = 'pending'"]
-                params = []
+                params: list[Any] = []
 
                 if filter_types:
                     placeholders = ",".join("?" for _ in filter_types)
@@ -169,7 +169,7 @@ class IssueQueueManager:
                 (status, json.dumps(fix_result) if fix_result else None, issue_id),
             )
 
-    def get_queue_stats(self) -> dict[str, int]:
+    def get_queue_stats(self) -> dict[str, int | float]:
         """Get statistics about the issue queue."""
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute(
@@ -193,3 +193,44 @@ class IssueQueueManager:
                 "failed": row[4] or 0,
                 "success_rate": (row[3] / row[0] * 100) if row[0] > 0 else 0.0,
             }
+
+    def get_queue_statistics(self) -> dict[str, Any]:
+        """Compatibility wrapper returning nested queue statistics."""
+        stats = self.get_queue_stats()
+        return {
+            "overall": {
+                "total_issues": int(stats.get("total", 0)),
+                "pending": int(stats.get("pending", 0)),
+                "in_progress": int(stats.get("processing", 0)),
+                "completed": int(stats.get("completed", 0)),
+                "failed": int(stats.get("failed", 0)),
+                "success_rate": float(stats.get("success_rate", 0.0)),
+            }
+        }
+
+    def cleanup_old_queue_items(self, days_to_keep: int = 7) -> int:
+        """Delete completed and failed queue items older than the retention window."""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.execute(
+                """
+                DELETE FROM issue_queue
+                WHERE status IN ('completed', 'failed')
+                  AND updated_at < datetime('now', ?)
+                """,
+                (f"-{days_to_keep} days",),
+            )
+            return cursor.rowcount
+
+    def reset_stale_issues(self, timeout_minutes: int = 30) -> int:
+        """Reset long-running processing issues back to pending."""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.execute(
+                """
+                UPDATE issue_queue
+                SET status = 'pending', worker_id = NULL, updated_at = CURRENT_TIMESTAMP
+                WHERE status = 'processing'
+                  AND updated_at < datetime('now', ?)
+                """,
+                (f"-{timeout_minutes} minutes",),
+            )
+            return cursor.rowcount

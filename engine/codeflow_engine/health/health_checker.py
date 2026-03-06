@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 class HealthStatus(Enum):
     """Overall health status."""
+
     HEALTHY = "healthy"
     DEGRADED = "degraded"
     UNHEALTHY = "unhealthy"
@@ -26,6 +27,7 @@ class HealthStatus(Enum):
 @dataclass
 class ComponentHealth:
     """Health status of a single component."""
+
     name: str
     status: HealthStatus
     message: str
@@ -60,7 +62,7 @@ class HealthChecker:
         self.last_check_results: dict[str, ComponentHealth] | None = None
         self._last_cpu_percent: float = 0.0
         self._last_cpu_check_time: float = 0.0
-    
+
     async def check_all(self, use_cache: bool = False) -> dict[str, Any]:
         """
         Perform comprehensive health check on all components.
@@ -90,11 +92,11 @@ class HealthChecker:
         ]
 
         results = await asyncio.gather(*checks, return_exceptions=True)
-        
+
         # Process results
         component_health: dict[str, ComponentHealth] = {}
         for result in results:
-            if isinstance(result, Exception):
+            if isinstance(result, BaseException):
                 logger.exception("Health check failed with exception", exc_info=result)
                 component_health["error"] = ComponentHealth(
                     name="error",
@@ -102,19 +104,19 @@ class HealthChecker:
                     message=f"Health check failed: {result}",
                     response_time_ms=0.0,
                 )
-            elif result:
+            elif isinstance(result, ComponentHealth):
                 component_health[result.name] = result
-        
+
         # Determine overall health
         overall_status = self._determine_overall_health(component_health)
-        
+
         # Calculate total response time
         total_time_ms = (time.time() - start_time) * 1000
-        
+
         # Store results for caching
         self.last_check_time = time.time()
         self.last_check_results = component_health
-        
+
         return {
             "status": overall_status.value,
             "timestamp": time.time(),
@@ -129,26 +131,30 @@ class HealthChecker:
                 for name, health in component_health.items()
             },
         }
-    
+
     async def _check_database(self) -> ComponentHealth:
         """Check database connectivity."""
         start_time = time.time()
-        
+
         try:
             # Check if we can access metrics collector database
-            if self.engine and hasattr(self.engine, 'metrics_collector'):
+            if self.engine and hasattr(self.engine, "metrics_collector"):
                 from codeflow_engine.quality.metrics_collector import MetricsCollector
+
                 collector = MetricsCollector()
-                
+
                 # Try a simple query
                 import sqlite3
+
                 with sqlite3.connect(collector.db_path, timeout=5) as conn:
                     cursor = conn.cursor()
-                    cursor.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table'")
+                    cursor.execute(
+                        "SELECT COUNT(*) FROM sqlite_master WHERE type='table'"
+                    )
                     table_count = cursor.fetchone()[0]
-                
+
                 response_time = (time.time() - start_time) * 1000
-                
+
                 return ComponentHealth(
                     name="database",
                     status=HealthStatus.HEALTHY,
@@ -164,7 +170,7 @@ class HealthChecker:
                     message="Metrics collector not configured",
                     response_time_ms=response_time,
                 )
-        
+
         except Exception as e:
             response_time = (time.time() - start_time) * 1000
             logger.exception("Database health check failed")
@@ -174,13 +180,13 @@ class HealthChecker:
                 message=f"Database check failed: {e}",
                 response_time_ms=response_time,
             )
-    
+
     async def _check_llm_providers(self) -> ComponentHealth:
         """Check LLM provider availability."""
         start_time = time.time()
-        
+
         try:
-            if not self.engine or not hasattr(self.engine, 'llm_manager'):
+            if not self.engine or not hasattr(self.engine, "llm_manager"):
                 response_time = (time.time() - start_time) * 1000
                 return ComponentHealth(
                     name="llm_providers",
@@ -188,9 +194,9 @@ class HealthChecker:
                     message="LLM manager not configured",
                     response_time_ms=response_time,
                 )
-            
+
             providers = self.engine.llm_manager.list_providers()
-            
+
             if not providers:
                 response_time = (time.time() - start_time) * 1000
                 return ComponentHealth(
@@ -199,16 +205,15 @@ class HealthChecker:
                     message="No LLM providers available",
                     response_time_ms=response_time,
                 )
-            
+
             # Check circuit breaker status
             cb_status = self.engine.llm_manager.get_circuit_breaker_status()
             available_providers = [
-                name for name, stats in cb_status.items()
-                if stats["state"] != "open"
+                name for name, stats in cb_status.items() if stats["state"] != "open"
             ]
-            
+
             response_time = (time.time() - start_time) * 1000
-            
+
             if not available_providers:
                 return ComponentHealth(
                     name="llm_providers",
@@ -245,7 +250,7 @@ class HealthChecker:
                         "providers": providers,
                     },
                 )
-        
+
         except Exception as e:
             response_time = (time.time() - start_time) * 1000
             logger.exception("LLM provider health check failed")
@@ -255,13 +260,13 @@ class HealthChecker:
                 message=f"LLM provider check failed: {e}",
                 response_time_ms=response_time,
             )
-    
+
     async def _check_integrations(self) -> ComponentHealth:
         """Check integration status."""
         start_time = time.time()
-        
+
         try:
-            if not self.engine or not hasattr(self.engine, 'integration_registry'):
+            if not self.engine or not hasattr(self.engine, "integration_registry"):
                 response_time = (time.time() - start_time) * 1000
                 return ComponentHealth(
                     name="integrations",
@@ -269,20 +274,21 @@ class HealthChecker:
                     message="Integration registry not configured",
                     response_time_ms=response_time,
                 )
-            
+
             registry = self.engine.integration_registry
             all_integrations = registry.get_all_integrations()
             initialized = registry.get_initialized_integrations()
-            
+
             # Perform health check on initialized integrations
             health_results = await registry.health_check_all()
             unhealthy_count = sum(
-                1 for status in health_results.values()
+                1
+                for status in health_results.values()
                 if status.get("status") == "error"
             )
-            
+
             response_time = (time.time() - start_time) * 1000
-            
+
             if unhealthy_count > 0:
                 return ComponentHealth(
                     name="integrations",
@@ -308,7 +314,7 @@ class HealthChecker:
                         "integrations": all_integrations,
                     },
                 )
-        
+
         except Exception as e:
             response_time = (time.time() - start_time) * 1000
             logger.exception("Integration health check failed")
@@ -318,7 +324,7 @@ class HealthChecker:
                 message=f"Integration check failed: {e}",
                 response_time_ms=response_time,
             )
-    
+
     async def _check_system_resources(self) -> ComponentHealth:
         """Check system resource utilization."""
         start_time = time.time()
@@ -335,17 +341,17 @@ class HealthChecker:
             else:
                 self._last_cpu_percent = cpu_percent
                 self._last_cpu_check_time = time.time()
-            
+
             # Memory usage
             memory = psutil.virtual_memory()
             memory_percent = memory.percent
-            
+
             # Disk usage
-            disk = psutil.disk_usage('/')
+            disk = psutil.disk_usage("/")
             disk_percent = disk.percent
-            
+
             response_time = (time.time() - start_time) * 1000
-            
+
             # Determine status based on resource utilization
             if cpu_percent > 90 or memory_percent > 90 or disk_percent > 90:
                 status = HealthStatus.UNHEALTHY
@@ -356,7 +362,7 @@ class HealthChecker:
             else:
                 status = HealthStatus.HEALTHY
                 message = "Resource utilization normal"
-            
+
             return ComponentHealth(
                 name="system_resources",
                 status=status,
@@ -370,7 +376,7 @@ class HealthChecker:
                     "disk_free_gb": disk.free / (1024 * 1024 * 1024),
                 },
             )
-        
+
         except ImportError:
             # psutil not available
             response_time = (time.time() - start_time) * 1000
@@ -389,13 +395,13 @@ class HealthChecker:
                 message=f"Resource check failed: {e}",
                 response_time_ms=response_time,
             )
-    
+
     async def _check_workflow_engine(self) -> ComponentHealth:
         """Check workflow engine health."""
         start_time = time.time()
-        
+
         try:
-            if not self.engine or not hasattr(self.engine, 'workflow_engine'):
+            if not self.engine or not hasattr(self.engine, "workflow_engine"):
                 response_time = (time.time() - start_time) * 1000
                 return ComponentHealth(
                     name="workflow_engine",
@@ -403,12 +409,12 @@ class HealthChecker:
                     message="Workflow engine not configured",
                     response_time_ms=response_time,
                 )
-            
+
             engine_status = self.engine.workflow_engine.get_status()
             metrics = self.engine.workflow_engine.get_metrics()
-            
+
             response_time = (time.time() - start_time) * 1000
-            
+
             # Check if engine is running and has reasonable metrics
             if not engine_status.get("running"):
                 return ComponentHealth(
@@ -418,10 +424,12 @@ class HealthChecker:
                     response_time_ms=response_time,
                     details=engine_status,
                 )
-            
+
             # Check error rate
-            error_rate = metrics.get("failed_executions", 0) / max(metrics.get("total_executions", 1), 1)
-            
+            error_rate = metrics.get("failed_executions", 0) / max(
+                metrics.get("total_executions", 1), 1
+            )
+
             if error_rate > 0.5:
                 status = HealthStatus.UNHEALTHY
                 message = f"High error rate: {error_rate*100:.1f}%"
@@ -431,7 +439,7 @@ class HealthChecker:
             else:
                 status = HealthStatus.HEALTHY
                 message = "Workflow engine healthy"
-            
+
             return ComponentHealth(
                 name="workflow_engine",
                 status=status,
@@ -444,7 +452,7 @@ class HealthChecker:
                     "metrics": metrics,
                 },
             )
-        
+
         except Exception as e:
             response_time = (time.time() - start_time) * 1000
             logger.exception("Workflow engine health check failed")
@@ -454,42 +462,44 @@ class HealthChecker:
                 message=f"Workflow engine check failed: {e}",
                 response_time_ms=response_time,
             )
-    
+
     def _determine_overall_health(
         self, component_health: dict[str, ComponentHealth]
     ) -> HealthStatus:
         """
         Determine overall health based on component health.
-        
+
         Args:
             component_health: Dictionary of component health statuses
-            
+
         Returns:
             Overall health status
         """
         if not component_health:
             return HealthStatus.UNHEALTHY
-        
+
         unhealthy_count = sum(
-            1 for health in component_health.values()
+            1
+            for health in component_health.values()
             if health.status == HealthStatus.UNHEALTHY
         )
         degraded_count = sum(
-            1 for health in component_health.values()
+            1
+            for health in component_health.values()
             if health.status == HealthStatus.DEGRADED
         )
-        
+
         # If any component is unhealthy, overall is unhealthy
         if unhealthy_count > 0:
             return HealthStatus.UNHEALTHY
-        
+
         # If any component is degraded, overall is degraded
         if degraded_count > 0:
             return HealthStatus.DEGRADED
-        
+
         # All components are healthy
         return HealthStatus.HEALTHY
-    
+
     def get_cached_results(self) -> dict[str, Any] | None:
         """
         Get cached health check results.

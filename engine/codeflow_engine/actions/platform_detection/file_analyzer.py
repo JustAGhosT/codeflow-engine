@@ -48,11 +48,11 @@ class FileAnalyzer:
         self, platform_configs: dict[str, dict[str, Any]]
     ) -> dict[str, list[str]]:
         """Scan workspace for platform-specific files."""
-        results = {}
+        results: dict[str, list[str]] = {}
 
         # Convert platform configs to the new format
         for platform, config in platform_configs.items():
-            file_matches = []
+            file_matches: list[str] = []
             for file_pattern in config.get("files", []):
                 # Convert glob patterns to the new format
                 pattern = FilePattern(platform, file_pattern, confidence=0.7)
@@ -71,10 +71,10 @@ class FileAnalyzer:
         self, platform_configs: dict[str, dict[str, Any]]
     ) -> dict[str, list[str]]:
         """Scan workspace for platform-specific folder patterns."""
-        results = {}
+        results: dict[str, list[str]] = {}
 
         for platform, config in platform_configs.items():
-            folder_matches = []
+            folder_matches: list[str] = []
             for folder_pattern in config.get("folder_patterns", []):
                 # Look for directories matching the pattern
                 folder_matches.extend(
@@ -87,22 +87,6 @@ class FileAnalyzer:
                 results[platform] = list(set(folder_matches))  # Remove duplicates
 
         return results
-
-    def _find_files_by_pattern(self, pattern: str) -> list[str]:
-        """Find files matching the given glob pattern."""
-        return [
-            str(file_path.relative_to(self.workspace_path))
-            for file_path in self.workspace_path.glob("**/" + pattern)
-            if file_path.is_file()
-        ]
-
-    def _find_folders_by_pattern(self, pattern: str) -> list[str]:
-        """Find folders matching the given glob pattern."""
-        return [
-            str(dir_path.relative_to(self.workspace_path))
-            for dir_path in self.workspace_path.glob("**/" + pattern)
-            if dir_path.is_dir()
-        ]
 
     def analyze_file_content(
         self, file_path: str, platform_configs: dict[str, dict[str, Any]]
@@ -146,7 +130,7 @@ class FileAnalyzer:
             Dict mapping platform names to their detection results
         """
         # Convert platform configs to the new format
-        results = {}
+        results: dict[str, dict[str, Any]] = {}
 
         # Get file and folder matches using the new analyzer
         file_matches = self.scan_for_platform_files(platform_configs)
@@ -154,21 +138,18 @@ class FileAnalyzer:
 
         # Combine results in the legacy format
         for platform in set(file_matches.keys()) | set(folder_matches.keys()):
-            results[platform] = {
-                "files": file_matches.get(platform, []),
-                "folders": folder_matches.get(platform, []),
-                "confidence": 0.0,
-            }
+            platform_files = file_matches.get(platform, [])
+            platform_folders = folder_matches.get(platform, [])
 
             # Calculate confidence based on number of matches
-            file_count = len(results[platform]["files"])
-            folder_count = len(results[platform]["folders"])
+            file_count = len(platform_files)
+            folder_count = len(platform_folders)
 
             # More matches = higher confidence, but cap at 0.7
             confidence = min(0.7, 0.1 * (file_count + folder_count))
 
             # Analyze file contents for additional confidence
-            for file_path in results[platform]["files"]:
+            for file_path in platform_files:
                 content_results = self.analyze_file_content(
                     str(self.workspace_path / file_path),
                     {platform: platform_configs[platform]},
@@ -176,7 +157,11 @@ class FileAnalyzer:
                 if platform in content_results:
                     confidence = min(1.0, confidence + content_results[platform])
 
-            results[platform]["confidence"] = confidence
+            results[platform] = {
+                "files": platform_files,
+                "folders": platform_folders,
+                "confidence": confidence,
+            }
 
         return results
 

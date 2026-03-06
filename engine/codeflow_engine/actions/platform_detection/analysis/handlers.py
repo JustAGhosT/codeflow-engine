@@ -60,16 +60,19 @@ class FileHandler(ABC):
 
         try:
             # First check file patterns (name, path, etc.)
-            for pattern in self.file_patterns:
-                if pattern.matches(file_path):
-                    result.add_match(pattern.platform_id, pattern.confidence)
+            for file_pattern in self.file_patterns:
+                if file_pattern.matches(file_path):
+                    result.add_match(file_pattern.platform_id, file_pattern.confidence)
 
             # Then check content patterns
             content = self._read_file(file_path)
             if content is not None:
-                for pattern in self.patterns:
-                    if pattern.matches(content):
-                        result.add_match(pattern.platform_id, pattern.confidence)
+                for content_pattern in self.patterns:
+                    if content_pattern.matches(content):
+                        result.add_match(
+                            content_pattern.platform_id,
+                            content_pattern.confidence,
+                        )
 
             # Run any custom analysis
             custom_result = self._analyze_content(file_path, content, analyzer)

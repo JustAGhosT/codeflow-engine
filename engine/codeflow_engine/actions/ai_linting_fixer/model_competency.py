@@ -24,7 +24,7 @@ class ModelCompetencyManager:
         """Initialize the competency manager with predefined ratings."""
         self.model_competency = self._initialize_competency_ratings()
         self.fallback_strategies = self._initialize_fallback_strategies()
-        self.available_models = {}
+        self.available_models: dict[str, bool] = {}
         self._update_model_availabilities()
 
     def _initialize_competency_ratings(self) -> dict[str, dict[str, float]]:
@@ -116,7 +116,7 @@ class ModelCompetencyManager:
         # Add ratings from model configurations
         for model_config in ALL_MODEL_CONFIGS:
             if model_config.competency_ratings:
-                ratings[model_config.name] = model_config.competency_ratings
+                ratings[model_config.name] = dict(model_config.competency_ratings)
 
         return ratings
 
@@ -176,7 +176,7 @@ class ModelCompetencyManager:
         return self.model_competency.get(model_name, {}).get(error_code, 0.5)
 
     def get_fallback_sequence(
-        self, error_code: str, strategy_override: str = None
+        self, error_code: str, strategy_override: str | None = None
     ) -> list[tuple[str, str]]:
         """Get the optimal fallback sequence for an error code."""
         if strategy_override:
@@ -230,7 +230,7 @@ class ModelCompetencyManager:
             return max(0.1, base_competency - 0.2)
 
     def get_best_model_for_issue(
-        self, error_code: str, available_models: list[str] = None
+        self, error_code: str, available_models: list[str] | None = None
     ) -> str:
         """Get the best available model for a specific issue type."""
         if available_models is None:
@@ -307,7 +307,7 @@ class ModelCompetencyManager:
                 }
 
         # Return info for legacy cloud models
-        legacy_models = {
+        legacy_models: dict[str, dict[str, Any]] = {
             "gpt-35-turbo": {"provider": "azure_openai", "performance_tier": "Fast"},
             "gpt-4": {"provider": "azure_openai", "performance_tier": "High"},
             "gpt-4o": {"provider": "azure_openai", "performance_tier": "Excellent"},

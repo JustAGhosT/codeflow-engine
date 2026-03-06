@@ -1,32 +1,32 @@
 name: Release Orchestration Utils
 
 on:
-  push:
-    tags:
-      - 'orchestration-utils-v*'
+    push:
+        tags:
+            - "orchestration-utils-v*"
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: orchestration/packages/@codeflow/utils
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Install dependencies
-        run: npm install
-      - name: Build utilities package
-        run: npm run build
-      - name: Archive package build
-        run: tar -czf ../../../../orchestration-utils-build.tar.gz dist package.json README.md LICENSE
-      - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
-        with:
-          name: Orchestration Utils Release ${{ github.ref_name }}
-          files: orchestration-utils-build.tar.gz
+    release:
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: orchestration/packages/@codeflow/utils
+        permissions:
+            contents: write
+        steps:
+            - uses: actions/checkout@v4
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+            - name: Install dependencies
+              run: npm install
+            - name: Build utilities package
+              run: npm run build
+            - name: Archive package build
+              run: tar -czf ../../../../orchestration-utils-build.tar.gz dist package.json README.md LICENSE
+            - name: Create GitHub release
+              uses: softprops/action-gh-release@v2
+              with:
+                  name: Orchestration Utils Release ${{ github.ref_name }}
+                  files: orchestration-utils-build.tar.gz

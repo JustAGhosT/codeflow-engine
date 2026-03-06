@@ -5,15 +5,15 @@ on:
     branches:
       - master
     paths:
-      - 'engine/**'
-      - '.github/workflows/deploy-autopr-engine.yml'
-      - '.github/app-manifest.yml'
+      - "engine/**"
+      - ".github/workflows/deploy-autopr-engine.yml"
+      - ".github/app-manifest.yml"
   pull_request:
     paths:
-      - 'engine/**'
-      - '.github/workflows/deploy-autopr-engine.yml'
-      - '.github/app-manifest.yml'
-      - '.codeflow.yml'
+      - "engine/**"
+      - ".github/workflows/deploy-autopr-engine.yml"
+      - ".github/app-manifest.yml"
+      - ".codeflow.yml"
   workflow_dispatch:
 
 env:
@@ -189,9 +189,9 @@ jobs:
           RESOURCE_GROUP="prod-rg-san-codeflow"
           ENV_NAME="prod-codeflow-san-env"
           CUSTOM_DOMAIN="app.codeflow.io"
-          
+
           echo "[*] Checking for existing managed certificates for domain: $CUSTOM_DOMAIN"
-          
+
           # Check if environment exists
           if az containerapp env show -n $ENV_NAME -g $RESOURCE_GROUP &>/dev/null; then
             echo "Environment exists, checking for duplicate certificates..."
@@ -259,7 +259,7 @@ jobs:
             --name codeflow-engine \
             --query properties.outputs \
             --output json)
-          
+
           echo "container_app_url=$(echo $OUTPUTS | jq -r '.containerAppUrl.value')" >> $GITHUB_OUTPUT
           echo "custom_domain=$(echo $OUTPUTS | jq -r '.customDomain.value')" >> $GITHUB_OUTPUT
           echo "postgres_fqdn=$(echo $OUTPUTS | jq -r '.postgresFqdn.value')" >> $GITHUB_OUTPUT
@@ -281,4 +281,3 @@ jobs:
           echo "3. Azure will automatically provision and bind the SSL certificate (5-15 minutes)"
           echo ""
           echo "[*] For troubleshooting, see: infrastructure/bicep/FAQ.md"
-

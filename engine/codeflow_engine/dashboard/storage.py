@@ -166,9 +166,13 @@ class RedisStorage(StorageBackend):
     # Minimum seconds between reconnection attempts
     RECONNECT_COOLDOWN = 5.0
 
-    def __init__(self, redis_url: str | None = None, key_prefix: str = "CODEFLOW:dashboard:"):
+    def __init__(
+        self, redis_url: str | None = None, key_prefix: str = "CODEFLOW:dashboard:"
+    ):
         self._key_prefix = key_prefix
-        self._redis_url = redis_url or os.getenv("REDIS_URL", "redis://localhost:6379/0")
+        self._redis_url = redis_url or os.getenv(
+            "REDIS_URL", "redis://localhost:6379/0"
+        )
         self._client = None
         self._available = False
         self._last_reconnect_attempt = 0.0
@@ -179,6 +183,7 @@ class RedisStorage(StorageBackend):
         """Connect to Redis."""
         try:
             import redis
+
             self._client = redis.from_url(
                 self._redis_url,
                 decode_responses=True,
@@ -186,14 +191,18 @@ class RedisStorage(StorageBackend):
                 socket_timeout=5,
             )
             # Test connection
+            assert self._client is not None
             self._client.ping()
             self._available = True
-            logger.info(f"Connected to Redis at {self._redis_url.split('@')[-1]}")
+            display_url = self._redis_url.split("@")[-1]
+            logger.info(f"Connected to Redis at {display_url}")
         except ImportError:
             logger.error("redis package not installed. Install with: pip install redis")
             self._available = False
         except Exception as e:
-            logger.warning(f"Failed to connect to Redis: {e}. Falling back to in-memory.")
+            logger.warning(
+                f"Failed to connect to Redis: {e}. Falling back to in-memory."
+            )
             self._available = False
 
     def _try_reconnect(self) -> bool:
@@ -246,7 +255,9 @@ class RedisStorage(StorageBackend):
                     try:
                         return func()
                     except Exception as retry_error:
-                        logger.error(f"Redis {operation} failed after reconnect: {retry_error}")
+                        logger.error(
+                            f"Redis {operation} failed after reconnect: {retry_error}"
+                        )
             else:
                 logger.error(f"Redis {operation} error: {e}")
 
@@ -262,6 +273,7 @@ class RedisStorage(StorageBackend):
             if value is None:
                 return default
             return json.loads(value)
+
         return self._execute_with_retry("get", _get, default)
 
     def set(self, key: str, value: Any, ttl: int | None = None) -> None:
@@ -272,11 +284,13 @@ class RedisStorage(StorageBackend):
             else:
                 self._client.set(self._key(key), serialized)
             return True
+
         self._execute_with_retry("set", _set, None)
 
     def increment(self, key: str, amount: int = 1) -> int:
         def _increment():
             return self._client.incrby(self._key(key), amount)
+
         result = self._execute_with_retry("increment", _increment, 0)
         return result if isinstance(result, int) else 0
 
@@ -289,12 +303,14 @@ class RedisStorage(StorageBackend):
             pipe.ltrim(prefixed_key, -max_length, -1)
             pipe.execute()
             return True
+
         self._execute_with_retry("append_to_list", _append, None)
 
     def get_list(self, key: str) -> list[Any]:
         def _get_list():
             items = self._client.lrange(self._key(key), 0, -1)
             return [json.loads(item) for item in items]
+
         result = self._execute_with_retry("get_list", _get_list, [])
         return result if isinstance(result, list) else []
 
@@ -302,12 +318,14 @@ class RedisStorage(StorageBackend):
         def _update():
             self._client.hset(self._key(key), field, json.dumps(value))
             return True
+
         self._execute_with_retry("update_dict", _update, None)
 
     def get_dict(self, key: str) -> dict[str, Any]:
         def _get_dict():
             data = self._client.hgetall(self._key(key))
             return {k: json.loads(v) for k, v in data.items()}
+
         result = self._execute_with_retry("get_dict", _get_dict, {})
         return result if isinstance(result, dict) else {}
 
@@ -317,6 +335,7 @@ class RedisStorage(StorageBackend):
             if not self._client.exists(prefixed_key):
                 self._client.set(prefixed_key, json.dumps(value), nx=True)
             return True
+
         self._execute_with_retry("initialize_if_empty", _initialize, None)
 
     def is_available(self) -> bool:

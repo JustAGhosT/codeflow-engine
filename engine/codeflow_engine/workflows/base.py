@@ -250,7 +250,7 @@ class YAMLWorkflow(Workflow):
         # Implement condition evaluation
         result = False
         error_msg = None
-        
+
         try:
             if not condition:
                 result = False
@@ -274,15 +274,18 @@ class YAMLWorkflow(Workflow):
         return {
             "condition": condition,
             "result": result,
-            "message": f"Condition evaluated to {result}" + (f" (error: {error_msg})" if error_msg else ""),
+            "message": f"Condition evaluated to {result}"
+            + (f" (error: {error_msg})" if error_msg else ""),
         }
-    
-    def _evaluate_string_condition(self, condition: str, context: dict[str, Any]) -> bool:
+
+    def _evaluate_string_condition(
+        self, condition: str, context: dict[str, Any]
+    ) -> bool:
         """Evaluate a string-based condition."""
         # Simple variable substitution and evaluation
         for key, value in context.items():
             condition = condition.replace(f"{{{key}}}", repr(value))
-        
+
         # Safe evaluation of basic boolean expressions
         try:
             # Only allow specific safe operations
@@ -290,38 +293,62 @@ class YAMLWorkflow(Workflow):
             return bool(eval(condition, {"__builtins__": {}}, allowed_names))
         except Exception:
             return False
-    
-    def _evaluate_dict_condition(self, condition: dict[str, Any], context: dict[str, Any]) -> bool:
+
+    def _evaluate_dict_condition(
+        self, condition: dict[str, Any], context: dict[str, Any]
+    ) -> bool:
         """Evaluate a dictionary-based condition with operators."""
         operator = condition.get("op", "eq")
         left = condition.get("left")
         right = condition.get("right")
-        
+
         # Resolve variables from context
         if isinstance(left, str) and left.startswith("$"):
             left = context.get(left[1:], None)
         if isinstance(right, str) and right.startswith("$"):
             right = context.get(right[1:], None)
-        
+
         # Evaluate based on operator
         if operator == "eq":
             return left == right
         elif operator == "ne":
             return left != right
         elif operator == "gt":
-            return left > right
+            if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+                return left > right
+            if isinstance(left, str) and isinstance(right, str):
+                return left > right
+            return False
         elif operator == "lt":
-            return left < right
+            if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+                return left < right
+            if isinstance(left, str) and isinstance(right, str):
+                return left < right
+            return False
         elif operator == "gte":
-            return left >= right
+            if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+                return left >= right
+            if isinstance(left, str) and isinstance(right, str):
+                return left >= right
+            return False
         elif operator == "lte":
-            return left <= right
+            if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+                return left <= right
+            if isinstance(left, str) and isinstance(right, str):
+                return left <= right
+            return False
         elif operator == "in":
-            return left in right
+            if isinstance(right, (str, list, tuple, set, dict)):
+                return left in right
+            return False
         elif operator == "not_in":
-            return left not in right
+            if isinstance(right, (str, list, tuple, set, dict)):
+                return left not in right
+            return False
         elif operator == "contains":
-            return right in left
+            if isinstance(left, (str, list, tuple, set, dict)):
+                return right in left
+            return False
         else:
             return False
 
@@ -334,27 +361,29 @@ class YAMLWorkflow(Workflow):
         # Implement parallel execution using asyncio.gather
         results = []
         errors = []
-        
+
         try:
             # Create tasks for all parallel steps
             tasks = [self._execute_step(s, context) for s in parallel_steps]
-            
+
             # Execute all tasks concurrently
             results = await asyncio.gather(*tasks, return_exceptions=True)
-            
+
             # Separate successful results from errors
             successful_results = []
             for i, result in enumerate(results):
                 if isinstance(result, Exception):
-                    errors.append({
-                        "step_index": i,
-                        "error": str(result),
-                    })
+                    errors.append(
+                        {
+                            "step_index": i,
+                            "error": str(result),
+                        }
+                    )
                 else:
                     successful_results.append(result)
-            
+
             results = successful_results
-            
+
         except Exception as e:
             logger.exception(f"Error executing parallel steps: {e}")
             errors.append({"error": str(e)})
@@ -365,8 +394,8 @@ class YAMLWorkflow(Workflow):
             "errors": len(errors),
             "results": results,
             "error_details": errors if errors else None,
-            "message": f"Executed {len(results)}/{len(parallel_steps)} parallel steps" 
-                      + (f" with {len(errors)} errors" if errors else ""),
+            "message": f"Executed {len(results)}/{len(parallel_steps)} parallel steps"
+            + (f" with {len(errors)} errors" if errors else ""),
         }
 
     async def _execute_delay_step(

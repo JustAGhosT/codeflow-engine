@@ -6,6 +6,7 @@ This module handles code analysis, validation, and complexity calculations.
 
 import ast
 import logging
+from typing import Any
 
 
 try:
@@ -156,7 +157,7 @@ class CodeAnalyzer:
         docstring_lines = 0
 
         in_docstring = False
-        docstring_quotes = None
+        docstring_quotes: str | None = None
 
         for line in lines:
             stripped = line.strip()
@@ -175,7 +176,7 @@ class CodeAnalyzer:
                     docstring_lines += 1
                 else:
                     # End of docstring
-                    if docstring_quotes in stripped:
+                    if docstring_quotes and docstring_quotes in stripped:
                         in_docstring = False
                         docstring_quotes = None
                     docstring_lines += 1
@@ -223,7 +224,7 @@ class CodeAnalyzer:
             logger.debug(f"Error getting CPU usage: {e}")
             return 0.0
 
-    def analyze_function_complexity(self, content: str) -> list[dict[str, any]]:
+    def analyze_function_complexity(self, content: str) -> list[dict[str, Any]]:
         """Analyze complexity of individual functions."""
         try:
             tree = ast.parse(content)
@@ -245,7 +246,9 @@ class CodeAnalyzer:
             logger.debug(f"Error analyzing function complexity: {e}")
             return []
 
-    def _calculate_function_complexity(self, node: ast.FunctionDef) -> int:
+    def _calculate_function_complexity(
+        self, node: ast.FunctionDef | ast.AsyncFunctionDef
+    ) -> int:
         """Calculate cyclomatic complexity of a function."""
         complexity = 1  # Base complexity
 
@@ -266,7 +269,7 @@ class CodeAnalyzer:
 
         return complexity
 
-    def detect_code_smells(self, content: str) -> list[dict[str, any]]:
+    def detect_code_smells(self, content: str) -> list[dict[str, Any]]:
         """Detect common code smells and anti-patterns."""
         smells = []
 
@@ -313,7 +316,7 @@ class CodeAnalyzer:
 
         return smells
 
-    def get_code_metrics(self, content: str) -> dict[str, any]:
+    def get_code_metrics(self, content: str) -> dict[str, Any]:
         """Get comprehensive code metrics."""
         return {
             "complexity": self.calculate_file_complexity(content),

@@ -130,6 +130,9 @@ class GitHooksManager:
 
     def _install_pre_commit_hook(self, config: dict[str, Any] | None = None):
         """Install pre-commit hook for quality checks."""
+        if self.hooks_dir is None:
+            msg = "Hooks directory is not available"
+            raise RuntimeError(msg)
         hook_content = self._generate_pre_commit_hook(config)
         hook_path = self.hooks_dir / "pre-commit"
 
@@ -141,6 +144,9 @@ class GitHooksManager:
 
     def _install_post_commit_hook(self, config: dict[str, Any] | None = None):
         """Install post-commit hook for metrics collection."""
+        if self.hooks_dir is None:
+            msg = "Hooks directory is not available"
+            raise RuntimeError(msg)
         hook_content = self._generate_post_commit_hook(config)
         hook_path = self.hooks_dir / "post-commit"
 
@@ -152,6 +158,9 @@ class GitHooksManager:
 
     def _install_commit_msg_hook(self, config: dict[str, Any] | None = None):
         """Install commit-msg hook for commit message validation."""
+        if self.hooks_dir is None:
+            msg = "Hooks directory is not available"
+            raise RuntimeError(msg)
         hook_content = self._generate_commit_msg_hook(config)
         hook_path = self.hooks_dir / "commit-msg"
 

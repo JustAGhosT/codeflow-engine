@@ -178,7 +178,7 @@ class GitHubClient:
             ClientError: For network or other client errors
         """
         url = f"{self.config.base_url}{endpoint}"
-        last_error = None
+        last_error: Exception | None = None
 
         for attempt in range(self.config.max_retries + 1):
             try:
@@ -189,39 +189,37 @@ class GitHubClient:
                     f"{method} {url} (attempt {attempt + 1}/{self.config.max_retries + 1})"
                 )
 
-                async with self._get_session() as session:
-                    async with session.request(method, url, **kwargs) as response:
-                        # Update rate limit info from response
-                        await self._handle_rate_limit(response)
+                session = await self._get_session()
+                async with session.request(method, url, **kwargs) as response:
+                    # Update rate limit info from response
+                    await self._handle_rate_limit(response)
 
-                        if (
-                            response.status == 403
-                            and "X-RateLimit-Remaining" in response.headers
-                        ) and int(response.headers["X-RateLimit-Remaining"]) == 0:
-                            reset_time = int(
-                                response.headers.get(
-                                    "X-RateLimit-Reset", time.time() + 60
-                                )
-                            )
-                            sleep_time = max(
-                                1, reset_time - time.time() + 1
-                            )  # Add 1s buffer
-                            self.logger.warning(
-                                "Rate limited. Waiting %.1fs until reset",
-                                sleep_time,
-                            )
-                            await asyncio.sleep(sleep_time)
-                            continue  # Retry the request after waiting
+                    if (
+                        response.status == 403
+                        and "X-RateLimit-Remaining" in response.headers
+                    ) and int(response.headers["X-RateLimit-Remaining"]) == 0:
+                        reset_time = int(
+                            response.headers.get("X-RateLimit-Reset", time.time() + 60)
+                        )
+                        sleep_time = max(
+                            1, reset_time - time.time() + 1
+                        )  # Add 1s buffer
+                        self.logger.warning(
+                            "Rate limited. Waiting %.1fs until reset",
+                            sleep_time,
+                        )
+                        await asyncio.sleep(sleep_time)
+                        continue  # Retry the request after waiting
 
-                        response.raise_for_status()
+                    response.raise_for_status()
 
-                        # Handle different response types
-                        content_type = response.headers.get("Content-Type", "")
-                        if "application/json" in content_type:
-                            return await response.json()
-                        if content_type.startswith("text/"):
-                            return {"text": await response.text()}
-                        return {}
+                    # Handle different response types
+                    content_type = response.headers.get("Content-Type", "")
+                    if "application/json" in content_type:
+                        return await response.json()
+                    if content_type.startswith("text/"):
+                        return {"text": await response.text()}
+                    return {}
 
             except ClientResponseError as e:
                 if e.status == 403 and "rate limit" in (e.message or "").lower():

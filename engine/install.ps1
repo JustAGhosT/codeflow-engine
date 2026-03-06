@@ -64,13 +64,15 @@ function Test-Python {
             if ($major -gt 3 -or ($major -eq 3 -and $minor -ge 12)) {
                 Write-Success "Python $major.$minor detected"
                 return $true
-            } else {
+            }
+            else {
                 Write-Error "Python 3.12+ required (found $major.$minor)"
                 Write-Host "Install Python from: https://www.python.org/downloads/" -ForegroundColor Yellow
                 return $false
             }
         }
-    } catch {
+    }
+    catch {
         Write-Error "Python not found. Please install Python 3.12+"
         Write-Host "Install Python from: https://www.python.org/downloads/" -ForegroundColor Yellow
         return $false
@@ -84,7 +86,8 @@ function Test-Pip {
         $null = pip --version
         Write-Success "pip detected"
         return $true
-    } catch {
+    }
+    catch {
         Write-Error "pip not found"
         return $false
     }
@@ -96,7 +99,8 @@ function Test-Docker {
         $null = docker --version
         Write-Success "Docker detected"
         return $true
-    } catch {
+    }
+    catch {
         Write-Error "Docker not found. Please install Docker Desktop"
         Write-Host "Install from: https://www.docker.com/products/docker-desktop/" -ForegroundColor Yellow
         return $false
@@ -127,7 +131,8 @@ function Install-CodeFlow {
             Write-Status "Installing development package..."
             if (Test-Path "pyproject.toml") {
                 pip install -e ".[dev]"
-            } else {
+            }
+            else {
                 Write-Status "Cloning repository..."
                 git clone https://github.com/JustAGhosT/codeflow-engine.git
                 Set-Location codeflow-engine\engine
@@ -142,7 +147,8 @@ function Install-CodeFlow {
 
     if ($LASTEXITCODE -eq 0) {
         Write-Success "CodeFlow Engine installed successfully!"
-    } else {
+    }
+    else {
         Write-Error "Installation failed"
         exit 1
     }
@@ -161,7 +167,8 @@ function Install-Docker {
         try {
             Invoke-WebRequest -Uri "https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/master/engine/docker-compose.yml" -OutFile "docker-compose.yml"
             Invoke-WebRequest -Uri "https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/master/engine/configs/.env.example" -OutFile ".env.example"
-        } catch {
+        }
+        catch {
             Write-Error "Failed to download configuration files"
             exit 1
         }
@@ -195,7 +202,8 @@ function Install-GitHubAction {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/JustAGhosT/codeflow-engine/master/engine/templates/quick-start/codeflow-workflow.yml" -OutFile $workflowFile
         Write-Success "Created $workflowFile"
         Write-Warning "Remember to add OPENAI_API_KEY to your repository secrets!"
-    } catch {
+    }
+    catch {
         Write-Error "Failed to download workflow file"
         exit 1
     }
@@ -255,11 +263,14 @@ function Main {
 
     if ($Minimal) {
         Install-CodeFlow -Type "Minimal"
-    } elseif ($Full) {
+    }
+    elseif ($Full) {
         Install-CodeFlow -Type "Full"
-    } elseif ($Dev) {
+    }
+    elseif ($Dev) {
         Install-CodeFlow -Type "Dev"
-    } else {
+    }
+    else {
         Install-CodeFlow -Type "Standard"
     }
 

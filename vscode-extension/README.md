@@ -68,8 +68,8 @@ AI-Powered Code Quality and Automation for VS Code
 
 ### Extension Settings
 
-| Setting                    | Description                    | Default  |
-| -------------------------- | ------------------------------ | -------- |
+| Setting                      | Description                    | Default  |
+| ---------------------------- | ------------------------------ | -------- |
 | `codeflow.enabled`           | Enable/disable the extension   | `true`   |
 | `codeflow.qualityMode`       | Default quality analysis mode  | `fast`   |
 | `codeflow.autoFixEnabled`    | Enable automatic fixing        | `false`  |

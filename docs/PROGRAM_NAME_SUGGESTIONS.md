@@ -10,16 +10,16 @@ This document provides a comprehensive analysis of naming options for the CodeFl
 
 Our evaluation framework uses 8 key factors to assess each name candidate:
 
-| Factor | Weight | Description |
-|--------|--------|-------------|
-| **Clarity** | 8 pts | How clearly the name communicates the product's purpose |
-| **Memorability** | 8 pts | How easy the name is to remember and recall |
-| **Brandability** | 7 pts | Potential for logo design, visual identity, and marketing |
-| **Domain Availability** | 6 pts | .com/.io domain availability and social media handles |
-| **Target Fit** | 6 pts | Alignment with developer/enterprise audience |
-| **Scalability** | 5 pts | Ability to support product expansion beyond PRs |
-| **Uniqueness** | 5 pts | Distinctiveness in the market and SEO advantages |
-| **Professional Appeal** | 5 pts | Enterprise credibility and trust signals |
+| Factor                  | Weight | Description                                               |
+| ----------------------- | ------ | --------------------------------------------------------- |
+| **Clarity**             | 8 pts  | How clearly the name communicates the product's purpose   |
+| **Memorability**        | 8 pts  | How easy the name is to remember and recall               |
+| **Brandability**        | 7 pts  | Potential for logo design, visual identity, and marketing |
+| **Domain Availability** | 6 pts  | .com/.io domain availability and social media handles     |
+| **Target Fit**          | 6 pts  | Alignment with developer/enterprise audience              |
+| **Scalability**         | 5 pts  | Ability to support product expansion beyond PRs           |
+| **Uniqueness**          | 5 pts  | Distinctiveness in the market and SEO advantages          |
+| **Professional Appeal** | 5 pts  | Enterprise credibility and trust signals                  |
 
 ---
 

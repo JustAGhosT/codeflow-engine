@@ -52,7 +52,9 @@ class StructuredFormatter(logging.Formatter):
         # Add exception info if present
         if record.exc_info:
             log_data["exception"] = self.formatException(record.exc_info)
-            log_data["exception_type"] = record.exc_info[0].__name__ if record.exc_info[0] else None
+            log_data["exception_type"] = (
+                record.exc_info[0].__name__ if record.exc_info[0] else None
+            )
 
         # Add any additional extra fields
         for key, value in record.__dict__.items():
@@ -134,17 +136,18 @@ def setup_logging(settings: CodeFlowSettings) -> None:
     """
     # Get root logger
     root_logger = logging.getLogger()
-    root_logger.setLevel(getattr(logging, settings.monitoring.log_level.upper(), logging.INFO))
+    root_logger.setLevel(
+        getattr(logging, settings.monitoring.log_level.upper(), logging.INFO)
+    )
 
     # Remove existing handlers
     root_logger.handlers.clear()
 
     # Determine log format
     log_format = getattr(settings.monitoring, "log_format", "json")
-    if log_format == "json":
-        formatter = StructuredFormatter()
-    else:
-        formatter = TextFormatter()
+    formatter: logging.Formatter = (
+        StructuredFormatter() if log_format == "json" else TextFormatter()
+    )
 
     # Configure output handlers
     log_output = getattr(settings.monitoring, "log_output", "stdout")
@@ -152,7 +155,9 @@ def setup_logging(settings: CodeFlowSettings) -> None:
     if log_output in ("stdout", "both"):
         stdout_handler = logging.StreamHandler(sys.stdout)
         stdout_handler.setFormatter(formatter)
-        stdout_handler.setLevel(getattr(logging, settings.monitoring.log_level.upper(), logging.INFO))
+        stdout_handler.setLevel(
+            getattr(logging, settings.monitoring.log_level.upper(), logging.INFO)
+        )
         root_logger.addHandler(stdout_handler)
 
     if log_output in ("file", "both"):
@@ -162,7 +167,9 @@ def setup_logging(settings: CodeFlowSettings) -> None:
 
         file_handler = logging.FileHandler(log_file)
         file_handler.setFormatter(formatter)
-        file_handler.setLevel(getattr(logging, settings.monitoring.log_level.upper(), logging.INFO))
+        file_handler.setLevel(
+            getattr(logging, settings.monitoring.log_level.upper(), logging.INFO)
+        )
         root_logger.addHandler(file_handler)
 
     # Configure Azure Log Analytics if configured
@@ -224,4 +231,3 @@ def log_with_context(
         **context: Additional context fields
     """
     logger.log(level, message, extra=context)
-

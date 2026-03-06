@@ -12,9 +12,10 @@ from codeflow_engine.actions.ai_linting_fixer.ai_fix_applier import AIFixApplier
 from codeflow_engine.actions.ai_linting_fixer.database import AIInteractionDB
 from codeflow_engine.actions.ai_linting_fixer.metrics import MetricsCollector
 from codeflow_engine.actions.ai_linting_fixer.queue_manager import IssueQueueManager
-from codeflow_engine.actions.ai_linting_fixer.workflow import (WorkflowContext,
-                                                      WorkflowIntegrationMixin)
-from codeflow_engine.ai.core.providers.manager import LLMProviderManager
+from codeflow_engine.actions.ai_linting_fixer.workflow import (
+    WorkflowContext,
+    WorkflowIntegrationMixin,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +39,7 @@ class AILintingFixer(WorkflowIntegrationMixin):
 
     def __init__(
         self,
-        llm_manager: LLMProviderManager | None = None,
+        llm_manager: Any | None = None,
         max_workers: int = DEFAULT_MAX_WORKERS,
         workflow_context: WorkflowContext | None = None,
     ):
@@ -82,8 +83,11 @@ class AILintingFixer(WorkflowIntegrationMixin):
         """Generate a unique session identifier."""
         import random
         import string
+
         timestamp = self.metrics.session_metrics.start_time.strftime("%Y%m%d_%H%M%S")
-        random_suffix = "".join(random.choices(string.ascii_lowercase + string.digits, k=6))
+        random_suffix = "".join(
+            random.choices(string.ascii_lowercase + string.digits, k=6)
+        )
         return f"ai_lint_{timestamp}_{random_suffix}"
 
     def queue_detected_issues(self, issues: list, quiet: bool = False) -> int:
@@ -92,7 +96,7 @@ class AILintingFixer(WorkflowIntegrationMixin):
             return 0
 
         # Ensure session_id exists
-        if not hasattr(self, 'session_id') or not self.session_id:
+        if not hasattr(self, "session_id") or not self.session_id:
             msg = "Session ID is required but not available"
             raise ValueError(msg)
 
@@ -126,9 +130,7 @@ class AILintingFixer(WorkflowIntegrationMixin):
             # Get next batch of issues
             batch_size = min(max_fixes - processed_count, max_fixes)
             issues = self.queue_manager.get_next_issues(
-                limit=batch_size,
-                worker_id=self.session_id,
-                filter_types=filter_types
+                limit=batch_size, worker_id=self.session_id, filter_types=filter_types
             )
 
             if not issues:
@@ -157,14 +159,16 @@ class AILintingFixer(WorkflowIntegrationMixin):
                         self.queue_manager.update_issue_status(
                             issue_id=int(issue_id),
                             status=status,
-                            fix_result=fix_result.get("details", {})
+                            fix_result=fix_result.get("details", {}),
                         )
 
                     results["processed"] += 1
                     processed_count += 1
                 except Exception as e:
                     if not quiet:
-                        logger.exception("Error processing issue %s", issue.get('id', 'unknown'))
+                        logger.exception(
+                            "Error processing issue %s", issue.get("id", "unknown")
+                        )
                     results["failed"] += 1
                     results["processed"] += 1
                     processed_count += 1
@@ -175,7 +179,7 @@ class AILintingFixer(WorkflowIntegrationMixin):
                         self.queue_manager.update_issue_status(
                             issue_id=int(issue_id),
                             status="failed",
-                            fix_result={"error": str(e)}
+                            fix_result={"error": str(e)},
                         )
 
         # Update stats
@@ -204,15 +208,12 @@ class AILintingFixer(WorkflowIntegrationMixin):
                     "line_number": line_number,
                     "error_code": error_code,
                     "message": message,
-                    "fix_applied": f"Applied fix for {error_code}"
-                }
+                    "fix_applied": f"Applied fix for {error_code}",
+                },
             }
         except Exception as e:
             logger.exception("Error in _attempt_issue_fix")
-            return {
-                "success": False,
-                "details": {"error": str(e)}
-            }
+            return {"success": False, "details": {"error": str(e)}}
         else:
             return fix_result
 
@@ -223,7 +224,9 @@ class AILintingFixer(WorkflowIntegrationMixin):
 
         # Calculate success rate
         total_issues = self.stats["issues_processed"]
-        success_rate = 0.0 if total_issues == 0 else self.stats["issues_fixed"] / total_issues
+        success_rate = (
+            0.0 if total_issues == 0 else self.stats["issues_fixed"] / total_issues
+        )
 
         return {
             "session_id": self.session_id,

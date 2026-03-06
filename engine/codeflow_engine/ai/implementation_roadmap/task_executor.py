@@ -3,7 +3,7 @@ Task Executor for Implementation Roadmap
 Handles the execution of individual implementation tasks
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -21,14 +21,8 @@ class TaskExecution:
     start_time: datetime
     end_time: datetime | None = None
     error_message: str | None = None
-    files_created: list[str] | None = None
-    logs: list[str] | None = None
-
-    def __post_init__(self) -> None:
-        if self.files_created is None:
-            self.files_created = []
-        if self.logs is None:
-            self.logs = []
+    files_created: list[str] = field(default_factory=list)
+    logs: list[str] = field(default_factory=list)
 
     @property
     def duration(self) -> float | None:

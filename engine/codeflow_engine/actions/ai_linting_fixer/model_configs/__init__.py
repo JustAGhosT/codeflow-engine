@@ -7,6 +7,7 @@ availability detection and performance characteristics.
 
 import logging
 from functools import partial
+from typing import Any, Callable
 
 from codeflow_engine.actions.ai_linting_fixer.model_configs.deepseek_r1_7b import \
     DEEPSEEK_R1_7B_CONFIG
@@ -40,7 +41,7 @@ from codeflow_engine.actions.ai_linting_fixer.shared.gpt5_helper import \
 logger = logging.getLogger(__name__)
 
 # All model configurations
-ALL_MODEL_CONFIGS = [
+ALL_MODEL_CONFIGS: list[Any] = [
     GPT_5_CHAT_CONFIG,
     MISTRAL_7B_CONFIG,
     DEEPSEEK_R1_7B_CONFIG,
@@ -51,7 +52,7 @@ ALL_MODEL_CONFIGS = [
 ]
 
 # Availability update functions
-AVAILABILITY_UPDATERS = {
+AVAILABILITY_UPDATERS: dict[str, Callable[[], bool]] = {
     # Do not overwrite release flag; update endpoint only
     "gpt-5-chat": partial(update_gpt5_availability, GPT_5_CHAT_CONFIG, update_endpoint_only=True),
     "mistral-7b": update_mistral_availability,
@@ -63,7 +64,7 @@ AVAILABILITY_UPDATERS = {
 }
 
 
-def update_all_availabilities():
+def update_all_availabilities() -> dict[str, bool]:
     """Update availability status for all models."""
     results = {}
     for model_name, updater in AVAILABILITY_UPDATERS.items():
@@ -75,12 +76,12 @@ def update_all_availabilities():
     return results
 
 
-def get_available_models():
+def get_available_models() -> list[Any]:
     """Get list of currently available models."""
     return [config for config in ALL_MODEL_CONFIGS if config.availability]
 
 
-def get_model_by_name(name: str):
+def get_model_by_name(name: str) -> Any | None:
     """Get model configuration by name."""
     for config in ALL_MODEL_CONFIGS:
         if config.name == name:

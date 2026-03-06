@@ -37,7 +37,8 @@ class TemplateManager:
         """Load configuration from file"""
         try:
             import yaml
-            with open(config_path, 'r', encoding='utf-8') as f:
+
+            with open(config_path, "r", encoding="utf-8") as f:
                 return yaml.safe_load(f) or {}
         except Exception:
             return {"templates": {"confidence_threshold": 0.5}}
@@ -54,7 +55,9 @@ class TemplateManager:
 
         return sorted(discovered, key=lambda t: t.confidence, reverse=True)
 
-    def _calculate_confidence(self, project_path: Path, template_info: TemplateInfo) -> float:
+    def _calculate_confidence(
+        self, project_path: Path, template_info: TemplateInfo
+    ) -> float:
         """Calculate confidence score for template match"""
         # Simple confidence calculation based on file presence
         confidence = 0.0

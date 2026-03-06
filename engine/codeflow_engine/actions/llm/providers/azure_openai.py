@@ -71,9 +71,12 @@ class AzureOpenAIProvider(BaseLLMProvider):
         """Complete a chat conversation using Azure OpenAI."""
         client = self._get_client()
         if not client:
+            fallback_model = (
+                request.get("model") or self.default_model or "azure-openai"
+            )
             return LLMResponse.from_error(
                 "Azure OpenAI client not available",
-                request.get("model", self.default_model),
+                str(fallback_model),
             )
 
         try:
@@ -122,6 +125,7 @@ class AzureOpenAIProvider(BaseLLMProvider):
         except Exception as e:
             error_msg = f"Azure OpenAI API error: {e!s}"
             logger.exception(error_msg)
-            return LLMResponse.from_error(
-                error_msg, request.get("model", self.default_model)
+            fallback_model = (
+                request.get("model") or self.default_model or "azure-openai"
             )
+            return LLMResponse.from_error(error_msg, str(fallback_model))

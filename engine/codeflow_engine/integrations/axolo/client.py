@@ -91,9 +91,11 @@ class AxoloIntegration:
 
         try:
             # GitHub client
-            from codeflow_engine.clients.github_client import GitHubClient
+            from codeflow_engine.clients.github_client import GitHubClient, GitHubConfig
 
-            self.github_client = GitHubClient(os.getenv("GITHUB_TOKEN"))
+            self.github_client = GitHubClient(
+                GitHubConfig(token=os.getenv("GITHUB_TOKEN", ""))
+            )
 
             # Slack client (if using direct API)
             from slack_sdk.web.async_client import (

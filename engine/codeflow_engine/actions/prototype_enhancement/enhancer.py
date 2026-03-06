@@ -11,15 +11,10 @@ from pathlib import Path
 from typing import Any
 
 
-try:
-    from codeflow_engine.models.artifacts import (  # type: ignore[import-untyped]
-        PrototypeEnhancerInputs,
-        PrototypeEnhancerOutputs,
-    )
-except ImportError:
-    # Fallback for when models are not available during development
-    from typing import Any as PrototypeEnhancerInputs
-    from typing import Any as PrototypeEnhancerOutputs
+from codeflow_engine.models.artifacts import (
+    PrototypeEnhancerInputs,
+    PrototypeEnhancerOutputs,
+)
 
 from codeflow_engine.actions.prototype_enhancement.enhancement_strategies import (
     EnhancementStrategy,
@@ -30,6 +25,39 @@ from codeflow_engine.actions.prototype_enhancement.platform_configs import Platf
 
 
 logger = logging.getLogger(__name__)
+
+
+def _build_output(
+    *,
+    success: bool,
+    message: str,
+    enhanced_files: dict[str, Any],
+    package_json_updates: dict[str, Any],
+    deployment_configs: dict[str, Any],
+    checklist: list[str],
+    next_steps: list[str],
+    enhancement_summary: str,
+    platform_specific_notes: list[str],
+) -> PrototypeEnhancerOutputs:
+    metadata = {
+        "enhanced_files": enhanced_files,
+        "package_json_updates": package_json_updates,
+        "deployment_configs": deployment_configs,
+        "checklist": checklist,
+        "enhancement_summary": enhancement_summary,
+        "platform_specific_notes": platform_specific_notes,
+    }
+
+    generated_files = sorted(enhanced_files.keys())
+
+    return PrototypeEnhancerOutputs(
+        success=success,
+        message=message,
+        generated_files=generated_files,
+        modified_files=[],
+        next_steps=next_steps,
+        metadata=metadata,
+    )
 
 
 class PrototypeEnhancer:
@@ -104,6 +132,7 @@ class PrototypeEnhancer:
         self, inputs: PrototypeEnhancerInputs, config: PlatformConfig
     ) -> PrototypeEnhancerOutputs:
         """Enhance project for production readiness."""
+        _ = config
         strategy = self.enhancement_strategies[inputs.platform]
         project_path = Path(inputs.project_path) if inputs.project_path else Path.cwd()
 
@@ -128,22 +157,23 @@ class PrototypeEnhancer:
             "production_ready"
         ]
 
-        return PrototypeEnhancerOutputs(
+        return _build_output(
+            success=True,
+            message="Production enhancement completed successfully",
             enhanced_files=enhancement_result.get("files", {}),
             package_json_updates=package_json_updates,
             deployment_configs=self._get_deployment_configs(inputs.platform),
-            production_checklist=production_checklist,
+            checklist=production_checklist,
             next_steps=next_steps,
             enhancement_summary=self._create_enhancement_summary(enhancement_result),
-            platform_specific_notes=self._get_platform_notes(
-                inputs.platform, "production_ready"
-            ),
+            platform_specific_notes=self._get_platform_notes(inputs.platform, "production_ready"),
         )
 
     def _enhance_for_testing(
         self, inputs: PrototypeEnhancerInputs, config: PlatformConfig
     ) -> PrototypeEnhancerOutputs:
         """Enhance project for testing."""
+        _ = config
         strategy = self.enhancement_strategies[inputs.platform]
         project_path = Path(inputs.project_path) if inputs.project_path else Path.cwd()
 
@@ -175,22 +205,23 @@ class PrototypeEnhancer:
         # Get next steps
         next_steps = self.platform_registry.get_next_steps()[inputs.platform]["testing"]
 
-        return PrototypeEnhancerOutputs(
+        return _build_output(
+            success=True,
+            message="Testing enhancement completed successfully",
             enhanced_files=enhancement_result.get("files", {}),
             package_json_updates=package_json_updates,
             deployment_configs={},
-            production_checklist=testing_checklist,
+            checklist=testing_checklist,
             next_steps=next_steps,
             enhancement_summary=self._create_enhancement_summary(enhancement_result),
-            platform_specific_notes=self._get_platform_notes(
-                inputs.platform, "testing"
-            ),
+            platform_specific_notes=self._get_platform_notes(inputs.platform, "testing"),
         )
 
     def _enhance_for_security(
         self, inputs: PrototypeEnhancerInputs, config: PlatformConfig
     ) -> PrototypeEnhancerOutputs:
         """Enhance project for security."""
+        _ = config
         strategy = self.enhancement_strategies[inputs.platform]
         project_path = Path(inputs.project_path) if inputs.project_path else Path.cwd()
 
@@ -224,16 +255,16 @@ class PrototypeEnhancer:
             "security"
         ]
 
-        return PrototypeEnhancerOutputs(
+        return _build_output(
+            success=True,
+            message="Security enhancement completed successfully",
             enhanced_files=enhancement_result.get("files", {}),
             package_json_updates=package_json_updates,
             deployment_configs={},
-            production_checklist=security_checklist,
+            checklist=security_checklist,
             next_steps=next_steps,
             enhancement_summary=self._create_enhancement_summary(enhancement_result),
-            platform_specific_notes=self._get_platform_notes(
-                inputs.platform, "security"
-            ),
+            platform_specific_notes=self._get_platform_notes(inputs.platform, "security"),
         )
 
     def _generate_package_json_updates(
@@ -357,11 +388,13 @@ class PrototypeEnhancer:
 
     def _create_error_output(self, error_message: str) -> PrototypeEnhancerOutputs:
         """Create an error output."""
-        return PrototypeEnhancerOutputs(
+        return _build_output(
+            success=False,
+            message=error_message,
             enhanced_files={},
             package_json_updates={},
             deployment_configs={},
-            production_checklist=[],
+            checklist=[],
             next_steps=[f"Error: {error_message}"],
             enhancement_summary=f"Enhancement failed: {error_message}",
             platform_specific_notes=[],

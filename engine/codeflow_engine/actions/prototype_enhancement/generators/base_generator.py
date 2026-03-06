@@ -4,6 +4,7 @@ Base Generator Module
 Provides the BaseGenerator class that all specialized generators inherit from.
 """
 
+from dataclasses import asdict
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, TypeVar
@@ -90,6 +91,6 @@ class BaseGenerator(ABC):
 
         return {
             "platform": self.platform_config.name,
-            "platform_config": self.platform_config.dict(),
-            "platform_vars": self.platform_config.variables or {},
+            "platform_config": asdict(self.platform_config),
+            "platform_vars": {},
         }

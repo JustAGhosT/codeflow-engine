@@ -74,14 +74,6 @@ class ConfigurationValidator:
                 "GitHub timeout is very low, may cause request failures"
             )
 
-        # Retries validation
-        if github.max_retries < 0:
-            self.errors.append("GitHub max_retries cannot be negative")
-        elif github.max_retries > 10:
-            self.warnings.append(
-                "GitHub max_retries is very high, may cause long delays"
-            )
-
     def _validate_llm_config(self) -> None:
         """Validate LLM configuration."""
         llm = self.settings.llm

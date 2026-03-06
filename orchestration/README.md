@@ -83,12 +83,12 @@ codeflow-orchestration/
 
 ### Overall: 72% Complete
 
-| Wave | Status | Progress |
-|------|--------|----------|
-| Wave 1: Critical Foundation | Complete | 95% |
-| Wave 2: Quality & Documentation | Complete | 92% |
-| Wave 3: Operations & Infrastructure | Complete | 90% |
-| Wave 4: Optimization & Enhancement | In Progress | 65% |
+| Wave                                | Status      | Progress |
+| ----------------------------------- | ----------- | -------- |
+| Wave 1: Critical Foundation         | Complete    | 95%      |
+| Wave 2: Quality & Documentation     | Complete    | 92%      |
+| Wave 3: Operations & Infrastructure | Complete    | 90%      |
+| Wave 4: Optimization & Enhancement  | In Progress | 65%      |
 
 ---
 
@@ -134,11 +134,11 @@ The `bootstrap/` directory contains generic, reusable Azure environment setup sc
 
 ### Available Scripts
 
-| Script | Purpose |
-|--------|---------|
-| `New-AzRepoEnvironment.ps1` | Create core Azure resources (RG, Storage, Log Analytics, App Insights) |
-| `New-AzRepoFullEnvironment.ps1` | Full environment with App Service, Container Apps, Managed Identity |
-| `Set-GitHubSecretsFromJson.ps1` | Configure GitHub secrets from Azure output |
+| Script                          | Purpose                                                                |
+| ------------------------------- | ---------------------------------------------------------------------- |
+| `New-AzRepoEnvironment.ps1`     | Create core Azure resources (RG, Storage, Log Analytics, App Insights) |
+| `New-AzRepoFullEnvironment.ps1` | Full environment with App Service, Container Apps, Managed Identity    |
+| `Set-GitHubSecretsFromJson.ps1` | Configure GitHub secrets from Azure output                             |
 
 ### Usage
 
