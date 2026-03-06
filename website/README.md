@@ -66,15 +66,15 @@ npm run lint
 
 Comprehensive documentation is available in the `docs/` directory:
 
-| Document | Description |
-|----------|-------------|
-| [Project Context](docs/project-context.md) | Business goals, target users, and user journeys |
-| [Design System](docs/design-system.md) | Design tokens, typography, colors, and component inventory |
-| [Architecture Overview](docs/architecture-overview.md) | System architecture, data flow, and deployment pipeline |
-| [Tech Stack](docs/tech-stack.md) | Detailed technology breakdown by layer |
-| [Best Practices Benchmark](docs/best-practices-benchmark.md) | Industry standards and evaluation criteria |
-| [Audit Findings](docs/audit-findings.md) | Code audit results and recommendations |
-| [Technical Debt Registry](docs/technical-debt-registry.md) | Tracked issues, priorities, and resolution status |
+| Document                                                     | Description                                                |
+| ------------------------------------------------------------ | ---------------------------------------------------------- |
+| [Project Context](docs/project-context.md)                   | Business goals, target users, and user journeys            |
+| [Design System](docs/design-system.md)                       | Design tokens, typography, colors, and component inventory |
+| [Architecture Overview](docs/architecture-overview.md)       | System architecture, data flow, and deployment pipeline    |
+| [Tech Stack](docs/tech-stack.md)                             | Detailed technology breakdown by layer                     |
+| [Best Practices Benchmark](docs/best-practices-benchmark.md) | Industry standards and evaluation criteria                 |
+| [Audit Findings](docs/audit-findings.md)                     | Code audit results and recommendations                     |
+| [Technical Debt Registry](docs/technical-debt-registry.md)   | Tracked issues, priorities, and resolution status          |
 
 ## Deployment
 

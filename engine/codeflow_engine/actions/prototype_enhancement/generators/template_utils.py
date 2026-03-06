@@ -65,31 +65,24 @@ class TemplateManager:
         Returns:
             Rendered template content, or None if template not found
         """
-        if variables is None:
-            variables = {}
-        # Get template metadata
-        template_meta = self.template_registry.get_template(template_key)
-        if not template_meta:
+        rendered = self.template_registry.generate_template(
+            template_key,
+            variables=variables,
+            variants=variants,
+        )
+        if rendered is None:
             return None
 
-        # Apply variants if specified
-        if variants:
-            template_meta = self._apply_variants(template_meta, variants)
+        metadata = self.template_registry.get_metadata(template_key)
+        if metadata is None:
+            return rendered
 
-        # Get the template content
-        template_path = self.templates_dir / template_meta.path
-        if not template_path.exists():
-            return None
-
-        template_content = template_path.read_text(encoding="utf-8")
-
-        # If it's a Jinja2 template (has .j2 extension), render it
+        template_path = metadata.template_file_path
         if template_path.suffix == ".j2":
-            template = self.jinja_env.from_string(template_content)
-            return template.render(**variables)
+            template = self.jinja_env.from_string(rendered)
+            return template.render(**(variables or {}))
 
-        # Otherwise, return the raw content
-        return template_content
+        return rendered
 
     def _apply_variants(
         self, template_meta: TemplateMetadata, variants: list[str]
@@ -103,16 +96,5 @@ class TemplateManager:
         Returns:
             New template metadata with variants applied
         """
-        # Start with a copy of the original metadata
-        result = template_meta.copy()
-        # Apply each variant in order
-        for variant in variants:
-            if variant in template_meta.variants:
-                variant_meta = template_meta.variants[variant]
-                # Merge the variant's variables with the current ones
-                if variant_meta.variables:
-                    result.variables = {**result.variables, **variant_meta.variables}
-                # Apply any template overrides
-                if variant_meta.template:
-                    result.template = variant_meta.template
-        return result
+        _ = variants
+        return template_meta

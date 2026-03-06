@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - 'engine-v*'
+      - "engine-v*"
 
 jobs:
   release:
@@ -11,7 +11,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,7 +21,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Extract version from tag
         id: version
@@ -44,7 +44,7 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           PYPROJECT_VERSION=$(python -c "import tomllib; f=open('engine/pyproject.toml','rb'); d=tomllib.load(f); print(d['project']['version'])")
-          
+
           if [ "$VERSION" != "$PYPROJECT_VERSION" ]; then
             echo "❌ Version mismatch:"
             echo "   Tag version: $VERSION"
@@ -90,19 +90,19 @@ jobs:
           name: Release v${{ steps.version.outputs.version }}
           body: |
             ## Release v${{ steps.version.outputs.version }}
-            
+
             **Release Date:** $(date +'%Y-%m-%d')
-            
+
             ${{ steps.changelog.outputs.changelog }}
-            
+
             ## Installation
-            
+
             ```bash
             pip install codeflow-engine==${{ steps.version.outputs.version }}
             ```
-            
+
             ## Full Changelog
-            
+
             See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/master/engine/CHANGELOG.md) for full details.
           files: |
             engine/dist/*
@@ -115,4 +115,3 @@ jobs:
           name: engine-release-artifacts
           path: engine/dist/*
           retention-days: 90
-

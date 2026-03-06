@@ -164,7 +164,7 @@ class PhaseManager:
 
     async def _check_phase_dependencies(self, phase: Phase) -> bool:
         """Check if phase dependencies are satisfied"""
-        for dep_phase_name in phase.dependencies:
+        for dep_phase_name in phase.depends_on:
             dep_execution = self.phase_executions.get(dep_phase_name)
             if not dep_execution or dep_execution.status != "completed":
                 return False
@@ -296,7 +296,7 @@ class PhaseManager:
 
     def get_next_steps(self) -> list[dict[str, Any]]:
         """Get recommended next steps based on current progress"""
-        next_steps = []
+        next_steps: list[dict[str, Any]] = []
 
         # Check immediate phase
         immediate_progress = self.get_phase_progress("immediate")
@@ -361,12 +361,8 @@ class PhaseManager:
 
     def get_phase_summary(self) -> dict[str, Any]:
         """Get comprehensive summary of all phases"""
-        summary = {
-            "execution_summary": self.get_overall_progress(),
-            "phase_details": {},
-            "next_steps": self.get_next_steps(),
-            "recommendations": [],
-        }
+        phase_details: dict[str, dict[str, Any]] = {}
+        recommendations: list[str] = []
 
         # Add detailed phase information
         for phase_name in ["immediate", "medium", "strategic"]:
@@ -375,7 +371,7 @@ class PhaseManager:
 
             phase_detail = {
                 "name": phase_name,
-                "description": phase.description if phase else "",
+                "description": phase.display_name if phase else "",
                 "total_tasks": len(phase.tasks) if phase else 0,
                 "status": execution.status if execution else "not_started",
                 "progress": self.get_phase_progress(phase_name),
@@ -396,21 +392,27 @@ class PhaseManager:
                         },
                     }
                 )
+            phase_details[phase_name] = phase_detail
 
-            summary["phase_details"][phase_name] = phase_detail
+        summary: dict[str, Any] = {
+            "execution_summary": self.get_overall_progress(),
+            "phase_details": phase_details,
+            "next_steps": self.get_next_steps(),
+            "recommendations": recommendations,
+        }
 
         # Add recommendations based on current state
         overall_progress = summary["execution_summary"]["overall_progress_percentage"]
         if overall_progress < 25:
-            summary["recommendations"].append(
+            recommendations.append(
                 "Focus on completing immediate priority tasks first for quick wins"
             )
         elif overall_progress < 75:
-            summary["recommendations"].append(
+            recommendations.append(
                 "Consider running medium priority tasks in parallel where possible"
             )
         else:
-            summary["recommendations"].append(
+            recommendations.append(
                 "Excellent progress! Consider strategic enhancements for long-term benefits"
             )
 

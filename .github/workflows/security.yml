@@ -2,17 +2,17 @@ name: Security Scan
 
 on:
   push:
-    branches: [ master, develop ]
+    branches: [master, develop]
     paths:
-      - 'engine/**'
-      - '.github/workflows/security.yml'
+      - "engine/**"
+      - ".github/workflows/security.yml"
   pull_request:
-    branches: [ master, develop ]
+    branches: [master, develop]
     paths:
-      - 'engine/**'
-      - '.github/workflows/security.yml'
+      - "engine/**"
+      - ".github/workflows/security.yml"
   schedule:
-    - cron: '0 0 * * 1' # Weekly on Monday
+    - cron: "0 0 * * 1" # Weekly on Monday
 
 jobs:
   bandit:
@@ -23,28 +23,28 @@ jobs:
         working-directory: engine
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-          cache: 'pip'
-      
+          python-version: "3.12"
+          cache: "pip"
+
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
           version: latest
           virtualenvs-create: true
           virtualenvs-in-project: true
-      
+
       - name: Install dependencies
         run: poetry install --with dev --no-root
-      
+
       - name: Run Bandit
         run: |
           poetry run bandit -r codeflow_engine -f json -o bandit-report.json || true
           poetry run bandit -r codeflow_engine
-      
+
       - name: Upload Bandit report
         if: always()
         uses: actions/upload-artifact@v4
@@ -60,26 +60,26 @@ jobs:
         working-directory: engine
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-          cache: 'pip'
-      
+          python-version: "3.12"
+          cache: "pip"
+
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
           version: latest
           virtualenvs-create: true
           virtualenvs-in-project: true
-      
+
       - name: Install dependencies
         run: poetry install --with dev --no-root
-      
+
       - name: Export dependencies
         run: poetry export -f requirements.txt --output requirements.txt --without-hashes
-      
+
       - name: Run Safety check
         run: |
           pip install safety
@@ -90,19 +90,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: 'fs'
-          scan-ref: './engine'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
-      
+          scan-type: "fs"
+          scan-ref: "./engine"
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "CRITICAL,HIGH"
+
       - name: Upload Trivy results to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
-          sarif_file: 'trivy-results.sarif'
-
+          sarif_file: "trivy-results.sarif"

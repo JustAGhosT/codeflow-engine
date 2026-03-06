@@ -3,15 +3,15 @@ name: CI
 on:
   workflow_dispatch:
   push:
-    branches: [ master, develop ]
+    branches: [master, develop]
     paths:
-      - 'engine/**'
-      - '.github/workflows/ci.yml'
+      - "engine/**"
+      - ".github/workflows/ci.yml"
   pull_request:
-    branches: [ master, develop ]
+    branches: [master, develop]
     paths:
-      - 'engine/**'
-      - '.github/workflows/ci.yml'
+      - "engine/**"
+      - ".github/workflows/ci.yml"
 
 jobs:
   test:
@@ -21,59 +21,59 @@ jobs:
         working-directory: engine
     strategy:
       matrix:
-        python-version: ['3.12', '3.13']
-    
+        python-version: ["3.12", "3.13"]
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
-        cache: 'pip'
-    
-    - name: Install Poetry
-      uses: snok/install-poetry@v1
-      with:
-        version: latest
-        virtualenvs-create: true
-        virtualenvs-in-project: true
-    
-    - name: Install dependencies
-      run: |
-        poetry install --with dev --no-root
-    
-    - name: Install package
-      run: poetry install --no-dev
-    
-    - name: Run tests with coverage
-      run: |
-        poetry run pytest --cov=codeflow_engine --cov-report=xml --cov-report=term --cov-report=html
-    
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        file: ./engine/coverage.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: false
-        token: ${{ secrets.CODECOV_TOKEN }}
-    
-    - name: Check coverage threshold
-      run: |
-        poetry run coverage report --fail-under=70 || echo "Coverage below 70% - this is a warning, not a failure"
-    
-    - name: Upload coverage HTML report
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: coverage-report-${{ matrix.python-version }}
-        path: engine/htmlcov/
-    
-    - name: Run linting
-      run: |
-        poetry run ruff check .
-        poetry run mypy codeflow_engine
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Install dependencies
+        run: |
+          poetry install --with dev --no-root
+
+      - name: Install package
+        run: poetry install --no-dev
+
+      - name: Run tests with coverage
+        run: |
+          poetry run pytest --cov=codeflow_engine --cov-report=xml --cov-report=term --cov-report=html
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./engine/coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Check coverage threshold
+        run: |
+          poetry run coverage report --fail-under=70 || echo "Coverage below 70% - this is a warning, not a failure"
+
+      - name: Upload coverage HTML report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report-${{ matrix.python-version }}
+          path: engine/htmlcov/
+
+      - name: Run linting
+        run: |
+          poetry run ruff check .
+          poetry run mypy codeflow_engine
 
   build:
     runs-on: ubuntu-latest
@@ -81,32 +81,31 @@ jobs:
     defaults:
       run:
         working-directory: engine
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.12'
-        cache: 'pip'
-    
-    - name: Install Poetry
-      uses: snok/install-poetry@v1
-      with:
-        version: latest
-        virtualenvs-create: true
-        virtualenvs-in-project: true
-    
-    - name: Build package
-      run: poetry build
-    
-    - name: Check package
-      run: poetry check
-    
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: engine-dist
-        path: engine/dist/*
 
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Build package
+        run: poetry build
+
+      - name: Check package
+        run: poetry check
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: engine-dist
+          path: engine/dist/*

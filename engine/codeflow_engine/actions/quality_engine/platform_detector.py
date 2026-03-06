@@ -4,6 +4,7 @@ Platform detection and tool adaptation for the Quality Engine.
 
 import platform
 import sys
+from typing import Any
 
 import structlog
 
@@ -20,7 +21,7 @@ class PlatformDetector:
         self.is_linux = self.platform == "linux"
         self.is_macos = self.platform == "darwin"
 
-    def detect_platform(self) -> dict[str, any]:
+    def detect_platform(self) -> dict[str, Any]:
         """Detect the current platform and its capabilities."""
         return {
             "platform": self.platform,
@@ -154,8 +155,9 @@ class PlatformDetector:
         ]
 
 
-def create_platform_aware_tool_registry(tool_registry: any) -> any:
+def create_platform_aware_tool_registry(tool_registry: Any) -> PlatformDetector:
     """Create a platform-aware tool registry that adapts tools for the current platform."""
+    _ = tool_registry
     detector = PlatformDetector()
 
     if detector.should_show_windows_warning():

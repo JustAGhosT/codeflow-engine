@@ -2,15 +2,15 @@ name: Lint
 
 on:
   push:
-    branches: [ master, develop ]
+    branches: [master, develop]
     paths:
-      - 'engine/**'
-      - '.github/workflows/lint.yml'
+      - "engine/**"
+      - ".github/workflows/lint.yml"
   pull_request:
-    branches: [ master, develop ]
+    branches: [master, develop]
     paths:
-      - 'engine/**'
-      - '.github/workflows/lint.yml'
+      - "engine/**"
+      - ".github/workflows/lint.yml"
 
 jobs:
   ruff:
@@ -21,26 +21,26 @@ jobs:
         working-directory: engine
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-          cache: 'pip'
-      
+          python-version: "3.12"
+          cache: "pip"
+
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
           version: latest
           virtualenvs-create: true
           virtualenvs-in-project: true
-      
+
       - name: Install dependencies
         run: poetry install --with dev --no-root
-      
+
       - name: Run Ruff
         run: poetry run ruff check .
-      
+
       - name: Run Ruff format check
         run: poetry run ruff format --check .
 
@@ -52,23 +52,22 @@ jobs:
         working-directory: engine
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-          cache: 'pip'
-      
+          python-version: "3.12"
+          cache: "pip"
+
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
           version: latest
           virtualenvs-create: true
           virtualenvs-in-project: true
-      
+
       - name: Install dependencies
         run: poetry install --with dev --no-root
-      
+
       - name: Run MyPy
         run: poetry run mypy codeflow_engine --ignore-missing-imports
-

@@ -34,19 +34,19 @@ codeflow-orchestration/          # Renamed or repurposed
 
 ### Final Distribution
 
-| Package/Component | Current Location | Target Location |
-|-------------------|------------------|-----------------|
-| `@codeflow/utils` (TypeScript) | orchestration | codeflow-desktop OR npm registry |
-| `codeflow-utils-python` | orchestration | codeflow-engine |
-| Version scripts | orchestration | KEEP in orchestration |
-| Migration scripts | orchestration | KEEP in orchestration |
-| Deploy scripts | orchestration | orchestration/infrastructure |
-| Cost/monitoring scripts | orchestration | orchestration/infrastructure |
-| Bicep templates | infrastructure | orchestration/infrastructure/bicep |
-| Terraform templates | infrastructure | orchestration/infrastructure/terraform |
-| K8s manifests | infrastructure | orchestration/infrastructure/kubernetes |
-| Docker configs | infrastructure | orchestration/infrastructure/docker |
-| Azure bootstrap scripts | azure-setup | orchestration/bootstrap |
+| Package/Component              | Current Location | Target Location                         |
+| ------------------------------ | ---------------- | --------------------------------------- |
+| `@codeflow/utils` (TypeScript) | orchestration    | codeflow-desktop OR npm registry        |
+| `codeflow-utils-python`        | orchestration    | codeflow-engine                         |
+| Version scripts                | orchestration    | KEEP in orchestration                   |
+| Migration scripts              | orchestration    | KEEP in orchestration                   |
+| Deploy scripts                 | orchestration    | orchestration/infrastructure            |
+| Cost/monitoring scripts        | orchestration    | orchestration/infrastructure            |
+| Bicep templates                | infrastructure   | orchestration/infrastructure/bicep      |
+| Terraform templates            | infrastructure   | orchestration/infrastructure/terraform  |
+| K8s manifests                  | infrastructure   | orchestration/infrastructure/kubernetes |
+| Docker configs                 | infrastructure   | orchestration/infrastructure/docker     |
+| Azure bootstrap scripts        | azure-setup      | orchestration/bootstrap                 |
 
 ---
 
@@ -75,17 +75,17 @@ mkdir -p infrastructure/.github/workflows
 
 ### 1.3 File Migration Map
 
-| Source (infrastructure) | Destination (orchestration) |
-|------------------------|----------------------------|
-| `bicep/*` | `infrastructure/bicep/` |
-| `terraform/*` | `infrastructure/terraform/` |
-| `kubernetes/*` | `infrastructure/kubernetes/` |
-| `docker/*` | `infrastructure/docker/` |
-| `.github/workflows/deploy.yml` | `infrastructure/.github/workflows/deploy.yml` |
-| `.github/workflows/validate-bicep.yml` | `infrastructure/.github/workflows/validate-bicep.yml` |
+| Source (infrastructure)                    | Destination (orchestration)                               |
+| ------------------------------------------ | --------------------------------------------------------- |
+| `bicep/*`                                  | `infrastructure/bicep/`                                   |
+| `terraform/*`                              | `infrastructure/terraform/`                               |
+| `kubernetes/*`                             | `infrastructure/kubernetes/`                              |
+| `docker/*`                                 | `infrastructure/docker/`                                  |
+| `.github/workflows/deploy.yml`             | `infrastructure/.github/workflows/deploy.yml`             |
+| `.github/workflows/validate-bicep.yml`     | `infrastructure/.github/workflows/validate-bicep.yml`     |
 | `.github/workflows/validate-terraform.yml` | `infrastructure/.github/workflows/validate-terraform.yml` |
-| `README.md` | `infrastructure/README.md` |
-| `CONTRIBUTING.md` | Merge into root `CONTRIBUTING.md` |
+| `README.md`                                | `infrastructure/README.md`                                |
+| `CONTRIBUTING.md`                          | Merge into root `CONTRIBUTING.md`                         |
 
 ### 1.4 Migration Commands
 
@@ -113,14 +113,14 @@ cat /workspace/repo-d2820966-92b3-4910-92b0-10b690b91f52/.gitignore >> .gitignor
 
 Files requiring path updates after move:
 
-| File | Changes Required |
-|------|------------------|
-| `infrastructure/bicep/deploy-codeflow-engine.sh` | Update relative paths to bicep files |
-| `infrastructure/bicep/deploy-codeflow-engine.ps1` | Update relative paths to bicep files |
-| `infrastructure/.github/workflows/deploy.yml` | Update working-directory to `infrastructure/bicep` |
-| `infrastructure/.github/workflows/validate-bicep.yml` | Update glob paths: `infrastructure/bicep/**/*.bicep` |
+| File                                                      | Changes Required                                       |
+| --------------------------------------------------------- | ------------------------------------------------------ |
+| `infrastructure/bicep/deploy-codeflow-engine.sh`          | Update relative paths to bicep files                   |
+| `infrastructure/bicep/deploy-codeflow-engine.ps1`         | Update relative paths to bicep files                   |
+| `infrastructure/.github/workflows/deploy.yml`             | Update working-directory to `infrastructure/bicep`     |
+| `infrastructure/.github/workflows/validate-bicep.yml`     | Update glob paths: `infrastructure/bicep/**/*.bicep`   |
 | `infrastructure/.github/workflows/validate-terraform.yml` | Update working-directory to `infrastructure/terraform` |
-| `infrastructure/docker/docker-compose.yml` | Update Dockerfile paths |
+| `infrastructure/docker/docker-compose.yml`                | Update Dockerfile paths                                |
 
 ### 1.6 CI/CD Workflow Integration
 
@@ -184,16 +184,16 @@ mkdir -p bootstrap/.github/workflows
 
 ### 2.3 File Migration Map
 
-| Source (azure-setup) | Destination (orchestration) |
-|---------------------|----------------------------|
-| `scripts/New-AzRepoEnvironment.ps1` | `bootstrap/scripts/` |
-| `scripts/New-AzRepoFullEnvironment.ps1` | `bootstrap/scripts/` |
-| `scripts/Set-GitHubSecretsFromJson.ps1` | `bootstrap/scripts/` |
-| `scripts/README-AZURE-SETUP.md` | `bootstrap/README.md` |
-| `.github/workflows/validate.yml` | `bootstrap/.github/workflows/validate.yml` |
-| `.github/workflows/validate-powershell.yml` | Merge into main `validate.yml` |
-| `README.md` | Reference in `bootstrap/README.md` |
-| `CONTRIBUTING.md` | Merge into root `CONTRIBUTING.md` |
+| Source (azure-setup)                        | Destination (orchestration)                |
+| ------------------------------------------- | ------------------------------------------ |
+| `scripts/New-AzRepoEnvironment.ps1`         | `bootstrap/scripts/`                       |
+| `scripts/New-AzRepoFullEnvironment.ps1`     | `bootstrap/scripts/`                       |
+| `scripts/Set-GitHubSecretsFromJson.ps1`     | `bootstrap/scripts/`                       |
+| `scripts/README-AZURE-SETUP.md`             | `bootstrap/README.md`                      |
+| `.github/workflows/validate.yml`            | `bootstrap/.github/workflows/validate.yml` |
+| `.github/workflows/validate-powershell.yml` | Merge into main `validate.yml`             |
+| `README.md`                                 | Reference in `bootstrap/README.md`         |
+| `CONTRIBUTING.md`                           | Merge into root `CONTRIBUTING.md`          |
 
 ### 2.4 Migration Commands
 
@@ -321,22 +321,22 @@ codeflow-utils-python = "^0.1.0"
 
 ### 3.3 Migration Scripts Distribution
 
-| Script Category | Current Location | Action |
-|----------------|------------------|--------|
-| `scripts/deploy-all.ps1` | orchestration | Move to `infrastructure/scripts/` |
-| `scripts/deploy-all.sh` | orchestration | Move to `infrastructure/scripts/` |
-| `scripts/health-check.ps1` | orchestration | Move to `infrastructure/scripts/` |
-| `scripts/automation/*` | orchestration | Move to `infrastructure/scripts/automation/` |
-| `scripts/cost/*` | orchestration | Move to `infrastructure/scripts/cost/` |
-| `scripts/monitoring/*` | orchestration | Move to `infrastructure/scripts/monitoring/` |
-| `scripts/performance/*` | orchestration | Move to `infrastructure/scripts/performance/` |
-| `scripts/deployment/*` | orchestration | Move to `infrastructure/scripts/deployment/` |
-| `scripts/check-versions.ps1` | orchestration | KEEP in `scripts/` |
-| `scripts/bump-version.ps1` | orchestration | KEEP in `scripts/` |
-| `scripts/sync-versions.ps1` | orchestration | KEEP in `scripts/` |
-| `scripts/migrate-autopr-to-codeflow.ps1` | orchestration | KEEP in `scripts/` as a legacy compatibility migration utility |
-| `scripts/dev-setup.ps1` | orchestration | KEEP in `scripts/` |
-| `scripts/dev-setup.sh` | orchestration | KEEP in `scripts/` |
+| Script Category                          | Current Location | Action                                                         |
+| ---------------------------------------- | ---------------- | -------------------------------------------------------------- |
+| `scripts/deploy-all.ps1`                 | orchestration    | Move to `infrastructure/scripts/`                              |
+| `scripts/deploy-all.sh`                  | orchestration    | Move to `infrastructure/scripts/`                              |
+| `scripts/health-check.ps1`               | orchestration    | Move to `infrastructure/scripts/`                              |
+| `scripts/automation/*`                   | orchestration    | Move to `infrastructure/scripts/automation/`                   |
+| `scripts/cost/*`                         | orchestration    | Move to `infrastructure/scripts/cost/`                         |
+| `scripts/monitoring/*`                   | orchestration    | Move to `infrastructure/scripts/monitoring/`                   |
+| `scripts/performance/*`                  | orchestration    | Move to `infrastructure/scripts/performance/`                  |
+| `scripts/deployment/*`                   | orchestration    | Move to `infrastructure/scripts/deployment/`                   |
+| `scripts/check-versions.ps1`             | orchestration    | KEEP in `scripts/`                                             |
+| `scripts/bump-version.ps1`               | orchestration    | KEEP in `scripts/`                                             |
+| `scripts/sync-versions.ps1`              | orchestration    | KEEP in `scripts/`                                             |
+| `scripts/migrate-autopr-to-codeflow.ps1` | orchestration    | KEEP in `scripts/` as a legacy compatibility migration utility |
+| `scripts/dev-setup.ps1`                  | orchestration    | KEEP in `scripts/`                                             |
+| `scripts/dev-setup.sh`                   | orchestration    | KEEP in `scripts/`                                             |
 
 ### 3.4 Script Relocation Commands
 
@@ -370,13 +370,13 @@ rmdir scripts/automation scripts/cost scripts/monitoring scripts/performance scr
 
 Update the following files in each CodeFlow repository:
 
-| Repository | Files to Update |
-|------------|-----------------|
-| codeflow-engine | `README.md`, CI/CD workflows |
-| codeflow-desktop | `README.md`, `package.json` |
-| codeflow-vscode-extension | `README.md` |
-| codeflow-website | `README.md`, deployment configs |
-| codeflow-orchestration | All docs, README.md |
+| Repository                | Files to Update                 |
+| ------------------------- | ------------------------------- |
+| codeflow-engine           | `README.md`, CI/CD workflows    |
+| codeflow-desktop          | `README.md`, `package.json`     |
+| codeflow-vscode-extension | `README.md`                     |
+| codeflow-website          | `README.md`, deployment configs |
+| codeflow-orchestration    | All docs, README.md             |
 
 ### 4.2 Archive codeflow-infrastructure
 

@@ -1,6 +1,6 @@
-﻿import React, { Suspense, lazy, useEffect, useState } from 'react';
-import { HashRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Home, Settings, FileText, Moon, Sun, BarChart3 } from 'lucide-react';
+﻿import { BarChart3, FileText, Home, Moon, Settings, Sun } from 'lucide-react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
+import { Link, Route, HashRouter as Router, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -57,11 +57,10 @@ function NavigationLink({ to, icon: Icon, label }: { to: string; icon: any; labe
   return (
     <Link
       to={to}
-      className={`flex items-center px-6 py-3 mt-2 transition-colors duration-200 ${
-        isActive
+      className={`flex items-center px-6 py-3 mt-2 transition-colors duration-200 ${isActive
           ? 'bg-blue-600 text-white'
           : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-      }`}
+        }`}
       aria-current={isActive ? 'page' : undefined}
     >
       <Icon className="w-5 h-5" />

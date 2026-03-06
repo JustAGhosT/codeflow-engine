@@ -8,18 +8,18 @@ The monorepo uses a combination of engine-specific workflows, path-aware compone
 
 ### Workflow Overview
 
-| Workflow | Purpose | Triggers |
-| --- | --- | --- |
-| `ci.yml` | Engine test and build validation | Push, PR, manual |
-| `lint.yml` | Engine lint and type checks | Push, PR |
-| `security.yml` | Engine dependency and filesystem security checks | Push, PR, schedule |
-| `monorepo-ci.yml` | Path-aware builds for engine, desktop, website, orchestration utils, and VS Code extension | Push, PR, manual |
-| `release.yml` | Engine package release | Tags, manual |
-| `release-desktop.yml` | Desktop release build | Tags, manual |
-| `release-website.yml` | Website release build | Tags, manual |
-| `release-vscode-extension.yml` | VS Code extension release packaging | Tags, manual |
-| `release-orchestration-utils.yml` | Shared utility package release build | Tags, manual |
-| `deploy-autopr-engine.yml` | Engine container build and Azure deployment | Push to `master`, PR, manual |
+| Workflow                          | Purpose                                                                                    | Triggers                     |
+| --------------------------------- | ------------------------------------------------------------------------------------------ | ---------------------------- |
+| `ci.yml`                          | Engine test and build validation                                                           | Push, PR, manual             |
+| `lint.yml`                        | Engine lint and type checks                                                                | Push, PR                     |
+| `security.yml`                    | Engine dependency and filesystem security checks                                           | Push, PR, schedule           |
+| `monorepo-ci.yml`                 | Path-aware builds for engine, desktop, website, orchestration utils, and VS Code extension | Push, PR, manual             |
+| `release.yml`                     | Engine package release                                                                     | Tags, manual                 |
+| `release-desktop.yml`             | Desktop release build                                                                      | Tags, manual                 |
+| `release-website.yml`             | Website release build                                                                      | Tags, manual                 |
+| `release-vscode-extension.yml`    | VS Code extension release packaging                                                        | Tags, manual                 |
+| `release-orchestration-utils.yml` | Shared utility package release build                                                       | Tags, manual                 |
+| `deploy-autopr-engine.yml`        | Engine container build and Azure deployment                                                | Push to `master`, PR, manual |
 
 ## Workflow Details
 
@@ -143,17 +143,17 @@ env:
 
 Set these in GitHub repository settings:
 
-| Variable                | Description              | Default |
-| ----------------------- | ------------------------ | ------- |
+| Variable                  | Description              | Default |
+| ------------------------- | ------------------------ | ------- |
 | `CODEFLOW_VOLUME_PR`      | Volume for pull requests | 100     |
 | `CODEFLOW_VOLUME_CHECKIN` | Volume for pushes        | 50      |
 | `CODEFLOW_VOLUME_DEV`     | Volume for development   | 200     |
 
 ### Environment Variables
 
-| Variable                  | Description               | Default |
-| ------------------------- | ------------------------- | ------- |
-| `PYTHON_VERSION`          | Python version to use     | 3.13    |
+| Variable                    | Description               | Default |
+| --------------------------- | ------------------------- | ------- |
+| `PYTHON_VERSION`            | Python version to use     | 3.13    |
 | `CODEFLOW_PRECOMMIT_VOLUME` | Pre-commit volume         | 100     |
 | `CODEFLOW_BG_BATCH`         | Background fix batch size | 30      |
 

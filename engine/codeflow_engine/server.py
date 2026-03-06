@@ -22,6 +22,7 @@ logger = get_logger(__name__)
 try:
     from codeflow_engine.dashboard.router import router as dashboard_router
     from codeflow_engine.dashboard.router import __version__ as DASHBOARD_VERSION
+
     DASHBOARD_AVAILABLE = True
     logger.info("Dashboard module loaded successfully")
 except ImportError as e:
@@ -37,6 +38,7 @@ try:
         webhook_router,
         setup_router,
     )
+
     GITHUB_APP_AVAILABLE = True
     logger.info("GitHub App integration loaded successfully")
 except ImportError as e:
@@ -60,7 +62,7 @@ def get_health_checker() -> HealthChecker:
 
 async def root_fallback():
     """Root endpoint fallback when dashboard is not available.
-    
+
     Returns API information and available endpoints.
     """
     return {
@@ -115,7 +117,9 @@ def create_app(settings: CodeFlowSettings | None = None) -> FastAPI:
     cors_origins_env = os.getenv("CORS_ALLOWED_ORIGINS", "")
     if cors_origins_env:
         # Parse comma-separated list of allowed origins
-        cors_origins = [origin.strip() for origin in cors_origins_env.split(",") if origin.strip()]
+        cors_origins = [
+            origin.strip() for origin in cors_origins_env.split(",") if origin.strip()
+        ]
         allow_credentials = True  # Safe with specific origins
     else:
         # Development fallback: allow all origins only when env var not set
@@ -179,7 +183,9 @@ def create_app(settings: CodeFlowSettings | None = None) -> FastAPI:
     health_checker = get_health_checker()
 
     @app.get("/health")
-    async def health(detailed: bool = Query(False, description="Return detailed health info")):
+    async def health(
+        detailed: bool = Query(False, description="Return detailed health info")
+    ):
         """
         Health check endpoint.
 

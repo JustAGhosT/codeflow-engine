@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 import secrets
@@ -34,8 +34,8 @@ class UserRole(Enum):
 class AuthenticationResult:
     success: bool
     user_id: str | None = None
-    roles: list[str] = None
-    permissions: list[str] = None
+    roles: list[str] = field(default_factory=list)
+    permissions: list[str] = field(default_factory=list)
     token: str | None = None
     expires_at: datetime | None = None
     error_message: str | None = None
@@ -50,7 +50,7 @@ class UserCredentials:
     roles: list[str]
     permissions: list[str]
     is_active: bool = True
-    created_at: datetime = None
+    created_at: datetime = field(default_factory=datetime.utcnow)
     last_login: datetime | None = None
     failed_login_attempts: int = 0
     locked_until: datetime | None = None
@@ -173,12 +173,13 @@ class EnterpriseAuthenticationManager:
             user.locked_until = None
 
             # Generate JWT token
-            payload = {
+            expires_at = datetime.utcnow() + self.token_expiry
+            payload: dict[str, Any] = {
                 "sub": user.username,
                 "roles": user.roles,
                 "permissions": user.permissions,
                 "iat": datetime.utcnow(),
-                "exp": datetime.utcnow() + self.token_expiry,
+                "exp": expires_at,
             }
             token = jwt.encode(payload, self.secret_key, algorithm="HS256")
 
@@ -198,7 +199,7 @@ class EnterpriseAuthenticationManager:
                 roles=user.roles,
                 permissions=user.permissions,
                 token=token,
-                expires_at=payload["exp"],
+                expires_at=expires_at,
             )
 
         except Exception as e:
