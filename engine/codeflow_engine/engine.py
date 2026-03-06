@@ -30,7 +30,11 @@ class CodeFlowEngine:
     - AI/LLM provider coordination
     """
 
-    def __init__(self, config: CodeFlowConfig | None = None, log_handler: logging.Handler | None = None):
+    def __init__(
+        self,
+        config: CodeFlowConfig | None = None,
+        log_handler: logging.Handler | None = None,
+    ):
         """
         Initialize the CodeFlow Engine.
 
@@ -67,7 +71,7 @@ class CodeFlowEngine:
                 msg = "Invalid configuration: Missing required authentication or LLM provider keys"
                 logger.error(msg)
                 raise ConfigurationError(msg)
-            
+
             await self.workflow_engine.start()
             await self.integration_registry.initialize()
             await self.llm_manager.initialize()
@@ -106,6 +110,7 @@ class CodeFlowEngine:
             return result
         except Exception as e:
             handle_operation_error("Event processing", e, CodeFlowException)
+            raise
 
     def get_status(self) -> dict[str, Any]:
         """
@@ -128,11 +133,11 @@ class CodeFlowEngine:
         from codeflow_engine import __version__
 
         return __version__
-    
+
     async def health_check(self) -> dict[str, Any]:
         """
         Perform comprehensive health check on all components.
-        
+
         Returns:
             Health check results including overall status and component details
         """
@@ -140,3 +145,4 @@ class CodeFlowEngine:
             return await self.health_checker.check_all()
         except Exception as e:
             handle_operation_error("Health check", e, CodeFlowException)
+            raise

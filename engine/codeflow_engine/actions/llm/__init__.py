@@ -59,7 +59,7 @@ from codeflow_engine.actions.ai_actions.llm.types import (
 )
 
 # Conditionally import MistralProvider
-MistralProvider = None
+MistralProvider: Any = None
 if MISTRAL_AVAILABLE:
     from codeflow_engine.actions.ai_actions.llm.providers import MistralProvider
 

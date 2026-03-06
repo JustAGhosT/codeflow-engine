@@ -90,7 +90,9 @@ class FileAnalyzer:
     ) -> None:
         """Register a handler for files matching the given pattern."""
         # Import here to avoid circular import
-        from codeflow_engine.actions.platform_detection.analysis.handlers import FileHandler
+        from codeflow_engine.actions.platform_detection.analysis.handlers import (
+            FileHandler,
+        )
 
         if not issubclass(handler_cls, FileHandler):
             msg = f"Handler must be a subclass of FileHandler, got {handler_cls}"
@@ -106,6 +108,10 @@ class FileAnalyzer:
 
     def get_handler_for_file(self, file_path: Path) -> FileHandler | None:
         """Get the appropriate handler for the given file."""
+        from codeflow_engine.actions.platform_detection.analysis.handlers import (
+            DefaultFileHandler,
+        )
+
         filename = file_path.name
 
         # Check for exact matches first
@@ -119,7 +125,8 @@ class FileAnalyzer:
                 return handler_cls()
 
         # Default to the catch-all handler if available
-        return self.handlers.get("*", DefaultFileHandler)()
+        default_handler_cls = self.handlers.get("*", DefaultFileHandler)
+        return default_handler_cls()
 
     def analyze_file(self, file_path: Path) -> FileAnalysisResult:
         """

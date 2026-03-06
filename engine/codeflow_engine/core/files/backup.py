@@ -43,7 +43,9 @@ class BackupService:
         try:
             timestamp = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
             prefix_part = f"{prefix}_" if prefix else ""
-            backup_filename = f"{path.stem}.{prefix_part}backup_{timestamp}{path.suffix}"
+            backup_filename = (
+                f"{path.stem}.{prefix_part}backup_{timestamp}{path.suffix}"
+            )
             backup_path = self.backup_directory / backup_filename
             shutil.copy2(file_path, backup_path)
             backup = FileBackup(
@@ -52,7 +54,9 @@ class BackupService:
                 backup_time=datetime.now(UTC),
                 original_size=FileIO.get_size(file_path),
             )
-            logger.info("backup_created", file_path=file_path, backup_path=str(backup_path))
+            logger.info(
+                "backup_created", file_path=file_path, backup_path=str(backup_path)
+            )
             return backup
         except Exception as e:
             logger.error("backup_failed", file_path=file_path, error=str(e))
@@ -74,31 +78,39 @@ class BackupService:
             logger.info("file_restored", file_path=file_path, backup_path=backup_path)
             return True
         except Exception as e:
-            logger.error("restore_failed", file_path=file_path, backup_path=backup_path, error=str(e))
+            logger.error(
+                "restore_failed",
+                file_path=file_path,
+                backup_path=backup_path,
+                error=str(e),
+            )
             return False
 
     def list_backups(self, file_path: str | None = None) -> list[dict[str, Any]]:
         try:
             if not self.backup_directory.exists():
                 return []
-            backups = []
+            backups: list[dict[str, Any]] = []
             for backup_file in self.backup_directory.glob("*.backup_*"):
                 try:
                     stat = backup_file.stat()
-                    backup_info = {
+                    backup_info: dict[str, Any] = {
                         "backup_path": str(backup_file),
                         "backup_name": backup_file.name,
                         "size_bytes": stat.st_size,
-                        "modified_time": datetime.fromtimestamp(stat.st_mtime, tz=UTC).isoformat(),
+                        "modified_time": datetime.fromtimestamp(
+                            stat.st_mtime, tz=UTC
+                        ).isoformat(),
                     }
                     name = backup_file.name
                     if ".backup_" in name:
                         original_stem = name.split(".backup_")[0]
                         parts = original_stem.rsplit(".", 1)
-                        backup_info["original_stem"] = parts[0] if parts else original_stem
+                        original_stem_value = parts[0] if parts else original_stem
+                        backup_info["original_stem"] = original_stem_value
                         if file_path:
                             file_stem = Path(file_path).stem
-                            if not backup_info["original_stem"].endswith(file_stem):
+                            if not str(original_stem_value).endswith(file_stem):
                                 continue
                     backups.append(backup_info)
                 except Exception:
@@ -113,18 +125,23 @@ class BackupService:
         backups = self.list_backups(file_path)
         return backups[0]["backup_path"] if backups else None
 
-    def cleanup_old_backups(self, max_backups: int = 10, older_than_days: int | None = None) -> int:
+    def cleanup_old_backups(
+        self, max_backups: int = 10, older_than_days: int | None = None
+    ) -> int:
         try:
             backups = self.list_backups()
             if len(backups) <= max_backups:
                 return 0
             backups_to_remove = backups[max_backups:]
             if older_than_days:
-                cutoff_time = datetime.now(UTC).timestamp() - (older_than_days * 24 * 60 * 60)
+                cutoff_time = datetime.now(UTC).timestamp() - (
+                    older_than_days * 24 * 60 * 60
+                )
                 backups_to_remove = [
                     backup
                     for backup in backups_to_remove
-                    if datetime.fromisoformat(backup["modified_time"]).timestamp() < cutoff_time
+                    if datetime.fromisoformat(backup["modified_time"]).timestamp()
+                    < cutoff_time
                 ]
             removed = 0
             for backup in backups_to_remove:
@@ -133,7 +150,11 @@ class BackupService:
                     logger.debug("backup_removed", backup_path=backup["backup_path"])
                     removed += 1
                 except Exception as e:
-                    logger.warning("backup_remove_failed", backup_path=backup["backup_path"], error=str(e))
+                    logger.warning(
+                        "backup_remove_failed",
+                        backup_path=backup["backup_path"],
+                        error=str(e),
+                    )
             logger.info("backups_cleaned", removed=removed)
             return removed
         except Exception as e:

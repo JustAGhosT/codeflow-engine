@@ -7,18 +7,24 @@ previously in the main function, now properly separated and focused.
 
 import logging
 import os
-from typing import Any
+from typing import Any, cast
 
 from codeflow_engine.actions.ai_linting_fixer.core import AILintingFixer
 from codeflow_engine.actions.ai_linting_fixer.detection import IssueDetector
-from codeflow_engine.actions.ai_linting_fixer.display import (DisplayConfig, OutputMode,
-                                                     get_display)
-from codeflow_engine.actions.ai_linting_fixer.models import (AILintingFixerInputs,
-                                                    AILintingFixerOutputs,
-                                                    LintingIssue,
-                                                    create_empty_outputs)
-from codeflow_engine.actions.llm.manager import \
-    ActionLLMProviderManager as LLMProviderManager
+from codeflow_engine.actions.ai_linting_fixer.display import (
+    DisplayConfig,
+    OutputMode,
+    get_display,
+)
+from codeflow_engine.actions.ai_linting_fixer.models import (
+    AILintingFixerInputs,
+    AILintingFixerOutputs,
+    LintingIssue,
+    create_empty_outputs,
+)
+from codeflow_engine.actions.llm.manager import (
+    ActionLLMProviderManager as LLMProviderManager,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -42,22 +48,24 @@ class WorkflowOrchestrator:
         self.display = get_display(display_config)
         self.issue_detector = IssueDetector()
 
-    def create_llm_manager(self, inputs: AILintingFixerInputs) -> LLMProviderManager | None:
+    def create_llm_manager(self, inputs: AILintingFixerInputs) -> Any | None:
         """Create and configure the LLM manager."""
         # Get Azure OpenAI configuration
-        azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT", "https://<your-azure-openai-endpoint>/")
+        azure_endpoint = os.getenv(
+            "AZURE_OPENAI_ENDPOINT", "https://<your-azure-openai-endpoint>/"
+        )
         azure_api_key = os.getenv("AZURE_OPENAI_API_KEY")
 
         # Soft validation: check if Azure OpenAI is properly configured
         azure_configured = (
-            azure_api_key and
-            azure_endpoint and
-            "<" not in azure_endpoint and
-            "your-azure-openai-endpoint" not in azure_endpoint
+            azure_api_key
+            and azure_endpoint
+            and "<" not in azure_endpoint
+            and "your-azure-openai-endpoint" not in azure_endpoint
         )
 
         # Build LLM configuration with fallback providers
-        llm_config = {
+        llm_config: dict[str, Any] = {
             "default_provider": None,  # Will be set based on available providers
             "fallback_order": [],  # Will be populated based on available providers
             "providers": {},
@@ -69,7 +77,9 @@ class WorkflowOrchestrator:
                 "azure_endpoint": azure_endpoint,
                 "api_key": azure_api_key,
                 "api_version": os.getenv("AZURE_OPENAI_API_VERSION", "2024-02-01"),
-                "deployment_name": os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME", "gpt-35-turbo"),
+                "deployment_name": os.getenv(
+                    "AZURE_OPENAI_DEPLOYMENT_NAME", "gpt-35-turbo"
+                ),
             }
 
         # Add other providers for fallback
@@ -130,7 +140,9 @@ class WorkflowOrchestrator:
             legacy_issues.append(legacy_issue)
         return legacy_issues
 
-    def queue_issues(self, fixer: AILintingFixer, issues: list[LintingIssue], quiet: bool) -> int:
+    def queue_issues(
+        self, fixer: AILintingFixer, issues: list[LintingIssue], quiet: bool
+    ) -> int:
         """Queue detected issues for processing."""
         self.display.operation.show_queueing_progress(len(issues))
 
@@ -149,7 +161,9 @@ class WorkflowOrchestrator:
         """Process queued issues."""
         # Note: processing mode could be used for future enhancements
         _processing_mode = (
-            "redis" if hasattr(fixer, 'redis_manager') and fixer.redis_manager else "local"
+            "redis"
+            if hasattr(fixer, "redis_manager") and fixer.redis_manager
+            else "local"
         )
         self.display.operation.show_processing_start(len(issues))
 
@@ -207,9 +221,13 @@ class WorkflowOrchestrator:
         suggestions = []
         if final_results.issues_failed > 0:
             suggestions.append("Review failed fixes and consider manual intervention")
-        success_rate = final_results.issues_fixed / max(final_results.total_issues_found, 1)
+        success_rate = final_results.issues_fixed / max(
+            final_results.total_issues_found, 1
+        )
         if success_rate < 0.8:
-            suggestions.append("Consider adjusting fix parameters or reviewing code patterns")
+            suggestions.append(
+                "Consider adjusting fix parameters or reviewing code patterns"
+            )
         self.display.results.show_suggestions(suggestions)
 
         return final_results
@@ -222,7 +240,9 @@ class WorkflowOrchestrator:
         return error_results
 
 
-async def orchestrate_ai_linting_workflow(inputs: AILintingFixerInputs) -> AILintingFixerOutputs:
+async def orchestrate_ai_linting_workflow(
+    inputs: AILintingFixerInputs,
+) -> AILintingFixerOutputs:
     """
     Main workflow orchestration function.
 
@@ -234,11 +254,7 @@ async def orchestrate_ai_linting_workflow(inputs: AILintingFixerInputs) -> AILin
         mode=(
             OutputMode.QUIET
             if inputs.quiet
-            else (
-                OutputMode.VERBOSE
-                if inputs.verbose_metrics
-                else OutputMode.NORMAL
-            )
+            else (OutputMode.VERBOSE if inputs.verbose_metrics else OutputMode.NORMAL)
         )
     )
 
@@ -263,15 +279,15 @@ async def orchestrate_ai_linting_workflow(inputs: AILintingFixerInputs) -> AILin
             except Exception as e:
                 logger.warning("Could not check provider status: %s", e)
         else:
-            display.system.show_warning(
+            display.error.show_warning(
                 "No LLM providers configured. AI features will be disabled."
             )
-            display.system.show_info("To enable AI features, configure at least one of:")
-            display.system.show_info(
+            display.error.show_info("To enable AI features, configure at least one of:")
+            display.error.show_info(
                 "  - AZURE_OPENAI_API_KEY and AZURE_OPENAI_ENDPOINT"
             )
-            display.system.show_info("  - OPENAI_API_KEY")
-            display.system.show_info("  - ANTHROPIC_API_KEY")
+            display.error.show_info("  - OPENAI_API_KEY")
+            display.error.show_info("  - ANTHROPIC_API_KEY")
 
         # Step 1: Detect issues
         issues = orchestrator.detect_issues(inputs.target_path)
@@ -299,7 +315,9 @@ async def orchestrate_ai_linting_workflow(inputs: AILintingFixerInputs) -> AILin
             return results
 
         # Step 3: Process issues
-        process_results = await orchestrator.process_issues(fixer, legacy_issues, inputs)
+        process_results = await orchestrator.process_issues(
+            fixer, legacy_issues, inputs
+        )
 
         # Show dry run notice if applicable
         if inputs.dry_run:

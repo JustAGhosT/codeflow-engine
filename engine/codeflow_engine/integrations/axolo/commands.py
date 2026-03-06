@@ -51,17 +51,18 @@ class AxoloCommandHandler:
 
         # Post initial response
         await self.messaging.post_slack_response(
-            channel_id, f"ðŸ¤– Starting CodeFlow analysis for PR #{pr_data['pr_number']}..."
+            channel_id,
+            f"ðŸ¤– Starting CodeFlow analysis for PR #{pr_data['pr_number']}...",
         )
 
         try:
             # Run analysis
-            await analyzer.analyze_pr_review(
-                {
-                    "pr_number": pr_data["pr_number"],
-                    "repository": pr_data["repository"],
-                    "review_data": await self._gather_review_data(pr_data["pr_number"]),
-                }
+            review_data = await self._gather_review_data(pr_data["pr_number"])
+            analyzer.analyze_reviews(
+                pr_data["pr_number"],
+                review_data.get("reviews", []),
+                review_data.get("comments", []),
+                pr_data,
             )
 
             # Post results (this would be handled by the main integration)

@@ -11,6 +11,7 @@ Centralized configuration management system with:
 
 from dataclasses import dataclass, field
 import os
+from os import PathLike
 import pathlib
 from typing import Any
 import warnings
@@ -96,16 +97,16 @@ class CodeFlowConfig:
             if env_value is not None:
                 # Handle type conversion
                 int_fields = {
-                    "max_concurrent_workflows", "workflow_timeout",
-                    "workflow_retry_attempts", "workflow_retry_delay"
+                    "max_concurrent_workflows",
+                    "workflow_timeout",
+                    "workflow_retry_attempts",
+                    "workflow_retry_delay",
                 }
                 if attr_name in int_fields:
                     setattr(self, attr_name, int(env_value))
                 elif attr_name == "enable_debug_logging":
                     setattr(
-                        self,
-                        attr_name,
-                        env_value.lower() in {"true", "1", "yes", "on"}
+                        self, attr_name, env_value.lower() in {"true", "1", "yes", "on"}
                     )
                 else:
                     setattr(self, attr_name, env_value)
@@ -114,7 +115,7 @@ class CodeFlowConfig:
         """Load configuration from YAML file."""
         if config_path is None:
             # Look for config file in common locations
-            possible_paths = [
+            possible_paths: list[str | PathLike[str]] = [
                 "codeflow.yaml",
                 "codeflow.yml",
                 ".codeflow.yaml",
@@ -124,16 +125,18 @@ class CodeFlowConfig:
             ]
 
             for path in possible_paths:
-                if pathlib.Path(path).exists():
-                    config_path = path
+                normalized_path = pathlib.Path(path)
+                if normalized_path.exists():
+                    config_path = str(normalized_path)
                     break
 
         if config_path and pathlib.Path(config_path).exists():
             try:
                 with open(config_path, encoding="utf-8") as f:
-                    config_data = yaml.safe_load(f)
+                    loaded_config = yaml.safe_load(f)
 
-                if config_data:
+                if isinstance(loaded_config, dict):
+                    config_data = dict(loaded_config)
                     for key, value in config_data.items():
                         if hasattr(self, key):
                             setattr(self, key, value)

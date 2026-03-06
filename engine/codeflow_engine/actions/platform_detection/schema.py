@@ -76,6 +76,11 @@ class UIConfig(TypedDict, total=False):
     theme_color: str
 
 
+def _default_ui_config() -> UIConfig:
+    """Create an empty UI config with the expected typed shape."""
+    return {}
+
+
 class PlatformStatus(StrEnum):
     """Status of the platform support."""
 
@@ -176,7 +181,7 @@ class PlatformConfig:
     integrations: list[str] = field(default_factory=list)
     integration_type: IntegrationType = IntegrationType.API
     integration_instructions: str = ""
-    ui_config: UIConfig = field(default_factory=dict)
+    ui_config: UIConfig = field(default_factory=_default_ui_config)
 
     # Documentation
     documentation_url: str = ""
@@ -298,11 +303,9 @@ class PlatformConfig:
             supported_languages=data.get("supported_languages", []),
             supported_frameworks=data.get("supported_frameworks", []),
             integrations=data.get("integrations", []),
-            integration_type=IntegrationType(
-                data.get("integration_type", "api")
-            ),
+            integration_type=IntegrationType(data.get("integration_type", "api")),
             integration_instructions=data.get("integration_instructions", ""),
-            ui_config=data.get("ui_config", {}),
+            ui_config=cast(UIConfig, data.get("ui_config", {})),
             # Documentation
             documentation_url=data.get("documentation_url", ""),
             setup_guide=data.get("setup_guide", ""),

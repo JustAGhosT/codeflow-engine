@@ -8,15 +8,17 @@ import logging
 from typing import Any
 
 from codeflow_engine.actions.ai_linting_fixer.backup_manager import BackupManager
-from codeflow_engine.actions.ai_linting_fixer.file_persistence import \
-    FilePersistenceManager
+from codeflow_engine.actions.ai_linting_fixer.file_persistence import (
+    FilePersistenceManager,
+)
 from codeflow_engine.actions.ai_linting_fixer.fix_strategy import StrategySelector
 from codeflow_engine.actions.ai_linting_fixer.llm_client import LLMClient
-from codeflow_engine.actions.ai_linting_fixer.models import (LintingIssue)
+from codeflow_engine.actions.ai_linting_fixer.models import LintingIssue
 from codeflow_engine.actions.ai_linting_fixer.response_parser import ResponseParser
 from codeflow_engine.actions.ai_linting_fixer.validation_manager import (
-    ValidationConfig, ValidationManager)
-from codeflow_engine.ai.core.providers.manager import LLMProviderManager
+    ValidationConfig,
+    ValidationManager,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +28,7 @@ class AIFixApplier:
 
     def __init__(
         self,
-        llm_manager: LLMProviderManager,
+        llm_manager: Any,
         backup_manager: BackupManager | None = None,
         validation_config: ValidationConfig | None = None,
     ):
@@ -51,7 +53,9 @@ class AIFixApplier:
         self.llm_client = LLMClient(llm_manager)
         self.response_parser = ResponseParser()
         self.persistence_manager = FilePersistenceManager(backup_manager)
-        self.validation_manager = ValidationManager(validation_config or ValidationConfig())
+        self.validation_manager = ValidationManager(
+            validation_config or ValidationConfig()
+        )
 
         # Initialize strategy selector
         self.strategy_selector = StrategySelector(
@@ -61,7 +65,7 @@ class AIFixApplier:
             self.validation_manager,
         )
 
-        self.session_id = None
+        self.session_id: str | None = None
 
     async def apply_specialist_fix_with_validation(
         self,

@@ -17,6 +17,7 @@ ConversableAgentType = Any
 try:
     from autogen import ConversableAgent  # type: ignore[import-not-found]
     from autogen import GroupChat, GroupChatManager
+
     AUTOGEN_AVAILABLE = True
 except ImportError:
     # Create dummy classes for type annotations when AutoGen is not available
@@ -24,9 +25,7 @@ except ImportError:
         def __init__(self, **kwargs: Any) -> None:
             pass
 
-        def initiate_chat(
-            self, *_args: Any, **_kwargs: Any
-        ) -> list[dict[str, Any]]:
+        def initiate_chat(self, *_args: Any, **_kwargs: Any) -> list[dict[str, Any]]:
             return []
 
     class _GroupChat:
@@ -40,9 +39,7 @@ except ImportError:
             self.messages: list[dict[str, Any]] = messages or []
 
     class _GroupChatManager:
-        def __init__(
-            self, groupchat: _GroupChat, _llm_config: dict[str, Any]
-        ) -> None:
+        def __init__(self, groupchat: _GroupChat, _llm_config: dict[str, Any]) -> None:
             self.groupchat: _GroupChat = groupchat
 
     # Define the constant outside the block to avoid redefinition
@@ -114,9 +111,7 @@ class AutoGenImplementation:
             )
 
             # Create group chat manager
-            manager = GroupChatManager(
-                groupchat=group_chat, llm_config=self.llm_config
-            )
+            manager = GroupChatManager(groupchat=group_chat, llm_config=self.llm_config)
 
             # Execute the task
             conversation_result = self._execute_conversation(agents, manager, inputs)
@@ -290,29 +285,29 @@ Review criteria:
 
         try:
             # Initiate the conversation with the architect
-            architect = cast(ConversableAgentType, agents[0])  # First agent is always the architect
+            architect = cast(
+                ConversableAgentType, agents[0]
+            )  # First agent is always the architect
 
             result = architect.initiate_chat(
-                manager,
-                message=task_message,
-                max_turns=20
+                manager, message=task_message, max_turns=20
             )
 
             # Extract conversation history - use safer approach to access attributes
             try:
-                if manager and hasattr(manager, 'groupchat'):
+                if manager and hasattr(manager, "groupchat"):
                     groupchat = manager.groupchat
-                    if hasattr(groupchat, 'messages'):
+                    if hasattr(groupchat, "messages"):
                         conversation_history = groupchat.messages
             except Exception:
                 # Fallback if we can't access conversation history
                 pass
-            else:
-                return {
-                    "success": True,
-                    "conversation_history": conversation_history,
-                    "final_result": result,
-                }
+
+            return {
+                "success": True,
+                "conversation_history": conversation_history,
+                "final_result": result,
+            }
 
         except Exception as e:
             return {
@@ -418,7 +413,9 @@ Please work together to create a complete, production-ready solution.
             error_message=None,
         )
 
-    def _extract_implementation_plan(self, conversation_history: list[dict[str, Any]]) -> str:
+    def _extract_implementation_plan(
+        self, conversation_history: list[dict[str, Any]]
+    ) -> str:
         """Extract implementation plan from conversation"""
         plan_content: list[str] = []
 
@@ -435,7 +432,9 @@ Please work together to create a complete, production-ready solution.
             else "No implementation plan found"
         )
 
-    def _extract_code_changes(self, conversation_history: list[dict[str, Any]]) -> dict[str, str]:
+    def _extract_code_changes(
+        self, conversation_history: list[dict[str, Any]]
+    ) -> dict[str, str]:
         """Extract code changes from conversation"""
         code_changes: dict[str, str] = {}
 
@@ -463,7 +462,9 @@ Please work together to create a complete, production-ready solution.
 
         return code_changes
 
-    def _extract_test_files(self, conversation_history: list[dict[str, Any]]) -> dict[str, str]:
+    def _extract_test_files(
+        self, conversation_history: list[dict[str, Any]]
+    ) -> dict[str, str]:
         """Extract test files from conversation"""
         test_files: dict[str, str] = {}
 
@@ -531,7 +532,9 @@ Please work together to create a complete, production-ready solution.
 
         return None
 
-    def _extract_recommendations(self, conversation_history: list[dict[str, Any]]) -> list[str]:
+    def _extract_recommendations(
+        self, conversation_history: list[dict[str, Any]]
+    ) -> list[str]:
         """Extract recommendations from conversation"""
         recommendations: list[str] = []
 
@@ -542,14 +545,19 @@ Please work together to create a complete, production-ready solution.
 
             if "recommend" in content.lower() or "suggestion" in content.lower():
                 # Extract recommendation sentences
-                sentences = content.split('.')
+                sentences = content.split(".")
                 for sentence in sentences:
-                    if "recommend" in sentence.lower() or "suggestion" in sentence.lower():
+                    if (
+                        "recommend" in sentence.lower()
+                        or "suggestion" in sentence.lower()
+                    ):
                         recommendations.append(sentence.strip())
 
         return recommendations[:5]  # Limit to 5 recommendations
 
-    def _extract_fix_code(self, conversation_history: list[dict[str, Any]]) -> str | None:
+    def _extract_fix_code(
+        self, conversation_history: list[dict[str, Any]]
+    ) -> str | None:
         """Extract fix code from conversation"""
         for message in conversation_history:
             content = message.get("content", "")
@@ -568,7 +576,9 @@ Please work together to create a complete, production-ready solution.
 
         return None
 
-    def _extract_consensus(self, conversation_history: list[dict[str, Any]]) -> str | None:
+    def _extract_consensus(
+        self, conversation_history: list[dict[str, Any]]
+    ) -> str | None:
         """Extract consensus from conversation"""
         consensus_messages: list[str] = []
 
@@ -581,7 +591,9 @@ Please work together to create a complete, production-ready solution.
                 word in content.lower()
                 for word in ["agree", "consensus", "unanimous", "approved"]
             ):
-                consensus_messages.append(f"**{message.get('name', 'Agent')}**: {content}")
+                consensus_messages.append(
+                    f"**{message.get('name', 'Agent')}**: {content}"
+                )
 
         if consensus_messages:
             return "\n\n".join(consensus_messages[-3:])  # Last 3 consensus messages
@@ -647,11 +659,13 @@ Please work together to create a complete, production-ready solution.
         for message in conversation_history:
             content = message.get("content", "")
             if isinstance(content, str):
-                formatted_conversations.append({
-                    "agent": str(message.get("name", "Unknown")),
-                    "content": content,
-                    "timestamp": datetime.now(UTC).isoformat(),
-                })
+                formatted_conversations.append(
+                    {
+                        "agent": str(message.get("name", "Unknown")),
+                        "content": content,
+                        "timestamp": datetime.now(UTC).isoformat(),
+                    }
+                )
 
         return formatted_conversations
 
@@ -675,7 +689,7 @@ def run(inputs_dict: dict[str, Any]) -> dict[str, Any]:
         )
         return (
             fallback_outputs.model_dump()
-            if hasattr(fallback_outputs, 'model_dump')
+            if hasattr(fallback_outputs, "model_dump")
             else fallback_outputs.dict()
         )
 
@@ -684,9 +698,7 @@ def run(inputs_dict: dict[str, Any]) -> dict[str, Any]:
     outputs = implementation.execute_multi_agent_task(inputs)
     # Use model_dump() which is the newer pydantic v2 way to convert to dict
     return (
-        outputs.model_dump()
-        if hasattr(outputs, 'model_dump')
-        else outputs.dict()
+        outputs.model_dump() if hasattr(outputs, "model_dump") else outputs.dict()
     )  # type: ignore[attr-defined]
 
 
@@ -700,12 +712,12 @@ if __name__ == "__main__":
         "pr_context": {
             "repository": "my-org/my-repo",
             "branch": "feature/role-based-access",
-            "title": "Add role-based access control"
+            "title": "Add role-based access control",
         },
         "agents_config": {
             "complexity_level": "medium",
             "max_agents": 4,
-            "specialized_agents": ["security_auditor", "qa_engineer"]
+            "specialized_agents": ["security_auditor", "qa_engineer"],
         },
     }
 

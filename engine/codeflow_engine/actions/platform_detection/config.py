@@ -9,7 +9,10 @@ import logging
 from pathlib import Path
 from typing import Any, ClassVar, Optional, Self, TypeVar
 
-from codeflow_engine.actions.platform_detection.schema import PlatformConfig, PlatformType
+from codeflow_engine.actions.platform_detection.schema import (
+    PlatformConfig,
+    PlatformType,
+)
 
 
 # Set up logging
@@ -250,7 +253,9 @@ class PlatformConfigManager:
                 ai_platforms[platform_id] = platform_dict
         return ai_platforms
 
-    def get_platforms_by_type(self, platform_type: str) -> list[dict[str, Any]]:
+    def get_platforms_by_type(
+        self, platform_type: str | PlatformType
+    ) -> list[dict[str, Any]]:
         """Get all platforms of a specific type.
 
         Args:
@@ -259,7 +264,19 @@ class PlatformConfigManager:
         Returns:
             A list of platform configurations of the specified type
         """
-        platform_ids: list[str] = self._platforms_by_type.get(platform_type, [])
+        normalized_type: PlatformType | None
+        if isinstance(platform_type, PlatformType):
+            normalized_type = platform_type
+        else:
+            try:
+                normalized_type = PlatformType(platform_type)
+            except ValueError:
+                normalized_type = None
+
+        if normalized_type is None:
+            return []
+
+        platform_ids: list[str] = self._platforms_by_type.get(normalized_type, [])
         return [self._platforms[pid].to_dict() for pid in platform_ids]
 
     def get_all_platforms(self) -> dict[str, dict[str, Any]]:

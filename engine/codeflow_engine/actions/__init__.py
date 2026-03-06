@@ -13,70 +13,31 @@ Core automation actions for GitHub PR processing, organized by category:
 - maintenance: Maintenance tasks
 """
 
+import importlib
+from types import ModuleType
 from typing import Any
 
 from codeflow_engine.actions.registry import ActionRegistry
 
+
+def _optional_module(module_name: str) -> ModuleType | None:
+    try:
+        return importlib.import_module(module_name)
+    except (ImportError, OSError):
+        return None
+
+
 # Import category modules with error handling for optional dependencies
-ai_actions = None
-try:
-    from codeflow_engine.actions import ai_actions
-except (ImportError, OSError):
-    pass
-
-analysis = None
-try:
-    from codeflow_engine.actions import analysis
-except (ImportError, OSError):
-    pass
-
-base = None
-try:
-    from codeflow_engine.actions import base
-except (ImportError, OSError):
-    pass
-
-generation = None
-try:
-    from codeflow_engine.actions import generation
-except (ImportError, OSError):
-    pass
-
-git = None
-try:
-    from codeflow_engine.actions import git
-except (ImportError, OSError):
-    pass
-
-issues = None
-try:
-    from codeflow_engine.actions import issues
-except (ImportError, OSError):
-    pass
-
-maintenance = None
-try:
-    from codeflow_engine.actions import maintenance
-except (ImportError, OSError):
-    pass
-
-platform = None
-try:
-    from codeflow_engine.actions import platform
-except (ImportError, OSError):
-    pass
-
-quality = None
-try:
-    from codeflow_engine.actions import quality
-except (ImportError, OSError):
-    pass
-
-scripts = None
-try:
-    from codeflow_engine.actions import scripts
-except (ImportError, OSError):
-    pass
+ai_actions: ModuleType | None = _optional_module("codeflow_engine.actions.ai_actions")
+analysis: ModuleType | None = _optional_module("codeflow_engine.actions.analysis")
+base: ModuleType | None = _optional_module("codeflow_engine.actions.base")
+generation: ModuleType | None = _optional_module("codeflow_engine.actions.generation")
+git: ModuleType | None = _optional_module("codeflow_engine.actions.git")
+issues: ModuleType | None = _optional_module("codeflow_engine.actions.issues")
+maintenance: ModuleType | None = _optional_module("codeflow_engine.actions.maintenance")
+platform: ModuleType | None = _optional_module("codeflow_engine.actions.platform")
+quality: ModuleType | None = _optional_module("codeflow_engine.actions.quality")
+scripts: ModuleType | None = _optional_module("codeflow_engine.actions.scripts")
 
 # Re-export commonly used actions for backward compatibility
 # Analysis
@@ -187,11 +148,7 @@ except ImportError:
     pass
 
 # Create llm alias for backward compatibility (codeflow_engine.actions.llm)
-llm = None
-try:
-    from codeflow_engine.actions.ai_actions import llm
-except ImportError:
-    pass
+llm: ModuleType | None = _optional_module("codeflow_engine.actions.ai_actions.llm")
 
 # Platform
 PlatformDetector: type[Any] | None = None

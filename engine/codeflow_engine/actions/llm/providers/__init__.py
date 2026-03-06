@@ -17,7 +17,7 @@ try:
 
     MISTRAL_AVAILABLE = True
 except ImportError:
-    MistralProvider = None
+    MistralProvider: Any = None
     MISTRAL_AVAILABLE = False
 from codeflow_engine.actions.llm.providers.openai import OpenAIProvider
 
