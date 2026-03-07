@@ -479,7 +479,10 @@ class SecurityValidator:
                     category="security",
                     message="Missing security considerations",
                     location=str(file_path),
-suggestion=("Add security considerations to help users understand "
+                    suggestion=(
+                        "Add security considerations to help users understand "
+                        "security implications and recommended safeguards"
+                    ),
                     rule_id=rule.rule_id,
                 )
             )

@@ -1,4 +1,4 @@
-﻿"""GitHub API client for CodeFlow with retry logic and rate limiting."""
+"""GitHub API client for CodeFlow with retry logic and rate limiting."""
 
 import asyncio
 from dataclasses import dataclass
@@ -222,21 +222,23 @@ class GitHubClient:
                     return {}
 
             except ClientResponseError as e:
-                if e.status == 403 and "rate limit" in (e.message or "").lower():
+                # Handle status code safely for type checking
+                status = e.status or 0
+                if status == 403 and "rate limit" in (e.message or "").lower():
                     last_error = RateLimitExceeded(
                         "GitHub API rate limit exceeded",
-                        status_code=e.status,
+                        status_code=status,
                         response=e.request_info,
                     )
                 else:
                     last_error = GitHubError(
                         f"GitHub API request failed: {e}",
-                        status_code=e.status,
+                        status_code=status,
                         response=e.request_info,
                     )
 
                 # Don't retry on client errors (4xx) except for rate limits
-                if 400 <= (e.status or 0) < 500 and e.status != 429:
+                if 400 <= status < 500 and status != 429:
                     break
 
             except (TimeoutError, ClientError) as e:

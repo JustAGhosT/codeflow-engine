@@ -41,15 +41,11 @@ class GroqProvider(BaseLLMProvider):
             max_tokens = request.get("max_tokens", 1024)
             temperature = request.get("temperature", 0.7)
 
-            filtered_messages = [
-                {"role": m.get("role", "user"), "content": m.get("content", "")}
-                for m in messages
-                if m.get("content")
-            ]
+            groq_messages = self._convert_to_provider_messages(messages, "groq")
 
-            response = self.client.chat.completions.create(  # type: ignore[arg-type]
+            response = self.client.chat.completions.create(
                 model=str(model),
-                messages=filtered_messages,
+                messages=groq_messages,
                 max_tokens=max_tokens,
                 temperature=temperature,
             )

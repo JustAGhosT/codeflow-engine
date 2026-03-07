@@ -1,51 +1,43 @@
-"""
-CodeFlow Engine - Automated Code Review and Quality Management System
+"""CodeFlow Engine public package API.
 
-This package provides AI-powered code analysis, automated fixes, and quality assurance workflows.
-
-Main Components:
-- CodeFlowEngine: Main orchestrator for all automation activities
-- ActionRegistry: Registry for managing action plugins
-- WorkflowEngine: Workflow execution engine
-- LLMProviderManager: Multi-provider LLM abstraction
-- MetricsCollector: Quality metrics collection
+The canonical package lives under ``engine/codeflow_engine`` in the monorepo.
+Keep this module lightweight so submodule imports such as
+``codeflow_engine.actions.analysis.ai_comment_analyzer`` do not eagerly import
+optional runtime dependencies during package initialization.
 """
 
+from __future__ import annotations
+
+import importlib
 import logging
 import os
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
-from codeflow_engine.actions.registry import ActionRegistry
-from codeflow_engine.ai.core.base import LLMProvider
-from codeflow_engine.ai.core.providers.manager import LLMProviderManager
-from codeflow_engine.config import CodeFlowConfig
-from codeflow_engine.engine import CodeFlowEngine
-from codeflow_engine.exceptions import (
-    ActionError,
-    AuthenticationError,
-    CodeFlowException,
-    CodeFlowPermissionError,
-    ConfigurationError,
-    IntegrationError,
-    LLMProviderError,
-    RateLimitError,
-    ValidationError,
-    WorkflowError,
-)
-from codeflow_engine.integrations.base import Integration
-from codeflow_engine.quality.metrics_collector import MetricsCollector
-
-# Security - guarded import
-EnterpriseAuthorizationManager: type[Any] | None = None
-try:
+if TYPE_CHECKING:
+    from codeflow_engine.actions.registry import ActionRegistry
+    from codeflow_engine.ai.core.base import LLMProvider
+    from codeflow_engine.ai.core.providers.manager import LLMProviderManager
+    from codeflow_engine.config import CodeFlowConfig
+    from codeflow_engine.engine import CodeFlowEngine
+    from codeflow_engine.exceptions import (
+        ActionError,
+        AuthenticationError,
+        CodeFlowException,
+        CodeFlowPermissionError,
+        ConfigurationError,
+        IntegrationError,
+        LLMProviderError,
+        RateLimitError,
+        ValidationError,
+        WorkflowError,
+    )
+    from codeflow_engine.integrations.base import Integration
+    from codeflow_engine.quality.metrics_collector import MetricsCollector
     from codeflow_engine.security.authorization.enterprise_manager import (
         EnterpriseAuthorizationManager,
     )
-except (ImportError, OSError):
-    pass
-
-from codeflow_engine.workflows.base import Workflow
-from codeflow_engine.workflows.engine import WorkflowEngine
+    from codeflow_engine.workflows.base import Workflow
+    from codeflow_engine.workflows.engine import WorkflowEngine
 
 # Import structlog with error handling
 STRUCTLOG_AVAILABLE: bool
@@ -59,6 +51,29 @@ except ImportError:
     structlog_module = None
 
 __version__ = "0.2.0-alpha.1"
+
+_LAZY_EXPORTS = {
+    "CodeFlowEngine": "codeflow_engine.engine:CodeFlowEngine",
+    "CodeFlowConfig": "codeflow_engine.config:CodeFlowConfig",
+    "ActionRegistry": "codeflow_engine.actions.registry:ActionRegistry",
+    "LLMProvider": "codeflow_engine.ai.core.base:LLMProvider",
+    "LLMProviderManager": "codeflow_engine.ai.core.providers.manager:LLMProviderManager",
+    "Integration": "codeflow_engine.integrations.base:Integration",
+    "Workflow": "codeflow_engine.workflows.base:Workflow",
+    "WorkflowEngine": "codeflow_engine.workflows.engine:WorkflowEngine",
+    "MetricsCollector": "codeflow_engine.quality.metrics_collector:MetricsCollector",
+    "EnterpriseAuthorizationManager": "codeflow_engine.security.authorization.enterprise_manager:EnterpriseAuthorizationManager",
+    "ActionError": "codeflow_engine.exceptions:ActionError",
+    "AuthenticationError": "codeflow_engine.exceptions:AuthenticationError",
+    "CodeFlowException": "codeflow_engine.exceptions:CodeFlowException",
+    "CodeFlowPermissionError": "codeflow_engine.exceptions:CodeFlowPermissionError",
+    "ConfigurationError": "codeflow_engine.exceptions:ConfigurationError",
+    "IntegrationError": "codeflow_engine.exceptions:IntegrationError",
+    "LLMProviderError": "codeflow_engine.exceptions:LLMProviderError",
+    "RateLimitError": "codeflow_engine.exceptions:RateLimitError",
+    "ValidationError": "codeflow_engine.exceptions:ValidationError",
+    "WorkflowError": "codeflow_engine.exceptions:WorkflowError",
+}
 
 # Public API exports
 __all__ = [
@@ -125,6 +140,31 @@ def configure_logging(level: str = "INFO", *, format_json: bool = False) -> None
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
             datefmt="%Y-%m-%d %H:%M:%S",
         )
+
+
+def __getattr__(name: str) -> Any:
+    """Lazily load public exports to avoid importing optional dependencies."""
+    target = _LAZY_EXPORTS.get(name)
+    if target is None:
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+    module_name, attribute_name = target.split(":", 1)
+    try:
+        module = importlib.import_module(module_name)
+        value = getattr(module, attribute_name)
+    except (ImportError, OSError):
+        if name == "EnterpriseAuthorizationManager":
+            value = None
+        else:
+            raise
+
+    globals()[name] = value
+    return value
+
+
+def __dir__() -> list[str]:
+    """Return module attributes including lazy exports for interactive tooling."""
+    return sorted(set(globals()) | set(__all__))
 
 
 # Configure logging on import

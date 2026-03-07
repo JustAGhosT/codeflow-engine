@@ -335,7 +335,7 @@ class CodeFlowSettings(BaseSettings):
     custom: dict[str, Any] = Field(default_factory=dict)
 
     # Pydantic V2 configuration using SettingsConfigDict
-    if _PYDANTIC_V2 and SettingsConfigDict:
+    if _PYDANTIC_V2 and SettingsConfigDict is not None:
         model_config = SettingsConfigDict(
             env_file=".env",
             env_file_encoding="utf-8",
