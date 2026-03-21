@@ -1,303 +1,237 @@
-﻿# 21. Repository Structure and Monorepo vs Multi-Repo Strategy
+# 21. Repository Structure: Monorepo vs Multi-Repo Decision
 
 ## Status
 
-Proposed
+Accepted
 
 ## Date
 
 2025-12-08
 
+## Updated
+
+2026-03-21
+
 ## Context
 
-The codeflow-engine project has grown significantly and now encompasses multiple distinct concerns:
+The CodeFlow project grew to span multiple distinct concerns across several archived
+`codeflow-*` repositories under the `JustAGhosT` GitHub organization:
 
-1. **Core Engine**: The main automation and workflow engine
-2. **Web UI/Dashboard**: React-based user interface
-3. **VS Code Extension**: Editor integration
-4. **Desktop Application**: Electron-based desktop app (codeflow-desktop)
-5. **Documentation Website**: Marketing and documentation site
-6. **Template System**: Reusable workflow templates
-7. **Infrastructure**: Kubernetes, Terraform, deployment configs
+| Repository | Status before migration |
+|---|---|
+| `codeflow-engine` | Active (this repo) |
+| `codeflow-orchestration` | Archived |
+| `codeflow-infrastructure` | Archived |
+| `codeflow-desktop` | Archived |
+| `codeflow-azure-setup` | Archived |
+| `codeflow-website` | Archived |
+| `codeflow-vscode-extension` | Archived |
 
-Currently, all these components live in a single monorepo, which has both advantages and growing pains.
+The discussion ([GitHub Issue #21](https://github.com/JustAGhosT/codeflow-engine/issues/21))
+asked two related questions:
 
-### Current Repository Structure
+1. Should the `codeflow-*` repositories be reintegrated into a monorepo?
+2. How do the `codeflow-*` repositories fit into the broader `phoenixvc/*` and
+   `justaghost/*` ecosystem?
+
+This ADR records the decision made and the reasoning behind it.
+
+---
+
+## Component Summary
+
+Before deciding on structure, the components were analysed for purpose and coupling:
+
+| Component | Type | Direct code deps |
+|---|---|---|
+| `engine/` | Python library + service | None (only external APIs) |
+| `desktop/` | Tauri + React app | `engine/` via HTTP/WebSocket sidecar only |
+| `vscode-extension/` | VS Code extension (TypeScript) | `engine/` via HTTP REST only |
+| `website/` | Next.js marketing/docs site | None (fully standalone) |
+| `orchestration/` | Azure IaC + shared utility packages | None |
+
+Key observation: `desktop/` and `vscode-extension/` communicate with `engine/` through
+well-defined API contracts, not direct imports. They are **loosely coupled at the code
+level** and can be built, released, and deployed independently.
+
+---
+
+## Options Evaluated
+
+### Option 1 — Keep monorepo with path-aware CI ✅ (Chosen)
+
+Consolidate all `codeflow-*` repositories into this repo; use path filters in CI so
+only the affected component builds on each change.
+
+**Pros:**
+- Archived repos need no ongoing maintenance in isolation.
+- Atomic cross-component changes remain easy (e.g. API shape change + client update in
+  one PR).
+- Single source of truth for linting configs, licences, and contribution guides.
+- Path-aware CI (`dorny/paths-filter`) eliminates the full-build penalty.
+- Small team; cross-repo coordination overhead is not justified.
+
+**Cons:**
+- Larger clone size (mitigated by sparse checkout or shallow clone).
+- Granular per-component access control is not possible (not a current requirement).
+
+### Option 2 — Split into 3–4 focused repositories
+
+Extract engine, UI clients, infrastructure, and templates into separate repos.
+
+**Pros:** Independent release cycles, focused pipelines, smaller clones.
+
+**Cons:**
+- The component repos were already archived; re-splitting re-creates maintenance burden.
+- Cross-repo version coordination is non-trivial for a small team.
+- No immediate access-control requirement justifies the overhead.
+
+### Option 3 — Full microrepo (one repo per component)
+
+Maximum independence but maximum coordination overhead. Not appropriate for the team
+size.
+
+---
+
+## Decision
+
+**Consolidate all `codeflow-*` repositories into this monorepo (Option 1).**
+
+All formerly separate repositories have been imported with git history preserved:
+
+| Legacy repository | Monorepo path |
+|---|---|
+| `codeflow-engine` | `engine/` |
+| `codeflow-desktop` | `desktop/` |
+| `codeflow-website` | `website/` |
+| `codeflow-orchestration` | `orchestration/` |
+| `codeflow-vscode-extension` | `vscode-extension/` |
+
+The canonical layout is:
 
 ```
 codeflow-engine/
-â”œâ”€â”€ engine/                  # Python package workspace
-â”‚   â””â”€â”€ codeflow_engine/    # Canonical Python package
-â”œâ”€â”€ desktop/                # Electron desktop app
-â”œâ”€â”€ vscode-extension/        # VS Code extension
-â”œâ”€â”€ website/                 # Documentation/marketing site
-â”œâ”€â”€ templates/               # Workflow templates
-â”œâ”€â”€ docs/                    # Documentation
-â”œâ”€â”€ tools/                   # Development tools
-â””â”€â”€ tests/                   # Test suite
+├── engine/            # Python core package (codeflow_engine)
+├── desktop/           # Tauri + React desktop application
+├── vscode-extension/  # VS Code extension
+├── website/           # Next.js marketing and documentation site
+├── orchestration/     # Azure IaC, bootstrap scripts, shared utility packages
+├── docs/              # Shared project documentation and ADRs
+└── tools/             # Shared development tooling and helper scripts
 ```
 
-### Problems with Current Structure
+---
 
-1. **Build Complexity**: Single CI/CD pipeline for multiple technologies
-2. **Dependency Conflicts**: Python, Node.js, .NET tools in one repo
-3. **Release Cycles**: Different components need different release schedules
-4. **Team Boundaries**: Different teams work on different components
-5. **Clone Size**: Large repository slows initial clones and fetches
-6. **Testing**: Full test suite runs even for unrelated changes
-7. **Permissions**: Difficult to grant granular access to components
+## Was the Monorepo the Right Decision?
 
-## Decision Options
-
-### Option 1: Keep Monorepo with Better Organization
-
-Maintain single repository but improve tooling and structure.
-
-**Pros:**
-- Easy code sharing and refactoring across components
-- Single source of truth for all code
-- Simplified dependency version coordination
-- Easy to enforce consistent coding standards
-- Better for atomic cross-component changes
-
-**Cons:**
-- CI/CD complexity continues to grow
-- Large repository size
-- Difficult selective access control
-- All-or-nothing cloning
-
-**Tooling:**
-- Use Nx, Turborepo, or Bazel for monorepo management
-- Implement affected testing (only test changed components)
-- Use sparse checkout for developers
-
-### Option 2: Split into 3-4 Core Repositories
-
-Separate concerns into logical repositories while maintaining some cohesion.
-
-**Proposed Split:**
-
-1. **codeflow-engine** (Core Python Package)
-   - Python engine code
-   - API server
-   - Worker processes
-   - Core tests
-   - Python dependencies only
-
-2. **codeflow-ui** (Frontend Applications)
-   - Web dashboard (React)
-   - VS Code extension
-   - Desktop app (Electron)
-   - Shared UI components
-   - Frontend tests
-
-3. **codeflow-infrastructure** (Deployment & Operations)
-   - Kubernetes manifests
-   - Terraform/Bicep configs
-   - Docker configurations
-   - Monitoring setups
-   - Infrastructure as Code
-
-4. **codeflow-templates** (Template Library)
-   - Workflow templates
-   - Platform-specific configs
-   - Template documentation
-   - Template tests
-
-**Pros:**
-- Clear separation of concerns
-- Independent release cycles
-- Focused CI/CD pipelines
-- Smaller, faster clones
-- Better team boundaries
-- Granular access control
-
-**Cons:**
-- Cross-repo coordination needed
-- Duplicate some tooling/configs
-- More complex version management
-- Breaking changes harder to coordinate
-- Need robust versioning strategy
-
-### Option 3: Full Microrepo (Many Small Repos)
-
-Split into many small, focused repositories.
-
-**Proposed Structure:**
-- codeflow-engine-core
-- codeflow-engine-api
-- codeflow-engine-worker
-- codeflow-ui-web
-- codeflow-ui-vscode
-- codeflow-desktop
-- codeflow-infra-k8s
-- codeflow-infra-terraform
-- codeflow-templates
-
-**Pros:**
-- Maximum independence
-- Clearest boundaries
-- Finest-grained access control
-- Smallest repositories
-
-**Cons:**
-- Coordination nightmare
-- Versioning complexity
-- Duplicated tooling everywhere
-- Difficult cross-component refactoring
-- High overhead for atomic changes
-
-## Recommendation
-
-**Choose Option 2**: Split into 3-4 core repositories for optimal balance between independence and coordination.
+Short answer: **yes, for the current stage of the project**.
 
 ### Rationale
 
-1. **Clear Boundaries**: The proposed split aligns with natural team and technology boundaries
-2. **Manageable Complexity**: 3-4 repos is manageable without excessive coordination overhead
-3. **Independent Deployments**: Core engine, UI, and infrastructure can deploy independently
-4. **Reasonable Clone Times**: Each repo will be significantly smaller
-5. **Focused CI/CD**: Each repo can have optimized pipelines for its technology
-6. **Gradual Migration**: Can split incrementally, starting with highest-value separations
+1. **Most component repos were already archived.** Re-splitting means creating and
+   maintaining new repos for code that was intentionally deprioritised.
+2. **Loose API coupling means monorepo risk is low.** Because `desktop/` and
+   `vscode-extension/` integrate with `engine/` through HTTP/WebSocket APIs and not
+   direct imports, independent release cadences are preserved even inside the same repo.
+3. **Path-aware CI eliminates the main monorepo penalty.** The
+   `.github/workflows/monorepo-ci.yml` workflow uses `dorny/paths-filter` so only
+   the changed component's jobs run.
+4. **Small team; cross-repo overhead is a real cost.** Version matrix management,
+   cross-repo PR coordination, and duplicated tooling configs are disproportionately
+   costly.
+5. **History is preserved.** `git subtree` imports keep blame and history intact
+   without requiring any git tricks at development time.
 
-## Implementation Plan
+### What Could Reasonably Be Extracted Later
 
-### Phase 1: Preparation (Weeks 1-2)
+The decision is **correct now** but two components warrant review as the project scales:
 
-1. **Audit Dependencies**: Map all inter-component dependencies
-2. **Design Interfaces**: Define stable APIs between components
-3. **Version Strategy**: Establish versioning scheme (semantic versioning + matrix)
-4. **CI/CD Planning**: Design independent CI/CD pipelines
-5. **Migration Scripts**: Prepare git history preservation scripts
+#### `website/` — borderline case
 
-### Phase 2: Core Engine Split (Weeks 3-4)
+- The marketing/docs site has **zero code dependencies** on the engine or any other
+  component. It is a fully standalone Next.js application.
+- It could be extracted to a dedicated repo (e.g. `codeflow-website`) if:
+  - A content team without engine write access needs to contribute, or
+  - The deployment cadence diverges significantly from the engine.
+- **Recommendation:** Keep in the monorepo for now. If contributor access-control
+  needs arise, extract at that point.
 
-1. Extract `engine/codeflow_engine/` to new `codeflow-engine` repository
-2. Keep git history intact (use `git filter-repo`)
-3. Set up independent CI/CD
-4. Publish to PyPI from new repo
-5. Update documentation
+#### `orchestration/bootstrap/` — generic Azure tooling
 
-### Phase 3: UI Split (Weeks 5-6)
+- The PowerShell scripts in `orchestration/bootstrap/` are deliberately generic (they
+  create Azure resource groups, storage accounts, and Log Analytics workspaces for
+  any project).
+- If a shared `justaghost/*` or `phoenixvc/*` infrastructure repo is established,
+  these scripts are good candidates to contribute upstream.
+- **Recommendation:** Keep here until a target shared repo exists. Do not extract
+  speculatively.
 
-1. Extract frontend code to `codeflow-ui` repository
-2. Consolidate UI components and shared libraries
-3. Set up Node.js/TypeScript CI/CD
-4. Establish npm publishing workflow
-5. Update integration points
+---
 
-### Phase 4: Infrastructure Split (Weeks 7-8)
+## Ecosystem Fit: `phoenixvc/*` and `justaghost/*`
 
-1. Extract infrastructure code to `codeflow-infrastructure` repository
-2. Set up GitOps workflows
-3. Establish environment management
-4. Document deployment processes
-5. Update runbooks
+As of this decision there are **no code-level references** to `phoenixvc` anywhere in
+this repository. The CodeFlow components relate to the broader organisation ecosystem
+as follows:
 
-### Phase 5: Templates Split (Weeks 9-10)
+| Component | Role in the ecosystem |
+|---|---|
+| `engine/` | Authoritative backend for AI-powered PR automation; exposed as both a PyPI package and a self-hosted service. Any `justaghost/*` or `phoenixvc/*` project can consume it as a dependency. |
+| `desktop/` | Local developer tooling for managing CodeFlow without a browser. Targets individual developers and small teams; no org-specific coupling. |
+| `vscode-extension/` | IDE integration surface; publishes to the VS Code Marketplace. Usable by any developer regardless of org. |
+| `website/` | Public-facing marketing and documentation. Not org-specific in content. |
+| `orchestration/` | Azure IaC and bootstrap tooling for CodeFlow deployments. The generic bootstrap scripts could serve as a template for other `justaghost/*` or `phoenixvc/*` projects that run on Azure. |
 
-1. Extract templates to `codeflow-templates` repository
-2. Set up template validation pipeline
-3. Establish template versioning
-4. Create template marketplace
-5. Document contribution guidelines
+### Integration path if a shared org repo is created
 
-### Phase 6: Stabilization (Weeks 11-12)
+If a `justaghost/shared-infra` or `phoenixvc/platform-bootstrap` repository is
+created in future, the recommended migration is:
 
-1. Cross-repo integration testing
-2. Documentation updates
-3. Developer onboarding guides
-4. Automated cross-repo tools
-5. Monitoring and alerting setup
+1. Extract `orchestration/bootstrap/` scripts to the shared repo.
+2. Extract the generic utility packages (`@codeflow/utils`,
+   `codeflow-utils-python`) if other org projects will reuse them.
+3. Keep CodeFlow-specific IaC (`orchestration/infrastructure/`) here.
 
-## Inter-Repository Coordination
+No extraction is warranted until a concrete target repo exists.
 
-### Version Matrix
+---
 
-Maintain compatibility matrix across repositories:
+## Implementation Status
 
-```yaml
-# codeflow-engine v1.2.0 compatibility
-compatible_ui_versions: "^2.1.0"
-compatible_templates: "^1.0.0"
-minimum_infra_version: "1.3.0"
-```
+### Completed
 
-### Shared Tooling
+- All `codeflow-*` repositories imported with git history preserved.
+- Path-aware monorepo CI workflow (`.github/workflows/monorepo-ci.yml`).
+- Shared documentation under `docs/`.
+- Archive and redirect guidance in `docs/LEGACY_REPO_REDIRECTS.md`.
+- Migration documentation in `MIGRATION_PLAN.md` and `MIGRATION_GUIDE.md`.
 
-Maintain shared configurations in a `codeflow-shared` repository:
-- Linting configs (ESLint, Ruff, Prettier)
-- GitHub Actions workflows (reusable)
-- Development environment configs
-- Code generation templates
+### Remaining Work
 
-### Communication
+1. Normalise dependency management across Python and Node.js components.
+2. Add path-aware release automation for each component.
+3. Consolidate duplicate `README`, `LICENSE`, and `CONTRIBUTING` files.
+4. Archive legacy split repositories and update their READMEs to redirect here.
 
-1. **Cross-Repo Issues**: Use GitHub Projects to track cross-repo work
-2. **Breaking Changes**: RFC process for changes affecting multiple repos
-3. **Release Coordination**: Coordinated release schedule published quarterly
-4. **Dependencies**: Renovate bot for automated dependency updates
-
-## Success Metrics
-
-- Build time reduction: Target 50% faster builds per repo
-- Clone time: Under 2 minutes for any single repo
-- Test execution: Under 10 minutes for affected tests
-- Release frequency: Each component can release independently
-- Developer onboarding: New developers can work on single component without full codebase
+---
 
 ## Consequences
 
 ### Positive
 
-- **Faster Development**: Focused repos mean faster builds and tests
-- **Clear Ownership**: Each repo has clear team ownership
-- **Independent Releases**: Components can evolve at their own pace
-- **Better Security**: Granular access control per component
-- **Reduced Conflicts**: Fewer merge conflicts with smaller teams per repo
-- **Optimized Tooling**: Each repo can use best tools for its tech stack
+- Single clone gives a contributor everything they need.
+- Atomic cross-component changes require only one PR.
+- Linting, formatting, and CI standards are enforced centrally.
+- No ongoing maintenance of multiple archived repositories.
 
 ### Negative
 
-- **Coordination Overhead**: Cross-repo changes require more planning
-- **Duplicated Config**: Some configs will be duplicated across repos
-- **Version Management**: Need to track compatible versions across repos
-- **Onboarding Complexity**: New developers need to understand multi-repo structure
-- **Migration Effort**: Significant work to split and test the separation
+- Repository clone size is larger than any individual component (mitigated by sparse
+  checkout or shallow clone).
+- Granular per-component access control is not possible inside GitHub's permission
+  model (not a current requirement).
 
-### Mitigations
-
-- Use monorepo tools temporarily to ease transition
-- Establish clear inter-repo contracts and APIs
-- Automate cross-repo testing with integration test suite
-- Create comprehensive migration and onboarding documentation
-- Use shared configuration repository for common tooling
-
-## Alternative Considered
-
-### Hybrid: Monorepo with Workspace Isolation
-
-Use tools like Nx or Turborepo to get multi-repo benefits while keeping monorepo:
-
-```
-codeflow-engine/
-â”œâ”€â”€ packages/
-â”‚   â”œâ”€â”€ core/           # Python package
-â”‚   â”œâ”€â”€ web/            # React app
-â”‚   â”œâ”€â”€ vscode/         # VS Code extension
-â”‚   â””â”€â”€ desktop/        # Electron app
-â”œâ”€â”€ nx.json
-â””â”€â”€ workspace.json
-```
-
-**Decision**: Not chosen because it doesn't solve clone size, access control, or technology heterogeneity issues.
-
-## Timeline
-
-- **Q1 2026**: Complete evaluation and decision
-- **Q2 2026**: Execute split (Phases 1-6)
-- **Q3 2026**: Stabilization and optimization
-- **Q4 2026**: Evaluate and iterate
+---
 
 ## Related Decisions
 
@@ -308,7 +242,7 @@ codeflow-engine/
 
 ## References
 
-- Monorepo vs Multi-Repo: https://monorepo.tools/
-- Google's Monorepo Experience: https://cacm.acm.org/magazines/2016/7/204032-why-google-stores-billions-of-lines-of-code-in-a-single-repository/
-- Git Filter-Repo: https://github.com/newren/git-filter-repo
-- Nx Monorepo Tools: https://nx.dev/
+- Monorepo vs Multi-Repo: <https://monorepo.tools/>
+- Google's Monorepo Experience: <https://cacm.acm.org/magazines/2016/7/204032-why-google-stores-billions-of-lines-of-code-in-a-single-repository/>
+- Migration Plan: [MIGRATION_PLAN.md](../../MIGRATION_PLAN.md)
+- Legacy Redirects: [docs/LEGACY_REPO_REDIRECTS.md](../LEGACY_REPO_REDIRECTS.md)
