@@ -32,9 +32,10 @@ Each ADR follows this structure:
   - **Supersedes ADR-0001**: Documents the actual Python-only implementation
   - Includes migration summary explaining why hybrid approach wasn't implemented
   
-- [ADR-0021: Repository Structure and Monorepo vs Multi-Repo](0021-repository-structure.md) - **Status: Proposed**
-  - Evaluates splitting the monorepo into 3-4 focused repositories
-  - Includes detailed implementation plan and timeline
+- [ADR-0021: Repository Structure and Monorepo vs Multi-Repo](0021-repository-structure.md) - **Status: Accepted** ⭐
+  - **Decision**: Consolidate all `codeflow-*` repositories into this monorepo with path-aware CI
+  - Analyses ecosystem fit within `justaghost/*` and `phoenixvc/*` organisations
+  - Identifies `website/` and `orchestration/bootstrap/` as candidates for future extraction
 
 ### Communication & Integration
 
@@ -145,7 +146,7 @@ The project uses a **Python-only architecture** (ADR-0019):
 
 ### Future Considerations
 
-- **Repository Split** (ADR-0021): Evaluating split into 3-4 focused repos for better scalability
+- **Repository Structure** (ADR-0021, Accepted): Monorepo consolidation complete. `website/` and `orchestration/bootstrap/` are candidates for future extraction if org-wide shared repos are created.
 - **Performance Optimization**: If needed, selective migration of hot paths to Rust/Go
 - **Microservices**: Potential extraction of high-throughput services
 
