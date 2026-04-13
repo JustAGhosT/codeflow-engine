@@ -156,7 +156,7 @@ codeflow-migration = "codeflow_engine.migration:main"
 "groq" = "codeflow_engine.ai.providers.groq:GroqProvider"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "8.2.0"
+pytest = "9.0.3"
 pytest-asyncio = ">=0.24.0"
 pytest-cov = ">=5.0.0"
 pytest-mock = ">=3.14.0"
